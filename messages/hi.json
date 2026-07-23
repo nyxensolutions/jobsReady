@@ -1,0 +1,191 @@
+{
+  "common": {
+    "appName": "JobsReady",
+    "tagline": "नौकरी खोजें। लोग नियुक्त करें। तैयार हो जाएं।",
+    "loading": "लोड हो रहा है...",
+    "error": "कुछ गलत हो गया",
+    "retry": "फिर कोशिश करें",
+    "save": "सेव करें",
+    "cancel": "रद्द करें",
+    "submit": "जमा करें",
+    "next": "आगे",
+    "back": "पीछे",
+    "search": "खोजें",
+    "filter": "फ़िल्टर",
+    "clear": "साफ़ करें",
+    "viewAll": "सभी देखें",
+    "seeMore": "और देखें",
+    "required": "ज़रूरी",
+    "optional": "वैकल्पिक"
+  },
+  "nav": {
+    "home": "होम",
+    "findJobs": "नौकरी खोजें",
+    "postJob": "नौकरी पोस्ट करें",
+    "login": "लॉग इन",
+    "register": "रजिस्टर करें",
+    "dashboard": "डैशबोर्ड",
+    "profile": "मेरी प्रोफ़ाइल",
+    "applications": "मेरे आवेदन",
+    "logout": "लॉग आउट",
+    "forJobSeekers": "नौकरी खोजने वालों के लिए",
+    "forEmployers": "नियोक्ताओं के लिए"
+  },
+  "home": {
+    "hero": {
+      "title": "आपकी अगली नौकरी तैयार है।",
+      "subtitle": "अपने शहर में डिलीवरी, सेल्स, सिक्योरिटी, ड्राइविंग और अन्य लाखों नौकरियां खोजें।",
+      "searchPlaceholder": "नौकरी का नाम, कौशल या कंपनी",
+      "locationPlaceholder": "शहर या इलाका",
+      "searchButton": "नौकरी खोजें",
+      "popularSearches": "लोकप्रिय खोजें"
+    },
+    "stats": {
+      "jobsPosted": "नौकरियां पोस्ट",
+      "citiesCovered": "शहर",
+      "companiesHiring": "कंपनियां",
+      "successfulHires": "सफल नियुक्तियां"
+    },
+    "categories": {
+      "title": "श्रेणी के अनुसार खोजें",
+      "subtitle": "अपने क्षेत्र में नौकरी खोजें"
+    },
+    "featured": {
+      "title": "फ़ीचर्ड नौकरियां",
+      "subtitle": "शीर्ष कंपनियां अभी भर्ती कर रही हैं"
+    },
+    "howItWorks": {
+      "title": "JobsReady कैसे काम करता है",
+      "seeker": {
+        "step1": "अपनी प्रोफ़ाइल बनाएं",
+        "step2": "खोजें और आवेदन करें",
+        "step3": "नौकरी पाएं"
+      },
+      "employer": {
+        "step1": "कंपनी रजिस्टर करें",
+        "step2": "नौकरी पोस्ट करें",
+        "step3": "उम्मीदवार खोजें"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "स्वागत है",
+    "registerTitle": "अकाउंट बनाएं",
+    "phoneLabel": "मोबाइल नंबर",
+    "phonePlaceholder": "10 अंकों का मोबाइल नंबर",
+    "emailLabel": "ईमेल पता",
+    "emailPlaceholder": "you@company.com",
+    "otpLabel": "OTP दर्ज करें",
+    "otpPlaceholder": "6 अंकों का OTP",
+    "sendOtp": "OTP भेजें",
+    "verifyOtp": "सत्यापित करें और जारी रखें",
+    "resendOtp": "OTP फिर भेजें",
+    "otpSent": "{phone} पर OTP भेजा गया",
+    "iAmSeeker": "मुझे नौकरी चाहिए",
+    "iAmEmployer": "मुझे लोग नियुक्त करने हैं",
+    "orContinueWith": "या इससे जारी रखें",
+    "continueWithGoogle": "Google से जारी रखें",
+    "alreadyHaveAccount": "पहले से अकाउंट है?",
+    "noAccount": "अकाउंट नहीं है?"
+  },
+  "jobs": {
+    "searchResults": "{count} नौकरियां मिलीं",
+    "noResults": "कोई नौकरी नहीं मिली। अलग कीवर्ड आज़माएं।",
+    "postedAgo": "{time} पहले पोस्ट",
+    "vacancies": "{count} रिक्ति",
+    "vacancies_plural": "{count} रिक्तियां",
+    "salary": "वेतन",
+    "experience": "अनुभव",
+    "jobType": "नौकरी का प्रकार",
+    "location": "स्थान",
+    "applyNow": "अभी आवेदन करें",
+    "applied": "आवेदन किया",
+    "callHr": "HR को कॉल करें",
+    "similarJobs": "समान नौकरियां",
+    "jobDetail": {
+      "about": "इस नौकरी के बारे में",
+      "requirements": "योग्यता",
+      "perks": "लाभ और सुविधाएं",
+      "aboutCompany": "कंपनी के बारे में"
+    },
+    "filters": {
+      "salary": "वेतन सीमा",
+      "experience": "अनुभव",
+      "jobType": "नौकरी का प्रकार",
+      "category": "श्रेणी",
+      "postedWithin": "पोस्ट की तारीख"
+    },
+    "types": {
+      "FULL_TIME": "पूर्णकालिक",
+      "PART_TIME": "अंशकालिक",
+      "CONTRACT": "अनुबंध",
+      "GIG": "गिग / फ्रीलांस"
+    }
+  },
+  "seeker": {
+    "dashboard": {
+      "title": "मेरा डैशबोर्ड",
+      "appliedJobs": "आवेदित नौकरियां",
+      "profileStrength": "प्रोफ़ाइल की मज़बूती",
+      "completeProfile": "बेहतर मैच के लिए प्रोफ़ाइल पूरी करें"
+    },
+    "profile": {
+      "title": "मेरी प्रोफ़ाइल",
+      "personalInfo": "व्यक्तिगत जानकारी",
+      "name": "पूरा नाम",
+      "phone": "मोबाइल नंबर",
+      "city": "शहर",
+      "experience": "अनुभव (वर्षों में)",
+      "skills": "कौशल",
+      "preferredCategories": "पसंदीदा नौकरी श्रेणियां",
+      "resume": "रेज़्यूमे",
+      "uploadResume": "रेज़्यूमे अपलोड करें",
+      "buildResume": "रेज़्यूमे बनाएं"
+    }
+  },
+  "employer": {
+    "dashboard": {
+      "title": "नियोक्ता डैशबोर्ड",
+      "activeJobs": "सक्रिय नौकरियां",
+      "totalApplications": "कुल आवेदन",
+      "newApplications": "नए आवेदन"
+    },
+    "postJob": {
+      "title": "नई नौकरी पोस्ट करें",
+      "jobTitle": "नौकरी का शीर्षक",
+      "category": "नौकरी श्रेणी",
+      "city": "शहर",
+      "salary": "वेतन",
+      "vacancies": "रिक्तियों की संख्या",
+      "description": "नौकरी विवरण",
+      "jobType": "नौकरी का प्रकार",
+      "experience": "न्यूनतम अनुभव",
+      "expiryDate": "लिस्टिंग समाप्ति तिथि",
+      "preview": "पूर्वावलोकन",
+      "publish": "समीक्षा के लिए सबमिट करें"
+    },
+    "register": {
+      "title": "नियोक्ता के रूप में रजिस्टर करें",
+      "companyName": "कंपनी का नाम",
+      "gstCin": "GST / CIN नंबर",
+      "industry": "उद्योग",
+      "contactPerson": "संपर्क व्यक्ति का नाम",
+      "uploadDocs": "सत्यापन दस्तावेज़ अपलोड करें",
+      "docsHint": "GST प्रमाणपत्र, कंपनी पंजीकरण, या ट्रेड लाइसेंस"
+    }
+  },
+  "categories": {
+    "delivery": "डिलीवरी",
+    "driver": "ड्राइवर",
+    "sales": "सेल्स",
+    "security": "सिक्योरिटी गार्ड",
+    "housekeeping": "हाउसकीपिंग",
+    "cook": "रसोइया / शेफ",
+    "construction": "निर्माण",
+    "factory": "फैक्ट्री कर्मचारी",
+    "retail": "रिटेल",
+    "fieldWork": "फील्ड वर्क",
+    "it": "IT / कंप्यूटर",
+    "healthcare": "स्वास्थ्य सेवा"
+  }
+}

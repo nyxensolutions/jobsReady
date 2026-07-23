@@ -1,0 +1,191 @@
+{
+  "common": {
+    "appName": "JobsReady",
+    "tagline": "ಉದ್ಯೋಗ ಹುಡುಕಿ. ಜನರನ್ನು ನೇಮಿಸಿ. ಸಿದ್ಧರಾಗಿ.",
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "error": "ಏನೋ ತಪ್ಪಾಯಿತು",
+    "retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+    "save": "ಉಳಿಸಿ",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "submit": "ಸಲ್ಲಿಸಿ",
+    "next": "ಮುಂದೆ",
+    "back": "ಹಿಂದೆ",
+    "search": "ಹುಡುಕಿ",
+    "filter": "ಫಿಲ್ಟರ್",
+    "clear": "ತೆರವುಗೊಳಿಸಿ",
+    "viewAll": "ಎಲ್ಲ ನೋಡಿ",
+    "seeMore": "ಇನ್ನಷ್ಟು ನೋಡಿ",
+    "required": "ಕಡ್ಡಾಯ",
+    "optional": "ಐಚ್ಛಿಕ"
+  },
+  "nav": {
+    "home": "ಮುಖಪುಟ",
+    "findJobs": "ಉದ್ಯೋಗ ಹುಡುಕಿ",
+    "postJob": "ಉದ್ಯೋಗ ಪೋಸ್ಟ್ ಮಾಡಿ",
+    "login": "ಲಾಗಿನ್",
+    "register": "ನೋಂದಾಯಿಸಿ",
+    "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "profile": "ನನ್ನ ಪ್ರೊಫೈಲ್",
+    "applications": "ನನ್ನ ಅರ್ಜಿಗಳು",
+    "logout": "ಲಾಗ್‌ಔಟ್",
+    "forJobSeekers": "ಉದ್ಯೋಗಾರ್ಥಿಗಳಿಗೆ",
+    "forEmployers": "ಉದ್ಯೋಗದಾತರಿಗೆ"
+  },
+  "home": {
+    "hero": {
+      "title": "ನಿಮ್ಮ ಮುಂದಿನ ಉದ್ಯೋಗ ಸಿದ್ಧವಾಗಿದೆ.",
+      "subtitle": "ನಿಮ್ಮ ನಗರದಲ್ಲಿ ಡೆಲಿವರಿ, ಮಾರಾಟ, ಭದ್ರತೆ, ಚಾಲನೆ ಮತ್ತು ಇನ್ನಷ್ಟು ಲಕ್ಷಾಂತರ ಉದ್ಯೋಗಗಳನ್ನು ಹುಡುಕಿ.",
+      "searchPlaceholder": "ಉದ್ಯೋಗ ಶೀರ್ಷಿಕೆ, ಕೌಶಲ್ಯ ಅಥವಾ ಕಂಪನಿ",
+      "locationPlaceholder": "ನಗರ ಅಥವಾ ಪ್ರದೇಶ",
+      "searchButton": "ಉದ್ಯೋಗ ಹುಡುಕಿ",
+      "popularSearches": "ಜನಪ್ರಿಯ ಹುಡುಕಾಟಗಳು"
+    },
+    "stats": {
+      "jobsPosted": "ಉದ್ಯೋಗಗಳು ಪೋಸ್ಟ್",
+      "citiesCovered": "ನಗರಗಳು",
+      "companiesHiring": "ಕಂಪನಿಗಳು",
+      "successfulHires": "ಯಶಸ್ವಿ ನೇಮಕಾತಿಗಳು"
+    },
+    "categories": {
+      "title": "ವರ್ಗದ ಮೂಲಕ ಹುಡುಕಿ",
+      "subtitle": "ನಿಮ್ಮ ಕ್ಷೇತ್ರದಲ್ಲಿ ಉದ್ಯೋಗಗಳನ್ನು ಹುಡುಕಿ"
+    },
+    "featured": {
+      "title": "ವೈಶಿಷ್ಟ್ಯ ಉದ್ಯೋಗಗಳು",
+      "subtitle": "ಉನ್ನತ ಕಂಪನಿಗಳು ಈಗ ನೇಮಕ ಮಾಡುತ್ತಿವೆ"
+    },
+    "howItWorks": {
+      "title": "JobsReady ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ",
+      "seeker": {
+        "step1": "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ",
+        "step2": "ಹುಡುಕಿ ಮತ್ತು ಅರ್ಜಿ ಹಾಕಿ",
+        "step3": "ಉದ್ಯೋಗ ಪಡೆಯಿರಿ"
+      },
+      "employer": {
+        "step1": "ಕಂಪನಿ ನೋಂದಾಯಿಸಿ",
+        "step2": "ಉದ್ಯೋಗ ಪೋಸ್ಟ್ ಮಾಡಿ",
+        "step3": "ಅಭ್ಯರ್ಥಿಗಳನ್ನು ಹುಡುಕಿ"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "ಸ್ವಾಗತ",
+    "registerTitle": "ಖಾತೆ ರಚಿಸಿ",
+    "phoneLabel": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+    "phonePlaceholder": "10-ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+    "emailLabel": "ಇಮೇಲ್ ವಿಳಾಸ",
+    "emailPlaceholder": "you@company.com",
+    "otpLabel": "OTP ನಮೂದಿಸಿ",
+    "otpPlaceholder": "6-ಅಂಕಿಯ OTP",
+    "sendOtp": "OTP ಕಳುಹಿಸಿ",
+    "verifyOtp": "ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮುಂದುವರಿಯಿರಿ",
+    "resendOtp": "OTP ಮತ್ತೆ ಕಳುಹಿಸಿ",
+    "otpSent": "{phone} ಗೆ OTP ಕಳುಹಿಸಲಾಗಿದೆ",
+    "iAmSeeker": "ನನಗೆ ಉದ್ಯೋಗ ಬೇಕು",
+    "iAmEmployer": "ನಾನು ಜನರನ್ನು ನೇಮಿಸಲು ಬಯಸುತ್ತೇನೆ",
+    "orContinueWith": "ಅಥವಾ ಇದರೊಂದಿಗೆ ಮುಂದುವರಿಯಿರಿ",
+    "continueWithGoogle": "Google ನೊಂದಿಗೆ ಮುಂದುವರಿಯಿರಿ",
+    "alreadyHaveAccount": "ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ?",
+    "noAccount": "ಖಾತೆ ಇಲ್ಲವೇ?"
+  },
+  "jobs": {
+    "searchResults": "{count} ಉದ್ಯೋಗಗಳು ಕಂಡುಬಂದವು",
+    "noResults": "ಉದ್ಯೋಗಗಳು ಕಂಡುಬಂದಿಲ್ಲ. ಬೇರೆ ಕೀವರ್ಡ್‌ಗಳನ್ನು ಪ್ರಯತ್ನಿಸಿ.",
+    "postedAgo": "{time} ಹಿಂದೆ ಪೋಸ್ಟ್",
+    "vacancies": "{count} ಖಾಲಿ",
+    "vacancies_plural": "{count} ಖಾಲಿ ಸ್ಥಾನಗಳು",
+    "salary": "ವೇತನ",
+    "experience": "ಅನುಭವ",
+    "jobType": "ಉದ್ಯೋಗ ಪ್ರಕಾರ",
+    "location": "ಸ್ಥಳ",
+    "applyNow": "ಈಗ ಅರ್ಜಿ ಹಾಕಿ",
+    "applied": "ಅರ್ಜಿ ಹಾಕಲಾಗಿದೆ",
+    "callHr": "HR ಗೆ ಕರೆ ಮಾಡಿ",
+    "similarJobs": "ಇದೇ ರೀತಿಯ ಉದ್ಯೋಗಗಳು",
+    "jobDetail": {
+      "about": "ಈ ಉದ್ಯೋಗದ ಬಗ್ಗೆ",
+      "requirements": "ಅವಶ್ಯಕತೆಗಳು",
+      "perks": "ಪ್ರಯೋಜನಗಳು ಮತ್ತು ಸೌಲಭ್ಯಗಳು",
+      "aboutCompany": "ಕಂಪನಿಯ ಬಗ್ಗೆ"
+    },
+    "filters": {
+      "salary": "ವೇತನ ವ್ಯಾಪ್ತಿ",
+      "experience": "ಅನುಭವ",
+      "jobType": "ಉದ್ಯೋಗ ಪ್ರಕಾರ",
+      "category": "ವರ್ಗ",
+      "postedWithin": "ಪೋಸ್ಟ್ ದಿನಾಂಕ"
+    },
+    "types": {
+      "FULL_TIME": "ಪೂರ್ಣ ಸಮಯ",
+      "PART_TIME": "ಅರೆಕಾಲಿಕ",
+      "CONTRACT": "ಒಪ್ಪಂದ",
+      "GIG": "ಗಿಗ್ / ಫ್ರೀಲ್ಯಾನ್ಸ್"
+    }
+  },
+  "seeker": {
+    "dashboard": {
+      "title": "ನನ್ನ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+      "appliedJobs": "ಅರ್ಜಿ ಹಾಕಿದ ಉದ್ಯೋಗಗಳು",
+      "profileStrength": "ಪ್ರೊಫೈಲ್ ಬಲ",
+      "completeProfile": "ಉತ್ತಮ ಹೊಂದಾಣಿಕೆಗಾಗಿ ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ"
+    },
+    "profile": {
+      "title": "ನನ್ನ ಪ್ರೊಫೈಲ್",
+      "personalInfo": "ವೈಯಕ್ತಿಕ ಮಾಹಿತಿ",
+      "name": "ಪೂರ್ಣ ಹೆಸರು",
+      "phone": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+      "city": "ನಗರ",
+      "experience": "ಅನುಭವ (ವರ್ಷಗಳಲ್ಲಿ)",
+      "skills": "ಕೌಶಲ್ಯಗಳು",
+      "preferredCategories": "ಆದ್ಯತೆಯ ಉದ್ಯೋಗ ವರ್ಗಗಳು",
+      "resume": "ರೆಸ್ಯೂಮೆ",
+      "uploadResume": "ರೆಸ್ಯೂಮೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+      "buildResume": "ರೆಸ್ಯೂಮೆ ತಯಾರಿಸಿ"
+    }
+  },
+  "employer": {
+    "dashboard": {
+      "title": "ಉದ್ಯೋಗದಾತ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+      "activeJobs": "ಸಕ್ರಿಯ ಉದ್ಯೋಗಗಳು",
+      "totalApplications": "ಒಟ್ಟು ಅರ್ಜಿಗಳು",
+      "newApplications": "ಹೊಸ ಅರ್ಜಿಗಳು"
+    },
+    "postJob": {
+      "title": "ಹೊಸ ಉದ್ಯೋಗ ಪೋಸ್ಟ್ ಮಾಡಿ",
+      "jobTitle": "ಉದ್ಯೋಗ ಶೀರ್ಷಿಕೆ",
+      "category": "ಉದ್ಯೋಗ ವರ್ಗ",
+      "city": "ನಗರ",
+      "salary": "ವೇತನ",
+      "vacancies": "ಖಾಲಿ ಸ್ಥಾನಗಳ ಸಂಖ್ಯೆ",
+      "description": "ಉದ್ಯೋಗ ವಿವರಣೆ",
+      "jobType": "ಉದ್ಯೋಗ ಪ್ರಕಾರ",
+      "experience": "ಕನಿಷ್ಠ ಅನುಭವ",
+      "expiryDate": "ಪಟ್ಟಿ ಮುಕ್ತಾಯ ದಿನಾಂಕ",
+      "preview": "ಪೂರ್ವವೀಕ್ಷಣೆ",
+      "publish": "ಪರಿಶೀಲನೆಗೆ ಸಲ್ಲಿಸಿ"
+    },
+    "register": {
+      "title": "ಉದ್ಯೋಗದಾತರಾಗಿ ನೋಂದಾಯಿಸಿ",
+      "companyName": "ಕಂಪನಿ ಹೆಸರು",
+      "gstCin": "GST / CIN ಸಂಖ್ಯೆ",
+      "industry": "ಉದ್ಯಮ",
+      "contactPerson": "ಸಂಪರ್ಕ ವ್ಯಕ್ತಿಯ ಹೆಸರು",
+      "uploadDocs": "ಪರಿಶೀಲನೆ ದಾಖಲೆಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+      "docsHint": "GST ಪ್ರಮಾಣಪತ್ರ, ಕಂಪನಿ ನೋಂದಣಿ, ಅಥವಾ ವ್ಯಾಪಾರ ಪರವಾನಗಿ"
+    }
+  },
+  "categories": {
+    "delivery": "ಡೆಲಿವರಿ",
+    "driver": "ಚಾಲಕ",
+    "sales": "ಮಾರಾಟ",
+    "security": "ಭದ್ರತಾ ಸಿಬ್ಬಂದಿ",
+    "housekeeping": "ಗೃಹ ನಿರ್ವಹಣೆ",
+    "cook": "ಅಡುಗೆಯವರು / ಚೆಫ್",
+    "construction": "ನಿರ್ಮಾಣ",
+    "factory": "ಕಾರ್ಖಾನೆ ಕಾರ್ಮಿಕ",
+    "retail": "ಚಿಲ್ಲರೆ",
+    "fieldWork": "ಕ್ಷೇತ್ರ ಕೆಲಸ",
+    "it": "IT / ಕಂಪ್ಯೂಟರ್",
+    "healthcare": "ಆರೋಗ್ಯ ಸೇವೆ"
+  }
+}

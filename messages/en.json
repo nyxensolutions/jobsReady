@@ -1,0 +1,191 @@
+{
+  "common": {
+    "appName": "JobsReady",
+    "tagline": "Find Jobs. Hire People. Get Ready.",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "next": "Next",
+    "back": "Back",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "viewAll": "View all",
+    "seeMore": "See more",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "nav": {
+    "home": "Home",
+    "findJobs": "Find Jobs",
+    "postJob": "Post a Job",
+    "login": "Log in",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "profile": "My Profile",
+    "applications": "My Applications",
+    "logout": "Log out",
+    "forJobSeekers": "For Job Seekers",
+    "forEmployers": "For Employers"
+  },
+  "home": {
+    "hero": {
+      "title": "Your next job is ready.",
+      "subtitle": "Search lakhs of jobs in delivery, sales, security, driving, and more — in your city.",
+      "searchPlaceholder": "Job title, skill or company",
+      "locationPlaceholder": "City or area",
+      "searchButton": "Find Jobs",
+      "popularSearches": "Popular searches"
+    },
+    "stats": {
+      "jobsPosted": "Jobs Posted",
+      "citiesCovered": "Cities Covered",
+      "companiesHiring": "Companies Hiring",
+      "successfulHires": "Successful Hires"
+    },
+    "categories": {
+      "title": "Browse by Category",
+      "subtitle": "Find jobs in your field"
+    },
+    "featured": {
+      "title": "Featured Jobs",
+      "subtitle": "Top employers hiring now"
+    },
+    "howItWorks": {
+      "title": "How JobsReady works",
+      "seeker": {
+        "step1": "Create your profile",
+        "step2": "Search and apply",
+        "step3": "Get hired"
+      },
+      "employer": {
+        "step1": "Register your company",
+        "step2": "Post a job",
+        "step3": "Find candidates"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "registerTitle": "Create account",
+    "phoneLabel": "Mobile number",
+    "phonePlaceholder": "10-digit mobile number",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@company.com",
+    "otpLabel": "Enter OTP",
+    "otpPlaceholder": "6-digit OTP",
+    "sendOtp": "Send OTP",
+    "verifyOtp": "Verify & Continue",
+    "resendOtp": "Resend OTP",
+    "otpSent": "OTP sent to {phone}",
+    "iAmSeeker": "I am looking for a job",
+    "iAmEmployer": "I want to hire people",
+    "orContinueWith": "or continue with",
+    "continueWithGoogle": "Continue with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?"
+  },
+  "jobs": {
+    "searchResults": "{count} jobs found",
+    "noResults": "No jobs found. Try different keywords.",
+    "postedAgo": "Posted {time}",
+    "vacancies": "{count} vacancy",
+    "vacancies_plural": "{count} vacancies",
+    "salary": "Salary",
+    "experience": "Experience",
+    "jobType": "Job Type",
+    "location": "Location",
+    "applyNow": "Apply Now",
+    "applied": "Applied",
+    "callHr": "Call HR",
+    "similarJobs": "Similar Jobs",
+    "jobDetail": {
+      "about": "About this job",
+      "requirements": "Requirements",
+      "perks": "Perks & Benefits",
+      "aboutCompany": "About the company"
+    },
+    "filters": {
+      "salary": "Salary range",
+      "experience": "Experience",
+      "jobType": "Job type",
+      "category": "Category",
+      "postedWithin": "Posted within"
+    },
+    "types": {
+      "FULL_TIME": "Full Time",
+      "PART_TIME": "Part Time",
+      "CONTRACT": "Contract",
+      "GIG": "Gig / Freelance"
+    }
+  },
+  "seeker": {
+    "dashboard": {
+      "title": "My Dashboard",
+      "appliedJobs": "Applied Jobs",
+      "profileStrength": "Profile strength",
+      "completeProfile": "Complete your profile to get better matches"
+    },
+    "profile": {
+      "title": "My Profile",
+      "personalInfo": "Personal Information",
+      "name": "Full Name",
+      "phone": "Mobile Number",
+      "city": "City",
+      "experience": "Years of Experience",
+      "skills": "Skills",
+      "preferredCategories": "Preferred Job Categories",
+      "resume": "Resume",
+      "uploadResume": "Upload Resume",
+      "buildResume": "Build Resume"
+    }
+  },
+  "employer": {
+    "dashboard": {
+      "title": "Employer Dashboard",
+      "activeJobs": "Active Jobs",
+      "totalApplications": "Total Applications",
+      "newApplications": "New Applications"
+    },
+    "postJob": {
+      "title": "Post a New Job",
+      "jobTitle": "Job Title",
+      "category": "Job Category",
+      "city": "City",
+      "salary": "Salary",
+      "vacancies": "Number of Vacancies",
+      "description": "Job Description",
+      "jobType": "Job Type",
+      "experience": "Minimum Experience",
+      "expiryDate": "Listing Expiry Date",
+      "preview": "Preview",
+      "publish": "Submit for Review"
+    },
+    "register": {
+      "title": "Register as Employer",
+      "companyName": "Company Name",
+      "gstCin": "GST / CIN Number",
+      "industry": "Industry",
+      "contactPerson": "Contact Person Name",
+      "uploadDocs": "Upload Verification Documents",
+      "docsHint": "GST certificate, company registration, or trade licence"
+    }
+  },
+  "categories": {
+    "delivery": "Delivery",
+    "driver": "Driver",
+    "sales": "Sales",
+    "security": "Security Guard",
+    "housekeeping": "Housekeeping",
+    "cook": "Cook / Chef",
+    "construction": "Construction",
+    "factory": "Factory Worker",
+    "retail": "Retail",
+    "fieldWork": "Field Work",
+    "it": "IT / Computer",
+    "healthcare": "Healthcare"
+  }
+}

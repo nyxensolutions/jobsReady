@@ -1,0 +1,191 @@
+{
+  "common": {
+    "appName": "JobsReady",
+    "tagline": "চাকরি খুঁজুন। মানুষ নিয়োগ দিন। প্রস্তুত হোন।",
+    "loading": "লোড হচ্ছে...",
+    "error": "কিছু একটা ভুল হয়েছে",
+    "retry": "আবার চেষ্টা করুন",
+    "save": "সংরক্ষণ করুন",
+    "cancel": "বাতিল করুন",
+    "submit": "জমা দিন",
+    "next": "পরবর্তী",
+    "back": "পিছনে",
+    "search": "খুঁজুন",
+    "filter": "ফিল্টার",
+    "clear": "মুছুন",
+    "viewAll": "সব দেখুন",
+    "seeMore": "আরও দেখুন",
+    "required": "বাধ্যতামূলক",
+    "optional": "ঐচ্ছিক"
+  },
+  "nav": {
+    "home": "হোম",
+    "findJobs": "চাকরি খুঁজুন",
+    "postJob": "চাকরি পোস্ট করুন",
+    "login": "লগ ইন",
+    "register": "নিবন্ধন করুন",
+    "dashboard": "ড্যাশবোর্ড",
+    "profile": "আমার প্রোফাইল",
+    "applications": "আমার আবেদনগুলো",
+    "logout": "লগ আউট",
+    "forJobSeekers": "চাকরিপ্রার্থীদের জন্য",
+    "forEmployers": "নিয়োগকর্তাদের জন্য"
+  },
+  "home": {
+    "hero": {
+      "title": "আপনার পরবর্তী চাকরি প্রস্তুত।",
+      "subtitle": "আপনার শহরে ডেলিভারি, বিক্রয়, নিরাপত্তা, ড্রাইভিং এবং আরও লক্ষ লক্ষ চাকরি খুঁজুন।",
+      "searchPlaceholder": "চাকরির নাম, দক্ষতা বা কোম্পানি",
+      "locationPlaceholder": "শহর বা এলাকা",
+      "searchButton": "চাকরি খুঁজুন",
+      "popularSearches": "জনপ্রিয় অনুসন্ধান"
+    },
+    "stats": {
+      "jobsPosted": "চাকরি পোস্ট",
+      "citiesCovered": "শহর",
+      "companiesHiring": "কোম্পানি",
+      "successfulHires": "সফল নিয়োগ"
+    },
+    "categories": {
+      "title": "বিভাগ অনুযায়ী খুঁজুন",
+      "subtitle": "আপনার ক্ষেত্রে চাকরি খুঁজুন"
+    },
+    "featured": {
+      "title": "বিশেষ চাকরিগুলো",
+      "subtitle": "শীর্ষ কোম্পানিগুলো এখন নিয়োগ দিচ্ছে"
+    },
+    "howItWorks": {
+      "title": "JobsReady কীভাবে কাজ করে",
+      "seeker": {
+        "step1": "আপনার প্রোফাইল তৈরি করুন",
+        "step2": "খুঁজুন এবং আবেদন করুন",
+        "step3": "চাকরি পান"
+      },
+      "employer": {
+        "step1": "কোম্পানি নিবন্ধন করুন",
+        "step2": "চাকরি পোস্ট করুন",
+        "step3": "প্রার্থী খুঁজুন"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "স্বাগতম",
+    "registerTitle": "অ্যাকাউন্ট তৈরি করুন",
+    "phoneLabel": "মোবাইল নম্বর",
+    "phonePlaceholder": "১০ সংখ্যার মোবাইল নম্বর",
+    "emailLabel": "ইমেইল ঠিকানা",
+    "emailPlaceholder": "you@company.com",
+    "otpLabel": "OTP লিখুন",
+    "otpPlaceholder": "৬ সংখ্যার OTP",
+    "sendOtp": "OTP পাঠান",
+    "verifyOtp": "যাচাই করুন এবং চালিয়ে যান",
+    "resendOtp": "OTP আবার পাঠান",
+    "otpSent": "{phone} নম্বরে OTP পাঠানো হয়েছে",
+    "iAmSeeker": "আমি চাকরি খুঁজছি",
+    "iAmEmployer": "আমি মানুষ নিয়োগ দিতে চাই",
+    "orContinueWith": "অথবা এর মাধ্যমে চালিয়ে যান",
+    "continueWithGoogle": "Google দিয়ে চালিয়ে যান",
+    "alreadyHaveAccount": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+    "noAccount": "অ্যাকাউন্ট নেই?"
+  },
+  "jobs": {
+    "searchResults": "{count}টি চাকরি পাওয়া গেছে",
+    "noResults": "কোনো চাকরি পাওয়া যায়নি। ভিন্ন কীওয়ার্ড চেষ্টা করুন।",
+    "postedAgo": "{time} আগে পোস্ট",
+    "vacancies": "{count}টি পদ",
+    "vacancies_plural": "{count}টি পদ",
+    "salary": "বেতন",
+    "experience": "অভিজ্ঞতা",
+    "jobType": "চাকরির ধরন",
+    "location": "অবস্থান",
+    "applyNow": "এখনই আবেদন করুন",
+    "applied": "আবেদন করা হয়েছে",
+    "callHr": "HR-কে কল করুন",
+    "similarJobs": "একই ধরনের চাকরি",
+    "jobDetail": {
+      "about": "এই চাকরি সম্পর্কে",
+      "requirements": "যোগ্যতা",
+      "perks": "সুবিধা ও সুযোগ",
+      "aboutCompany": "কোম্পানি সম্পর্কে"
+    },
+    "filters": {
+      "salary": "বেতনের পরিসর",
+      "experience": "অভিজ্ঞতা",
+      "jobType": "চাকরির ধরন",
+      "category": "বিভাগ",
+      "postedWithin": "পোস্টের তারিখ"
+    },
+    "types": {
+      "FULL_TIME": "পূর্ণকালীন",
+      "PART_TIME": "খণ্ডকালীন",
+      "CONTRACT": "চুক্তি",
+      "GIG": "গিগ / ফ্রিল্যান্স"
+    }
+  },
+  "seeker": {
+    "dashboard": {
+      "title": "আমার ড্যাশবোর্ড",
+      "appliedJobs": "আবেদন করা চাকরিগুলো",
+      "profileStrength": "প্রোফাইলের শক্তি",
+      "completeProfile": "আরও ভালো ম্যাচের জন্য আপনার প্রোফাইল সম্পূর্ণ করুন"
+    },
+    "profile": {
+      "title": "আমার প্রোফাইল",
+      "personalInfo": "ব্যক্তিগত তথ্য",
+      "name": "পুরো নাম",
+      "phone": "মোবাইল নম্বর",
+      "city": "শহর",
+      "experience": "অভিজ্ঞতা (বছরে)",
+      "skills": "দক্ষতা",
+      "preferredCategories": "পছন্দের চাকরির বিভাগ",
+      "resume": "রেজুমে",
+      "uploadResume": "রেজুমে আপলোড করুন",
+      "buildResume": "রেজুমে তৈরি করুন"
+    }
+  },
+  "employer": {
+    "dashboard": {
+      "title": "নিয়োগকর্তা ড্যাশবোর্ড",
+      "activeJobs": "সক্রিয় চাকরিগুলো",
+      "totalApplications": "মোট আবেদন",
+      "newApplications": "নতুন আবেদন"
+    },
+    "postJob": {
+      "title": "নতুন চাকরি পোস্ট করুন",
+      "jobTitle": "চাকরির শিরোনাম",
+      "category": "চাকরির বিভাগ",
+      "city": "শহর",
+      "salary": "বেতন",
+      "vacancies": "শূন্য পদের সংখ্যা",
+      "description": "চাকরির বিবরণ",
+      "jobType": "চাকরির ধরন",
+      "experience": "ন্যূনতম অভিজ্ঞতা",
+      "expiryDate": "তালিকার মেয়াদ শেষের তারিখ",
+      "preview": "প্রিভিউ",
+      "publish": "পর্যালোচনার জন্য জমা দিন"
+    },
+    "register": {
+      "title": "নিয়োগকর্তা হিসেবে নিবন্ধন করুন",
+      "companyName": "কোম্পানির নাম",
+      "gstCin": "GST / CIN নম্বর",
+      "industry": "শিল্প",
+      "contactPerson": "যোগাযোগের ব্যক্তির নাম",
+      "uploadDocs": "যাচাইকরণ নথি আপলোড করুন",
+      "docsHint": "GST সার্টিফিকেট, কোম্পানি নিবন্ধন বা ট্রেড লাইসেন্স"
+    }
+  },
+  "categories": {
+    "delivery": "ডেলিভারি",
+    "driver": "ড্রাইভার",
+    "sales": "বিক্রয়",
+    "security": "নিরাপত্তা প্রহরী",
+    "housekeeping": "গৃহকর্মী",
+    "cook": "রাঁধুনি / শেফ",
+    "construction": "নির্মাণ",
+    "factory": "কারখানা শ্রমিক",
+    "retail": "খুচরা",
+    "fieldWork": "মাঠকর্মী",
+    "it": "IT / কম্পিউটার",
+    "healthcare": "স্বাস্থ্যসেবা"
+  }
+}

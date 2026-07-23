@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  SEEKER
+  EMPLOYER
+  ADMIN
+}
+
+enum JobStatus {
+  DRAFT
+  PENDING_REVIEW
+  ACTIVE
+  EXPIRED
+  CLOSED
+  REJECTED
+}
+
+enum ApplicationStatus {
+  APPLIED
+  VIEWED
+  SHORTLISTED
+  REJECTED
+  HIRED
+}
+
+enum EmployerStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  SUSPENDED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  GIG
+}
+
+// ─── Core ────────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  phone     String?  @unique
+  email     String?  @unique
+  role      UserRole @default(SEEKER)
+  locale    String   @default("en")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  seekerProfile   SeekerProfile?
+  employerProfile EmployerProfile?
+  notifications   Notification[]
+
+  @@map("users")
+}
+
+model SeekerProfile {
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  name                String
+  city                String?
+  pincode             String?
+  stateCode           String?
+  experienceYears     Int       @default(0)
+  skills              String[]
+  preferredJobTypes   JobType[]
+  preferredCategories String[]
+  resumeUrl           String?
+  photoUrl            String?
+  bio                 String?
+  isProfileComplete   Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications Application[]
+
+  @@map("seeker_profiles")
+}
+
+model EmployerProfile {
+  id            String         @id @default(uuid())
+  userId        String         @unique
+  companyName   String
+  gstCin        String?
+  industry      String?
+  contactPerson String?
+  contactPhone  String?
+  city          String?
+  stateCode     String?
+  pincode       String?
+  website       String?
+  logoUrl       String?
+  description   String?
+  status        EmployerStatus @default(PENDING)
+  verifiedAt    DateTime?
+  docUrls       String[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobListings JobListing[]
+
+  @@map("employer_profiles")
+}
+
+// ─── Jobs ────────────────────────────────────────────────────────────────────
+
+model Category {
+  id        String  @id @default(uuid())
+  slug      String  @unique
+  nameEn    String
+  nameHi    String?
+  nameTe    String?
+  nameTa    String?
+  nameKn    String?
+  nameBn    String?
+  namePa    String?
+  icon      String?
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  jobListings JobListing[]
+
+  @@map("categories")
+}
+
+model City {
+  id        String  @id @default(uuid())
+  name      String
+  nameHi    String?
+  slug      String  @unique
+  stateCode String
+  stateName String
+  isActive  Boolean @default(true)
+
+  jobListings JobListing[]
+
+  @@map("cities")
+}
+
+model JobListing {
+  id            String    @id @default(uuid())
+  employerId    String
+  categoryId    String
+  cityId        String
+  title         String
+  description   String
+  salaryMin     Int?
+  salaryMax     Int?
+  salaryUnit    String    @default("monthly")
+  vacancies     Int       @default(1)
+  jobType       JobType   @default(FULL_TIME)
+  experienceMin Int       @default(0)
+  pincode       String?
+  status        JobStatus @default(PENDING_REVIEW)
+  isFeatured    Boolean   @default(false)
+  viewCount     Int       @default(0)
+  expiresAt     DateTime?
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  employer     EmployerProfile @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  category     Category        @relation(fields: [categoryId], references: [id])
+  city         City            @relation(fields: [cityId], references: [id])
+  applications Application[]
+
+  @@index([status, cityId])
+  @@index([status, categoryId])
+  @@index([employerId])
+  @@map("job_listings")
+}
+
+model Application {
+  id        String            @id @default(uuid())
+  jobId     String
+  seekerId  String
+  status    ApplicationStatus @default(APPLIED)
+  coverNote String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  job    JobListing    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  seeker SeekerProfile @relation(fields: [seekerId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, seekerId])
+  @@index([seekerId])
+  @@map("applications")
+}
+
+// ─── Notifications ───────────────────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  title     String
+  body      String
+  isRead    Boolean  @default(false)
+  data      Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}

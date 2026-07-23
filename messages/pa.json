@@ -1,0 +1,191 @@
+{
+  "common": {
+    "appName": "JobsReady",
+    "tagline": "ਨੌਕਰੀ ਲੱਭੋ। ਲੋਕਾਂ ਨੂੰ ਨਿਯੁਕਤ ਕਰੋ। ਤਿਆਰ ਹੋਵੋ।",
+    "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...",
+    "error": "ਕੁਝ ਗਲਤ ਹੋਇਆ",
+    "retry": "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+    "save": "ਸੇਵ ਕਰੋ",
+    "cancel": "ਰੱਦ ਕਰੋ",
+    "submit": "ਜਮ੍ਹਾ ਕਰੋ",
+    "next": "ਅੱਗੇ",
+    "back": "ਪਿੱਛੇ",
+    "search": "ਖੋਜੋ",
+    "filter": "ਫਿਲਟਰ",
+    "clear": "ਸਾਫ਼ ਕਰੋ",
+    "viewAll": "ਸਾਰੇ ਦੇਖੋ",
+    "seeMore": "ਹੋਰ ਦੇਖੋ",
+    "required": "ਜ਼ਰੂਰੀ",
+    "optional": "ਵਿਕਲਪਿਕ"
+  },
+  "nav": {
+    "home": "ਹੋਮ",
+    "findJobs": "ਨੌਕਰੀ ਲੱਭੋ",
+    "postJob": "ਨੌਕਰੀ ਪੋਸਟ ਕਰੋ",
+    "login": "ਲੌਗ ਇਨ",
+    "register": "ਰਜਿਸਟਰ ਕਰੋ",
+    "dashboard": "ਡੈਸ਼ਬੋਰਡ",
+    "profile": "ਮੇਰੀ ਪ੍ਰੋਫਾਈਲ",
+    "applications": "ਮੇਰੀਆਂ ਅਰਜ਼ੀਆਂ",
+    "logout": "ਲੌਗ ਆਊਟ",
+    "forJobSeekers": "ਨੌਕਰੀ ਭਾਲਕਾਂ ਲਈ",
+    "forEmployers": "ਨਿਯੋਕਤਾਵਾਂ ਲਈ"
+  },
+  "home": {
+    "hero": {
+      "title": "ਤੁਹਾਡੀ ਅਗਲੀ ਨੌਕਰੀ ਤਿਆਰ ਹੈ।",
+      "subtitle": "ਆਪਣੇ ਸ਼ਹਿਰ ਵਿੱਚ ਡਿਲੀਵਰੀ, ਸੇਲਜ਼, ਸੁਰੱਖਿਆ, ਡ੍ਰਾਈਵਿੰਗ ਅਤੇ ਹੋਰ ਲੱਖਾਂ ਨੌਕਰੀਆਂ ਲੱਭੋ।",
+      "searchPlaceholder": "ਨੌਕਰੀ ਦਾ ਨਾਮ, ਹੁਨਰ ਜਾਂ ਕੰਪਨੀ",
+      "locationPlaceholder": "ਸ਼ਹਿਰ ਜਾਂ ਇਲਾਕਾ",
+      "searchButton": "ਨੌਕਰੀ ਲੱਭੋ",
+      "popularSearches": "ਪ੍ਰਸਿੱਧ ਖੋਜਾਂ"
+    },
+    "stats": {
+      "jobsPosted": "ਨੌਕਰੀਆਂ ਪੋਸਟ",
+      "citiesCovered": "ਸ਼ਹਿਰ",
+      "companiesHiring": "ਕੰਪਨੀਆਂ",
+      "successfulHires": "ਸਫਲ ਨਿਯੁਕਤੀਆਂ"
+    },
+    "categories": {
+      "title": "ਸ਼੍ਰੇਣੀ ਅਨੁਸਾਰ ਲੱਭੋ",
+      "subtitle": "ਆਪਣੇ ਖੇਤਰ ਵਿੱਚ ਨੌਕਰੀਆਂ ਲੱਭੋ"
+    },
+    "featured": {
+      "title": "ਵਿਸ਼ੇਸ਼ ਨੌਕਰੀਆਂ",
+      "subtitle": "ਚੋਟੀ ਦੀਆਂ ਕੰਪਨੀਆਂ ਹੁਣ ਭਰਤੀ ਕਰ ਰਹੀਆਂ ਹਨ"
+    },
+    "howItWorks": {
+      "title": "JobsReady ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ",
+      "seeker": {
+        "step1": "ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਬਣਾਓ",
+        "step2": "ਲੱਭੋ ਅਤੇ ਅਰਜ਼ੀ ਦਿਓ",
+        "step3": "ਨੌਕਰੀ ਪਾਓ"
+      },
+      "employer": {
+        "step1": "ਕੰਪਨੀ ਰਜਿਸਟਰ ਕਰੋ",
+        "step2": "ਨੌਕਰੀ ਪੋਸਟ ਕਰੋ",
+        "step3": "ਉਮੀਦਵਾਰ ਲੱਭੋ"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "ਜੀ ਆਇਆਂ ਨੂੰ",
+    "registerTitle": "ਖਾਤਾ ਬਣਾਓ",
+    "phoneLabel": "ਮੋਬਾਈਲ ਨੰਬਰ",
+    "phonePlaceholder": "10 ਅੰਕਾਂ ਦਾ ਮੋਬਾਈਲ ਨੰਬਰ",
+    "emailLabel": "ਈਮੇਲ ਪਤਾ",
+    "emailPlaceholder": "you@company.com",
+    "otpLabel": "OTP ਦਰਜ ਕਰੋ",
+    "otpPlaceholder": "6 ਅੰਕਾਂ ਦਾ OTP",
+    "sendOtp": "OTP ਭੇਜੋ",
+    "verifyOtp": "ਤਸਦੀਕ ਕਰੋ ਅਤੇ ਜਾਰੀ ਰੱਖੋ",
+    "resendOtp": "OTP ਦੁਬਾਰਾ ਭੇਜੋ",
+    "otpSent": "{phone} 'ਤੇ OTP ਭੇਜਿਆ ਗਿਆ",
+    "iAmSeeker": "ਮੈਨੂੰ ਨੌਕਰੀ ਚਾਹੀਦੀ ਹੈ",
+    "iAmEmployer": "ਮੈਂ ਲੋਕਾਂ ਨੂੰ ਨਿਯੁਕਤ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹਾਂ",
+    "orContinueWith": "ਜਾਂ ਇਸ ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    "continueWithGoogle": "Google ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    "alreadyHaveAccount": "ਪਹਿਲਾਂ ਤੋਂ ਖਾਤਾ ਹੈ?",
+    "noAccount": "ਖਾਤਾ ਨਹੀਂ ਹੈ?"
+  },
+  "jobs": {
+    "searchResults": "{count} ਨੌਕਰੀਆਂ ਮਿਲੀਆਂ",
+    "noResults": "ਕੋਈ ਨੌਕਰੀ ਨਹੀਂ ਮਿਲੀ। ਵੱਖਰੇ ਕੀਵਰਡ ਅਜ਼ਮਾਓ।",
+    "postedAgo": "{time} ਪਹਿਲਾਂ ਪੋਸਟ",
+    "vacancies": "{count} ਅਸਾਮੀ",
+    "vacancies_plural": "{count} ਅਸਾਮੀਆਂ",
+    "salary": "ਤਨਖ਼ਾਹ",
+    "experience": "ਤਜਰਬਾ",
+    "jobType": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ",
+    "location": "ਸਥਾਨ",
+    "applyNow": "ਹੁਣੇ ਅਰਜ਼ੀ ਦਿਓ",
+    "applied": "ਅਰਜ਼ੀ ਦਿੱਤੀ",
+    "callHr": "HR ਨੂੰ ਕਾਲ ਕਰੋ",
+    "similarJobs": "ਮਿਲਦੀਆਂ-ਜੁਲਦੀਆਂ ਨੌਕਰੀਆਂ",
+    "jobDetail": {
+      "about": "ਇਸ ਨੌਕਰੀ ਬਾਰੇ",
+      "requirements": "ਲੋੜਾਂ",
+      "perks": "ਲਾਭ ਅਤੇ ਸਹੂਲਤਾਂ",
+      "aboutCompany": "ਕੰਪਨੀ ਬਾਰੇ"
+    },
+    "filters": {
+      "salary": "ਤਨਖ਼ਾਹ ਰੇਂਜ",
+      "experience": "ਤਜਰਬਾ",
+      "jobType": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ",
+      "category": "ਸ਼੍ਰੇਣੀ",
+      "postedWithin": "ਪੋਸਟ ਦੀ ਤਾਰੀਖ"
+    },
+    "types": {
+      "FULL_TIME": "ਪੂਰੇ ਸਮੇਂ",
+      "PART_TIME": "ਅੱਧੇ ਸਮੇਂ",
+      "CONTRACT": "ਠੇਕਾ",
+      "GIG": "ਗਿਗ / ਫ੍ਰੀਲਾਂਸ"
+    }
+  },
+  "seeker": {
+    "dashboard": {
+      "title": "ਮੇਰਾ ਡੈਸ਼ਬੋਰਡ",
+      "appliedJobs": "ਅਰਜ਼ੀ ਦਿੱਤੀਆਂ ਨੌਕਰੀਆਂ",
+      "profileStrength": "ਪ੍ਰੋਫਾਈਲ ਦੀ ਮਜ਼ਬੂਤੀ",
+      "completeProfile": "ਬਿਹਤਰ ਮੇਲ ਲਈ ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਪੂਰੀ ਕਰੋ"
+    },
+    "profile": {
+      "title": "ਮੇਰੀ ਪ੍ਰੋਫਾਈਲ",
+      "personalInfo": "ਨਿੱਜੀ ਜਾਣਕਾਰੀ",
+      "name": "ਪੂਰਾ ਨਾਮ",
+      "phone": "ਮੋਬਾਈਲ ਨੰਬਰ",
+      "city": "ਸ਼ਹਿਰ",
+      "experience": "ਤਜਰਬਾ (ਸਾਲਾਂ ਵਿੱਚ)",
+      "skills": "ਹੁਨਰ",
+      "preferredCategories": "ਪਸੰਦੀਦਾ ਨੌਕਰੀ ਸ਼੍ਰੇਣੀਆਂ",
+      "resume": "ਰੈਜ਼ਿਊਮੇ",
+      "uploadResume": "ਰੈਜ਼ਿਊਮੇ ਅਪਲੋਡ ਕਰੋ",
+      "buildResume": "ਰੈਜ਼ਿਊਮੇ ਬਣਾਓ"
+    }
+  },
+  "employer": {
+    "dashboard": {
+      "title": "ਨਿਯੋਕਤਾ ਡੈਸ਼ਬੋਰਡ",
+      "activeJobs": "ਸਰਗਰਮ ਨੌਕਰੀਆਂ",
+      "totalApplications": "ਕੁੱਲ ਅਰਜ਼ੀਆਂ",
+      "newApplications": "ਨਵੀਆਂ ਅਰਜ਼ੀਆਂ"
+    },
+    "postJob": {
+      "title": "ਨਵੀਂ ਨੌਕਰੀ ਪੋਸਟ ਕਰੋ",
+      "jobTitle": "ਨੌਕਰੀ ਦਾ ਸਿਰਲੇਖ",
+      "category": "ਨੌਕਰੀ ਸ਼੍ਰੇਣੀ",
+      "city": "ਸ਼ਹਿਰ",
+      "salary": "ਤਨਖ਼ਾਹ",
+      "vacancies": "ਅਸਾਮੀਆਂ ਦੀ ਗਿਣਤੀ",
+      "description": "ਨੌਕਰੀ ਦਾ ਵੇਰਵਾ",
+      "jobType": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ",
+      "experience": "ਘੱਟੋ-ਘੱਟ ਤਜਰਬਾ",
+      "expiryDate": "ਸੂਚੀ ਦੀ ਮਿਆਦ ਖਤਮ ਹੋਣ ਦੀ ਤਾਰੀਖ",
+      "preview": "ਪ੍ਰੀਵਿਊ",
+      "publish": "ਸਮੀਖਿਆ ਲਈ ਜਮ੍ਹਾ ਕਰੋ"
+    },
+    "register": {
+      "title": "ਨਿਯੋਕਤਾ ਵਜੋਂ ਰਜਿਸਟਰ ਕਰੋ",
+      "companyName": "ਕੰਪਨੀ ਦਾ ਨਾਮ",
+      "gstCin": "GST / CIN ਨੰਬਰ",
+      "industry": "ਉਦਯੋਗ",
+      "contactPerson": "ਸੰਪਰਕ ਵਿਅਕਤੀ ਦਾ ਨਾਮ",
+      "uploadDocs": "ਤਸਦੀਕ ਦਸਤਾਵੇਜ਼ ਅਪਲੋਡ ਕਰੋ",
+      "docsHint": "GST ਸਰਟੀਫਿਕੇਟ, ਕੰਪਨੀ ਰਜਿਸਟ੍ਰੇਸ਼ਨ, ਜਾਂ ਵਪਾਰ ਲਾਇਸੈਂਸ"
+    }
+  },
+  "categories": {
+    "delivery": "ਡਿਲੀਵਰੀ",
+    "driver": "ਡਰਾਈਵਰ",
+    "sales": "ਸੇਲਜ਼",
+    "security": "ਸੁਰੱਖਿਆ ਗਾਰਡ",
+    "housekeeping": "ਘਰੇਲੂ ਸਾਂਭ-ਸੰਭਾਲ",
+    "cook": "ਰਸੋਈਆ / ਸ਼ੈੱਫ",
+    "construction": "ਨਿਰਮਾਣ",
+    "factory": "ਫੈਕਟਰੀ ਕਾਮਾ",
+    "retail": "ਰਿਟੇਲ",
+    "fieldWork": "ਫੀਲਡ ਵਰਕ",
+    "it": "IT / ਕੰਪਿਊਟਰ",
+    "healthcare": "ਸਿਹਤ ਸੇਵਾ"
+  }
+}
