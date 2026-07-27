@@ -1,73 +1,53 @@
-"use client"
-
-import { useTranslations } from "next-intl"
 import Link from "next/link"
-import { UserPlus, Search, CheckCircle, Building2, PenLine, Users } from "lucide-react"
+import Image from "next/image"
+
+const SEEKER_STEPS = [
+  { num: "1", img: "/images/step-register.jpg", label: "Sign Up Free", desc: "Quick OTP login with your mobile — no resume needed" },
+  { num: "2", img: "/images/step-post.jpg",     label: "Browse Jobs",  desc: "Search by role, salary, city, and qualification" },
+  { num: "3", img: "/images/step-hire.jpg",     label: "Get Hired",    desc: "Call HR directly and walk in for the interview" },
+]
 
 export default function HowItWorks() {
-  const t = useTranslations("home.howItWorks")
-
-  const seekerSteps = [
-    { icon: UserPlus, label: t("seeker.step1") },
-    { icon: Search, label: t("seeker.step2") },
-    { icon: CheckCircle, label: t("seeker.step3") },
-  ]
-
-  const employerSteps = [
-    { icon: Building2, label: t("employer.step1") },
-    { icon: PenLine, label: t("employer.step2") },
-    { icon: Users, label: t("employer.step3") },
-  ]
-
   return (
-    <section className="py-16 bg-white">
+    <section className="py-14 bg-white border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-12">
-          {t("title")}
-        </h2>
+        <div className="text-center mb-10">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">How It Works</h2>
+          <p className="text-sm text-gray-400 mt-1">Find a job in 3 easy steps — 100% free</p>
+        </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Job seekers */}
-          <div className="bg-blue-50 rounded-2xl p-8">
-            <h3 className="text-lg font-bold text-blue-800 mb-6">Looking for a job?</h3>
-            <div className="flex flex-col gap-5">
-              {seekerSteps.map(({ icon: Icon, label }, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0">
-                    <Icon size={18} />
-                  </div>
-                  <span className="text-gray-700 font-medium">{label}</span>
-                </div>
-              ))}
+        {/* Step cards with photos */}
+        <div className="grid sm:grid-cols-3 gap-5 mb-10">
+          {SEEKER_STEPS.map(({ num, img, label, desc }) => (
+            <div key={num} className="flex flex-col rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+              <div className="relative aspect-video w-full">
+                <Image src={img} alt={label} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <span className="absolute bottom-3 left-3 w-7 h-7 rounded-full bg-orange-500 text-white text-xs font-black flex items-center justify-center shadow">
+                  {num}
+                </span>
+              </div>
+              <div className="p-4 bg-white flex-1">
+                <p className="font-bold text-gray-800 text-sm">{label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
+              </div>
             </div>
-            <Link
-              href="/register"
-              className="mt-8 inline-flex items-center justify-center w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors"
-            >
-              Create Free Profile
-            </Link>
-          </div>
+          ))}
+        </div>
 
-          {/* Employers */}
-          <div className="bg-gray-900 rounded-2xl p-8 text-white">
-            <h3 className="text-lg font-bold mb-6">Want to hire?</h3>
-            <div className="flex flex-col gap-5">
-              {employerSteps.map(({ icon: Icon, label }, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                    <Icon size={18} />
-                  </div>
-                  <span className="text-gray-200 font-medium">{label}</span>
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/employer/register"
-              className="mt-8 inline-flex items-center justify-center w-full py-3 rounded-xl bg-white text-gray-900 font-semibold text-sm hover:bg-gray-100 transition-colors"
-            >
-              Post a Job Free
-            </Link>
-          </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Link
+            href="/login"
+            className="flex items-center justify-center py-3.5 rounded-2xl bg-[#b45309] text-white font-bold text-sm hover:bg-[#92400e] transition-colors shadow-sm"
+          >
+            Get a Job Now — Free
+          </Link>
+          <Link
+            href="/employer/register"
+            className="flex items-center justify-center py-3.5 rounded-2xl bg-[#1a3461] text-white font-bold text-sm hover:bg-[#142a52] transition-colors shadow-sm"
+          >
+            Post a Job — Free
+          </Link>
         </div>
       </div>
     </section>

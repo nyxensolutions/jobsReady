@@ -1,54 +1,56 @@
-"use client"
-
-import { useTranslations } from "next-intl"
 import Link from "next/link"
-import {
-  Truck, Car, TrendingUp, Shield, Sparkles, UtensilsCrossed,
-  HardHat, Factory, ShoppingBag, Briefcase, Monitor, HeartPulse
-} from "lucide-react"
 
 const CATEGORIES = [
-  { key: "delivery", icon: Truck, color: "bg-orange-50 text-orange-600" },
-  { key: "driver", icon: Car, color: "bg-blue-50 text-blue-600" },
-  { key: "sales", icon: TrendingUp, color: "bg-green-50 text-green-600" },
-  { key: "security", icon: Shield, color: "bg-red-50 text-red-600" },
-  { key: "housekeeping", icon: Sparkles, color: "bg-purple-50 text-purple-600" },
-  { key: "cook", icon: UtensilsCrossed, color: "bg-yellow-50 text-yellow-600" },
-  { key: "construction", icon: HardHat, color: "bg-stone-50 text-stone-600" },
-  { key: "factory", icon: Factory, color: "bg-slate-50 text-slate-600" },
-  { key: "retail", icon: ShoppingBag, color: "bg-pink-50 text-pink-600" },
-  { key: "fieldWork", icon: Briefcase, color: "bg-teal-50 text-teal-600" },
-  { key: "it", icon: Monitor, color: "bg-indigo-50 text-indigo-600" },
-  { key: "healthcare", icon: HeartPulse, color: "bg-rose-50 text-rose-600" },
+  { slug: "delivery",     label: "Delivery",        emoji: "🛵", vacancies: "23L+",  bg: "bg-amber-50",   ring: "hover:ring-amber-300",  text: "text-amber-700"   },
+  { slug: "driver",       label: "Driver",           emoji: "🚗", vacancies: "3.3L+", bg: "bg-sky-50",     ring: "hover:ring-sky-300",    text: "text-sky-700"     },
+  { slug: "sales",        label: "Sales",            emoji: "📈", vacancies: "5L+",   bg: "bg-green-50",   ring: "hover:ring-green-300",  text: "text-green-700"   },
+  { slug: "security",     label: "Security Guard",   emoji: "🛡️", vacancies: "70K+",  bg: "bg-red-50",     ring: "hover:ring-red-300",    text: "text-red-700"     },
+  { slug: "housekeeping", label: "Housekeeping",     emoji: "🧹", vacancies: "1.5L+", bg: "bg-purple-50",  ring: "hover:ring-purple-300", text: "text-purple-700"  },
+  { slug: "cook",         label: "Cook / Chef",      emoji: "👨‍🍳", vacancies: "80K+",  bg: "bg-yellow-50",  ring: "hover:ring-yellow-300", text: "text-yellow-700"  },
+  { slug: "construction", label: "Construction",     emoji: "🏗️", vacancies: "1L+",   bg: "bg-orange-50",  ring: "hover:ring-orange-300", text: "text-orange-700"  },
+  { slug: "factory",      label: "Factory / Mfg",   emoji: "🏭", vacancies: "70K+",  bg: "bg-slate-50",   ring: "hover:ring-slate-300",  text: "text-slate-700"   },
+  { slug: "retail",       label: "Retail / Shop",    emoji: "🛒", vacancies: "2L+",   bg: "bg-pink-50",    ring: "hover:ring-pink-300",   text: "text-pink-700"    },
+  { slug: "fieldWork",    label: "Field Work",       emoji: "📋", vacancies: "1.2L+", bg: "bg-teal-50",    ring: "hover:ring-teal-300",   text: "text-teal-700"    },
+  { slug: "it",           label: "IT / Computer",    emoji: "💻", vacancies: "10K+",  bg: "bg-indigo-50",  ring: "hover:ring-indigo-300", text: "text-indigo-700"  },
+  { slug: "healthcare",   label: "Healthcare",       emoji: "🏥", vacancies: "20K+",  bg: "bg-rose-50",    ring: "hover:ring-rose-300",   text: "text-rose-700"    },
 ]
 
 export default function CategoryGrid() {
-  const t = useTranslations("home.categories")
-  const tCat = useTranslations("categories")
-
   return (
-    <section className="py-14 bg-gray-50">
+    <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("title")}</h2>
-          <p className="text-gray-500 mt-2 text-sm">{t("subtitle")}</p>
+        <div className="flex items-center justify-between mb-7">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">What kind of job do you want?</h2>
+            <p className="text-gray-500 mt-1 text-sm">Browse by job type — find verified openings near you</p>
+          </div>
+          <Link href="/jobs" className="text-sm text-[#1a3461] font-medium hover:underline hidden sm:block">
+            View all jobs →
+          </Link>
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-          {CATEGORIES.map(({ key, icon: Icon, color }) => (
+          {CATEGORIES.map(({ slug, label, emoji, vacancies, bg, ring, text }) => (
             <Link
-              key={key}
-              href={`/jobs?category=${key}`}
-              className="group flex flex-col items-center gap-2 p-4 rounded-xl bg-white border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all"
+              key={slug}
+              href={`/jobs?category=${slug}`}
+              className={`group flex flex-col items-center gap-2.5 p-4 rounded-2xl ${bg} hover:shadow-md transition-all ring-1 ring-transparent ${ring} border border-transparent hover:border-white`}
             >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${color} group-hover:scale-110 transition-transform`}>
-                <Icon size={22} />
+              <div className="text-4xl leading-none select-none group-hover:scale-110 transition-transform duration-200">
+                {emoji}
               </div>
-              <span className="text-xs font-medium text-gray-700 text-center leading-tight">
-                {tCat(key as any)}
-              </span>
+              <div className="text-center">
+                <div className={`text-xs font-bold leading-tight ${text}`}>{label}</div>
+                <div className="text-xs text-gray-400 mt-0.5">{vacancies} jobs</div>
+              </div>
             </Link>
           ))}
+        </div>
+
+        <div className="text-center mt-6 sm:hidden">
+          <Link href="/jobs" className="text-sm text-[#1a3461] font-medium hover:underline">
+            View all jobs →
+          </Link>
         </div>
       </div>
     </section>

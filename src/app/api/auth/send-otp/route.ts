@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-
-const OTP_STORE = new Map<string, { otp: string; expiresAt: number }>()
+import { otpSet } from "@/lib/otp-store"
 
 function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString()
@@ -14,8 +13,12 @@ export async function POST(req: NextRequest) {
   }
 
   const otp = generateOtp()
-  const expiresAt = Date.now() + 10 * 60 * 1000 // 10 minutes
-  OTP_STORE.set(phone, { otp, expiresAt })
+  try {
+    await otpSet(phone, otp)
+  } catch (err: any) {
+    console.error("[send-otp] DB save failed:", err.message)
+    return NextResponse.json({ error: "Server error — please try again" }, { status: 500 })
+  }
 
   const apiKey = process.env.FAST2SMS_API_KEY
   if (!apiKey) {
@@ -24,6 +27,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true })
   }
 
+  let smsFailed = false
   try {
     const res = await fetch("https://www.fast2sms.com/dev/bulkV2", {
       method: "POST",
@@ -41,11 +45,15 @@ export async function POST(req: NextRequest) {
     if (!data.return) throw new Error(data.message ?? "SMS send failed")
   } catch (err: any) {
     console.error("Fast2SMS error:", err.message)
-    // Still log in dev so testing isn't blocked
     console.log(`[FALLBACK] OTP for ${phone}: ${otp}`)
+    smsFailed = true
   }
 
-  return NextResponse.json({ success: true })
+  // In dev mode: include OTP in response when SMS delivery failed so testing isn't blocked
+  const isDev = process.env.NODE_ENV !== "production"
+  return NextResponse.json({
+    success: true,
+    ...(isDev && smsFailed ? { devOtp: otp } : {}),
+  })
 }
 
-export { OTP_STORE }

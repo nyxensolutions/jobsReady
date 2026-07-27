@@ -11,12 +11,8 @@ type Props = {
   params: Promise<{ locale: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: "common" })
-  return {
-    title: t("appName"),
-  }
+export async function generateMetadata(): Promise<Metadata> {
+  return {}
 }
 
 export function generateStaticParams() {

@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "JobsReady",
+    "appName": "Job Ready",
     "tagline": "ਨੌਕਰੀ ਲੱਭੋ। ਲੋਕਾਂ ਨੂੰ ਨਿਯੁਕਤ ਕਰੋ। ਤਿਆਰ ਹੋਵੋ।",
     "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...",
     "error": "ਕੁਝ ਗਲਤ ਹੋਇਆ",
@@ -55,11 +55,11 @@
       "subtitle": "ਚੋਟੀ ਦੀਆਂ ਕੰਪਨੀਆਂ ਹੁਣ ਭਰਤੀ ਕਰ ਰਹੀਆਂ ਹਨ"
     },
     "howItWorks": {
-      "title": "JobsReady ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ",
+      "title": "Job Ready ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ",
       "seeker": {
-        "step1": "ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਬਣਾਓ",
-        "step2": "ਲੱਭੋ ਅਤੇ ਅਰਜ਼ੀ ਦਿਓ",
-        "step3": "ਨੌਕਰੀ ਪਾਓ"
+        "step1": "ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਬਣਾ�",
+        "step2": "ਲੱਭੋ ਅਤੇ ਅਰਜ਼ੀ ਦਿ�",
+        "step3": "ਨੌਕਰੀ ਪਾ�"
       },
       "employer": {
         "step1": "ਕੰਪਨੀ ਰਜਿਸਟਰ ਕਰੋ",
@@ -70,7 +70,7 @@
   },
   "auth": {
     "loginTitle": "ਜੀ ਆਇਆਂ ਨੂੰ",
-    "registerTitle": "ਖਾਤਾ ਬਣਾਓ",
+    "registerTitle": "ਖਾਤਾ ਬਣਾ�",
     "phoneLabel": "ਮੋਬਾਈਲ ਨੰਬਰ",
     "phonePlaceholder": "10 ਅੰਕਾਂ ਦਾ ਮੋਬਾਈਲ ਨੰਬਰ",
     "emailLabel": "ਈਮੇਲ ਪਤਾ",
@@ -90,7 +90,7 @@
   },
   "jobs": {
     "searchResults": "{count} ਨੌਕਰੀਆਂ ਮਿਲੀਆਂ",
-    "noResults": "ਕੋਈ ਨੌਕਰੀ ਨਹੀਂ ਮਿਲੀ। ਵੱਖਰੇ ਕੀਵਰਡ ਅਜ਼ਮਾਓ।",
+    "noResults": "ਕੋਈ ਨੌਕਰੀ ਨਹੀਂ ਮਿਲੀ। ਵੱਖਰੇ ਕੀਵਰਡ ਅਜ਼ਮਾ�।",
     "postedAgo": "{time} ਪਹਿਲਾਂ ਪੋਸਟ",
     "vacancies": "{count} ਅਸਾਮੀ",
     "vacancies_plural": "{count} ਅਸਾਮੀਆਂ",
@@ -98,7 +98,7 @@
     "experience": "ਤਜਰਬਾ",
     "jobType": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ",
     "location": "ਸਥਾਨ",
-    "applyNow": "ਹੁਣੇ ਅਰਜ਼ੀ ਦਿਓ",
+    "applyNow": "ਹੁਣੇ ਅਰਜ਼ੀ ਦਿ�",
     "applied": "ਅਰਜ਼ੀ ਦਿੱਤੀ",
     "callHr": "HR ਨੂੰ ਕਾਲ ਕਰੋ",
     "similarJobs": "ਮਿਲਦੀਆਂ-ਜੁਲਦੀਆਂ ਨੌਕਰੀਆਂ",
@@ -140,7 +140,7 @@
       "preferredCategories": "ਪਸੰਦੀਦਾ ਨੌਕਰੀ ਸ਼੍ਰੇਣੀਆਂ",
       "resume": "ਰੈਜ਼ਿਊਮੇ",
       "uploadResume": "ਰੈਜ਼ਿਊਮੇ ਅਪਲੋਡ ਕਰੋ",
-      "buildResume": "ਰੈਜ਼ਿਊਮੇ ਬਣਾਓ"
+      "buildResume": "ਰੈਜ਼ਿਊਮੇ ਬਣਾ�"
     }
   },
   "employer": {
@@ -189,3 +189,4 @@
     "healthcare": "ਸਿਹਤ ਸੇਵਾ"
   }
 }
+

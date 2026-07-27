@@ -1,13 +1,24 @@
 import { getTranslations } from "next-intl/server"
+import { prisma } from "@/lib/db"
 import JobSearchBar from "@/components/jobs/JobSearchBar"
 import JobFilters from "@/components/jobs/JobFilters"
 import JobCard from "@/components/jobs/JobCard"
+import SortSelect from "@/components/jobs/SortSelect"
+import JobsPagination from "@/components/jobs/JobsPagination"
+import { Briefcase } from "lucide-react"
+
+const PER_PAGE = 20
 
 type SearchParams = {
   q?: string
   city?: string
   category?: string
   type?: string
+  sort?: string
+  minSalary?: string
+  freshers?: string
+  qualification?: string
+  posted?: string
   page?: string
 }
 
@@ -15,100 +26,96 @@ type Props = {
   searchParams: Promise<SearchParams>
 }
 
-// Sample data until DB is live
-const SAMPLE_JOBS = [
-  {
-    id: "1",
-    title: "Delivery Executive",
-    company: "Zomato",
-    city: "Hyderabad",
-    salary: "₹15,000 – ₹22,000/month",
-    type: "FULL_TIME",
-    category: "delivery",
-    vacancies: 10,
-    postedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    isFeatured: true,
-  },
-  {
-    id: "2",
-    title: "Security Guard",
-    company: "G4S India",
-    city: "Hyderabad",
-    salary: "₹12,000 – ₹16,000/month",
-    type: "FULL_TIME",
-    category: "security",
-    vacancies: 5,
-    postedAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
-    isFeatured: false,
-  },
-  {
-    id: "3",
-    title: "Sales Executive",
-    company: "Reliance Retail",
-    city: "Hyderabad",
-    salary: "₹18,000 – ₹28,000/month",
-    type: "FULL_TIME",
-    category: "sales",
-    vacancies: 8,
-    postedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    isFeatured: true,
-  },
-  {
-    id: "4",
-    title: "Driver (LMV)",
-    company: "Ola",
-    city: "Bengaluru",
-    salary: "₹20,000 – ₹30,000/month",
-    type: "GIG",
-    category: "driver",
-    vacancies: 20,
-    postedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-    isFeatured: false,
-  },
-  {
-    id: "5",
-    title: "Cook (North Indian)",
-    company: "Hospitality Hub",
-    city: "Mumbai",
-    salary: "₹14,000 – ₹20,000/month",
-    type: "FULL_TIME",
-    category: "cook",
-    vacancies: 3,
-    postedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
-    isFeatured: false,
-  },
-  {
-    id: "6",
-    title: "Warehouse Helper",
-    company: "Amazon India",
-    city: "Hyderabad",
-    salary: "₹13,000 – ₹18,000/month",
-    type: "CONTRACT",
-    category: "factory",
-    vacancies: 30,
-    postedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
-    isFeatured: true,
-  },
-]
+function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {
+  const suffix = unit === "daily" ? "/day" : "/month"
+  const fmt = (n: number) =>
+    n >= 1000 ? `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : `₹${n}`
+  if (min && max) return `${fmt(min)} – ${fmt(max)}${suffix}`
+  if (min) return `From ${fmt(min)}${suffix}`
+  if (max) return `Up to ${fmt(max)}${suffix}`
+  return "Salary not mentioned"
+}
 
 export default async function JobsPage({ searchParams }: Props) {
   const params = await searchParams
   const t = await getTranslations("jobs")
 
-  const q = params.q ?? ""
-  const city = params.city ?? ""
+  const q = params.q?.trim() ?? ""
+  const city = params.city?.trim() ?? ""
   const category = params.category ?? ""
+  const type = params.type ?? ""
+  const sort = params.sort ?? "newest"
+  const minSalary = params.minSalary ? parseInt(params.minSalary) : null
+  const freshersOnly = params.freshers === "1"
+  const qualification = params.qualification ?? ""
+  const posted = params.posted ?? ""
+  const page = Math.max(1, parseInt(params.page ?? "1"))
 
-  const filtered = SAMPLE_JOBS.filter((j) => {
-    if (q && !j.title.toLowerCase().includes(q.toLowerCase()) && !j.company.toLowerCase().includes(q.toLowerCase())) return false
-    if (city && !j.city.toLowerCase().includes(city.toLowerCase())) return false
-    if (category && j.category !== category) return false
-    return true
-  })
+  const postedAfter =
+    posted === "today"
+      ? new Date(Date.now() - 24 * 60 * 60 * 1000)
+      : posted === "week"
+      ? new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      : null
+
+  const where = {
+    status: "ACTIVE" as const,
+    ...(q
+      ? {
+          OR: [
+            { title: { contains: q, mode: "insensitive" as const } },
+            { employer: { companyName: { contains: q, mode: "insensitive" as const } } },
+          ],
+        }
+      : {}),
+    ...(city ? { city: { name: { contains: city, mode: "insensitive" as const } } } : {}),
+    ...(category ? { category: { slug: category } } : {}),
+    ...(type ? { jobType: type as any } : {}),
+    ...(minSalary ? { salaryMin: { gte: minSalary } } : {}),
+    ...(freshersOnly ? { experienceMin: 0 } : {}),
+    ...(qualification ? { qualificationRequired: qualification } : {}),
+    ...(postedAfter ? { createdAt: { gte: postedAfter } } : {}),
+  }
+
+  const orderBy =
+    sort === "vacancies"
+      ? [{ isFeatured: "desc" as const }, { vacancies: "desc" as const }]
+      : sort === "salary"
+      ? [{ isFeatured: "desc" as const }, { salaryMax: "desc" as const }]
+      : [{ isFeatured: "desc" as const }, { createdAt: "desc" as const }]
+
+  const [jobs, total] = await Promise.all([
+    prisma.jobListing.findMany({
+      where,
+      include: {
+        employer: { select: { companyName: true, contactPhone: true } },
+        category: { select: { slug: true } },
+        city: { select: { name: true } },
+      },
+      orderBy,
+      skip: (page - 1) * PER_PAGE,
+      take: PER_PAGE,
+    }),
+    prisma.jobListing.count({ where }),
+  ])
+
+  const mapped = jobs.map((j) => ({
+    id: j.id,
+    title: j.title,
+    company: j.source === "SCRAPED" ? "" : j.employer.companyName,
+    contactPhone: j.employer.contactPhone ?? null,
+    city: j.city.name,
+    salary: formatSalary(j.salaryMin, j.salaryMax, j.salaryUnit),
+    type: j.jobType,
+    category: j.category.slug,
+    vacancies: j.vacancies,
+    experienceMin: j.experienceMin,
+    postedAt: j.createdAt,
+    isFeatured: j.isFeatured,
+  }))
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top search bar */}
       <div className="bg-white border-b border-gray-200 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <JobSearchBar defaultQuery={q} defaultCity={city} />
@@ -117,35 +124,36 @@ export default async function JobsPage({ searchParams }: Props) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex gap-6">
-          {/* Sidebar filters */}
           <aside className="hidden lg:block w-64 shrink-0">
             <JobFilters activeCategory={category} />
           </aside>
 
-          {/* Results */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-gray-600">
-                {t("searchResults", { count: filtered.length })}
+                {t("searchResults", { count: total })}
                 {q && <span className="font-semibold"> for "{q}"</span>}
               </p>
-              <select className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 text-gray-700 outline-none focus:ring-2 focus:ring-blue-500">
-                <option>Newest first</option>
-                <option>Highest salary</option>
-                <option>Most vacancies</option>
-              </select>
+              <SortSelect sort={sort} />
             </div>
 
-            {filtered.length === 0 ? (
-              <div className="text-center py-20 text-gray-400">
-                <p className="text-lg">{t("noResults")}</p>
+            {mapped.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                  <Briefcase size={24} className="text-gray-400" />
+                </div>
+                <p className="text-gray-700 font-semibold">{t("noResults")}</p>
+                <p className="text-sm text-gray-400 mt-1">Try different keywords or remove filters</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-3">
-                {filtered.map((job) => (
-                  <JobCard key={job.id} job={job} />
-                ))}
-              </div>
+              <>
+                <div className="flex flex-col gap-3">
+                  {mapped.map((job) => (
+                    <JobCard key={job.id} job={job} />
+                  ))}
+                </div>
+                <JobsPagination page={page} total={total} perPage={PER_PAGE} />
+              </>
             )}
           </div>
         </div>

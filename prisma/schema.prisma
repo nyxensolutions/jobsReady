@@ -43,6 +43,7 @@ enum JobType {
   PART_TIME
   CONTRACT
   GIG
+  WALK_IN
 }
 
 // ─── Core ────────────────────────────────────────────────────────────────────
@@ -79,11 +80,13 @@ model SeekerProfile {
   photoUrl            String?
   bio                 String?
   isProfileComplete   Boolean   @default(false)
+  isOpenToWork        Boolean   @default(true)
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   applications Application[]
+  savedJobs    SavedJob[]
 
   @@map("seeker_profiles")
 }
@@ -163,9 +166,15 @@ model JobListing {
   jobType       JobType   @default(FULL_TIME)
   experienceMin Int       @default(0)
   pincode       String?
+  requirements  String[]
+  perks         String[]
   status        JobStatus @default(PENDING_REVIEW)
   isFeatured    Boolean   @default(false)
   viewCount     Int       @default(0)
+  qualificationRequired String?
+  source        String    @default("EMPLOYER")
+  sourceUrl     String?
+  lastScrapedAt DateTime?
   expiresAt     DateTime?
   publishedAt   DateTime?
   createdAt     DateTime  @default(now())
@@ -175,6 +184,7 @@ model JobListing {
   category     Category        @relation(fields: [categoryId], references: [id])
   city         City            @relation(fields: [cityId], references: [id])
   applications Application[]
+  savedBy      SavedJob[]
 
   @@index([status, cityId])
   @@index([status, categoryId])
@@ -197,6 +207,30 @@ model Application {
   @@unique([jobId, seekerId])
   @@index([seekerId])
   @@map("applications")
+}
+
+model SavedJob {
+  id        String   @id @default(uuid())
+  seekerId  String
+  jobId     String
+  createdAt DateTime @default(now())
+
+  seeker SeekerProfile @relation(fields: [seekerId], references: [id], onDelete: Cascade)
+  job    JobListing    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([seekerId, jobId])
+  @@index([seekerId])
+  @@map("saved_jobs")
+}
+
+// ─── OTP ─────────────────────────────────────────────────────────────────────
+
+model OtpCode {
+  phone     String   @id
+  otp       String
+  expiresAt DateTime
+
+  @@map("otp_codes")
 }
 
 // ─── Notifications ───────────────────────────────────────────────────────────

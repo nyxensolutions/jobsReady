@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "JobsReady",
+    "appName": "Job Ready",
     "tagline": "ಉದ್ಯೋಗ ಹುಡುಕಿ. ಜನರನ್ನು ನೇಮಿಸಿ. ಸಿದ್ಧರಾಗಿ.",
     "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
     "error": "ಏನೋ ತಪ್ಪಾಯಿತು",
@@ -24,10 +24,10 @@
     "postJob": "ಉದ್ಯೋಗ ಪೋಸ್ಟ್ ಮಾಡಿ",
     "login": "ಲಾಗಿನ್",
     "register": "ನೋಂದಾಯಿಸಿ",
-    "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "dashboard": "ಡ್ಯಾಶ್ಬೋರ್ಡ್",
     "profile": "ನನ್ನ ಪ್ರೊಫೈಲ್",
     "applications": "ನನ್ನ ಅರ್ಜಿಗಳು",
-    "logout": "ಲಾಗ್‌ಔಟ್",
+    "logout": "ಲಾಗ್�ಟ್",
     "forJobSeekers": "ಉದ್ಯೋಗಾರ್ಥಿಗಳಿಗೆ",
     "forEmployers": "ಉದ್ಯೋಗದಾತರಿಗೆ"
   },
@@ -55,7 +55,7 @@
       "subtitle": "ಉನ್ನತ ಕಂಪನಿಗಳು ಈಗ ನೇಮಕ ಮಾಡುತ್ತಿವೆ"
     },
     "howItWorks": {
-      "title": "JobsReady ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ",
+      "title": "Job Ready ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ",
       "seeker": {
         "step1": "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ",
         "step2": "ಹುಡುಕಿ ಮತ್ತು ಅರ್ಜಿ ಹಾಕಿ",
@@ -90,7 +90,7 @@
   },
   "jobs": {
     "searchResults": "{count} ಉದ್ಯೋಗಗಳು ಕಂಡುಬಂದವು",
-    "noResults": "ಉದ್ಯೋಗಗಳು ಕಂಡುಬಂದಿಲ್ಲ. ಬೇರೆ ಕೀವರ್ಡ್‌ಗಳನ್ನು ಪ್ರಯತ್ನಿಸಿ.",
+    "noResults": "ಉದ್ಯೋಗಗಳು ಕಂಡುಬಂದಿಲ್ಲ. ಬೇರೆ ಕೀವರ್ಡ್ಗಳನ್ನು ಪ್ರಯತ್ನಿಸಿ.",
     "postedAgo": "{time} ಹಿಂದೆ ಪೋಸ್ಟ್",
     "vacancies": "{count} ಖಾಲಿ",
     "vacancies_plural": "{count} ಖಾಲಿ ಸ್ಥಾನಗಳು",
@@ -118,13 +118,13 @@
     "types": {
       "FULL_TIME": "ಪೂರ್ಣ ಸಮಯ",
       "PART_TIME": "ಅರೆಕಾಲಿಕ",
-      "CONTRACT": "ಒಪ್ಪಂದ",
+      "CONTRACT": "�'ಪ್ಪಂದ",
       "GIG": "ಗಿಗ್ / ಫ್ರೀಲ್ಯಾನ್ಸ್"
     }
   },
   "seeker": {
     "dashboard": {
-      "title": "ನನ್ನ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+      "title": "ನನ್ನ ಡ್ಯಾಶ್ಬೋರ್ಡ್",
       "appliedJobs": "ಅರ್ಜಿ ಹಾಕಿದ ಉದ್ಯೋಗಗಳು",
       "profileStrength": "ಪ್ರೊಫೈಲ್ ಬಲ",
       "completeProfile": "ಉತ್ತಮ ಹೊಂದಾಣಿಕೆಗಾಗಿ ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ"
@@ -139,15 +139,15 @@
       "skills": "ಕೌಶಲ್ಯಗಳು",
       "preferredCategories": "ಆದ್ಯತೆಯ ಉದ್ಯೋಗ ವರ್ಗಗಳು",
       "resume": "ರೆಸ್ಯೂಮೆ",
-      "uploadResume": "ರೆಸ್ಯೂಮೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+      "uploadResume": "ರೆಸ್ಯೂಮೆ ಅಪ್ಲೋಡ್ ಮಾಡಿ",
       "buildResume": "ರೆಸ್ಯೂಮೆ ತಯಾರಿಸಿ"
     }
   },
   "employer": {
     "dashboard": {
-      "title": "ಉದ್ಯೋಗದಾತ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+      "title": "ಉದ್ಯೋಗದಾತ ಡ್ಯಾಶ್ಬೋರ್ಡ್",
       "activeJobs": "ಸಕ್ರಿಯ ಉದ್ಯೋಗಗಳು",
-      "totalApplications": "ಒಟ್ಟು ಅರ್ಜಿಗಳು",
+      "totalApplications": "�'ಟ್ಟು ಅರ್ಜಿಗಳು",
       "newApplications": "ಹೊಸ ಅರ್ಜಿಗಳು"
     },
     "postJob": {
@@ -170,7 +170,7 @@
       "gstCin": "GST / CIN ಸಂಖ್ಯೆ",
       "industry": "ಉದ್ಯಮ",
       "contactPerson": "ಸಂಪರ್ಕ ವ್ಯಕ್ತಿಯ ಹೆಸರು",
-      "uploadDocs": "ಪರಿಶೀಲನೆ ದಾಖಲೆಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+      "uploadDocs": "ಪರಿಶೀಲನೆ ದಾಖಲೆಗಳನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ",
       "docsHint": "GST ಪ್ರಮಾಣಪತ್ರ, ಕಂಪನಿ ನೋಂದಣಿ, ಅಥವಾ ವ್ಯಾಪಾರ ಪರವಾನಗಿ"
     }
   },
@@ -189,3 +189,4 @@
     "healthcare": "ಆರೋಗ್ಯ ಸೇವೆ"
   }
 }
+

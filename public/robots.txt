@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+User-agent: *
+Disallow: /api/
+Disallow: /seeker/
+Disallow: /employer/dashboard
+Disallow: /employer/post-job
+Disallow: /admin/
+Disallow: /auth/
+
+Sitemap: https://jobready.in/sitemap.xml

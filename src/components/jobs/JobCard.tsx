@@ -1,18 +1,21 @@
 "use client"
 
 import Link from "next/link"
-import { MapPin, Clock, Briefcase, Users, Star } from "lucide-react"
-import { formatRelativeTime, formatSalary } from "@/lib/utils"
+import { MapPin, Clock, Users, Phone, ChevronRight } from "lucide-react"
+import { formatRelativeTime } from "@/lib/utils"
+import SaveJobButton from "@/components/jobs/SaveJobButton"
 
 type Job = {
   id: string
   title: string
   company: string
+  contactPhone: string | null
   city: string
   salary: string
   type: string
   category: string
   vacancies: number
+  experienceMin: number
   postedAt: Date
   isFeatured: boolean
 }
@@ -22,85 +25,91 @@ const TYPE_LABELS: Record<string, string> = {
   PART_TIME: "Part Time",
   CONTRACT: "Contract",
   GIG: "Gig",
+  WALK_IN: "Walk-in",
 }
 
-const TYPE_COLORS: Record<string, string> = {
-  FULL_TIME: "bg-green-100 text-green-700",
-  PART_TIME: "bg-yellow-100 text-yellow-700",
-  CONTRACT: "bg-purple-100 text-purple-700",
-  GIG: "bg-orange-100 text-orange-700",
-}
+const AVATAR_COLORS = [
+  "bg-violet-100 text-violet-700",
+  "bg-sky-100 text-sky-700",
+  "bg-emerald-100 text-emerald-700",
+  "bg-amber-100 text-amber-700",
+  "bg-rose-100 text-rose-700",
+  "bg-indigo-100 text-indigo-700",
+]
 
 export default function JobCard({ job }: { job: Job }) {
-  return (
-    <Link
-      href={`/jobs/${job.id}`}
-      className={`block bg-white rounded-xl border transition-all hover:shadow-md hover:border-blue-200 group ${
-        job.isFeatured ? "border-blue-200 shadow-sm" : "border-gray-200"
-      }`}
-    >
-      <div className="p-4 sm:p-5">
-        <div className="flex items-start justify-between gap-3">
-          {/* Company logo placeholder */}
-          <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shrink-0 group-hover:scale-105 transition-transform">
-            {job.company[0]}
-          </div>
+  const avatarSeed = job.company || job.title
+  const avatarColor = AVATAR_COLORS[avatarSeed.charCodeAt(0) % AVATAR_COLORS.length]
 
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 hover:border-[#1a3461]/30 hover:shadow-md transition-all">
+      <Link href={`/jobs/${job.id}`} className="block p-4 sm:p-5">
+        {/* Top row: avatar + title + featured badge */}
+        <div className="flex items-start gap-3">
+          <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold text-base shrink-0 ${avatarColor}`}>
+            {avatarSeed[0].toUpperCase()}
+          </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 flex-wrap">
-              <div>
-                {job.isFeatured && (
-                  <div className="flex items-center gap-1 text-amber-600 text-xs font-semibold mb-1">
-                    <Star size={12} fill="currentColor" />
-                    Featured
-                  </div>
-                )}
-                <h3 className="font-semibold text-gray-900 text-base group-hover:text-blue-700 transition-colors">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <h3 className="font-bold text-[#1a3461] text-sm sm:text-base leading-snug group-hover:text-blue-700 truncate">
                   {job.title}
                 </h3>
-                <p className="text-sm text-gray-500 mt-0.5">{job.company}</p>
+                {job.company && <p className="text-xs text-gray-500 mt-0.5 truncate">{job.company}</p>}
               </div>
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${TYPE_COLORS[job.type] ?? "bg-gray-100 text-gray-600"}`}>
-                {TYPE_LABELS[job.type] ?? job.type}
-              </span>
+              <div className="flex items-center gap-1 shrink-0">
+                {job.isFeatured && (
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                    Featured
+                  </span>
+                )}
+                <SaveJobButton jobId={job.id} />
+              </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 mt-3 text-sm text-gray-500">
-              <span className="flex items-center gap-1">
-                <MapPin size={13} />
-                {job.city}
+            {/* Salary — prominent */}
+            <p className="text-base font-bold text-green-600 mt-2">{job.salary}</p>
+
+            {/* Meta row */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs text-gray-500">
+              <span className="flex items-center gap-1"><MapPin size={11} />{job.city}</span>
+              <span className="flex items-center gap-1"><Users size={11} />{job.vacancies} {job.vacancies === 1 ? "opening" : "openings"}</span>
+              <span className="flex items-center gap-1"><Clock size={11} />{formatRelativeTime(job.postedAt)}</span>
+            </div>
+
+            {/* Chips */}
+            <div className="flex flex-wrap gap-1.5 mt-2.5">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">
+                {TYPE_LABELS[job.type] ?? job.type}
               </span>
-              <span className="flex items-center gap-1">
-                <Briefcase size={13} />
-                {job.salary}
-              </span>
-              <span className="flex items-center gap-1">
-                <Users size={13} />
-                {job.vacancies} {job.vacancies === 1 ? "vacancy" : "vacancies"}
-              </span>
-              <span className="flex items-center gap-1 ml-auto text-xs">
-                <Clock size={12} />
-                {formatRelativeTime(job.postedAt)}
-              </span>
+              {job.experienceMin === 0 && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700 font-medium border border-green-100">
+                  Freshers OK
+                </span>
+              )}
             </div>
           </div>
         </div>
+      </Link>
 
-        <div className="mt-4 flex gap-2">
-          <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation() }}
-            className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
+      {/* CTA buttons */}
+      <div className="px-4 pb-4 sm:px-5 sm:pb-5 flex gap-2 -mt-1">
+        <Link
+          href={`/jobs/${job.id}`}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-lg transition-colors"
+        >
+          Apply Now <ChevronRight size={13} />
+        </Link>
+        {job.contactPhone && (
+          <a
+            href={`tel:${job.contactPhone}`}
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center justify-center gap-1.5 px-4 py-2 border border-green-500 hover:bg-green-50 text-green-700 text-xs font-bold rounded-lg transition-colors"
           >
-            Apply Now
-          </button>
-          <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation() }}
-            className="px-4 py-2 border border-gray-300 hover:border-blue-400 text-gray-700 text-sm font-medium rounded-lg transition-colors"
-          >
-            Save
-          </button>
-        </div>
+            <Phone size={13} /> Call HR
+          </a>
+        )}
       </div>
-    </Link>
+    </div>
   )
 }

@@ -1,25 +1,35 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useTranslations } from "next-intl"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { Phone, Mail, ArrowRight, Loader2, ShieldCheck } from "lucide-react"
+import { Phone, Mail, ArrowRight, Loader2, ShieldCheck, Briefcase } from "lucide-react"
 
 type Step = "role" | "phone" | "otp" | "email"
 type Role = "seeker" | "employer"
 
-export default function LoginPage() {
+function LoginPageContent() {
   const t = useTranslations("auth")
-  const [role, setRole] = useState<Role | null>(null)
-  const [step, setStep] = useState<Step>("role")
-  const [phone, setPhone] = useState("")
+  const searchParams = useSearchParams()
+  const prefilledPhone = searchParams.get("phone") ?? ""
+  const prefilledRole = searchParams.get("role") as Role | null
+  const nextUrl = searchParams.get("next") ?? "/jobs"
+
+  const [role, setRole] = useState<Role | null>(prefilledRole)
+  const [step, setStep] = useState<Step>(
+    prefilledRole === "seeker" && prefilledPhone ? "phone" : "role"
+  )
+  const [phone, setPhone] = useState(prefilledPhone)
   const [email, setEmail] = useState("")
   const [otp, setOtp] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [devOtp, setDevOtp] = useState("")
 
   function selectRole(r: Role) {
     setRole(r)
+    setError("")
     setStep(r === "seeker" ? "phone" : "email")
   }
 
@@ -37,7 +47,9 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone }),
       })
-      if (!res.ok) throw new Error((await res.json()).error ?? "Failed")
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? "Failed to send OTP")
+      if (data.devOtp) setDevOtp(data.devOtp)
       setStep("otp")
     } catch (err: any) {
       setError(err.message)
@@ -58,10 +70,12 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp }),
+        body: JSON.stringify({ phone, otp, next: nextUrl }),
       })
-      if (!res.ok) throw new Error((await res.json()).error ?? "Invalid OTP")
-      window.location.href = "/seeker/dashboard"
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? "Invalid OTP")
+      // Follow the Supabase magic link — this sets session cookies then redirects to dashboard
+      window.location.href = data.redirectUrl
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -80,7 +94,6 @@ export default function LoginPage() {
         body: JSON.stringify({ email }),
       })
       if (!res.ok) throw new Error((await res.json()).error ?? "Failed")
-      // Redirect to check email page
       window.location.href = `/employer/check-email?email=${encodeURIComponent(email)}`
     } catch (err: any) {
       setError(err.message)
@@ -89,16 +102,19 @@ export default function LoginPage() {
     }
   }
 
+  const inputCls = "w-full px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">
-              JR
+    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center bg-gray-50 px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="bg-white rounded-2xl border border-gray-200 p-8">
+          {/* Logo */}
+          <div className="text-center mb-7">
+            <div className="w-11 h-11 bg-blue-700 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <Briefcase size={20} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">{t("loginTitle")}</h1>
+            <h1 className="text-xl font-bold text-gray-900">{t("loginTitle")}</h1>
+            <p className="text-sm text-gray-500 mt-1">Welcome back to Job Ready</p>
           </div>
 
           {/* Step: Choose role */}
@@ -106,30 +122,30 @@ export default function LoginPage() {
             <div className="flex flex-col gap-3">
               <button
                 onClick={() => selectRole("seeker")}
-                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-left group"
+                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all text-left group"
               >
-                <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <Phone size={20} />
+                <div className="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors shrink-0">
+                  <Phone size={18} />
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900">{t("iAmSeeker")}</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-900 text-sm">{t("iAmSeeker")}</div>
                   <div className="text-xs text-gray-500 mt-0.5">Login with mobile OTP</div>
                 </div>
-                <ArrowRight size={16} className="ml-auto text-gray-400 group-hover:text-blue-600" />
+                <ArrowRight size={15} className="text-gray-400 group-hover:text-orange-500" />
               </button>
 
               <button
                 onClick={() => selectRole("employer")}
-                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-left group"
+                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-left group"
               >
-                <div className="w-10 h-10 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <Mail size={20} />
+                <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center group-hover:bg-blue-700 group-hover:text-white transition-colors shrink-0">
+                  <Mail size={18} />
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900">{t("iAmEmployer")}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Login with email</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-900 text-sm">{t("iAmEmployer")}</div>
+                  <div className="text-xs text-gray-500 mt-0.5">Login with email link</div>
                 </div>
-                <ArrowRight size={16} className="ml-auto text-gray-400 group-hover:text-blue-600" />
+                <ArrowRight size={15} className="text-gray-400 group-hover:text-blue-600" />
               </button>
             </div>
           )}
@@ -137,19 +153,13 @@ export default function LoginPage() {
           {/* Step: Phone */}
           {step === "phone" && (
             <form onSubmit={sendOtp} className="flex flex-col gap-4">
-              <button
-                type="button"
-                onClick={() => setStep("role")}
-                className="text-sm text-blue-600 hover:underline text-left mb-2"
-              >
+              <button type="button" onClick={() => setStep("role")} className="text-sm text-gray-500 hover:text-gray-700 text-left flex items-center gap-1">
                 ← Back
               </button>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  {t("phoneLabel")}
-                </label>
-                <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
-                  <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm border-r border-gray-300">+91</span>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">{t("phoneLabel")}</label>
+                <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-orange-400 focus-within:border-transparent">
+                  <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm border-r border-gray-300 shrink-0">+91</span>
                   <input
                     type="tel"
                     inputMode="numeric"
@@ -166,9 +176,9 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
-                {loading && <Loader2 size={16} className="animate-spin" />}
+                {loading && <Loader2 size={15} className="animate-spin" />}
                 {t("sendOtp")}
               </button>
             </form>
@@ -177,26 +187,30 @@ export default function LoginPage() {
           {/* Step: OTP */}
           {step === "otp" && (
             <form onSubmit={verifyOtp} className="flex flex-col gap-4">
-              <div className="text-center mb-2">
+              <div className="text-center mb-1">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <ShieldCheck size={24} className="text-green-600" />
                 </div>
                 <p className="text-sm text-gray-600">
                   {t("otpSent", { phone: `+91 ${phone}` })}
                 </p>
+                <p className="text-xs text-gray-400 mt-1">Check your SMS · Valid for 10 minutes</p>
+                {devOtp && (
+                  <div className="mt-2 inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono px-3 py-1.5 rounded-lg">
+                    🛠 Dev OTP: <strong>{devOtp}</strong>
+                  </div>
+                )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  {t("otpLabel")}
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">{t("otpLabel")}</label>
                 <input
                   type="text"
                   inputMode="numeric"
                   maxLength={6}
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                  placeholder={t("otpPlaceholder")}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-center text-2xl tracking-[1em] outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="• • • • • •"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-center text-2xl tracking-[0.5em] outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                   autoFocus
                 />
               </div>
@@ -204,17 +218,17 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
-                {loading && <Loader2 size={16} className="animate-spin" />}
+                {loading && <Loader2 size={15} className="animate-spin" />}
                 {t("verifyOtp")}
               </button>
               <button
                 type="button"
-                onClick={() => setStep("phone")}
-                className="text-sm text-blue-600 hover:underline text-center"
+                onClick={() => { setOtp(""); setStep("phone") }}
+                className="text-sm text-gray-500 hover:text-gray-700 text-center"
               >
-                {t("resendOtp")}
+                {t("resendOtp")} →
               </button>
             </form>
           )}
@@ -222,23 +236,17 @@ export default function LoginPage() {
           {/* Step: Employer email */}
           {step === "email" && (
             <form onSubmit={employerLogin} className="flex flex-col gap-4">
-              <button
-                type="button"
-                onClick={() => setStep("role")}
-                className="text-sm text-blue-600 hover:underline text-left mb-2"
-              >
+              <button type="button" onClick={() => setStep("role")} className="text-sm text-gray-500 hover:text-gray-700 text-left">
                 ← Back
               </button>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  {t("emailLabel")}
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">{t("emailLabel")}</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t("emailPlaceholder")}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={inputCls}
                   autoFocus
                 />
               </div>
@@ -246,25 +254,31 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-blue-700 text-white font-semibold text-sm hover:bg-blue-800 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
-                {loading && <Loader2 size={16} className="animate-spin" />}
-                Continue with Email
+                {loading && <Loader2 size={15} className="animate-spin" />}
+                Send Magic Link
               </button>
-              <p className="text-xs text-gray-500 text-center">
-                We'll send you a magic link to sign in.
-              </p>
+              <p className="text-xs text-gray-400 text-center">We'll email you a one-click sign-in link.</p>
             </form>
           )}
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 mt-5">
           New employer?{" "}
-          <Link href="/employer/register" className="text-blue-600 font-medium hover:underline">
+          <Link href="/employer/register" className="text-blue-700 font-medium hover:underline">
             Register your company
           </Link>
         </p>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 size={28} className="animate-spin text-gray-400" /></div>}>
+      <LoginPageContent />
+    </Suspense>
   )
 }

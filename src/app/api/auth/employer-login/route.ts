@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createAdminClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json()
@@ -8,14 +8,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email address" }, { status: 400 })
   }
 
-  const supabase = await createAdminClient()
+  const supabase = await createClient()
 
-  // Send magic link email via Supabase
-  const { error } = await supabase.auth.admin.generateLink({
-    type: "magiclink",
+  const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback?next=/employer/dashboard`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm?next=/employer/dashboard`,
     },
   })
 

@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "JobsReady",
+    "appName": "Job Ready",
     "tagline": "Find Jobs. Hire People. Get Ready.",
     "loading": "Loading...",
     "error": "Something went wrong",
@@ -34,7 +34,7 @@
   "home": {
     "hero": {
       "title": "Your next job is ready.",
-      "subtitle": "Search lakhs of jobs in delivery, sales, security, driving, and more — in your city.",
+      "subtitle": "Search lakhs of jobs in delivery, sales, security, driving and more - in your city.",
       "searchPlaceholder": "Job title, skill or company",
       "locationPlaceholder": "City or area",
       "searchButton": "Find Jobs",
@@ -55,7 +55,7 @@
       "subtitle": "Top employers hiring now"
     },
     "howItWorks": {
-      "title": "How JobsReady works",
+      "title": "How Job Ready works",
       "seeker": {
         "step1": "Create your profile",
         "step2": "Search and apply",
@@ -189,3 +189,4 @@
     "healthcare": "Healthcare"
   }
 }
+
