@@ -20,31 +20,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Server error — please try again" }, { status: 500 })
   }
 
-  const apiKey = process.env.FAST2SMS_API_KEY
+  const apiKey = process.env.TWOFACTOR_API_KEY
   if (!apiKey) {
-    // Dev mode: log OTP to console
     console.log(`[DEV] OTP for ${phone}: ${otp}`)
     return NextResponse.json({ success: true })
   }
 
   let smsFailed = false
   try {
-    const res = await fetch("https://www.fast2sms.com/dev/bulkV2", {
-      method: "POST",
-      headers: {
-        authorization: apiKey,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        route: "otp",
-        variables_values: otp,
-        numbers: phone,
-      }),
-    })
+    const res = await fetch(
+      `https://2factor.in/API/V1/${apiKey}/SMS/${phone}/${otp}/AUTOGEN`,
+      { method: "GET" }
+    )
     const data = await res.json()
-    if (!data.return) throw new Error(data.message ?? "SMS send failed")
+    if (data.Status !== "Success") throw new Error(data.Details ?? "SMS send failed")
   } catch (err: any) {
-    console.error("Fast2SMS error:", err.message)
+    console.error("2Factor OTP error:", err.message)
     console.log(`[OTP FALLBACK] ${phone} → ${otp}`)
     smsFailed = true
   }
