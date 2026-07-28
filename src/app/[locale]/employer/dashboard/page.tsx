@@ -66,6 +66,12 @@ export default async function EmployerDashboardPage() {
           </div>
           <div className="flex items-center gap-2">
             <Link
+              href="/employer/profile"
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-600 text-sm font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+            >
+              Edit Profile
+            </Link>
+            <Link
               href="/employer/candidates"
               className="inline-flex items-center gap-2 px-4 py-2.5 border border-[#1a3461] text-[#1a3461] text-sm font-semibold rounded-xl hover:bg-[#1a3461]/5 transition-colors"
             >

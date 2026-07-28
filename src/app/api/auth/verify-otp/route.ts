@@ -9,7 +9,9 @@ function phoneEmail(phone: string) {
 }
 
 export async function POST(req: NextRequest) {
-  const { phone, otp, next } = await req.json()
+  const body = await req.json()
+  const { phone, otp } = body
+  let next: string | undefined = body.next
 
   if (!phone || !otp) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 })
@@ -59,10 +61,9 @@ export async function POST(req: NextRequest) {
 
     // Create DB user + empty seeker profile in one go
     dbUser = await prisma.user.create({ data: { id: authId, phone, role: "SEEKER" } })
-
-    await prisma.seekerProfile.create({
-      data: { userId: dbUser.id, name: phone }, // user fills name in profile page
-    })
+    await prisma.seekerProfile.create({ data: { userId: dbUser.id, name: phone } })
+    // New users always go to profile setup first
+    next = "/seeker/profile"
   } else {
     // Ensure Supabase user has the phone-derived email (for magic link)
     await supabase.auth.admin.updateUserById(dbUser.id, {

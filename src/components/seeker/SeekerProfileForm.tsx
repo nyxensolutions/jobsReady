@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Loader2, CheckCircle, Plus, X, Camera } from "lucide-react"
+import { Loader2, CheckCircle, Plus, X, Camera, FileText, Trash2 } from "lucide-react"
 import Image from "next/image"
 
 const JOB_TYPES = [
@@ -22,6 +22,7 @@ type Initial = {
   experienceYears: number
   isOpenToWork: boolean
   photoUrl: string | null
+  resumeUrl: string | null
 } | null
 
 export default function SeekerProfileForm({
@@ -45,9 +46,48 @@ export default function SeekerProfileForm({
   const [photoUploading, setPhotoUploading] = useState(false)
   const [photoError, setPhotoError] = useState("")
   const photoInputRef = useRef<HTMLInputElement>(null)
+  const [resumeUrl, setResumeUrl] = useState<string | null>(initial?.resumeUrl ?? null)
+  const [resumeUploading, setResumeUploading] = useState(false)
+  const [resumeError, setResumeError] = useState("")
+  const resumeInputRef = useRef<HTMLInputElement>(null)
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [saved, setSaved] = useState(false)
+
+  async function handleResumeChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setResumeError("")
+    const allowed = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
+    if (!allowed.includes(file.type)) { setResumeError("Only PDF or Word files allowed"); return }
+    if (file.size > 5 * 1024 * 1024) { setResumeError("File must be under 5 MB"); return }
+    setResumeUploading(true)
+    try {
+      const fd = new FormData()
+      fd.append("resume", file)
+      const res = await fetch("/api/seeker/resume", { method: "POST", body: fd })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? "Upload failed")
+      setResumeUrl(json.resumeUrl)
+    } catch (err: any) {
+      setResumeError(err.message)
+    } finally {
+      setResumeUploading(false)
+    }
+  }
+
+  async function handleDeleteAccount() {
+    if (!deleteConfirm) { setDeleteConfirm(true); return }
+    setDeleting(true)
+    try {
+      await fetch("/api/user/delete", { method: "DELETE" })
+      router.push("/")
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -272,6 +312,29 @@ export default function SeekerProfileForm({
         </button>
       </div>
 
+      {/* Resume upload */}
+      <div>
+        <label className={labelCls}>Resume <span className="text-gray-400 text-xs font-normal">(PDF or Word, max 5 MB)</span></label>
+        {resumeUrl ? (
+          <div className="flex items-center gap-3 px-4 py-3 bg-green-50 border border-green-200 rounded-xl">
+            <FileText size={18} className="text-green-600 shrink-0" />
+            <a href={resumeUrl} target="_blank" rel="noreferrer" className="text-sm text-green-700 font-medium hover:underline flex-1 truncate">View uploaded resume</a>
+            <button type="button" onClick={() => resumeInputRef.current?.click()} className="text-xs text-blue-600 hover:underline shrink-0">Replace</button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => resumeInputRef.current?.click()}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-colors"
+          >
+            {resumeUploading ? <Loader2 size={16} className="animate-spin" /> : <FileText size={16} />}
+            {resumeUploading ? "Uploading..." : "Upload Resume"}
+          </button>
+        )}
+        <input ref={resumeInputRef} type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={handleResumeChange} />
+        {resumeError && <p className="text-xs text-red-500 mt-1">{resumeError}</p>}
+      </div>
+
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
       {saved && (
@@ -289,6 +352,24 @@ export default function SeekerProfileForm({
         {loading && <Loader2 size={15} className="animate-spin" />}
         Save Profile
       </button>
+
+      {/* Account deletion */}
+      <div className="border-t border-gray-100 pt-4">
+        <button
+          type="button"
+          onClick={handleDeleteAccount}
+          disabled={deleting}
+          className={`flex items-center gap-2 text-sm px-4 py-2 rounded-xl border transition-colors ${
+            deleteConfirm ? "bg-red-600 text-white border-red-600" : "text-red-500 border-red-200 hover:bg-red-50"
+          }`}
+        >
+          {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+          {deleteConfirm ? "Are you sure? Click to confirm" : "Delete my account"}
+        </button>
+        {deleteConfirm && (
+          <p className="text-xs text-red-400 mt-1 ml-1">This will permanently delete your account and all data.</p>
+        )}
+      </div>
     </form>
   )
 }

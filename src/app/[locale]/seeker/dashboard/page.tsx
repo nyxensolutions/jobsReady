@@ -7,6 +7,7 @@ import {
   Star, ChevronRight, Bookmark, Bell, Phone, User
 } from "lucide-react"
 import { formatRelativeTime } from "@/lib/utils"
+import WithdrawButton from "@/components/seeker/WithdrawButton"
 
 const APP_STATUS_CONFIG: Record<string, { label: string; color: string }> = {
   APPLIED:     { label: "Applied",     color: "text-blue-700 bg-blue-100" },
@@ -241,6 +242,7 @@ export default async function SeekerDashboardPage() {
                       <span className="text-xs text-gray-400 flex items-center gap-1">
                         <Clock size={11} />{formatRelativeTime(app.createdAt)}
                       </span>
+                      {app.status === "APPLIED" && <WithdrawButton applicationId={app.id} />}
                     </div>
                   </div>
                 )

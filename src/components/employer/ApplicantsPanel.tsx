@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { CheckCircle, XCircle, Eye, Star, Users, MapPin, Briefcase, ChevronDown, Phone } from "lucide-react"
+import { CheckCircle, XCircle, Eye, Star, Users, MapPin, Briefcase, ChevronDown, Phone, Download } from "lucide-react"
 
 type Seeker = {
   id: string
@@ -82,6 +82,29 @@ export default function ApplicantsPanel({ jobId, jobTitle, initialApplications }
     }
   }
 
+  function exportCSV() {
+    const rows = [
+      ["Name", "City", "Experience (yrs)", "Skills", "Status", "Applied On", "Cover Note"],
+      ...applications.map((a) => [
+        a.seeker.name,
+        a.seeker.city ?? "",
+        String(a.seeker.experienceYears),
+        a.seeker.skills.join("; "),
+        a.status,
+        new Date(a.createdAt).toLocaleDateString("en-IN"),
+        (a.coverNote ?? "").replace(/"/g, '""'),
+      ]),
+    ]
+    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(",")).join("\n")
+    const blob = new Blob([csv], { type: "text/csv" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${jobTitle.replace(/\s+/g, "_")}_applicants.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const filtered = activeTab === "All" ? applications : applications.filter((a) => a.status === activeTab)
 
   const counts = TAB_FILTERS.reduce<Record<string, number>>((acc, tab) => {
@@ -94,10 +117,17 @@ export default function ApplicantsPanel({ jobId, jobTitle, initialApplications }
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-7">
 
         {/* Header */}
-        <div className="mb-6">
-          <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Applicants for</p>
-          <h1 className="text-xl font-bold text-gray-900">{jobTitle}</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{applications.length} total application{applications.length !== 1 ? "s" : ""}</p>
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Applicants for</p>
+            <h1 className="text-xl font-bold text-gray-900">{jobTitle}</h1>
+            <p className="text-sm text-gray-500 mt-0.5">{applications.length} total application{applications.length !== 1 ? "s" : ""}</p>
+          </div>
+          {applications.length > 0 && (
+            <button onClick={exportCSV} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors shrink-0">
+              <Download size={15} /> Export CSV
+            </button>
+          )}
         </div>
 
         {/* Tabs */}

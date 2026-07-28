@@ -37,6 +37,7 @@ export default async function SeekerProfilePage() {
               experienceYears: profile.experienceYears,
               isOpenToWork: profile.isOpenToWork,
               photoUrl: profile.photoUrl ?? null,
+              resumeUrl: profile.resumeUrl ?? null,
             } : null}
             cities={cities.map((c) => c.name)}
           />

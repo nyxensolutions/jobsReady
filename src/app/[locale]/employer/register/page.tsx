@@ -80,18 +80,22 @@ export default function EmployerRegisterPage() {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50 px-4">
         <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center max-w-md w-full">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
-            <CheckCircle size={32} className="text-green-600" />
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-5">
+            <Upload size={28} className="text-blue-700" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Registration submitted!</h2>
-          <p className="text-gray-500 text-sm mb-6">
-            We'll review your company details and send a verification email to <strong>{form.email}</strong> within 24 hours.
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Check your email</h2>
+          <p className="text-gray-500 text-sm mb-1">
+            We sent a sign-in link to
+          </p>
+          <p className="font-semibold text-gray-800 text-sm mb-5">{form.email}</p>
+          <p className="text-xs text-gray-400 mb-7 leading-relaxed">
+            Click the link in the email to access your employer dashboard and post your first job. The link expires in 24 hours.
           </p>
           <Link
-            href="/"
-            className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl text-sm hover:bg-blue-700 transition-colors"
+            href={`/login?role=employer`}
+            className="inline-flex items-center justify-center px-6 py-3 bg-blue-700 text-white font-semibold rounded-xl text-sm hover:bg-blue-800 transition-colors"
           >
-            Back to Home
+            Didn't get the email? Sign in here
           </Link>
         </div>
       </div>
