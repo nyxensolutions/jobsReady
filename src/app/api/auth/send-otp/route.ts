@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     if (!data.return) throw new Error(data.message ?? "SMS send failed")
   } catch (err: any) {
     console.error("Fast2SMS error:", err.message)
-    console.log(`[FALLBACK] OTP for ${phone}: ${otp}`)
+    console.log(`[OTP FALLBACK] ${phone} → ${otp}`)
     smsFailed = true
   }
 
