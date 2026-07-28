@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   let smsFailed = false
   try {
     const res = await fetch(
-      `https://2factor.in/API/V1/${apiKey}/SMS/${phone}/${otp}/AUTOGEN`,
+      `https://2factor.in/API/V1/${apiKey}/SMS/${phone}/${otp}`,
       { method: "GET" }
     )
     const data = await res.json()
