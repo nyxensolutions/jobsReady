@@ -82,20 +82,21 @@ export async function PUT(
           })
         }
 
-        // SMS via Fast2SMS (phone accounts — extract phone from synthetic email)
-        const apiKey = process.env.FAST2SMS_API_KEY
-        if (apiKey) {
+        // SMS via 2Factor.in transactional SMS (phone accounts)
+        const tfApiKey = process.env.TWOFACTOR_API_KEY
+        const senderId = process.env.TWOFACTOR_SENDER_ID ?? "JBSRDY"
+        if (tfApiKey) {
           const phone = seekerAuthUser?.phone
             ?? (seekerEmail?.endsWith("@phone.jobsready.in") ? seekerEmail.split("@")[0] : null)
           if (phone && /^[6-9]\d{9}$/.test(phone)) {
             const smsText = status === "SHORTLISTED"
-              ? `Congrats! You've been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Job Ready app for details.`
-              : `Great news! You've been selected for ${application.job.title} at ${application.job.employer.companyName}. Expect a call soon!`
-            await fetch("https://www.fast2sms.com/dev/bulkV2", {
-              method: "POST",
-              headers: { authorization: apiKey, "Content-Type": "application/json" },
-              body: JSON.stringify({ route: "q", message: smsText, numbers: phone }),
-            })
+              ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Jobs Ready app for details.`
+              : `Great news! You have been selected for ${application.job.title} at ${application.job.employer.companyName}. Expect a call soon!`
+            const url = `https://2factor.in/API/V1/${tfApiKey}/ADDON_SERVICES/SEND/TSMS`
+              + `?From=${encodeURIComponent(senderId)}`
+              + `&To=${phone}`
+              + `&Msg=${encodeURIComponent(smsText)}`
+            await fetch(url)
           }
         }
       } catch (err) {
