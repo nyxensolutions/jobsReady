@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
       { method: "GET" }
     )
     const data = await res.json()
+    console.log("[2Factor OTP response]", JSON.stringify(data))
     if (data.Status !== "Success") throw new Error(data.Details ?? "SMS send failed")
   } catch (err: any) {
     console.error("2Factor OTP error:", err.message)
