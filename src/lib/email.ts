@@ -139,6 +139,45 @@ export async function sendCandidateInviteEmail({
   })
 }
 
+export async function sendEmployerMagicLink({
+  email,
+  magicLink,
+}: {
+  email: string
+  magicLink: string
+}) {
+  await resend.emails.send({
+    from: `Job Ready <${FROM}>`,
+    to: email,
+    subject: "Sign in to Job Ready",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#1a3461;padding:24px 32px">
+          <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700">Job<span style="color:#f97316">Ready</span></h1>
+          <p style="margin:4px 0 0;color:#93c5fd;font-size:12px">India's job portal for blue-collar workers</p>
+        </div>
+        <div style="padding:32px">
+          <h2 style="margin:0 0 8px;color:#1a3461;font-size:18px">Sign in to your account</h2>
+          <p style="margin:0 0 24px;color:#4b5563;font-size:14px;line-height:1.6">
+            Click the button below to sign in to your Job Ready employer account. This link expires in 1 hour.
+          </p>
+          <a href="${magicLink}" style="display:inline-block;background:#1a3461;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600">
+            Sign in to Job Ready →
+          </a>
+          <p style="margin:24px 0 0;color:#6b7280;font-size:12px;line-height:1.6">
+            If the button doesn't work, copy and paste this link:<br>
+            <a href="${magicLink}" style="color:#1a3461;word-break:break-all">${magicLink}</a>
+          </p>
+          <p style="margin:16px 0 0;color:#9ca3af;font-size:12px">If you didn't request this, you can safely ignore this email.</p>
+        </div>
+        <div style="background:#f9fafb;padding:16px 32px;border-top:1px solid #e5e7eb">
+          <p style="margin:0;color:#9ca3af;font-size:11px">Job Ready · NyxenCloud Solution Pvt. Ltd.</p>
+        </div>
+      </div>
+    `,
+  })
+}
+
 export async function sendSeekerShortlistAlert({
   seekerEmail,
   seekerName,
