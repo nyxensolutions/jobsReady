@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
   })
 
   if (error) {
-    console.error("Magic link error:", error.message)
-    return NextResponse.json({ error: "Failed to send login email" }, { status: 500 })
+    console.error("Magic link error:", error.message, error.status, JSON.stringify(error))
+    return NextResponse.json({ error: error.message ?? "Failed to send login email" }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
