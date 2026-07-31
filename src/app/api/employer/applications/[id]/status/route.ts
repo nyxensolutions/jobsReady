@@ -90,7 +90,7 @@ export async function PUT(
             ?? (seekerEmail?.endsWith("@phone.jobsready.in") ? seekerEmail.split("@")[0] : null)
           if (phone && /^[6-9]\d{9}$/.test(phone)) {
             const msg = status === "SHORTLISTED"
-              ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Jobs Ready app for details.`
+              ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Job Ready app for details.`
               : `Great news! You have been selected for ${application.job.title} at ${application.job.employer.companyName}. Expect a call from them soon!`
             // Optional: add &TemplateId=XXXX once 2Factor reveals the ID
             const url = `https://2factor.in/API/V1/${tfApiKey}/ADDON_SERVICES/SEND/TSMS`

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Mail, MapPin, Clock, AlertCircle } from "lucide-react"
+import { Mail, MapPin, Clock, AlertCircle, Phone } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -47,6 +47,18 @@ export default function ContactPage() {
                     <a href="mailto:employers@jobready.in" className="text-sm font-semibold text-[#1a3461] hover:underline">
                       employers@jobready.in
                     </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#eef2ff] flex items-center justify-center shrink-0">
+                    <Phone size={16} className="text-[#1a3461]" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-0.5">Phone / WhatsApp</p>
+                    <a href="tel:+919953699143" className="text-sm font-semibold text-[#1a3461] hover:underline">
+                      +91 99536 99143
+                    </a>
+                    <p className="text-xs text-gray-400 mt-0.5">Mon – Sat, 9 AM – 6 PM IST</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -104,7 +116,7 @@ export default function ContactPage() {
                 { q: "Is Job Ready free for job seekers?", a: "Yes, completely free. Job seekers can apply to unlimited jobs at no cost." },
                 { q: "How do I post a job as an employer?", a: "Register your company, verify your email, and use the dashboard to post and manage job listings." },
                 { q: "I didn't receive my OTP. What should I do?", a: "Wait 60 seconds and retry. If the issue persists, email us at support@jobready.in with your mobile number." },
-                { q: "How do I delete my account?", a: "Email support@jobready.in from your registered email/phone with the subject 'Account Deletion Request'." },
+                { q: "How do I delete my account?", a: "Go to your Profile page and scroll to the bottom — there is a 'Delete Account' button. Alternatively, call or email us at support@jobready.in." },
                 { q: "How do I report a fraudulent job posting?", a: "Click 'Report' on the job listing, or email grievance@jobready.in with the job ID and details." },
               ].map(({ q, a }) => (
                 <div key={q} className="py-3.5">

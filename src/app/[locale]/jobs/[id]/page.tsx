@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `${job.title} in ${metaCompany}. ${salary ? salary + ". " : ""}${job.description.slice(0, 140)}`
 
   return {
-    title: `${job.title} in ${metaCompany} — JobsReady`,
+    title: `${job.title} in ${metaCompany} — Job Ready`,
     description,
     openGraph: {
       title: `${job.title} — ${metaCompany}`,

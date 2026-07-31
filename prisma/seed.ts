@@ -23,6 +23,17 @@ async function main() {
     { slug: "fieldWork", nameEn: "Field Work", nameHi: "फील्ड वर्क", nameTe: "ఫీల్డ్ వర్క్", nameTa: "களப்பணி", nameKn: "ಕ್ಷೇತ್ರ ಕೆಲಸ", nameBn: "মাঠকর্মী", namePa: "ਫੀਲਡ ਵਰਕ", icon: "Briefcase", sortOrder: 10 },
     { slug: "it", nameEn: "IT / Computer", nameHi: "IT / कंप्यूटर", nameTe: "IT / కంప్యూటర్", nameTa: "IT / கணினி", nameKn: "IT / ಕಂಪ್ಯೂಟರ್", nameBn: "IT / কম্পিউটার", namePa: "IT / ਕੰਪਿਊਟਰ", icon: "Monitor", sortOrder: 11 },
     { slug: "healthcare", nameEn: "Healthcare", nameHi: "स्वास्थ्य सेवा", nameTe: "ఆరోగ్య సేవలు", nameTa: "சுகாதாரம்", nameKn: "ಆರೋಗ್ಯ ಸೇವೆ", nameBn: "স্বাস্থ্যসেবা", namePa: "ਸਿਹਤ ਸੇਵਾ", icon: "HeartPulse", sortOrder: 12 },
+    { slug: "data-entry", nameEn: "Data Entry", nameHi: "डेटा एंट्री", nameTe: "డేటా ఎంట్రీ", nameTa: "தரவு உள்ளீடு", nameKn: "ಡೇಟಾ ಎಂಟ್ರಿ", nameBn: "ডেটা এন্ট্রি", namePa: "ਡੇਟਾ ਐਂਟਰੀ", icon: "Keyboard", sortOrder: 13 },
+    { slug: "telecaller", nameEn: "Telecaller / BPO", nameHi: "टेलीकॉलर / BPO", nameTe: "టెలీకాలర్ / BPO", nameTa: "தொலைபேசி நிபுணர்", nameKn: "ಟೆಲಿಕಾಲರ್ / BPO", nameBn: "টেলিকলার / BPO", namePa: "ਟੈਲੀਕਾਲਰ / BPO", icon: "Phone", sortOrder: 14 },
+    { slug: "electrician", nameEn: "Electrician", nameHi: "इलेक्ट्रीशियन", nameTe: "ఎలక్ట్రీషియన్", nameTa: "மின்சாரவாதி", nameKn: "ವಿದ್ಯುತ್ ತಂತ್ರಜ್ಞ", nameBn: "ইলেকট্রিশিয়ান", namePa: "ਇਲੈਕਟ੍ਰੀਸ਼ੀਅਨ", icon: "Zap", sortOrder: 15 },
+    { slug: "plumber", nameEn: "Plumber", nameHi: "प्लंबर", nameTe: "ప్లంబర్", nameTa: "குழாய் பணியாளர்", nameKn: "ಪ್ಲಂಬರ್", nameBn: "প্লাম্বার", namePa: "ਪਲੰਬਰ", icon: "Wrench", sortOrder: 16 },
+    { slug: "carpenter", nameEn: "Carpenter", nameHi: "बढ़ई / कारपेंटर", nameTe: "వడ్రంగి", nameTa: "தச்சர்", nameKn: "ಮರಗೆಲಸಗಾರ", nameBn: "কাঠমিস্ত্রি", namePa: "ਤਰਖਾਣ", icon: "Hammer", sortOrder: 17 },
+    { slug: "mechanic", nameEn: "Mechanic / Technician", nameHi: "मैकेनिक / टेक्नीशियन", nameTe: "మెకానిక్ / టెక్నీషియన్", nameTa: "இயந்திர நிபுணர்", nameKn: "ಮೆಕ್ಯಾನಿಕ್ / ತಂತ್ರಜ್ಞ", nameBn: "মেকানিক / টেকনিশিয়ান", namePa: "ਮਕੈਨਿਕ / ਟੈਕਨੀਸ਼ੀਅਨ", icon: "Settings", sortOrder: 18 },
+    { slug: "tailor", nameEn: "Tailor / Stitching", nameHi: "दर्जी / सिलाई", nameTe: "దర్జీ / కుట్టు", nameTa: "தையல்காரர்", nameKn: "ದರ್ಜಿ / ಹೊಲಿಗೆ", nameBn: "দর্জি / সেলাই", namePa: "ਦਰਜ਼ੀ / ਸਿਲਾਈ", icon: "Scissors", sortOrder: 19 },
+    { slug: "beautician", nameEn: "Beautician / Salon", nameHi: "ब्यूटीशियन / सैलून", nameTe: "బ్యూటీషియన్ / సెలూన్", nameTa: "அழகுநர் / சலூன்", nameKn: "ಬ್ಯೂಟಿಷಿಯನ್ / ಸಲೂನ್", nameBn: "বিউটিশিয়ান / সেলুন", namePa: "ਬਿਊਟੀਸ਼ੀਅਨ / ਸੈਲੂਨ", icon: "Sparkles", sortOrder: 20 },
+    { slug: "peon", nameEn: "Peon / Office Boy", nameHi: "चपरासी / ऑफिस बॉय", nameTe: "పియోన్ / ఆఫీస్ బాయ్", nameTa: "அலுவலக உதவியாளர்", nameKn: "ಪ್ಯಾದೆ / ಆಫೀಸ್ ಬಾಯ್", nameBn: "পিয়ন / অফিস বয়", namePa: "ਚਪੜਾਸੀ / ਆਫਿਸ ਬੁਆਏ", icon: "User", sortOrder: 21 },
+    { slug: "accounting", nameEn: "Accounting / Finance", nameHi: "अकाउंटिंग / फाइनेंस", nameTe: "అకౌంటింగ్ / ఫైనాన్స్", nameTa: "கணக்கியல் / நிதி", nameKn: "ಅಕೌಂಟಿಂಗ್ / ಫೈನಾನ್ಸ್", nameBn: "অ্যাকাউন্টিং / ফাইন্যান্স", namePa: "ਅਕਾਊਂਟਿੰਗ / ਫਾਈਨੈਂਸ", icon: "Calculator", sortOrder: 22 },
+    { slug: "teaching", nameEn: "Teaching / Tutor", nameHi: "शिक्षक / ट्यूटर", nameTe: "టీచర్ / ట్యూటర్", nameTa: "ஆசிரியர் / பயிற்சியாளர்", nameKn: "ಶಿಕ್ಷಕ / ಟ್ಯೂಟರ್", nameBn: "শিক্ষক / টিউটর", namePa: "ਅਧਿਆਪਕ / ਟਿਊਟਰ", icon: "BookOpen", sortOrder: 23 },
   ]
 
   for (const cat of categories) {
@@ -48,6 +59,21 @@ async function main() {
     { name: "Lucknow", nameHi: "लखनऊ", slug: "lucknow", stateCode: "UP", stateName: "Uttar Pradesh" },
     { name: "Chandigarh", nameHi: "चंडीगढ़", slug: "chandigarh", stateCode: "PB", stateName: "Punjab" },
     { name: "Visakhapatnam", nameHi: "विशाखापट्टनम", slug: "visakhapatnam", stateCode: "AP", stateName: "Andhra Pradesh" },
+    { name: "Noida", nameHi: "नोएडा", slug: "noida", stateCode: "UP", stateName: "Uttar Pradesh" },
+    { name: "Gurugram", nameHi: "गुरुग्राम", slug: "gurugram", stateCode: "HR", stateName: "Haryana" },
+    { name: "Ghaziabad", nameHi: "गाज़ियाबाद", slug: "ghaziabad", stateCode: "UP", stateName: "Uttar Pradesh" },
+    { name: "Faridabad", nameHi: "फरीदाबाद", slug: "faridabad", stateCode: "HR", stateName: "Haryana" },
+    { name: "Greater Noida", nameHi: "ग्रेटर नोएडा", slug: "greater-noida", stateCode: "UP", stateName: "Uttar Pradesh" },
+    { name: "Indore", nameHi: "इंदौर", slug: "indore", stateCode: "MP", stateName: "Madhya Pradesh" },
+    { name: "Bhopal", nameHi: "भोपाल", slug: "bhopal", stateCode: "MP", stateName: "Madhya Pradesh" },
+    { name: "Nagpur", nameHi: "नागपुर", slug: "nagpur", stateCode: "MH", stateName: "Maharashtra" },
+    { name: "Surat", nameHi: "सूरत", slug: "surat", stateCode: "GJ", stateName: "Gujarat" },
+    { name: "Kochi", nameHi: "कोच्चि", slug: "kochi", stateCode: "KL", stateName: "Kerala" },
+    { name: "Coimbatore", nameHi: "कोयंबटूर", slug: "coimbatore", stateCode: "TN", stateName: "Tamil Nadu" },
+    { name: "Nashik", nameHi: "नासिक", slug: "nashik", stateCode: "MH", stateName: "Maharashtra" },
+    { name: "Patna", nameHi: "पटना", slug: "patna", stateCode: "BR", stateName: "Bihar" },
+    { name: "Agra", nameHi: "आगरा", slug: "agra", stateCode: "UP", stateName: "Uttar Pradesh" },
+    { name: "Varanasi", nameHi: "वाराणसी", slug: "varanasi", stateCode: "UP", stateName: "Uttar Pradesh" },
   ]
 
   for (const city of cities) {
