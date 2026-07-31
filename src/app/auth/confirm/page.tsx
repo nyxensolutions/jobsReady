@@ -10,30 +10,35 @@ function AuthConfirmContent() {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    const hash = window.location.hash.slice(1)
-    if (!hash) {
-      setError("No session data in URL.")
-      return
-    }
-
-    const params = new URLSearchParams(hash)
-    const access_token = params.get("access_token")
-    const refresh_token = params.get("refresh_token")
-
-    if (!access_token || !refresh_token) {
-      setError("Invalid or expired sign-in link.")
-      return
-    }
-
     const supabase = createClient()
-    supabase.auth.setSession({ access_token, refresh_token }).then(({ error: err }) => {
-      if (err) {
-        setError(err.message)
+    const next = searchParams.get("next") ?? "/"
+
+    // PKCE flow — employer email magic link sends ?code=...
+    const code = searchParams.get("code")
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ error: err }) => {
+        if (err) { setError(err.message); return }
+        window.location.replace(next)
+      })
+      return
+    }
+
+    // Implicit flow — seeker phone OTP magic link sends #access_token=...&refresh_token=...
+    const hash = window.location.hash.slice(1)
+    if (hash) {
+      const params = new URLSearchParams(hash)
+      const access_token = params.get("access_token")
+      const refresh_token = params.get("refresh_token")
+      if (access_token && refresh_token) {
+        supabase.auth.setSession({ access_token, refresh_token }).then(({ error: err }) => {
+          if (err) { setError(err.message); return }
+          window.location.replace(next)
+        })
         return
       }
-      const next = searchParams.get("next") ?? "/"
-      window.location.replace(next)
-    })
+    }
+
+    setError("Invalid or expired sign-in link. Please request a new one.")
   }, [searchParams])
 
   if (error) {
