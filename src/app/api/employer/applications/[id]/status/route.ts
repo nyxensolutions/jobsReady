@@ -85,17 +85,19 @@ export async function PUT(
         // SMS via 2Factor.in transactional SMS (phone accounts)
         const tfApiKey = process.env.TWOFACTOR_API_KEY
         const senderId = process.env.TWOFACTOR_SENDER_ID ?? "JBSRDY"
-        if (tfApiKey) {
+        const templateId = status === "SHORTLISTED"
+          ? process.env.TWOFACTOR_TEMPLATE_SHORTLISTED
+          : process.env.TWOFACTOR_TEMPLATE_HIRED
+        if (tfApiKey && templateId) {
           const phone = seekerAuthUser?.phone
             ?? (seekerEmail?.endsWith("@phone.jobsready.in") ? seekerEmail.split("@")[0] : null)
           if (phone && /^[6-9]\d{9}$/.test(phone)) {
-            const smsText = status === "SHORTLISTED"
-              ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Jobs Ready app for details.`
-              : `Great news! You have been selected for ${application.job.title} at ${application.job.employer.companyName}. Expect a call soon!`
             const url = `https://2factor.in/API/V1/${tfApiKey}/ADDON_SERVICES/SEND/TSMS`
               + `?From=${encodeURIComponent(senderId)}`
               + `&To=${phone}`
-              + `&Msg=${encodeURIComponent(smsText)}`
+              + `&TemplateId=${templateId}`
+              + `&VAR1=${encodeURIComponent(application.job.title)}`
+              + `&VAR2=${encodeURIComponent(application.job.employer.companyName)}`
             await fetch(url)
           }
         }
