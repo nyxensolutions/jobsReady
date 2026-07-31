@@ -194,7 +194,7 @@ function LoginPageContent() {
                 <p className="text-sm text-gray-600">
                   {t("otpSent", { phone: `+91 ${phone}` })}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">Check your SMS · Valid for 10 minutes</p>
+                <p className="text-xs text-gray-400 mt-1">You will receive an SMS or a call with your OTP · Valid for 10 minutes</p>
                 {devOtp && (
                   <div className="mt-2 inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono px-3 py-1.5 rounded-lg">
                     🛠 Dev OTP: <strong>{devOtp}</strong>
