@@ -15,11 +15,11 @@ const BASE = "https://jsearch.p.rapidapi.com/search-v2"
 // JSearch query format: "job title in city, country"
 const SEARCHES = [
   { query: "delivery boy courier executive in Delhi India", category: "delivery" },
-  { query: "security guard watchman in Delhi India", category: "security" },
+  { query: "security guard officer in Delhi NCR India", category: "security" },
   { query: "driver cab auto in Delhi NCR India", category: "driver" },
   { query: "cook chef kitchen helper in Delhi India", category: "cook" },
-  { query: "factory worker packing operator in Noida India", category: "factory" },
-  { query: "housekeeping cleaner sweeper in Gurgaon India", category: "housekeeping" },
+  { query: "packing operator production worker in Noida India", category: "factory" },
+  { query: "housekeeping staff cleaning in Gurgaon India", category: "housekeeping" },
 ]
 
 const CITY_SLUG: Record<string, string> = {
@@ -108,7 +108,7 @@ async function fetchJSearchJobs(query: string): Promise<JSearchJob[]> {
   }
 
   const data = await res.json()
-  return (data?.data ?? []) as JSearchJob[]
+  return (data?.data?.jobs ?? data?.data ?? []) as JSearchJob[]
 }
 
 function normaliseSalary(amount: number | undefined, period: string | undefined): number | undefined {
