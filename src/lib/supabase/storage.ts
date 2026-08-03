@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js"
 
-// Minimal Supabase client for file storage only — no auth
+// Service-role client for server-side file uploads — bypasses RLS (server-only)
 export const supabaseStorage = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
