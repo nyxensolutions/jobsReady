@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import {
   MapPin, Briefcase, Clock, CheckCircle,
@@ -35,14 +35,13 @@ const QUICK_CATEGORIES = [
 ]
 
 export default async function SeekerDashboardPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect("/login")
+  const session = await getServerSession()
+  if (!session) redirect("/login")
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "SEEKER") redirect("/login")
 
-  const profile = await prisma.seekerProfile.findUnique({ where: { userId: user.id } })
+  const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
 
   const applications = profile
     ? await prisma.application.findMany({

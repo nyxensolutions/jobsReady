@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient, createAdminClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendSeekerShortlistAlert } from "@/lib/email"
 
@@ -11,11 +11,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") {
     return NextResponse.json({ error: "Employers only" }, { status: 403 })
   }
@@ -39,7 +38,7 @@ export async function PUT(
     },
   })
 
-  if (!application || application.job.employer.userId !== user.id) {
+  if (!application || application.job.employer.userId !== session.uid) {
     return NextResponse.json({ error: "Application not found" }, { status: 404 })
   }
 
@@ -68,40 +67,36 @@ export async function PUT(
     // Email + SMS the seeker — fire and forget
     ;(async () => {
       try {
-        const admin = await createAdminClient()
-        const { data: { user: seekerAuthUser } } = await admin.auth.admin.getUserById(application.seeker.userId)
-        const seekerEmail = seekerAuthUser?.email
+        const seekerUser = await prisma.user.findUnique({
+          where: { id: application.seeker.userId },
+          select: { email: true, phone: true },
+        })
 
-        // Email (only for non-phone accounts and only on shortlist)
-        if (seekerEmail && !seekerEmail.endsWith("@phone.jobsready.in") && status === "SHORTLISTED") {
+        // Email (only on shortlist and only if seeker has an email)
+        if (seekerUser?.email && status === "SHORTLISTED") {
           await sendSeekerShortlistAlert({
-            seekerEmail,
+            seekerEmail: seekerUser.email,
             seekerName: application.seeker.name,
             jobTitle: application.job.title,
             companyName: application.job.employer.companyName,
           })
         }
 
-        // SMS via 2Factor.in transactional SMS (phone accounts)
+        // SMS via 2Factor.in transactional SMS
         const tfApiKey = process.env.TWOFACTOR_API_KEY
         const senderId = process.env.TWOFACTOR_SENDER_ID ?? "JBSRDY"
-        if (tfApiKey) {
-          const phone = seekerAuthUser?.phone
-            ?? (seekerEmail?.endsWith("@phone.jobsready.in") ? seekerEmail.split("@")[0] : null)
-          if (phone && /^[6-9]\d{9}$/.test(phone)) {
-            const msg = status === "SHORTLISTED"
-              ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Job Ready app for details.`
-              : `Great news! You have been selected for ${application.job.title} at ${application.job.employer.companyName}. Expect a call from them soon!`
-            // Optional: add &TemplateId=XXXX once 2Factor reveals the ID
-            const url = `https://2factor.in/API/V1/${tfApiKey}/ADDON_SERVICES/SEND/TSMS`
-              + `?From=${encodeURIComponent(senderId)}`
-              + `&To=${phone}`
-              + `&Msg=${encodeURIComponent(msg)}`
-            const smsRes = await fetch(url)
-            const smsData = await smsRes.json().catch(() => null)
-            if (smsData?.Status !== "Success") {
-              console.error("2Factor SMS failed:", smsData)
-            }
+        if (tfApiKey && seekerUser?.phone && /^[6-9]\d{9}$/.test(seekerUser.phone)) {
+          const msg = status === "SHORTLISTED"
+            ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Job Ready app for details.`
+            : `Great news! You have been selected for ${application.job.title} at ${application.job.employer.companyName}. Expect a call from them soon!`
+          const url = `https://2factor.in/API/V1/${tfApiKey}/ADDON_SERVICES/SEND/TSMS`
+            + `?From=${encodeURIComponent(senderId)}`
+            + `&To=${seekerUser.phone}`
+            + `&Msg=${encodeURIComponent(msg)}`
+          const smsRes = await fetch(url)
+          const smsData = await smsRes.json().catch(() => null)
+          if (smsData?.Status !== "Success") {
+            console.error("2Factor SMS failed:", smsData)
           }
         }
       } catch (err) {

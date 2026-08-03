@@ -7,7 +7,8 @@ import { useState, useEffect, useRef } from "react"
 import { Menu, X, User, Briefcase, LogOut, ChevronDown } from "lucide-react"
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher"
 import NotificationBell from "@/components/layout/NotificationBell"
-import { createClient } from "@/lib/supabase/client"
+import { auth } from "@/lib/firebase/client"
+import { onAuthStateChanged, signOut as firebaseSignOut } from "firebase/auth"
 
 type AuthUser = {
   name: string
@@ -23,23 +24,16 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const supabase = createClient()
-
     async function loadUser() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { setAuthUser(null); return }
-
-      // Fetch name + role from our DB via a lightweight API
       try {
         const res = await fetch("/api/auth/me")
-        if (res.ok) {
-          const data = await res.json()
-          setAuthUser({
-            name: data.name ?? user.email?.split("@")[0] ?? "User",
-            role: data.role ?? "SEEKER",
-            initial: (data.name ?? "U")[0].toUpperCase(),
-          })
-        }
+        if (!res.ok) { setAuthUser(null); return }
+        const data = await res.json()
+        setAuthUser({
+          name: data.name ?? "User",
+          role: data.role ?? "SEEKER",
+          initial: (data.name ?? "U")[0].toUpperCase(),
+        })
       } catch {
         setAuthUser(null)
       }
@@ -47,11 +41,11 @@ export default function Header() {
 
     loadUser()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) { setAuthUser(null); return }
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (!user) { setAuthUser(null); return }
       loadUser()
     })
-    return () => subscription.unsubscribe()
+    return () => unsub()
   }, [])
 
   useEffect(() => {
@@ -63,10 +57,12 @@ export default function Header() {
   }, [])
 
   async function signOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    setAuthUser(null)
     setMenuOpen(false)
+    setAuthUser(null)
+    await Promise.all([
+      firebaseSignOut(auth),
+      fetch("/api/auth/session", { method: "DELETE" }),
+    ])
     window.location.href = "/"
   }
 

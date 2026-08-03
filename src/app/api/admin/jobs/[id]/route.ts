@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient, createAdminClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendEmployerJobApprovedAlert, sendEmployerJobRejectedAlert } from "@/lib/email"
 
-async function assertAdmin(supabase: Awaited<ReturnType<typeof createClient>>) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return false
-  const dbUser = await prisma.user.findFirst({ where: { OR: [{ email: user.email }, { phone: user.email?.split("@")[0] }] } })
+async function assertAdmin() {
+  const session = await getServerSession()
+  if (!session) return false
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   return dbUser?.role === "ADMIN"
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
-  if (!await assertAdmin(supabase)) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  if (!await assertAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
   const { action, reason } = await req.json() // "approve" | "reject" | "feature"
   let data: any = {}
@@ -63,23 +62,21 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       },
     })
 
-    // Email — fire and forget
+    // Email — fire and forget, use email stored in DB
     ;(async () => {
       try {
-        const admin = await createAdminClient()
-        const { data: { user: empUser } } = await admin.auth.admin.getUserById(employerUserId)
-        const email = empUser?.email
-        if (email && !email.endsWith("@phone.jobsready.in")) {
+        const empUser = await prisma.user.findUnique({ where: { id: employerUserId }, select: { email: true } })
+        if (empUser?.email) {
           if (action === "approve") {
             await sendEmployerJobApprovedAlert({
-              employerEmail: email,
+              employerEmail: empUser.email,
               employerName: job.employer.contactPerson ?? job.employer.companyName,
               jobTitle: job.title,
               jobId: id,
             })
           } else {
             await sendEmployerJobRejectedAlert({
-              employerEmail: email,
+              employerEmail: empUser.email,
               employerName: job.employer.contactPerson ?? job.employer.companyName,
               jobTitle: job.title,
               reason,

@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 
-async function assertAdmin(supabase: Awaited<ReturnType<typeof createClient>>) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return false
-  const dbUser = await prisma.user.findFirst({ where: { OR: [{ email: user.email }, { phone: user.email?.split("@")[0] }] } })
+async function assertAdmin() {
+  const session = await getServerSession()
+  if (!session) return false
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   return dbUser?.role === "ADMIN"
 }
 
 export async function GET(req: NextRequest) {
-  const supabase = await createClient()
-  if (!await assertAdmin(supabase)) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  if (!await assertAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
   const status = req.nextUrl.searchParams.get("status") ?? "PENDING_REVIEW"
 

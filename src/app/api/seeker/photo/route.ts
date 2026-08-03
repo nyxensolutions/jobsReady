@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
+import { supabaseStorage } from "@/lib/supabase/storage"
 import { prisma } from "@/lib/db"
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "SEEKER") {
     return NextResponse.json({ error: "Not a seeker account" }, { status: 403 })
   }
@@ -25,10 +25,10 @@ export async function POST(req: NextRequest) {
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg"
-  const path = `seekers/${user.id}/photo.${ext}`
+  const path = `seekers/${session.uid}/photo.${ext}`
   const bytes = await file.arrayBuffer()
 
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await supabaseStorage.storage
     .from("avatars")
     .upload(path, bytes, { contentType: file.type, upsert: true })
 
@@ -37,12 +37,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Upload failed" }, { status: 500 })
   }
 
-  const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path)
+  const { data: { publicUrl } } = supabaseStorage.storage.from("avatars").getPublicUrl(path)
 
-  const existing = await prisma.seekerProfile.findUnique({ where: { userId: user.id }, select: { name: true } })
+  const existing = await prisma.seekerProfile.findUnique({ where: { userId: session.uid }, select: { name: true } })
   await prisma.seekerProfile.upsert({
-    where: { userId: user.id },
-    create: { userId: user.id, name: existing?.name ?? "", photoUrl: publicUrl },
+    where: { userId: session.uid },
+    create: { userId: session.uid, name: existing?.name ?? "", photoUrl: publicUrl },
     update: { photoUrl: publicUrl },
   })
 

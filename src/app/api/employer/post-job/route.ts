@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const body = await req.json()
   const {
@@ -32,12 +28,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") {
     return NextResponse.json({ error: "Only employers can post jobs" }, { status: 403 })
   }
 
-  const employer = await prisma.employerProfile.findUnique({ where: { userId: user.id } })
+  const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
   if (!employer) {
     return NextResponse.json({ error: "Complete employer registration first" }, { status: 403 })
   }

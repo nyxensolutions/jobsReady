@@ -1,36 +1,70 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import { useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { Phone, Mail, ArrowRight, Loader2, ShieldCheck, Briefcase } from "lucide-react"
+import {
+  Phone, Mail, ArrowRight, Loader2, ShieldCheck, Briefcase,
+} from "lucide-react"
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  GoogleAuthProvider,
+  signInWithPopup,
+  ConfirmationResult,
+} from "firebase/auth"
+import { auth } from "@/lib/firebase/client"
 
-type Step = "role" | "phone" | "otp" | "email"
+type Step = "role" | "phone" | "otp" | "employer"
 type Role = "seeker" | "employer"
+
+async function createSession(idToken: string, role: "SEEKER" | "EMPLOYER") {
+  const res = await fetch("/api/auth/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ idToken, role }),
+  })
+  if (!res.ok) throw new Error((await res.json()).error ?? "Session error")
+  return res.json() as Promise<{ role: string; requiresProfile: boolean }>
+}
 
 function LoginPageContent() {
   const t = useTranslations("auth")
   const searchParams = useSearchParams()
   const prefilledPhone = searchParams.get("phone") ?? ""
   const prefilledRole = searchParams.get("role") as Role | null
-  const nextUrl = searchParams.get("next") ?? "/jobs"
+  const nextUrl = searchParams.get("next") ?? ""
 
   const [role, setRole] = useState<Role | null>(prefilledRole)
-  const [step, setStep] = useState<Step>(
-    prefilledRole === "seeker" && prefilledPhone ? "phone" : "role"
-  )
+  const [step, setStep] = useState<Step>(prefilledRole ? (prefilledRole === "seeker" ? "phone" : "employer") : "role")
   const [phone, setPhone] = useState(prefilledPhone)
-  const [email, setEmail] = useState("")
   const [otp, setOtp] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [devOtp, setDevOtp] = useState("")
+  const confirmRef = useRef<ConfirmationResult | null>(null)
+  const recaptchaRef = useRef<RecaptchaVerifier | null>(null)
 
   function selectRole(r: Role) {
     setRole(r)
     setError("")
-    setStep(r === "seeker" ? "phone" : "email")
+    setStep(r === "seeker" ? "phone" : "employer")
+  }
+
+  function getRedirect(role: string, requiresProfile: boolean) {
+    if (requiresProfile) return "/employer/register"
+    if (nextUrl) return nextUrl
+    return role === "EMPLOYER" ? "/employer/dashboard" : "/seeker/dashboard"
+  }
+
+  // Setup invisible reCAPTCHA once
+  function ensureRecaptcha() {
+    if (!recaptchaRef.current) {
+      recaptchaRef.current = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible",
+      })
+    }
+    return recaptchaRef.current
   }
 
   async function sendOtp(e: React.FormEvent) {
@@ -42,17 +76,19 @@ function LoginPageContent() {
     }
     setLoading(true)
     try {
-      const res = await fetch("/api/auth/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? "Failed to send OTP")
-      if (data.devOtp) setDevOtp(data.devOtp)
+      const verifier = ensureRecaptcha()
+      const result = await signInWithPhoneNumber(auth, `+91${phone}`, verifier)
+      confirmRef.current = result
       setStep("otp")
     } catch (err: any) {
-      setError(err.message)
+      // Reset reCAPTCHA on error so it can be retried
+      recaptchaRef.current?.clear()
+      recaptchaRef.current = null
+      setError(err.message?.includes("invalid-phone-number")
+        ? "Invalid phone number"
+        : err.message?.includes("too-many-requests")
+        ? "Too many attempts. Try again later."
+        : "Failed to send OTP. Try again.")
     } finally {
       setLoading(false)
     }
@@ -61,51 +97,48 @@ function LoginPageContent() {
   async function verifyOtp(e: React.FormEvent) {
     e.preventDefault()
     setError("")
-    if (otp.length !== 6) {
-      setError("Enter the 6-digit OTP")
-      return
-    }
+    if (otp.length !== 6) { setError("Enter the 6-digit OTP"); return }
+    if (!confirmRef.current) { setError("Session expired. Request a new OTP."); return }
     setLoading(true)
     try {
-      const res = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp, next: nextUrl }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? "Invalid OTP")
-      // Follow the Supabase magic link — this sets session cookies then redirects to dashboard
-      window.location.href = data.redirectUrl
+      const result = await confirmRef.current.confirm(otp)
+      const idToken = await result.user.getIdToken()
+      const data = await createSession(idToken, "SEEKER")
+      window.location.href = getRedirect(data.role, data.requiresProfile)
     } catch (err: any) {
-      setError(err.message)
+      setError(err.message?.includes("invalid-verification-code")
+        ? "Incorrect OTP. Please try again."
+        : "Verification failed. Try again.")
     } finally {
       setLoading(false)
     }
   }
 
-  async function employerLogin(e: React.FormEvent) {
-    e.preventDefault()
+  async function googleSignIn() {
     setError("")
     setLoading(true)
     try {
-      const res = await fetch("/api/auth/employer-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      })
-      if (!res.ok) throw new Error((await res.json()).error ?? "Failed")
-      window.location.href = `/employer/check-email?email=${encodeURIComponent(email)}`
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth, provider)
+      const idToken = await result.user.getIdToken()
+      const data = await createSession(idToken, "EMPLOYER")
+      window.location.href = getRedirect(data.role, data.requiresProfile)
     } catch (err: any) {
-      setError(err.message)
+      if (err.code === "auth/popup-closed-by-user") { setLoading(false); return }
+      setError("Google sign-in failed. Try again.")
     } finally {
       setLoading(false)
     }
   }
 
-  const inputCls = "w-full px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+  const inputCls =
+    "w-full px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center bg-gray-50 px-4 py-12">
+      {/* Invisible reCAPTCHA mount point */}
+      <div id="recaptcha-container" />
+
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
           {/* Logo */}
@@ -143,7 +176,7 @@ function LoginPageContent() {
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold text-gray-900 text-sm">{t("iAmEmployer")}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Login with email link</div>
+                  <div className="text-xs text-gray-500 mt-0.5">Sign in with Google</div>
                 </div>
                 <ArrowRight size={15} className="text-gray-400 group-hover:text-blue-600" />
               </button>
@@ -194,12 +227,7 @@ function LoginPageContent() {
                 <p className="text-sm text-gray-600">
                   {t("otpSent", { phone: `+91 ${phone}` })}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">You will receive an SMS or a call with your OTP · Valid for 10 minutes</p>
-                {devOtp && (
-                  <div className="mt-2 inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono px-3 py-1.5 rounded-lg">
-                    🛠 Dev OTP: <strong>{devOtp}</strong>
-                  </div>
-                )}
+                <p className="text-xs text-gray-400 mt-1">Check your SMS · Valid for a few minutes</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">{t("otpLabel")}</label>
@@ -225,7 +253,7 @@ function LoginPageContent() {
               </button>
               <button
                 type="button"
-                onClick={() => { setOtp(""); setStep("phone") }}
+                onClick={() => { setOtp(""); setStep("phone"); confirmRef.current = null }}
                 className="text-sm text-gray-500 hover:text-gray-700 text-center"
               >
                 {t("resendOtp")} →
@@ -233,34 +261,35 @@ function LoginPageContent() {
             </form>
           )}
 
-          {/* Step: Employer email */}
-          {step === "email" && (
-            <form onSubmit={employerLogin} className="flex flex-col gap-4">
+          {/* Step: Employer sign in */}
+          {step === "employer" && (
+            <div className="flex flex-col gap-4">
               <button type="button" onClick={() => setStep("role")} className="text-sm text-gray-500 hover:text-gray-700 text-left">
                 ← Back
               </button>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">{t("emailLabel")}</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t("emailPlaceholder")}
-                  className={inputCls}
-                  autoFocus
-                />
+              <div className="text-center py-2">
+                <p className="text-sm text-gray-600 mb-1">Sign in to your employer account</p>
+                <p className="text-xs text-gray-400">Use the same Google account you registered with</p>
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button
-                type="submit"
+                onClick={googleSignIn}
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-blue-700 text-white font-semibold text-sm hover:bg-blue-800 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-700 font-semibold text-sm hover:border-blue-500 hover:bg-blue-50 transition-all disabled:opacity-60 flex items-center justify-center gap-3"
               >
-                {loading && <Loader2 size={15} className="animate-spin" />}
-                Send Magic Link
+                {loading ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M17.64 9.2c0-.638-.057-1.252-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                    <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+                    <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+                    <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                  </svg>
+                )}
+                Continue with Google
               </button>
-              <p className="text-xs text-gray-400 text-center">We'll email you a one-click sign-in link.</p>
-            </form>
+            </div>
           )}
         </div>
 

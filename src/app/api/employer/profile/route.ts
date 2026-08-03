@@ -1,31 +1,29 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 
 export async function GET() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const employer = await prisma.employerProfile.findUnique({ where: { userId: user.id } })
+  const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
   if (!employer) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   return NextResponse.json(employer)
 }
 
 export async function PATCH(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") return NextResponse.json({ error: "Employers only" }, { status: 403 })
 
   const { companyName, industry, contactPerson, contactPhone, city, website, description } = await req.json()
   if (!companyName?.trim()) return NextResponse.json({ error: "Company name is required" }, { status: 400 })
 
   const updated = await prisma.employerProfile.update({
-    where: { userId: user.id },
+    where: { userId: session.uid },
     data: {
       companyName: companyName.trim(),
       industry: industry?.trim() || null,

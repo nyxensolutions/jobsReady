@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
-import { createAdminClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendEmployerApplicationAlert } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
+  const session = await getServerSession()
+  if (!session) {
     return NextResponse.json({ error: "Login required", code: "UNAUTHENTICATED" }, { status: 401 })
   }
 
@@ -17,12 +14,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing jobId" }, { status: 400 })
   }
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "SEEKER") {
     return NextResponse.json({ error: "Only job seekers can apply", code: "NOT_SEEKER" }, { status: 403 })
   }
 
-  const profile = await prisma.seekerProfile.findUnique({ where: { userId: user.id } })
+  const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
   if (!profile) {
     return NextResponse.json({ error: "Complete your profile first", code: "NO_PROFILE" }, { status: 403 })
   }
@@ -65,15 +62,13 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  // Fire-and-forget employer email notification
+  // Fire-and-forget employer email notification — use email stored in DB
   ;(async () => {
     try {
-      const admin = await createAdminClient()
-      const { data: { user: employerAuthUser } } = await admin.auth.admin.getUserById(job.employer.userId)
-      const email = employerAuthUser?.email
-      if (email && !email.endsWith("@phone.jobsready.in")) {
+      const employerDbUser = await prisma.user.findUnique({ where: { id: job.employer.userId }, select: { email: true } })
+      if (employerDbUser?.email) {
         await sendEmployerApplicationAlert({
-          employerEmail: email,
+          employerEmail: employerDbUser.email,
           employerName: job.employer.contactPerson ?? job.employer.companyName,
           jobTitle: job.title,
           seekerName: profile.name,

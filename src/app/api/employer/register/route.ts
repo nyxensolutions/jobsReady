@@ -1,41 +1,31 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createAdminClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 
 export async function POST(req: NextRequest) {
   const { companyName, email, contactPerson, contactPhone, industry, city, gstCin, website } =
     await req.json()
 
-  if (!companyName || !email || !contactPerson || !contactPhone || !industry || !city) {
+  if (!companyName || !contactPerson || !contactPhone || !industry || !city) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
 
-  const supabase = await createAdminClient()
+  // Must be authenticated
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  // Create or fetch Supabase auth user for this email
-  const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback?next=/employer/dashboard`,
-    data: { role: "EMPLOYER" },
+  // Upsert user as EMPLOYER
+  await prisma.user.upsert({
+    where: { id: session.uid },
+    create: { id: session.uid, role: "EMPLOYER", email: email || null },
+    update: { role: "EMPLOYER", ...(email ? { email } : {}) },
   })
 
-  if (error && !error.message.includes("already been registered")) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-
-  const authId = data?.user?.id
-
-  // Upsert user in our DB
-  const user = await prisma.user.upsert({
-    where: { email },
-    create: { id: authId, email, role: "EMPLOYER" },
-    update: { role: "EMPLOYER" },
-  })
-
-  // Create employer profile (idempotent)
+  // Create or update employer profile
   await prisma.employerProfile.upsert({
-    where: { userId: user.id },
+    where: { userId: session.uid },
     create: {
-      userId: user.id,
+      userId: session.uid,
       companyName,
       contactPerson,
       contactPhone,

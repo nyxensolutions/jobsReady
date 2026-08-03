@@ -5,7 +5,7 @@ import Link from "next/link"
 import { MapPin, Clock, Users, ArrowLeft, CheckCircle, IndianRupee, Briefcase, Calendar, GraduationCap, ChevronRight, Share2 } from "lucide-react"
 import { formatRelativeTime } from "@/lib/utils"
 import { prisma } from "@/lib/db"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import ApplyButton from "@/components/jobs/ApplyButton"
 import SaveJobButton from "@/components/jobs/SaveJobButton"
 
@@ -105,10 +105,9 @@ export default async function JobDetailPage({ params }: Props) {
   // Check if logged-in seeker has saved this job
   let isSaved = false
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
-      const seeker = await prisma.seekerProfile.findFirst({ where: { userId: user.id }, select: { id: true } })
+    const session = await getServerSession()
+    if (session) {
+      const seeker = await prisma.seekerProfile.findFirst({ where: { userId: session.uid }, select: { id: true } })
       if (seeker) {
         const saved = await prisma.savedJob.findUnique({ where: { seekerId_jobId: { seekerId: seeker.id, jobId: id } } })
         isSaved = !!saved

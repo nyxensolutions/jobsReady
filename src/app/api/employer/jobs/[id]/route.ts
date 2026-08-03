@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 
 async function getEmployerJob(userId: string, jobId: string) {
@@ -10,14 +10,13 @@ async function getEmployerJob(userId: string, jobId: string) {
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") return NextResponse.json({ error: "Employers only" }, { status: 403 })
 
-  const job = await getEmployerJob(user.id, id)
+  const job = await getEmployerJob(session.uid, id)
   if (!job) return NextResponse.json({ error: "Job not found" }, { status: 404 })
   if (job.status === "CLOSED" || job.status === "EXPIRED") {
     return NextResponse.json({ error: "Cannot edit a closed or expired job. Use Repost instead." }, { status: 400 })

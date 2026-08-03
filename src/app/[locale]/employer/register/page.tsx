@@ -69,6 +69,7 @@ export default function EmployerRegisterPage() {
       })
       if (!res.ok) throw new Error((await res.json()).error ?? "Registration failed")
       setDone(true)
+      setTimeout(() => { window.location.href = "/employer/dashboard" }, 2000)
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -80,23 +81,14 @@ export default function EmployerRegisterPage() {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50 px-4">
         <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center max-w-md w-full">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-5">
-            <Upload size={28} className="text-blue-700" />
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
+            <CheckCircle size={28} className="text-green-600" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Check your email</h2>
-          <p className="text-gray-500 text-sm mb-1">
-            We sent a sign-in link to
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Company registered!</h2>
+          <p className="text-gray-500 text-sm mb-5">
+            Taking you to your dashboard…
           </p>
-          <p className="font-semibold text-gray-800 text-sm mb-5">{form.email}</p>
-          <p className="text-xs text-gray-400 mb-7 leading-relaxed">
-            Click the link in the email to access your employer dashboard and post your first job. The link expires in 24 hours.
-          </p>
-          <Link
-            href={`/login?role=employer`}
-            className="inline-flex items-center justify-center px-6 py-3 bg-blue-700 text-white font-semibold rounded-xl text-sm hover:bg-blue-800 transition-colors"
-          >
-            Didn't get the email? Sign in here
-          </Link>
+          <Loader2 size={22} className="animate-spin text-blue-700 mx-auto" />
         </div>
       </div>
     )

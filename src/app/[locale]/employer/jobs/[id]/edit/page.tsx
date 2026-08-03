@@ -1,19 +1,18 @@
 import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import PostJobForm from "@/components/employer/PostJobForm"
 import { Pencil } from "lucide-react"
 
 export default async function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect("/login")
+  const session = await getServerSession()
+  if (!session) redirect("/login")
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") redirect("/login")
 
-  const employer = await prisma.employerProfile.findUnique({ where: { userId: user.id } })
+  const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
   if (!employer) redirect("/employer/register")
 
   const job = await prisma.jobListing.findFirst({

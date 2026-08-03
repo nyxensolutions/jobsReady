@@ -17,6 +17,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { scrapeNcs } from "./scrape-ncs"
 import { scrapeStructured } from "./scrape-structured"
 import { scrapeAdzuna } from "./scrape-adzuna"
+import { scrapeJSearch } from "./scrape-jsearch"
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL ?? process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
@@ -118,6 +119,11 @@ async function main() {
   console.log("\n── Adzuna Jobs Scraper ──────────────────────────────────")
   summary.adzuna = await scrapeAdzuna(employerId)
   console.log(`  Adzuna: ${summary.adzuna.inserted} inserted, ${summary.adzuna.skipped} skipped, ${summary.adzuna.errors} errors`)
+
+  // Run JSearch scraper (RapidAPI — aggregates Indeed + LinkedIn + others)
+  console.log("\n── JSearch Scraper (RapidAPI) ───────────────────────────")
+  summary.jsearch = await scrapeJSearch(employerId)
+  console.log(`  JSearch: ${summary.jsearch.inserted} inserted, ${summary.jsearch.skipped} skipped, ${summary.jsearch.errors} errors`)
 
   // Print totals
   const totals = Object.values(summary).reduce(

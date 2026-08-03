@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { PlusCircle, Eye, Users, Clock, CheckCircle, XCircle, AlertCircle, Briefcase, UserSearch } from "lucide-react"
 import EmployerJobActions from "@/components/employer/EmployerJobActions"
@@ -28,14 +28,13 @@ function formatSalary(min?: number | null, max?: number | null, unit = "monthly"
 }
 
 export default async function EmployerDashboardPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect("/login")
+  const session = await getServerSession()
+  if (!session) redirect("/login")
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") redirect("/login")
 
-  const employer = await prisma.employerProfile.findUnique({ where: { userId: user.id } })
+  const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
   if (!employer) redirect("/employer/register")
 
   const jobs = await prisma.jobListing.findMany({

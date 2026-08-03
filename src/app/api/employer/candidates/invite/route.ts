@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient, createAdminClient } from "@/lib/supabase/server"
+import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendCandidateInviteEmail } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") return NextResponse.json({ error: "Employers only" }, { status: 403 })
 
-  const employer = await prisma.employerProfile.findUnique({ where: { userId: user.id } })
+  const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
   if (!employer) return NextResponse.json({ error: "Profile not found" }, { status: 403 })
 
   const { seekerProfileId, jobId } = await req.json()
@@ -42,15 +41,13 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  // Send email invite — fire and forget
+  // Send email invite if seeker has an email address — fire and forget
   ;(async () => {
     try {
-      const admin = await createAdminClient()
-      const { data: { user: seekerAuthUser } } = await admin.auth.admin.getUserById(seekerProfile.userId)
-      const email = seekerAuthUser?.email
-      if (email && !email.endsWith("@phone.jobsready.in")) {
+      const seekerUser = await prisma.user.findUnique({ where: { id: seekerProfile.userId }, select: { email: true } })
+      if (seekerUser?.email) {
         await sendCandidateInviteEmail({
-          seekerEmail: email,
+          seekerEmail: seekerUser.email,
           seekerName: seekerProfile.name,
           jobTitle: job.title,
           companyName: employer.companyName,
