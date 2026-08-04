@@ -7,11 +7,12 @@ export default async function EmployerRegisterPage() {
   const session = await getServerSession()
   if (!session) redirect("/login?role=employer")
 
-  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
+  const [dbUser, employer] = await Promise.all([
+    prisma.user.findUnique({ where: { id: session.uid } }),
+    prisma.employerProfile.findUnique({ where: { userId: session.uid } }),
+  ])
   if (!dbUser) redirect("/login?role=employer")
-
   // Already registered → go to dashboard
-  const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
   if (employer) redirect("/employer/dashboard")
 
   const cities = await prisma.city.findMany({

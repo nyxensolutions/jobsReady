@@ -38,10 +38,21 @@ export default async function SeekerDashboardPage() {
   const session = await getServerSession()
   if (!session) redirect("/login")
 
-  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
+  const [dbUser, profile, recommendedJobs] = await Promise.all([
+    prisma.user.findUnique({ where: { id: session.uid } }),
+    prisma.seekerProfile.findUnique({ where: { userId: session.uid } }),
+    prisma.jobListing.findMany({
+      where: { status: "ACTIVE" },
+      include: {
+        employer: { select: { companyName: true, contactPhone: true } },
+        city: { select: { name: true } },
+        category: { select: { nameEn: true, slug: true } },
+      },
+      orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
+      take: 6,
+    }),
+  ])
   if (!dbUser || dbUser.role !== "SEEKER") redirect("/login")
-
-  const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
 
   const [applications, totalApplied] = profile
     ? await Promise.all([
@@ -61,18 +72,6 @@ export default async function SeekerDashboardPage() {
         prisma.application.count({ where: { seekerId: profile.id } }),
       ])
     : [[], 0]
-
-  // Recommended jobs — featured or newest
-  const recommendedJobs = await prisma.jobListing.findMany({
-    where: { status: "ACTIVE" },
-    include: {
-      employer: { select: { companyName: true, contactPhone: true } },
-      city: { select: { name: true } },
-      category: { select: { nameEn: true, slug: true } },
-    },
-    orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
-    take: 6,
-  })
 
   const stats = {
     applied: totalApplied,

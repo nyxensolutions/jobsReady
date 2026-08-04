@@ -16,15 +16,22 @@ type AuthUser = {
   initial: string
 }
 
-export default function Header() {
+type Props = {
+  initialAuth?: AuthUser | null
+}
+
+export default function Header({ initialAuth }: Props) {
   const t = useTranslations("nav")
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [authUser, setAuthUser] = useState<AuthUser | null>(null)
+  const [authUser, setAuthUser] = useState<AuthUser | null>(initialAuth ?? null)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    async function loadUser() {
+    // Only listen for client-side auth changes (sign-out / new sign-in)
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) { setAuthUser(null); return }
+      // Only fetch if auth state changed from the server-provided initial
       try {
         const res = await fetch("/api/auth/me")
         if (!res.ok) { setAuthUser(null); return }
@@ -37,13 +44,6 @@ export default function Header() {
       } catch {
         setAuthUser(null)
       }
-    }
-
-    loadUser()
-
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (!user) { setAuthUser(null); return }
-      loadUser()
     })
     return () => unsub()
   }, [])

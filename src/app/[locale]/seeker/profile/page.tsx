@@ -7,16 +7,12 @@ export default async function SeekerProfilePage() {
   const session = await getServerSession()
   if (!session) redirect("/login")
 
-  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
+  const [dbUser, profile, cities] = await Promise.all([
+    prisma.user.findUnique({ where: { id: session.uid } }),
+    prisma.seekerProfile.findUnique({ where: { userId: session.uid } }),
+    prisma.city.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, select: { name: true } }),
+  ])
   if (!dbUser || dbUser.role !== "SEEKER") redirect("/login")
-
-  const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
-
-  const cities = await prisma.city.findMany({
-    where: { isActive: true },
-    orderBy: { name: "asc" },
-    select: { name: true },
-  })
 
   return (
     <SeekerProfileClient
