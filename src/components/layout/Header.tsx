@@ -116,7 +116,7 @@ export default function Header() {
                 <Link href="/employer/dashboard" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
                   Dashboard
                 </Link>
-                <Link href="/employer/jobs" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
+                <Link href="/employer/dashboard#jobs" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
                   My Jobs
                 </Link>
                 <Link href="/employer/candidates" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
@@ -238,7 +238,7 @@ export default function Header() {
           {authUser?.role === "EMPLOYER" && (
             <>
               <Link href="/employer/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Dashboard</Link>
-              <Link href="/employer/jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Jobs</Link>
+              <Link href="/employer/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Jobs</Link>
               <Link href="/employer/candidates" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Responses</Link>
             </>
           )}

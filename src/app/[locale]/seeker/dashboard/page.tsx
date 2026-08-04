@@ -4,7 +4,7 @@ import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import {
   MapPin, Briefcase, Clock, CheckCircle,
-  Star, ChevronRight, Bookmark, Bell, Phone, User
+  Star, ChevronRight, Bookmark, Bell, User
 } from "lucide-react"
 import { formatRelativeTime } from "@/lib/utils"
 import WithdrawButton from "@/components/seeker/WithdrawButton"
@@ -49,7 +49,7 @@ export default async function SeekerDashboardPage() {
         include: {
           job: {
             include: {
-              employer: { select: { companyName: true, contactPhone: true } },
+              employer: { select: { companyName: true } },
               city: { select: { name: true } },
             },
           },
@@ -102,7 +102,7 @@ export default async function SeekerDashboardPage() {
           </p>
           <Link
             href="/jobs"
-            className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors shadow"
+            className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#1a3461] text-sm font-bold rounded-xl hover:bg-gray-100 transition-colors shadow"
           >
             <Briefcase size={15} /> Find Jobs Near You
           </Link>
@@ -179,7 +179,7 @@ export default async function SeekerDashboardPage() {
           <div>
             <div className="flex items-center justify-between mb-3">
               <h2 className="font-bold text-gray-800">Recommended Jobs</h2>
-              <Link href="/jobs" className="text-xs text-orange-500 font-semibold hover:underline">See all</Link>
+              <Link href="/jobs" className="text-xs text-[#1a3461] font-semibold hover:underline">See all</Link>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
               {recommendedJobs.map(job => (
@@ -198,17 +198,11 @@ export default async function SeekerDashboardPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex gap-2 mt-3">
+                  <div className="mt-3">
                     <Link href={`/jobs/${job.id}`}
-                      className="flex-1 flex items-center justify-center py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-lg transition-colors">
+                      className="w-full flex items-center justify-center py-1.5 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors">
                       Apply Now
                     </Link>
-                    {job.employer.contactPhone && (
-                      <a href={`tel:${job.employer.contactPhone}`}
-                        className="flex items-center gap-1 px-3 py-1.5 border border-green-500 text-green-700 text-xs font-bold rounded-lg hover:bg-green-50 transition-colors">
-                        <Phone size={12} /> Call
-                      </a>
-                    )}
                   </div>
                 </div>
               ))}
@@ -268,11 +262,6 @@ export default async function SeekerDashboardPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      {app.job.employer.contactPhone && (
-                        <a href={`tel:${app.job.employer.contactPhone}`} className="p-1.5 rounded-full border border-green-400 text-green-600 hover:bg-green-50 transition-colors">
-                          <Phone size={13} />
-                        </a>
-                      )}
                       <span className="text-xs text-gray-400 flex items-center gap-1">
                         <Clock size={11} />{formatRelativeTime(app.createdAt)}
                       </span>

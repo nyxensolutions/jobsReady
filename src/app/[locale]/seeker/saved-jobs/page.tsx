@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Bookmark, MapPin, Phone, ChevronRight } from "lucide-react"
+import { Bookmark, MapPin, ChevronRight } from "lucide-react"
 
 interface SavedJob {
   id: string
@@ -12,7 +12,7 @@ interface SavedJob {
     salaryMin: number
     salaryMax: number | null
     status: string
-    employer: { companyName: string; contactPhone: string | null }
+    employer: { companyName: string }
     city: { name: string }
     category: { slug: string; nameEn: string }
   }
@@ -42,8 +42,8 @@ export default function SavedJobsPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-            <Bookmark size={20} className="text-orange-500" />
+          <div className="w-10 h-10 rounded-full bg-[#eef2ff] flex items-center justify-center">
+            <Bookmark size={20} className="text-[#1a3461]" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">Saved Jobs</h1>
@@ -65,7 +65,7 @@ export default function SavedJobsPage() {
             <Bookmark size={48} className="mx-auto mb-4 text-gray-300" />
             <p className="font-semibold text-gray-500">No saved jobs yet</p>
             <p className="text-sm text-gray-400 mt-1">Tap the bookmark icon on any job to save it</p>
-            <Link href="/jobs" className="mt-6 inline-block bg-orange-500 text-white px-6 py-2 rounded-lg font-semibold text-sm hover:bg-orange-600 transition-colors">
+            <Link href="/jobs" className="mt-6 inline-block bg-[#1a3461] text-white px-6 py-2 rounded-lg font-semibold text-sm hover:bg-[#142a52] transition-colors">
               Browse Jobs
             </Link>
           </div>
@@ -88,22 +88,17 @@ export default function SavedJobsPage() {
                     </div>
                     <button
                       onClick={() => unsave(job.id)}
-                      className="p-2 rounded-full text-orange-400 hover:text-gray-400 hover:bg-gray-100 transition-colors"
+                      className="p-2 rounded-full text-[#1a3461] hover:text-gray-400 hover:bg-gray-100 transition-colors"
                       title="Remove from saved"
                     >
                       <Bookmark size={16} fill="currentColor" />
                     </button>
                   </div>
                 </div>
-                <div className="px-4 pb-4 flex gap-2">
-                  <Link href={`/jobs/${job.id}`} className="flex-1 flex items-center justify-center gap-1 py-2 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-lg transition-colors">
+                <div className="px-4 pb-4">
+                  <Link href={`/jobs/${job.id}`} className="w-full flex items-center justify-center gap-1 py-2 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors">
                     Apply Now <ChevronRight size={13} />
                   </Link>
-                  {job.employer.contactPhone && (
-                    <a href={`tel:${job.employer.contactPhone}`} className="flex items-center gap-1.5 px-4 py-2 border border-green-500 text-green-700 text-xs font-bold rounded-lg hover:bg-green-50 transition-colors">
-                      <Phone size={13} /> Call HR
-                    </a>
-                  )}
                 </div>
               </div>
             ))}

@@ -2,9 +2,16 @@
 
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+
+const NO_FOOTER_SEGMENTS = ["/employer/", "/seeker/", "/admin"]
 
 export default function Footer() {
   const t = useTranslations("nav")
+  const pathname = usePathname()
+  const hide = NO_FOOTER_SEGMENTS.some((s) => pathname.includes(s))
+  if (hide) return null
 
   return (
     <footer className="bg-gray-900 text-gray-400 text-sm">
@@ -12,9 +19,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-7 h-7 rounded-lg bg-blue-700 flex items-center justify-center">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-              </div>
+              <Image src="/logo-full.png" alt="Job Ready" width={32} height={32} className="object-contain" />
               <span className="font-bold text-white text-base">Job<span className="text-blue-400">Ready</span></span>
             </div>
             <p className="text-gray-600 text-xs mb-3">

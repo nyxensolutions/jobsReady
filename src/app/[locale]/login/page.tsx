@@ -4,7 +4,8 @@ import { useState, useRef, Suspense } from "react"
 import { useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { Phone, ArrowRight, Loader2, ShieldCheck, Briefcase, Users } from "lucide-react"
+import Image from "next/image"
+import { Phone, ArrowRight, Loader2, ShieldCheck, Users } from "lucide-react"
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
@@ -149,8 +150,8 @@ function LoginPageContent() {
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
           {/* Logo */}
           <div className="text-center mb-7">
-            <div className="w-11 h-11 bg-[#1a3461] rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Briefcase size={20} className="text-white" />
+            <div className="mx-auto mb-4 w-12 h-12 flex items-center justify-center">
+              <Image src="/logo-full.png" alt="Job Ready" width={48} height={48} className="object-contain" />
             </div>
             <h1 className="text-xl font-bold text-gray-900">Job Ready</h1>
             <p className="text-sm text-gray-500 mt-1">Sign in to continue</p>
