@@ -1,12 +1,10 @@
 "use client"
 
-import { useState, useEffect, useRef, Suspense } from "react"
+import { useState, useRef, Suspense } from "react"
 import { useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import {
-  Phone, Mail, ArrowRight, Loader2, ShieldCheck, Briefcase,
-} from "lucide-react"
+import { Phone, ArrowRight, Loader2, ShieldCheck, Briefcase, Users } from "lucide-react"
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
@@ -37,7 +35,9 @@ function LoginPageContent() {
   const nextUrl = searchParams.get("next") ?? ""
 
   const [role, setRole] = useState<Role | null>(prefilledRole)
-  const [step, setStep] = useState<Step>(prefilledRole ? (prefilledRole === "seeker" ? "phone" : "employer") : "role")
+  const [step, setStep] = useState<Step>(
+    prefilledRole ? (prefilledRole === "seeker" ? "phone" : "employer") : "role"
+  )
   const [phone, setPhone] = useState(prefilledPhone)
   const [otp, setOtp] = useState("")
   const [loading, setLoading] = useState(false)
@@ -51,13 +51,18 @@ function LoginPageContent() {
     setStep(r === "seeker" ? "phone" : "employer")
   }
 
-  function getRedirect(role: string, requiresProfile: boolean) {
-    if (requiresProfile) return "/employer/register"
-    if (nextUrl) return nextUrl
-    return role === "EMPLOYER" ? "/employer/dashboard" : "/seeker/dashboard"
+  function selectEmployerPhone() {
+    setRole("employer")
+    setError("")
+    setStep("phone")
   }
 
-  // Setup invisible reCAPTCHA once
+  function getRedirect(roleStr: string, requiresProfile: boolean) {
+    if (requiresProfile) return "/employer/register"
+    if (nextUrl) return nextUrl
+    return roleStr === "EMPLOYER" ? "/employer/dashboard" : "/seeker/dashboard"
+  }
+
   function ensureRecaptcha() {
     if (!recaptchaRef.current) {
       recaptchaRef.current = new RecaptchaVerifier(auth, "recaptcha-container", {
@@ -81,14 +86,15 @@ function LoginPageContent() {
       confirmRef.current = result
       setStep("otp")
     } catch (err: any) {
-      // Reset reCAPTCHA on error so it can be retried
       recaptchaRef.current?.clear()
       recaptchaRef.current = null
-      setError(err.message?.includes("invalid-phone-number")
-        ? "Invalid phone number"
-        : err.message?.includes("too-many-requests")
-        ? "Too many attempts. Try again later."
-        : "Failed to send OTP. Try again.")
+      setError(
+        err.message?.includes("invalid-phone-number")
+          ? "Invalid phone number"
+          : err.message?.includes("too-many-requests")
+          ? "Too many attempts. Try again later."
+          : "Failed to send OTP. Try again."
+      )
     } finally {
       setLoading(false)
     }
@@ -103,12 +109,16 @@ function LoginPageContent() {
     try {
       const result = await confirmRef.current.confirm(otp)
       const idToken = await result.user.getIdToken()
-      const data = await createSession(idToken, "SEEKER")
+      // Create session with the right role (employer or seeker)
+      const sessionRole = role === "employer" ? "EMPLOYER" : "SEEKER"
+      const data = await createSession(idToken, sessionRole)
       window.location.href = getRedirect(data.role, data.requiresProfile)
     } catch (err: any) {
-      setError(err.message?.includes("invalid-verification-code")
-        ? "Incorrect OTP. Please try again."
-        : "Verification failed. Try again.")
+      setError(
+        err.message?.includes("invalid-verification-code")
+          ? "Incorrect OTP. Please try again."
+          : "Verification failed. Try again."
+      )
     } finally {
       setLoading(false)
     }
@@ -131,23 +141,19 @@ function LoginPageContent() {
     }
   }
 
-  const inputCls =
-    "w-full px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-
   return (
     <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center bg-gray-50 px-4 py-12">
-      {/* Invisible reCAPTCHA mount point */}
       <div id="recaptcha-container" />
 
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
           {/* Logo */}
           <div className="text-center mb-7">
-            <div className="w-11 h-11 bg-blue-700 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-11 h-11 bg-[#1a3461] rounded-xl flex items-center justify-center mx-auto mb-4">
               <Briefcase size={20} className="text-white" />
             </div>
-            <h1 className="text-xl font-bold text-gray-900">{t("loginTitle")}</h1>
-            <p className="text-sm text-gray-500 mt-1">Welcome back to Job Ready</p>
+            <h1 className="text-xl font-bold text-gray-900">Job Ready</h1>
+            <p className="text-sm text-gray-500 mt-1">Sign in to continue</p>
           </div>
 
           {/* Step: Choose role */}
@@ -158,7 +164,7 @@ function LoginPageContent() {
                 className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all text-left group"
               >
                 <div className="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors shrink-0">
-                  <Phone size={18} />
+                  <Users size={18} />
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold text-gray-900 text-sm">{t("iAmSeeker")}</div>
@@ -169,16 +175,16 @@ function LoginPageContent() {
 
               <button
                 onClick={() => selectRole("employer")}
-                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-left group"
+                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 hover:border-[#1a3461] hover:bg-[#1a3461]/5 transition-all text-left group"
               >
-                <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center group-hover:bg-blue-700 group-hover:text-white transition-colors shrink-0">
-                  <Mail size={18} />
+                <div className="w-10 h-10 rounded-lg bg-blue-100 text-[#1a3461] flex items-center justify-center group-hover:bg-[#1a3461] group-hover:text-white transition-colors shrink-0">
+                  <Briefcase size={18} />
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold text-gray-900 text-sm">{t("iAmEmployer")}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Sign in with Google</div>
+                  <div className="text-xs text-gray-500 mt-0.5">Phone OTP or Google</div>
                 </div>
-                <ArrowRight size={15} className="text-gray-400 group-hover:text-blue-600" />
+                <ArrowRight size={15} className="text-gray-400 group-hover:text-[#1a3461]" />
               </button>
             </div>
           )}
@@ -186,12 +192,21 @@ function LoginPageContent() {
           {/* Step: Phone */}
           {step === "phone" && (
             <form onSubmit={sendOtp} className="flex flex-col gap-4">
-              <button type="button" onClick={() => setStep("role")} className="text-sm text-gray-500 hover:text-gray-700 text-left flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setStep(role === "employer" ? "employer" : "role")}
+                className="text-sm text-gray-500 hover:text-gray-700 text-left flex items-center gap-1"
+              >
                 ← Back
               </button>
+              {role === "employer" && (
+                <div className="bg-[#1a3461]/5 rounded-xl px-3 py-2 text-xs text-[#1a3461] font-medium">
+                  Employer · Phone OTP login
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">{t("phoneLabel")}</label>
-                <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-orange-400 focus-within:border-transparent">
+                <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#1a3461] focus-within:border-transparent">
                   <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm border-r border-gray-300 shrink-0">+91</span>
                   <input
                     type="tel"
@@ -209,7 +224,7 @@ function LoginPageContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-[#1a3461] text-white font-semibold text-sm hover:bg-[#142a52] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 size={15} className="animate-spin" />}
                 {t("sendOtp")}
@@ -238,7 +253,7 @@ function LoginPageContent() {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                   placeholder="• • • • • •"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-center text-2xl tracking-[0.5em] outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-center text-2xl tracking-[0.5em] outline-none focus:ring-2 focus:ring-[#1a3461] focus:border-transparent"
                   autoFocus
                 />
               </div>
@@ -246,7 +261,7 @@ function LoginPageContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-[#1a3461] text-white font-semibold text-sm hover:bg-[#142a52] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 size={15} className="animate-spin" />}
                 {t("verifyOtp")}
@@ -264,13 +279,34 @@ function LoginPageContent() {
           {/* Step: Employer sign in */}
           {step === "employer" && (
             <div className="flex flex-col gap-4">
-              <button type="button" onClick={() => setStep("role")} className="text-sm text-gray-500 hover:text-gray-700 text-left">
+              <button
+                type="button"
+                onClick={() => setStep("role")}
+                className="text-sm text-gray-500 hover:text-gray-700 text-left"
+              >
                 ← Back
               </button>
-              <div className="text-center py-2">
-                <p className="text-sm text-gray-600 mb-1">Sign in to your employer account</p>
-                <p className="text-xs text-gray-400">Use the same Google account you registered with</p>
+              <div className="text-center py-1">
+                <p className="text-sm font-semibold text-gray-800 mb-1">Sign in as Employer</p>
+                <p className="text-xs text-gray-400">Post jobs and find candidates</p>
               </div>
+
+              {/* Phone OTP option */}
+              <button
+                onClick={selectEmployerPhone}
+                className="w-full py-3 rounded-xl border-2 border-gray-200 hover:border-[#1a3461] hover:bg-[#1a3461]/5 text-gray-700 font-semibold text-sm transition-all flex items-center justify-center gap-3"
+              >
+                <Phone size={17} className="text-[#1a3461]" />
+                Enter your mobile number
+              </button>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="text-xs text-gray-400">or</span>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+
+              {/* Google option */}
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button
                 onClick={googleSignIn}
@@ -294,9 +330,9 @@ function LoginPageContent() {
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-5">
-          New employer?{" "}
-          <Link href="/employer/register" className="text-blue-700 font-medium hover:underline">
-            Register your company
+          Looking for a job?{" "}
+          <Link href="/login" className="text-[#1a3461] font-medium hover:underline">
+            Job seeker login
           </Link>
         </p>
       </div>
@@ -306,7 +342,11 @@ function LoginPageContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 size={28} className="animate-spin text-gray-400" /></div>}>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 size={28} className="animate-spin text-gray-400" />
+      </div>
+    }>
       <LoginPageContent />
     </Suspense>
   )

@@ -1,8 +1,7 @@
 import { redirect } from "next/navigation"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-import PostJobForm from "@/components/employer/PostJobForm"
-import { Briefcase } from "lucide-react"
+import PostJobWizard from "@/components/employer/PostJobWizard"
 
 export default async function PostJobPage() {
   const session = await getServerSession()
@@ -28,22 +27,11 @@ export default async function PostJobPage() {
   ])
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-blue-700 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Briefcase size={22} className="text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">Post a Job</h1>
-          <p className="text-gray-500 text-sm mt-2">
-            Posting as <span className="font-semibold text-gray-700">{employer.companyName}</span>
-          </p>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-          <PostJobForm categories={categories} cities={cities} />
-        </div>
-      </div>
-    </div>
+    <PostJobWizard
+      categories={categories}
+      cities={cities}
+      companyName={employer.companyName}
+      contactPhone={employer.contactPhone ?? ""}
+    />
   )
 }

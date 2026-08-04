@@ -14,6 +14,7 @@ const PROTECTED_SEGMENTS = [
   "/employer/profile",
   "/employer/candidates",
   "/employer/jobs",
+  "/employer/setup",
   "/admin",
 ]
 
