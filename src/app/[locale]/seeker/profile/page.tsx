@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-import SeekerProfileForm from "@/components/seeker/SeekerProfileForm"
+import SeekerProfileClient from "@/components/seeker/SeekerProfileClient"
 
 export default async function SeekerProfilePage() {
   const session = await getServerSession()
@@ -19,29 +19,20 @@ export default async function SeekerProfilePage() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-xl mx-auto">
-        <div className="mb-7">
-          <h1 className="text-xl font-bold text-gray-900">My Profile</h1>
-          <p className="text-sm text-gray-500 mt-1">Keep your profile updated to get more interview calls</p>
-        </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-          <SeekerProfileForm
-            initial={profile ? {
-              name: profile.name,
-              city: profile.city ?? "",
-              bio: profile.bio ?? "",
-              skills: profile.skills,
-              preferredJobTypes: profile.preferredJobTypes,
-              experienceYears: profile.experienceYears,
-              isOpenToWork: profile.isOpenToWork,
-              photoUrl: profile.photoUrl ?? null,
-              resumeUrl: profile.resumeUrl ?? null,
-            } : null}
-            cities={cities.map((c) => c.name)}
-          />
-        </div>
-      </div>
-    </div>
+    <SeekerProfileClient
+      initial={profile ? {
+        name: profile.name,
+        city: profile.city ?? "",
+        bio: profile.bio ?? "",
+        skills: profile.skills,
+        preferredJobTypes: profile.preferredJobTypes,
+        experienceYears: profile.experienceYears,
+        isOpenToWork: profile.isOpenToWork,
+        photoUrl: profile.photoUrl ?? null,
+        resumeUrl: profile.resumeUrl ?? null,
+      } : null}
+      phone={dbUser.phone}
+      cities={cities.map(c => c.name)}
+    />
   )
 }

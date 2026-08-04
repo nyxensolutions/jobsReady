@@ -40,7 +40,7 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
         setStatus("error")
         return
       }
-      setStatus("done")
+      router.push(`/${locale}/jobs/${jobId}/applied`)
     } catch {
       setErrorMsg("Network error. Please try again.")
       setStatus("error")
