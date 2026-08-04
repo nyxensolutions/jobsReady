@@ -17,8 +17,13 @@ export default async function AppliedPage({ params }: { params: Promise<{ id: st
   const session = await getServerSession()
   if (!session) redirect("/login")
 
+  // Fetch seeker profile (used for auth check + profile completion)
+  const seeker = await prisma.seekerProfile.findUnique({
+    where: { userId: session.uid },
+    select: { id: true, name: true, city: true, skills: true, resumeUrl: true },
+  })
+
   // Verify the seeker actually applied for this job
-  const seeker = await prisma.seekerProfile.findUnique({ where: { userId: session.uid }, select: { id: true } })
   if (seeker) {
     const application = await prisma.application.findUnique({
       where: { seekerId_jobId: { seekerId: seeker.id, jobId: id } },
@@ -48,12 +53,6 @@ export default async function AppliedPage({ params }: { params: Promise<{ id: st
     },
     orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
     take: 8,
-  })
-
-  // Check if seeker profile is complete
-  const seeker = await prisma.seekerProfile.findUnique({
-    where: { userId: session.uid },
-    select: { name: true, city: true, skills: true, resumeUrl: true },
   })
   const isPhonePlaceholder = !seeker?.name || /^\+?\d+$/.test(seeker.name)
   const profileScore = [
