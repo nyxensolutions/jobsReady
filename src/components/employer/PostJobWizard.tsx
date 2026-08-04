@@ -52,6 +52,7 @@ const JOB_TYPES: { value: string; label: string }[] = [
   { value: "PART_TIME", label: "Part-Time" },
   { value: "CONTRACT", label: "Contract" },
   { value: "GIG", label: "Gig / Daily Wage" },
+  { value: "WALK_IN", label: "Walk-in Interview" },
 ]
 const BENEFIT_CHIPS = ["Meal", "Insurance", "PF", "Medical Benefits"]
 const SHIFT_CHIPS = ["Day", "Night", "Rotational", "Flexible"]
@@ -64,7 +65,7 @@ const QUAL_CHIPS = [
 ]
 const EXP_OPTIONS = [
   { value: "0", label: "Fresher" },
-  { value: "6m", label: "6 months" },
+  { value: "0.5", label: "6 months" },
   { value: "1", label: "1 year" },
   { value: "2", label: "2 years" },
   { value: "3", label: "3 years" },
@@ -732,6 +733,11 @@ export default function PostJobWizard({
       if (!data.title.trim()) return "Please enter a job title."
       if (!data.categorySlug) return "Please select a job category."
       if (!data.citySlug) return "Please select a city."
+    }
+    if (s === 2) {
+      const min = data.salaryMin ? Number(data.salaryMin) : null
+      const max = data.salaryMax ? Number(data.salaryMax) : null
+      if (min && max && max < min) return "Maximum salary cannot be less than minimum salary."
     }
     if (s === 4) {
       if (!data.description.trim()) return "Please write a job description."

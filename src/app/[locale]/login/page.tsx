@@ -32,7 +32,8 @@ function LoginPageContent() {
   const t = useTranslations("auth")
   const searchParams = useSearchParams()
   const prefilledPhone = searchParams.get("phone") ?? ""
-  const prefilledRole = searchParams.get("role") as Role | null
+  const rawRole = searchParams.get("role")
+  const prefilledRole: Role | null = rawRole === "seeker" || rawRole === "employer" ? rawRole : null
   const nextUrl = searchParams.get("next") ?? ""
 
   const [role, setRole] = useState<Role | null>(prefilledRole)
@@ -332,7 +333,7 @@ function LoginPageContent() {
 
         <p className="text-center text-sm text-gray-500 mt-5">
           Looking for a job?{" "}
-          <Link href="/login" className="text-[#1a3461] font-medium hover:underline">
+          <Link href="/login?role=seeker" className="text-[#1a3461] font-medium hover:underline">
             Job seeker login
           </Link>
         </p>

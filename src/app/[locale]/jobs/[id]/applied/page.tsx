@@ -17,6 +17,18 @@ export default async function AppliedPage({ params }: { params: Promise<{ id: st
   const session = await getServerSession()
   if (!session) redirect("/login")
 
+  // Verify the seeker actually applied for this job
+  const seeker = await prisma.seekerProfile.findUnique({ where: { userId: session.uid }, select: { id: true } })
+  if (seeker) {
+    const application = await prisma.application.findUnique({
+      where: { seekerId_jobId: { seekerId: seeker.id, jobId: id } },
+      select: { id: true },
+    })
+    if (!application) redirect(`/jobs/${id}`)
+  } else {
+    redirect(`/jobs/${id}`)
+  }
+
   const job = await prisma.jobListing.findUnique({
     where: { id },
     include: {

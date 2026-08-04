@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/db"
 import JobSearchBar from "@/components/jobs/JobSearchBar"
 import JobFilters from "@/components/jobs/JobFilters"
+import MobileFilters from "@/components/jobs/MobileFilters"
 import JobCard from "@/components/jobs/JobCard"
 import SortSelect from "@/components/jobs/SortSelect"
 import JobsPagination from "@/components/jobs/JobsPagination"
@@ -130,10 +131,13 @@ export default async function JobsPage({ searchParams }: Props) {
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-gray-600">
-                {t("searchResults", { count: total })}
-                {q && <span className="font-semibold"> for "{q}"</span>}
-              </p>
+              <div className="flex items-center gap-2">
+                <MobileFilters activeCategory={category || undefined} />
+                <p className="text-sm text-gray-600">
+                  {t("searchResults", { count: total })}
+                  {q && <span className="font-semibold"> for "{q}"</span>}
+                </p>
+              </div>
               <SortSelect sort={sort} />
             </div>
             <FilterChips

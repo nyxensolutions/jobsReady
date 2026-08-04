@@ -55,7 +55,7 @@ export default async function EmployerDashboardPage() {
   // Verification steps
   const steps = [
     { label: "Create an account", done: true },
-    { label: "Post your first job", done: jobs.length > 0, action: jobs.length > 0 ? { label: "View", href: `/employer/jobs/${jobs[0]?.id}` } : null },
+    { label: "Post your first job", done: jobs.length > 0, action: jobs.length > 0 ? { label: "View", href: `/employer/jobs/${jobs[0]?.id}/applicants` } : null },
     { label: "Email Verification", done: !!dbUser.email, action: !dbUser.email ? { label: "Add email", href: "/employer/profile" } : null },
     { label: "Document Submission", done: (employer.docUrls ?? []).length > 0, action: { label: "Upload", href: "/employer/setup/verify-docs", icon: "upload" } },
     { label: "Verification", done: employer.status === "VERIFIED", action: { label: "Info", href: "#", icon: "info" } },

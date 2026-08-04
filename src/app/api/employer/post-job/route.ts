@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       salaryMax: salaryMax ? parseInt(salaryMax) : null,
       salaryUnit: salaryUnit ?? "monthly",
       vacancies: parseInt(vacancies) || 1,
-      experienceMin: parseInt(experienceMin) || 0,
+      experienceMin: parseFloat(experienceMin) || 0,
       pincode: pincode?.trim() || null,
       qualificationRequired: qualificationRequired ?? null,
       status: "PENDING_REVIEW",

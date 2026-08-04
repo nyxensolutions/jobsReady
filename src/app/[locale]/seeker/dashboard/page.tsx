@@ -43,21 +43,24 @@ export default async function SeekerDashboardPage() {
 
   const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
 
-  const applications = profile
-    ? await prisma.application.findMany({
-        where: { seekerId: profile.id },
-        include: {
-          job: {
-            include: {
-              employer: { select: { companyName: true } },
-              city: { select: { name: true } },
+  const [applications, totalApplied] = profile
+    ? await Promise.all([
+        prisma.application.findMany({
+          where: { seekerId: profile.id },
+          include: {
+            job: {
+              include: {
+                employer: { select: { companyName: true } },
+                city: { select: { name: true } },
+              },
             },
           },
-        },
-        orderBy: { createdAt: "desc" },
-        take: 10,
-      })
-    : []
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        }),
+        prisma.application.count({ where: { seekerId: profile.id } }),
+      ])
+    : [[], 0]
 
   // Recommended jobs — featured or newest
   const recommendedJobs = await prisma.jobListing.findMany({
@@ -72,7 +75,7 @@ export default async function SeekerDashboardPage() {
   })
 
   const stats = {
-    applied: applications.length,
+    applied: totalApplied,
     shortlisted: applications.filter((a) => a.status === "SHORTLISTED").length,
     hired: applications.filter((a) => a.status === "HIRED").length,
   }

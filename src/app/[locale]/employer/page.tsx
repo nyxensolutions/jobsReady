@@ -101,13 +101,13 @@ export default function EmployerLandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
-                  href="/employer/register"
+                  href="/login?role=employer"
                   className="inline-flex items-center justify-center px-7 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-white font-bold text-sm transition-colors shadow-lg"
                 >
                   Register Free — Post a Job
                 </Link>
                 <Link
-                  href="/employer/post-job"
+                  href="/login?role=employer&next=/employer/post-job"
                   className="inline-flex items-center justify-center px-7 py-3.5 rounded-xl border border-white/30 hover:bg-white/10 text-white font-semibold text-sm transition-colors"
                 >
                   Post a Job Now →
@@ -237,13 +237,13 @@ export default function EmployerLandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/employer/register"
+              href="/login?role=employer"
               className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-orange-500 hover:bg-orange-400 text-white font-bold transition-colors shadow-lg"
             >
               Get Started — It's Free
             </Link>
             <Link
-              href="/jobs"
+              href="/employer/candidates"
               className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-white/30 hover:bg-white/10 text-white font-semibold transition-colors"
             >
               Browse Candidates

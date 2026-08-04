@@ -51,9 +51,10 @@ const SALARY_RANGES = [
 
 type Props = {
   activeCategory?: string
+  onFilterApply?: () => void
 }
 
-export default function JobFilters({ activeCategory }: Props) {
+export default function JobFilters({ activeCategory, onFilterApply }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -66,6 +67,7 @@ export default function JobFilters({ activeCategory }: Props) {
     }
     params.delete("page")
     router.push(`/jobs?${params.toString()}`)
+    onFilterApply?.()
   }
 
   const currentType = searchParams.get("type")

@@ -423,7 +423,7 @@ export default async function JobDetailPage({ params }: Props) {
           <div className="hidden lg:block lg:col-span-1">
             <div className="bg-white rounded-2xl border border-gray-200 p-5 sticky top-20">
               <div className="text-center mb-5 pb-4 border-b border-gray-100">
-                <p className="text-xs text-gray-400 mb-1">Monthly Salary</p>
+                <p className="text-xs text-gray-400 mb-1">{job.salaryUnit === "daily" ? "Daily Wage" : "Monthly Salary"}</p>
                 <p className="text-2xl font-black text-green-600">{salary}</p>
               </div>
 

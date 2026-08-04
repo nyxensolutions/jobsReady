@@ -197,7 +197,7 @@ export default function Header() {
                   {t("login")}
                 </Link>
                 <Link
-                  href="/employer/post-job"
+                  href="/login?role=employer&next=/employer/post-job"
                   className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] transition-colors shadow-sm"
                 >
                   {t("postJob")}
@@ -238,7 +238,7 @@ export default function Header() {
           {authUser?.role === "EMPLOYER" && (
             <>
               <Link href="/employer/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Dashboard</Link>
-              <Link href="/employer/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Jobs</Link>
+              <Link href="/employer/dashboard#jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Jobs</Link>
               <Link href="/employer/candidates" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Responses</Link>
             </>
           )}
@@ -247,7 +247,7 @@ export default function Header() {
           ) : (
             <>
               <Link href="/login" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm text-slate-600">{t("login")}</Link>
-              <Link href="/employer/post-job" onClick={() => setMobileOpen(false)} className="flex items-center justify-center px-4 py-3 rounded-xl bg-[#1a3461] text-white font-semibold text-sm">
+              <Link href="/login?role=employer&next=/employer/post-job" onClick={() => setMobileOpen(false)} className="flex items-center justify-center px-4 py-3 rounded-xl bg-[#1a3461] text-white font-semibold text-sm">
                 {t("postJob")}
               </Link>
             </>

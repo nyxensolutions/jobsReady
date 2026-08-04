@@ -19,7 +19,8 @@ interface SavedJob {
 }
 
 function formatSalary(min: number, max: number | null) {
-  return max ? `₹${(min / 1000).toFixed(0)}K–₹${(max / 1000).toFixed(0)}K/mo` : `₹${(min / 1000).toFixed(0)}K+/mo`
+  const fmt = (n: number) => n >= 1000 ? `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : `₹${n}`
+  return max ? `${fmt(min)}–${fmt(max)}/mo` : `${fmt(min)}+/mo`
 }
 
 export default function SavedJobsPage() {
