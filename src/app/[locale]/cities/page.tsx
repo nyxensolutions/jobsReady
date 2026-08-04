@@ -77,7 +77,7 @@ export default function CitiesPage() {
         <div className="mb-10">
           <h1 className="text-2xl sm:text-3xl font-black text-[#1a3461] mb-2">Browse Jobs by City</h1>
           <p className="text-gray-500 text-sm max-w-xl">
-            Job Ready focuses on Delhi NCR and nearby cities first — the region with the most blue-collar job demand in India.
+            Jobs Ready focuses on Delhi NCR and nearby cities first — the region with the most blue-collar job demand in India.
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export default function CitiesPage() {
         <div className="mt-12 bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
           <h2 className="font-bold text-gray-800 mb-3">Find Jobs Near You in Delhi NCR</h2>
           <p className="text-sm text-gray-500 leading-relaxed">
-            Job Ready is India's fastest-growing blue-collar job platform, focused on Delhi, Noida, Gurugram, Ghaziabad,
+            Jobs Ready is India's fastest-growing blue-collar job platform, focused on Delhi, Noida, Gurugram, Ghaziabad,
             Faridabad, Meerut, Hapur and the entire NCR belt. Whether you're looking for a delivery job, driver job,
             security guard job, factory worker job, or any other frontline role — find verified openings near you and apply
             in one click. No CV needed, no registration fee, and direct contact with HR.

@@ -4,7 +4,7 @@ import { Mail, MapPin, Clock, AlertCircle, Phone } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Get in touch with Job Ready support team. We're here to help job seekers and employers.",
+  description: "Get in touch with Jobs Ready support team. We're here to help job seekers and employers.",
 }
 
 export default function ContactPage() {
@@ -113,7 +113,7 @@ export default function ContactPage() {
             <div className="flex flex-col divide-y divide-gray-100">
               {[
                 { q: "How do I apply for a job?", a: "Search for a job, click 'Apply Now', and log in with your mobile number via OTP. No email or CV needed." },
-                { q: "Is Job Ready free for job seekers?", a: "Yes, completely free. Job seekers can apply to unlimited jobs at no cost." },
+                { q: "Is Jobs Ready free for job seekers?", a: "Yes, completely free. Job seekers can apply to unlimited jobs at no cost." },
                 { q: "How do I post a job as an employer?", a: "Register your company, verify your email, and use the dashboard to post and manage job listings." },
                 { q: "I didn't receive my OTP. What should I do?", a: "Wait 60 seconds and retry. If the issue persists, email us at support@jobready.in with your mobile number." },
                 { q: "How do I delete my account?", a: "Go to your Profile page and scroll to the bottom — there is a 'Delete Account' button. Alternatively, call or email us at support@jobready.in." },

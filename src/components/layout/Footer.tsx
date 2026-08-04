@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -19,8 +19,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-1">
-              <Image src="/logo-full.png" alt="Job Ready" width={32} height={32} className="object-contain" />
-              <span className="font-bold text-white text-base">Job<span className="text-blue-400">Ready</span></span>
+              <Image src="/logo-full.png" alt="Jobs Ready" width={32} height={32} className="object-contain" />
+              <span className="font-bold text-white text-base">Jobs<span className="text-blue-400">Ready</span></span>
             </div>
             <p className="text-gray-600 text-xs mb-3">
               A product of{" "}

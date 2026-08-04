@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import { Geist } from "next/font/google"
 import "./globals.css"
 
@@ -9,8 +9,8 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: {
-    default: "Job Ready — Find Jobs. Hire People.",
-    template: "%s | Job Ready",
+    default: "Jobs Ready — Find Jobs. Hire People.",
+    template: "%s | Jobs Ready",
   },
   description:
     "India's blue-collar job portal. Search lakhs of jobs in delivery, sales, security, driving and more.",

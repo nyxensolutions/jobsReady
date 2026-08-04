@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Terms of Use",
-  description: "Terms of Use for Job Ready by NyxenCloud Solution Pvt. Ltd. Read the rules governing your use of our job platform.",
+  description: "Terms of Use for Jobs Ready by NyxenCloud Solution Pvt. Ltd. Read the rules governing your use of our job platform.",
 }
 
 const LAST_UPDATED = "1 July 2026"
@@ -21,7 +21,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-lg font-bold text-gray-800 mb-3">1. Acceptance of Terms</h2>
               <p>
-                By accessing or using the Job Ready platform ("<strong>Platform</strong>") — including the website
+                By accessing or using the Jobs Ready platform ("<strong>Platform</strong>") — including the website
                 jobready.in and any associated mobile application — you agree to be bound by these Terms of Use
                 ("<strong>Terms</strong>") and our <a href="/privacy" className="text-blue-700 hover:underline">Privacy Policy</a>.
               </p>
@@ -59,7 +59,7 @@ export default function TermsPage() {
                 <li>Job Seekers may use the Platform to search and apply for jobs, create and maintain a profile, and receive notifications about job opportunities.</li>
                 <li>Your profile information, including name, contact number, and experience, will be shared with employers when you apply for a job.</li>
                 <li>You agree that the information in your profile is accurate and does not infringe any third-party rights.</li>
-                <li>Job Ready is a free service for job seekers. We will never charge you to apply for a job.</li>
+                <li>Jobs Ready is a free service for job seekers. We will never charge you to apply for a job.</li>
                 <li>We do not guarantee employment or interview calls. The hiring decision rests solely with the employer.</li>
               </ul>
             </section>

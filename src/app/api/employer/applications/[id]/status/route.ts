@@ -87,7 +87,7 @@ export async function PUT(
         const senderId = process.env.TWOFACTOR_SENDER_ID ?? "JBSRDY"
         if (tfApiKey && seekerUser?.phone && /^[6-9]\d{9}$/.test(seekerUser.phone)) {
           const msg = status === "SHORTLISTED"
-            ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Job Ready app for details.`
+            ? `Congrats! You have been shortlisted for ${application.job.title} at ${application.job.employer.companyName}. Check Jobs Ready app for details.`
             : `Great news! You have been selected for ${application.job.title} at ${application.job.employer.companyName}. Expect a call from them soon!`
           const url = `https://2factor.in/API/V1/${tfApiKey}/ADDON_SERVICES/SEND/TSMS`
             + `?From=${encodeURIComponent(senderId)}`

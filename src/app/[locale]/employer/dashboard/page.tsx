@@ -71,7 +71,7 @@ export default async function EmployerDashboardPage() {
       <aside className="hidden md:flex flex-col w-56 lg:w-60 bg-white border-r border-gray-200 fixed top-0 h-screen z-10 overflow-y-auto">
         {/* Logo */}
         <div className="px-4 py-4 border-b border-gray-100">
-          <Link href="/" className="text-lg font-bold text-[#1a3461]">Job Ready</Link>
+          <Link href="/" className="text-lg font-bold text-[#1a3461]">Jobs Ready</Link>
         </div>
 
         {/* User info */}
@@ -339,7 +339,7 @@ export default async function EmployerDashboardPage() {
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-5">
               <p className="font-semibold text-gray-800 text-sm mb-1">Refer us</p>
-              <p className="text-xs text-gray-500 mb-3">Help your network hire faster with Job Ready</p>
+              <p className="text-xs text-gray-500 mb-3">Help your network hire faster with Jobs Ready</p>
               <button className="text-xs font-semibold text-[#1a3461] flex items-center gap-1 hover:underline">
                 Share with a friend <ChevronRight size={13} />
               </button>

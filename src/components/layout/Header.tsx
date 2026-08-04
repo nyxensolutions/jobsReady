@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -77,9 +77,9 @@ export default function Header() {
 
           {/* Logo — goes to dashboard if logged in, home if not */}
           <Link href={authUser ? dashboardHref : "/"} className="flex items-center gap-2 shrink-0">
-            <Image src="/logo-full.png" alt="Job Ready" width={44} height={44} className="object-contain" />
+            <Image src="/logo-full.png" alt="Jobs Ready" width={44} height={44} className="object-contain" />
             <span className="font-bold text-lg text-[#1a3461] tracking-tight">
-              Job<span className="text-orange-500">Ready</span>
+              Jobs<span className="text-orange-500">Ready</span>
             </span>
           </Link>
 

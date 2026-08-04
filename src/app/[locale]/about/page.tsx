@@ -4,7 +4,7 @@ import { Target, Users, Zap, Heart } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "Job Ready is India's dedicated blue-collar job portal connecting workers with employers across 200+ cities. Built by NyxenCloud Solution Pvt. Ltd.",
+  description: "Jobs Ready is India's dedicated blue-collar job portal connecting workers with employers across 200+ cities. Built by NyxenCloud Solution Pvt. Ltd.",
 }
 
 const VALUES = [
@@ -24,7 +24,7 @@ export default function AboutPage() {
           <span className="inline-block bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
             A product of NyxenCloud Solution Pvt. Ltd.
           </span>
-          <h1 className="text-3xl sm:text-4xl font-black mb-4">About Job Ready</h1>
+          <h1 className="text-3xl sm:text-4xl font-black mb-4">About Jobs Ready</h1>
           <p className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             We're building India's most trusted job platform for blue-collar and frontline workers —
             connecting millions of job seekers with employers across every city and town.
@@ -39,12 +39,12 @@ export default function AboutPage() {
             <div>
               <h2 className="text-2xl font-bold text-[#1a3461] mb-4">Our Story</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Job Ready was born from a simple observation: India has hundreds of millions of skilled,
+                Jobs Ready was born from a simple observation: India has hundreds of millions of skilled,
                 hard-working people — delivery workers, drivers, cooks, security guards — who struggle
                 to find the right jobs simply because existing job platforms are built for office workers.
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
-                We set out to change that. Job Ready is built ground-up for India's frontline workforce:
+                We set out to change that. Jobs Ready is built ground-up for India's frontline workforce:
                 phone-number login (no email required), Hindi and regional language support, jobs
                 listed by salary and city, and a direct "Call HR" button on every listing.
               </p>
@@ -99,7 +99,7 @@ export default function AboutPage() {
                 www.nyxensolutions.net
               </a>
             </p>
-            <p><strong className="text-gray-800">Product:</strong> Job Ready (jobready.in)</p>
+            <p><strong className="text-gray-800">Product:</strong> Jobs Ready (jobready.in)</p>
             <p><strong className="text-gray-800">Registered in:</strong> India</p>
             <p><strong className="text-gray-800">Contact:</strong>{" "}
               <a href="mailto:support@jobready.in" className="text-blue-700 hover:underline">support@jobready.in</a>
@@ -112,7 +112,7 @@ export default function AboutPage() {
       <section className="py-12 bg-[#1a3461] text-white text-center">
         <div className="max-w-xl mx-auto px-4">
           <h2 className="text-xl font-bold mb-3">Ready to find your next job?</h2>
-          <p className="text-white/70 text-sm mb-6">Join thousands of workers who found their dream job on Job Ready.</p>
+          <p className="text-white/70 text-sm mb-6">Join thousands of workers who found their dream job on Jobs Ready.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/jobs" className="px-6 py-3 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded-xl transition-colors text-sm">
               Browse Jobs
