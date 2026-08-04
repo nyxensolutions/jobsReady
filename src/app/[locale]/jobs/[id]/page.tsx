@@ -126,7 +126,6 @@ export default async function JobDetailPage({ params }: Props) {
     { label: "Openings", value: `${job.vacancies}` },
     { label: "Salary", value: salary },
     { label: "Location", value: job.city.name },
-    ...(job.employer.contactPhone ? [{ label: "Contact", value: job.employer.contactPhone }] : []),
     { label: "Posted", value: formatRelativeTime(job.createdAt) },
   ]
 
@@ -258,7 +257,7 @@ export default async function JobDetailPage({ params }: Props) {
 
               {/* Mobile CTA (hidden on lg) */}
               <div className="lg:hidden mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2">
-                <ApplyButton jobId={job.id} contactPhone={job.employer.contactPhone} locale={locale} />
+                <ApplyButton jobId={job.id} locale={locale} />
                 <SaveJobButton jobId={job.id} initialSaved={isSaved} locale={locale} />
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: https://jobready.in/jobs/${job.id}`)}`}

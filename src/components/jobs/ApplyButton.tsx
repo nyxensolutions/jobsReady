@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Loader2, CheckCircle, Phone } from "lucide-react"
+import { Loader2, CheckCircle } from "lucide-react"
 
 type Props = {
   jobId: string
@@ -49,44 +49,23 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
 
   if (status === "done" || status === "duplicate") {
     return (
-      <div className="flex flex-col gap-3">
-        <div className="w-full py-3 rounded-xl bg-green-50 border border-green-200 flex items-center justify-center gap-2 text-green-700 font-semibold text-sm">
-          <CheckCircle size={16} />
-          {status === "done" ? "Application submitted!" : "Already applied"}
-        </div>
-        {contactPhone && (
-          <a
-            href={`tel:${contactPhone}`}
-            className="w-full py-3 flex items-center justify-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-xl transition-colors text-sm"
-          >
-            <Phone size={15} />
-            Call HR directly
-          </a>
-        )}
+      <div className="w-full py-3 rounded-xl bg-green-50 border border-green-200 flex items-center justify-center gap-2 text-green-700 font-semibold text-sm">
+        <CheckCircle size={16} />
+        {status === "done" ? "Application submitted!" : "Already applied"}
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       <button
         onClick={handleApply}
         disabled={status === "loading"}
-        className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors text-sm disabled:opacity-60 flex items-center justify-center gap-2"
+        className="w-full py-3 bg-[#1a3461] hover:bg-[#142a52] text-white font-bold rounded-xl transition-colors text-sm disabled:opacity-60 flex items-center justify-center gap-2"
       >
         {status === "loading" && <Loader2 size={15} className="animate-spin" />}
         Apply Now — Free
       </button>
-
-      {contactPhone && (
-        <a
-          href={`tel:${contactPhone}`}
-          className="w-full py-3 flex items-center justify-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-xl transition-colors text-sm"
-        >
-          <Phone size={15} />
-          Call HR directly
-        </a>
-      )}
 
       {status === "error" && (
         <p className="text-red-500 text-xs text-center">{errorMsg}</p>

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Phone, ArrowRight, CheckCircle } from "lucide-react"
 
-const QUICK_JOBS = ["Delivery Boy", "Driver", "Security Guard", "Sales Executive", "Cook", "Helper", "Factory Worker", "Nurse"]
+const QUICK_JOBS = ["Delivery Executive", "BPO Executive", "Telecaller", "Driver", "Security Guard", "Sales Executive", "Cook", "Data Entry", "Helper", "Factory Worker", "Warehouse", "Nurse"]
 
 export default function GetJobNowSection() {
   const router = useRouter()

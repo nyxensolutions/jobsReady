@@ -1,18 +1,24 @@
 import Link from "next/link"
 
 const CATEGORIES = [
-  { slug: "delivery",     label: "Delivery",        emoji: "🛵", vacancies: "23L+",  bg: "bg-amber-50",   ring: "hover:ring-amber-300",  text: "text-amber-700"   },
+  { slug: "delivery",     label: "Delivery",         emoji: "🛵", vacancies: "23L+",  bg: "bg-amber-50",   ring: "hover:ring-amber-300",  text: "text-amber-700"   },
+  { slug: "bpo",          label: "BPO / Telecaller", emoji: "🎧", vacancies: "8L+",   bg: "bg-cyan-50",    ring: "hover:ring-cyan-300",   text: "text-cyan-700"    },
   { slug: "driver",       label: "Driver",           emoji: "🚗", vacancies: "3.3L+", bg: "bg-sky-50",     ring: "hover:ring-sky-300",    text: "text-sky-700"     },
   { slug: "sales",        label: "Sales",            emoji: "📈", vacancies: "5L+",   bg: "bg-green-50",   ring: "hover:ring-green-300",  text: "text-green-700"   },
   { slug: "security",     label: "Security Guard",   emoji: "🛡️", vacancies: "70K+",  bg: "bg-red-50",     ring: "hover:ring-red-300",    text: "text-red-700"     },
   { slug: "housekeeping", label: "Housekeeping",     emoji: "🧹", vacancies: "1.5L+", bg: "bg-purple-50",  ring: "hover:ring-purple-300", text: "text-purple-700"  },
   { slug: "cook",         label: "Cook / Chef",      emoji: "👨‍🍳", vacancies: "80K+",  bg: "bg-yellow-50",  ring: "hover:ring-yellow-300", text: "text-yellow-700"  },
+  { slug: "dataEntry",    label: "Data Entry",       emoji: "⌨️", vacancies: "2L+",   bg: "bg-lime-50",    ring: "hover:ring-lime-300",   text: "text-lime-700"    },
   { slug: "construction", label: "Construction",     emoji: "🏗️", vacancies: "1L+",   bg: "bg-orange-50",  ring: "hover:ring-orange-300", text: "text-orange-700"  },
   { slug: "factory",      label: "Factory / Mfg",   emoji: "🏭", vacancies: "70K+",  bg: "bg-slate-50",   ring: "hover:ring-slate-300",  text: "text-slate-700"   },
   { slug: "retail",       label: "Retail / Shop",    emoji: "🛒", vacancies: "2L+",   bg: "bg-pink-50",    ring: "hover:ring-pink-300",   text: "text-pink-700"    },
   { slug: "fieldWork",    label: "Field Work",       emoji: "📋", vacancies: "1.2L+", bg: "bg-teal-50",    ring: "hover:ring-teal-300",   text: "text-teal-700"    },
+  { slug: "teaching",     label: "Teaching",         emoji: "📚", vacancies: "1.5L+", bg: "bg-violet-50",  ring: "hover:ring-violet-300", text: "text-violet-700"  },
+  { slug: "accounting",   label: "Accounting",       emoji: "🧾", vacancies: "60K+",  bg: "bg-emerald-50", ring: "hover:ring-emerald-300",text: "text-emerald-700" },
   { slug: "it",           label: "IT / Computer",    emoji: "💻", vacancies: "10K+",  bg: "bg-indigo-50",  ring: "hover:ring-indigo-300", text: "text-indigo-700"  },
   { slug: "healthcare",   label: "Healthcare",       emoji: "🏥", vacancies: "20K+",  bg: "bg-rose-50",    ring: "hover:ring-rose-300",   text: "text-rose-700"    },
+  { slug: "beauty",       label: "Beauty / Salon",   emoji: "💇", vacancies: "40K+",  bg: "bg-fuchsia-50", ring: "hover:ring-fuchsia-300",text: "text-fuchsia-700" },
+  { slug: "logistics",    label: "Warehouse",        emoji: "📦", vacancies: "1L+",   bg: "bg-stone-50",   ring: "hover:ring-stone-300",  text: "text-stone-700"   },
 ]
 
 export default function CategoryGrid() {

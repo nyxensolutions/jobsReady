@@ -5,6 +5,7 @@ import JobFilters from "@/components/jobs/JobFilters"
 import JobCard from "@/components/jobs/JobCard"
 import SortSelect from "@/components/jobs/SortSelect"
 import JobsPagination from "@/components/jobs/JobsPagination"
+import FilterChips from "@/components/jobs/FilterChips"
 import { Briefcase } from "lucide-react"
 
 const PER_PAGE = 20
@@ -88,7 +89,7 @@ export default async function JobsPage({ searchParams }: Props) {
     prisma.jobListing.findMany({
       where,
       include: {
-        employer: { select: { companyName: true, contactPhone: true } },
+        employer: { select: { companyName: true } },
         category: { select: { slug: true } },
         city: { select: { name: true } },
       },
@@ -103,7 +104,6 @@ export default async function JobsPage({ searchParams }: Props) {
     id: j.id,
     title: j.title,
     company: j.source === "SCRAPED" ? "" : j.employer.companyName,
-    contactPhone: j.employer.contactPhone ?? null,
     city: j.city.name,
     salary: formatSalary(j.salaryMin, j.salaryMax, j.salaryUnit),
     type: j.jobType,
@@ -129,13 +129,21 @@ export default async function JobsPage({ searchParams }: Props) {
           </aside>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3">
               <p className="text-sm text-gray-600">
                 {t("searchResults", { count: total })}
                 {q && <span className="font-semibold"> for "{q}"</span>}
               </p>
               <SortSelect sort={sort} />
             </div>
+            <FilterChips
+              category={category || undefined}
+              type={type || undefined}
+              minSalary={params.minSalary || undefined}
+              freshers={freshersOnly ? "1" : undefined}
+              qualification={qualification || undefined}
+              posted={posted || undefined}
+            />
 
             {mapped.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">

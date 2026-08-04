@@ -93,13 +93,36 @@ export default function Header() {
                 🔍 {t("findJobs")}
               </Link>
             )}
-            {authUser?.role !== "SEEKER" && (
+            {!authUser && (
               <Link
                 href="/employer"
                 className="inline-flex items-center px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-[#1a3461] hover:bg-[#f0f4ff] hover:border-[#1a3461] transition-all"
               >
                 🏢 {t("forEmployers")}
               </Link>
+            )}
+            {authUser?.role === "SEEKER" && (
+              <>
+                <Link href="/seeker/dashboard" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
+                  My Applications
+                </Link>
+                <Link href="/seeker/saved-jobs" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
+                  Saved Jobs
+                </Link>
+              </>
+            )}
+            {authUser?.role === "EMPLOYER" && (
+              <>
+                <Link href="/employer/dashboard" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
+                  Dashboard
+                </Link>
+                <Link href="/employer/jobs" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
+                  My Jobs
+                </Link>
+                <Link href="/employer/candidates" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
+                  Responses
+                </Link>
+              </>
             )}
           </nav>
 
@@ -196,19 +219,31 @@ export default function Header() {
       {/* Mobile nav */}
       {mobileOpen && (
         <div className="md:hidden border-t border-slate-100 bg-white px-4 py-4 flex flex-col gap-3">
-          <Link href="/jobs" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
-            🔍 {t("findJobs")}
-          </Link>
-          <Link href="/employer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
-            🏢 {t("forEmployers")}
-          </Link>
-          {authUser ? (
+          {authUser?.role !== "EMPLOYER" && (
+            <Link href="/jobs" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
+              🔍 {t("findJobs")}
+            </Link>
+          )}
+          {!authUser && (
+            <Link href="/employer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
+              🏢 {t("forEmployers")}
+            </Link>
+          )}
+          {authUser?.role === "SEEKER" && (
             <>
-              <Link href={dashboardHref} onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">
-                My Dashboard
-              </Link>
-              <button onClick={signOut} className="text-left px-4 py-2 text-sm text-red-600">Sign Out</button>
+              <Link href="/seeker/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Applications</Link>
+              <Link href="/seeker/saved-jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Saved Jobs</Link>
             </>
+          )}
+          {authUser?.role === "EMPLOYER" && (
+            <>
+              <Link href="/employer/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Dashboard</Link>
+              <Link href="/employer/jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Jobs</Link>
+              <Link href="/employer/candidates" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Responses</Link>
+            </>
+          )}
+          {authUser ? (
+            <button onClick={signOut} className="text-left px-4 py-2 text-sm text-red-600">Sign Out</button>
           ) : (
             <>
               <Link href="/login" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm text-slate-600">{t("login")}</Link>

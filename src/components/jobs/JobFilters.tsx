@@ -6,15 +6,21 @@ const CATEGORIES = [
   { key: "delivery", label: "Delivery" },
   { key: "driver", label: "Driver" },
   { key: "sales", label: "Sales" },
+  { key: "bpo", label: "BPO / Telecaller" },
   { key: "security", label: "Security Guard" },
   { key: "housekeeping", label: "Housekeeping" },
   { key: "cook", label: "Cook / Chef" },
+  { key: "dataEntry", label: "Data Entry" },
   { key: "construction", label: "Construction" },
   { key: "factory", label: "Factory Worker" },
-  { key: "retail", label: "Retail" },
+  { key: "retail", label: "Retail / Shop" },
   { key: "fieldWork", label: "Field Work" },
+  { key: "accounting", label: "Accounting" },
+  { key: "teaching", label: "Teaching" },
   { key: "it", label: "IT / Computer" },
   { key: "healthcare", label: "Healthcare" },
+  { key: "beauty", label: "Beauty / Salon" },
+  { key: "logistics", label: "Logistics / Warehouse" },
 ]
 
 const QUALIFICATIONS = [

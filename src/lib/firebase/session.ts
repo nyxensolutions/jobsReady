@@ -9,7 +9,7 @@ export async function getServerSession() {
   const sessionCookie = cookieStore.get(SESSION_COOKIE)?.value
   if (!sessionCookie) return null
   try {
-    return await adminAuth.verifySessionCookie(sessionCookie, true)
+    return await adminAuth.verifySessionCookie(sessionCookie, false)
   } catch {
     return null
   }

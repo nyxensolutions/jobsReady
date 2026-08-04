@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { MapPin, Clock, Users, Phone, ChevronRight } from "lucide-react"
+import { MapPin, Clock, Users, ChevronRight } from "lucide-react"
 import { formatRelativeTime } from "@/lib/utils"
 import SaveJobButton from "@/components/jobs/SaveJobButton"
 
@@ -9,7 +9,6 @@ type Job = {
   id: string
   title: string
   company: string
-  contactPhone: string | null
   city: string
   salary: string
   type: string
@@ -63,7 +62,7 @@ export default function JobCard({ job }: { job: Job }) {
                     Featured
                   </span>
                 )}
-                <SaveJobButton jobId={job.id} />
+                <SaveJobButton jobId={job.id} compact />
               </div>
             </div>
 
@@ -92,23 +91,14 @@ export default function JobCard({ job }: { job: Job }) {
         </div>
       </Link>
 
-      {/* CTA buttons */}
-      <div className="px-4 pb-4 sm:px-5 sm:pb-5 flex gap-2 -mt-1">
+      {/* CTA button */}
+      <div className="px-4 pb-4 sm:px-5 sm:pb-5 -mt-1">
         <Link
           href={`/jobs/${job.id}`}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 py-2 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors"
         >
           Apply Now <ChevronRight size={13} />
         </Link>
-        {job.contactPhone && (
-          <a
-            href={`tel:${job.contactPhone}`}
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center justify-center gap-1.5 px-4 py-2 border border-green-500 hover:bg-green-50 text-green-700 text-xs font-bold rounded-lg transition-colors"
-          >
-            <Phone size={13} /> Call HR
-          </a>
-        )}
       </div>
     </div>
   )
