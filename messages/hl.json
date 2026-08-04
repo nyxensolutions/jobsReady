@@ -1,0 +1,191 @@
+{
+  "common": {
+    "appName": "Job Ready",
+    "tagline": "Naukri dhundein. Log hire karein. Taiyaar rahein.",
+    "loading": "Load ho raha hai...",
+    "error": "Kuch galat ho gaya",
+    "retry": "Dobara try karein",
+    "save": "Save karein",
+    "cancel": "Cancel",
+    "submit": "Submit karein",
+    "next": "Aage",
+    "back": "Wapas",
+    "search": "Search karein",
+    "filter": "Filter",
+    "clear": "Clear karein",
+    "viewAll": "Sab dekhein",
+    "seeMore": "Aur dekhein",
+    "required": "Zaroori",
+    "optional": "Optional"
+  },
+  "nav": {
+    "home": "Home",
+    "findJobs": "Naukri Dhundein",
+    "postJob": "Job Post Karein",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "profile": "Mera Profile",
+    "applications": "Meri Applications",
+    "logout": "Logout",
+    "forJobSeekers": "Job Seekers Ke Liye",
+    "forEmployers": "Employers Ke Liye"
+  },
+  "home": {
+    "hero": {
+      "title": "Aapki agli naukri ready hai.",
+      "subtitle": "Delivery, sales, security, driving aur aur bhi — apne sheher mein lakhs of jobs dhundein.",
+      "searchPlaceholder": "Job title, skill ya company",
+      "locationPlaceholder": "Sheher ya area",
+      "searchButton": "Naukri Dhundein",
+      "popularSearches": "Popular searches"
+    },
+    "stats": {
+      "jobsPosted": "Jobs Posted",
+      "citiesCovered": "Sheher Cover Hue",
+      "companiesHiring": "Companies Hire Kar Rahi Hain",
+      "successfulHires": "Log Hire Ho Gaye"
+    },
+    "categories": {
+      "title": "Category Se Dhundein",
+      "subtitle": "Apne kaam ki naukri dhundein"
+    },
+    "featured": {
+      "title": "Featured Jobs",
+      "subtitle": "Top companies abhi hire kar rahi hain"
+    },
+    "howItWorks": {
+      "title": "Job Ready kaise kaam karta hai",
+      "seeker": {
+        "step1": "Apna profile banayein",
+        "step2": "Search karein aur apply karein",
+        "step3": "Hire ho jayein"
+      },
+      "employer": {
+        "step1": "Company register karein",
+        "step2": "Job post karein",
+        "step3": "Candidates dhundein"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "Wapas aaye",
+    "registerTitle": "Account banayein",
+    "phoneLabel": "Mobile number",
+    "phonePlaceholder": "10 digit mobile number",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "aap@company.com",
+    "otpLabel": "OTP daalen",
+    "otpPlaceholder": "6 digit OTP",
+    "sendOtp": "OTP Bhejein",
+    "verifyOtp": "Verify Karein",
+    "resendOtp": "OTP Dobara Bhejein",
+    "otpSent": "OTP bheja gaya {phone} par",
+    "iAmSeeker": "Mujhe naukri chahiye",
+    "iAmEmployer": "Mujhe log hire karne hain",
+    "orContinueWith": "ya continue karein",
+    "continueWithGoogle": "Google Se Continue Karein",
+    "alreadyHaveAccount": "Pehle se account hai?",
+    "noAccount": "Account nahi hai?"
+  },
+  "jobs": {
+    "searchResults": "{count} jobs mile",
+    "noResults": "Koi job nahi mili. Alag keywords try karein.",
+    "postedAgo": "{time} pehle post hua",
+    "vacancies": "{count} vacancy",
+    "vacancies_plural": "{count} vacancies",
+    "salary": "Salary",
+    "experience": "Experience",
+    "jobType": "Job Type",
+    "location": "Location",
+    "applyNow": "Abhi Apply Karein",
+    "applied": "Apply Ho Gaya",
+    "callHr": "HR Ko Call Karein",
+    "similarJobs": "Milti Julti Jobs",
+    "jobDetail": {
+      "about": "Is job ke baare mein",
+      "requirements": "Requirements",
+      "perks": "Perks aur Benefits",
+      "aboutCompany": "Company ke baare mein"
+    },
+    "filters": {
+      "salary": "Salary range",
+      "experience": "Experience",
+      "jobType": "Job type",
+      "category": "Category",
+      "postedWithin": "Kab post hua"
+    },
+    "types": {
+      "FULL_TIME": "Full Time",
+      "PART_TIME": "Part Time",
+      "CONTRACT": "Contract",
+      "GIG": "Gig / Freelance"
+    }
+  },
+  "seeker": {
+    "dashboard": {
+      "title": "Mera Dashboard",
+      "appliedJobs": "Apply Ki Hui Jobs",
+      "profileStrength": "Profile ki taakat",
+      "completeProfile": "Jaldi hire hone ke liye profile complete karein"
+    },
+    "profile": {
+      "title": "Mera Profile",
+      "personalInfo": "Personal Jankari",
+      "name": "Poora Naam",
+      "phone": "Mobile Number",
+      "city": "Sheher",
+      "experience": "Kitne Saal Ka Experience",
+      "skills": "Skills",
+      "preferredCategories": "Pasandida Job Categories",
+      "resume": "Resume",
+      "uploadResume": "Resume Upload Karein",
+      "buildResume": "Resume Banayein"
+    }
+  },
+  "employer": {
+    "dashboard": {
+      "title": "Employer Dashboard",
+      "activeJobs": "Active Jobs",
+      "totalApplications": "Total Applications",
+      "newApplications": "Nayi Applications"
+    },
+    "postJob": {
+      "title": "Nayi Job Post Karein",
+      "jobTitle": "Job Title",
+      "category": "Job Category",
+      "city": "Sheher",
+      "salary": "Salary",
+      "vacancies": "Kitni Vacancies Hain",
+      "description": "Job Description",
+      "jobType": "Job Type",
+      "experience": "Minimum Experience",
+      "expiryDate": "Listing Khatam Hone Ki Tarikh",
+      "preview": "Preview",
+      "publish": "Review Ke Liye Submit Karein"
+    },
+    "register": {
+      "title": "Employer Ke Roop Mein Register Karein",
+      "companyName": "Company Ka Naam",
+      "gstCin": "GST / CIN Number",
+      "industry": "Industry",
+      "contactPerson": "Contact Person Ka Naam",
+      "uploadDocs": "Verification Documents Upload Karein",
+      "docsHint": "GST certificate, company registration, ya trade licence"
+    }
+  },
+  "categories": {
+    "delivery": "Delivery",
+    "driver": "Driver",
+    "sales": "Sales",
+    "security": "Security Guard",
+    "housekeeping": "Housekeeping",
+    "cook": "Cook / Chef",
+    "construction": "Construction",
+    "factory": "Factory Worker",
+    "retail": "Retail",
+    "fieldWork": "Field Work",
+    "it": "IT / Computer",
+    "healthcare": "Healthcare"
+  }
+}

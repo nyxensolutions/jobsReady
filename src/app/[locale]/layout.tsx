@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing"
 import type { Metadata } from "next"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
+import SeekerBottomNav from "@/components/layout/SeekerBottomNav"
 
 type Props = {
   children: React.ReactNode
@@ -33,6 +34,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <SeekerBottomNav />
     </NextIntlClientProvider>
   )
 }

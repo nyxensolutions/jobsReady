@@ -1,7 +1,7 @@
 "use client"
 
 import { useLocale } from "next-intl"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter } from "@/i18n/navigation"
 import { localeNames, locales } from "@/i18n/config"
 import { Globe } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
@@ -25,12 +25,7 @@ export default function LocaleSwitcher() {
 
   function switchLocale(newLocale: string) {
     setOpen(false)
-    // Strip current locale prefix if present, then add new one
-    const segments = pathname.split("/")
-    const hasLocale = locales.includes(segments[1] as any)
-    const pathWithoutLocale = hasLocale ? "/" + segments.slice(2).join("/") : pathname
-    const newPath = newLocale === "en" ? pathWithoutLocale || "/" : `/${newLocale}${pathWithoutLocale}`
-    router.push(newPath)
+    router.push(pathname, { locale: newLocale })
   }
 
   return (
