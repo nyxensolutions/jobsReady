@@ -81,6 +81,9 @@ model SeekerProfile {
   bio                 String?
   isProfileComplete   Boolean   @default(false)
   isOpenToWork        Boolean   @default(true)
+  openToRelocate      Boolean   @default(true)
+  preferredCities     String[]
+  languages           String[]
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
@@ -172,6 +175,7 @@ model JobListing {
   isFeatured    Boolean   @default(false)
   viewCount     Int       @default(0)
   qualificationRequired String?
+  languagesRequired     String[]
   source        String    @default("EMPLOYER")
   sourceUrl     String?
   lastScrapedAt DateTime?

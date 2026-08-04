@@ -11,33 +11,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Not a seeker account" }, { status: 403 })
   }
 
-  const { name, city, bio, skills, preferredJobTypes, experienceYears, isOpenToWork } = await req.json()
+  const {
+    name, city, bio, skills, preferredJobTypes, experienceYears,
+    isOpenToWork, openToRelocate, preferredCities, languages,
+  } = await req.json()
 
   if (!name?.trim()) {
     return NextResponse.json({ error: "Name is required" }, { status: 400 })
   }
 
+  const patch = {
+    name: name.trim(),
+    city: city?.trim() || null,
+    bio: bio?.trim() || null,
+    skills: Array.isArray(skills) ? skills.filter(Boolean) : [],
+    preferredJobTypes: Array.isArray(preferredJobTypes) ? preferredJobTypes : [],
+    experienceYears: experienceYears != null ? parseInt(experienceYears) : 0,
+    isOpenToWork: isOpenToWork ?? true,
+    openToRelocate: openToRelocate ?? true,
+    preferredCities: Array.isArray(preferredCities) ? preferredCities.filter(Boolean) : [],
+    languages: Array.isArray(languages) ? languages.filter(Boolean) : [],
+  }
+
   const profile = await prisma.seekerProfile.upsert({
     where: { userId: session.uid },
-    create: {
-      userId: session.uid,
-      name: name.trim(),
-      city: city?.trim() || null,
-      bio: bio?.trim() || null,
-      skills: Array.isArray(skills) ? skills.filter(Boolean) : [],
-      preferredJobTypes: Array.isArray(preferredJobTypes) ? preferredJobTypes : [],
-      experienceYears: experienceYears != null ? parseInt(experienceYears) : 0,
-      isOpenToWork: isOpenToWork ?? true,
-    },
-    update: {
-      name: name.trim(),
-      city: city?.trim() || null,
-      bio: bio?.trim() || null,
-      skills: Array.isArray(skills) ? skills.filter(Boolean) : [],
-      preferredJobTypes: Array.isArray(preferredJobTypes) ? preferredJobTypes : [],
-      experienceYears: experienceYears != null ? parseInt(experienceYears) : 0,
-      isOpenToWork: isOpenToWork ?? true,
-    },
+    create: { userId: session.uid, ...patch },
+    update: patch,
   })
 
   return NextResponse.json({ success: true, profile })

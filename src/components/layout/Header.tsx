@@ -103,7 +103,7 @@ export default function Header({ initialAuth }: Props) {
             )}
             {authUser?.role === "SEEKER" && (
               <>
-                <Link href="/seeker/dashboard" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
+                <Link href="/seeker/dashboard#applications" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
                   My Applications
                 </Link>
                 <Link href="/seeker/saved-jobs" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
@@ -231,7 +231,7 @@ export default function Header({ initialAuth }: Props) {
           )}
           {authUser?.role === "SEEKER" && (
             <>
-              <Link href="/seeker/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Applications</Link>
+              <Link href="/seeker/dashboard#applications" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Applications</Link>
               <Link href="/seeker/saved-jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Saved Jobs</Link>
             </>
           )}

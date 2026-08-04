@@ -8,6 +8,7 @@ type SearchParams = {
   category?: string
   q?: string
   minExp?: string
+  language?: string
   page?: string
 }
 
@@ -53,6 +54,7 @@ export default async function CandidatesPage({
   const category = sp.category?.trim()
   const keyword = sp.q?.trim()
   const minExp = sp.minExp ? parseInt(sp.minExp) : undefined
+  const language = sp.language?.trim()
   const page = Math.max(1, parseInt(sp.page ?? "1"))
   const take = 24
 
@@ -63,6 +65,7 @@ export default async function CandidatesPage({
     ...(city ? { city: { contains: city, mode: "insensitive" as const } } : {}),
     ...(category ? { preferredCategories: { hasSome: [category] } } : {}),
     ...(minExp !== undefined ? { experienceYears: { gte: minExp } } : {}),
+    ...(language ? { languages: { hasSome: [language] } } : {}),
     ...(keyword ? {
       OR: [
         { bio: { contains: keyword, mode: "insensitive" as const } },
@@ -78,6 +81,7 @@ export default async function CandidatesPage({
         id: true, name: true, city: true, stateCode: true,
         experienceYears: true, skills: true, preferredCategories: true,
         preferredJobTypes: true, bio: true, photoUrl: true, updatedAt: true,
+        languages: true, openToRelocate: true, preferredCities: true,
       },
       orderBy: { updatedAt: "desc" },
       skip: (page - 1) * take,
@@ -94,7 +98,7 @@ export default async function CandidatesPage({
       activeJobs={activeJobs as any}
       categories={categories}
       cities={cities}
-      filters={{ city, category, keyword, minExp: sp.minExp }}
+      filters={{ city, category, keyword, minExp: sp.minExp, language }}
       companyName={employer.companyName}
     />
   )

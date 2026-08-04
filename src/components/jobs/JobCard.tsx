@@ -95,7 +95,7 @@ export default function JobCard({ job }: { job: Job }) {
       <div className="px-4 pb-4 sm:px-5 sm:pb-5 -mt-1">
         <Link
           href={`/jobs/${job.id}`}
-          className="w-full flex items-center justify-center gap-1.5 py-2 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 py-2 bg-[#1a3461] hover:bg-[#142a52] hover:shadow-md active:scale-[0.98] text-white text-xs font-bold rounded-lg transition-all"
         >
           Apply Now <ChevronRight size={13} />
         </Link>

@@ -24,6 +24,9 @@ export default async function SeekerProfilePage() {
         preferredJobTypes: profile.preferredJobTypes,
         experienceYears: profile.experienceYears,
         isOpenToWork: profile.isOpenToWork,
+        openToRelocate: profile.openToRelocate,
+        preferredCities: profile.preferredCities,
+        languages: profile.languages,
         photoUrl: profile.photoUrl ?? null,
         resumeUrl: profile.resumeUrl ?? null,
       } : null}

@@ -17,7 +17,12 @@ export async function GET(req: NextRequest) {
   const jobs = await prisma.jobListing.findMany({
     where: { status: status as any },
     include: {
-      employer: { select: { companyName: true, contactPerson: true, contactPhone: true, status: true } },
+      employer: {
+        select: {
+          companyName: true, contactPerson: true, contactPhone: true,
+          status: true, website: true, description: true, docUrls: true,
+        },
+      },
       category: { select: { nameEn: true } },
       city: { select: { name: true } },
       _count: { select: { applications: true } },

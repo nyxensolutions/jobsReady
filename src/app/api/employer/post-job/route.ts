@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     requirements,
     perks,
     pincode,
+    languagesRequired,
   } = body
 
   if (!title || !categorySlug || !citySlug || !jobType || !description) {
@@ -63,6 +64,7 @@ export async function POST(req: NextRequest) {
       experienceMin: parseFloat(experienceMin) || 0,
       pincode: pincode?.trim() || null,
       qualificationRequired: qualificationRequired ?? null,
+      languagesRequired: Array.isArray(languagesRequired) ? languagesRequired.filter(Boolean) : [],
       status: "PENDING_REVIEW",
     },
   })

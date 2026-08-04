@@ -35,6 +35,7 @@ type WizardData = {
   requirements: string[]
   perks: string[]
   pincode: string
+  languagesRequired: string[]
 }
 
 const INITIAL: WizardData = {
@@ -42,7 +43,7 @@ const INITIAL: WizardData = {
   salaryMin: "", salaryMax: "", salaryUnit: "monthly", benefits: [], shift: "",
   gender: "Any", qualification: "Any", experienceMin: "0", experienceMax: "",
   freshersOnly: false, skills: [], description: "",
-  requirements: [], perks: [], pincode: "",
+  requirements: [], perks: [], pincode: "", languagesRequired: [],
 }
 
 const JOB_TITLE_CHIPS = ["Delivery Boy", "Driver", "Security Guard", "Picker / Packer", "Telecaller", "Data Entry"]
@@ -56,6 +57,7 @@ const JOB_TYPES: { value: string; label: string }[] = [
 ]
 const BENEFIT_CHIPS = ["Meal", "Insurance", "PF", "Medical Benefits"]
 const SHIFT_CHIPS = ["Day", "Night", "Rotational", "Flexible"]
+const LANGUAGE_CHIPS = ["Hindi", "English", "Telugu", "Tamil", "Kannada", "Bengali", "Marathi", "Gujarati", "Punjabi"]
 const GENDER_CHIPS = ["Any", "Male", "Female"]
 const QUAL_CHIPS = [
   { value: "Any", label: "Any" },
@@ -261,7 +263,7 @@ function Step1({
   cities: City[]
 }) {
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-xl">
+    <div className="flex flex-col gap-6 p-6 max-w-2xl mx-auto w-full">
       {/* Job Title */}
       <div>
         <label className={label}>Job Title <span className="text-red-500">*</span></label>
@@ -400,7 +402,7 @@ function Step2({
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-xl">
+    <div className="flex flex-col gap-6 p-6 max-w-2xl mx-auto w-full">
       {/* Salary */}
       <div>
         <label className={label}>Salary per month</label>
@@ -495,7 +497,7 @@ function Step3({
   update: <K extends keyof WizardData>(k: K, v: WizardData[K]) => void
 }) {
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-xl">
+    <div className="flex flex-col gap-6 p-6 max-w-2xl mx-auto w-full">
       {/* Gender */}
       <div>
         <label className={label}>Gender</label>
@@ -563,6 +565,30 @@ function Step3({
           placeholder="+ Add a skill (e.g. Two-Wheeler Driving)"
         />
       </div>
+
+      {/* Languages */}
+      <div>
+        <label className={label}>Languages Required <span className="text-xs text-gray-400 font-normal">(optional)</span></label>
+        <div className="flex flex-wrap gap-2">
+          {LANGUAGE_CHIPS.map((lang) => (
+            <button
+              key={lang}
+              type="button"
+              onClick={() => {
+                const langs = data.languagesRequired ?? []
+                update("languagesRequired", langs.includes(lang) ? langs.filter(l => l !== lang) : [...langs, lang])
+              }}
+              className={`px-3 py-1.5 rounded-full border text-sm font-medium transition-all ${
+                (data.languagesRequired ?? []).includes(lang)
+                  ? "border-[#1a3461] bg-[#1a3461]/5 text-[#1a3461]"
+                  : "border-gray-300 text-gray-600 hover:border-gray-400 bg-white"
+              }`}
+            >
+              {lang}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -582,7 +608,7 @@ function Step4({
   const template = TEMPLATE(data.title, data.salaryMin, data.salaryMax)
 
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-xl">
+    <div className="flex flex-col gap-6 p-6 max-w-2xl mx-auto w-full">
       {/* Suggested template */}
       {showTemplate && (
         <div className="border border-gray-200 rounded-xl overflow-hidden">
@@ -637,7 +663,7 @@ function Step5({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-6 max-w-xl">
+    <div className="flex flex-col gap-4 p-6 max-w-2xl mx-auto w-full">
       {/* Basic Info */}
       <div className="border border-gray-200 rounded-xl overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
@@ -797,6 +823,7 @@ export default function PostJobWizard({
           requirements,
           perks,
           pincode: data.pincode,
+          languagesRequired: data.languagesRequired ?? [],
         }),
       })
       const result = await res.json()

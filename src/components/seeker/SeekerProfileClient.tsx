@@ -16,6 +16,11 @@ const JOB_TYPES = [
   { value: "WALK_IN",    label: "Walk-in Interview" },
 ]
 
+const COMMON_LANGUAGES = [
+  "Hindi", "English", "Telugu", "Tamil", "Kannada", "Malayalam",
+  "Bengali", "Marathi", "Gujarati", "Punjabi", "Odia", "Urdu",
+]
+
 type Profile = {
   name: string
   city: string
@@ -24,6 +29,9 @@ type Profile = {
   preferredJobTypes: string[]
   experienceYears: number
   isOpenToWork: boolean
+  openToRelocate: boolean
+  preferredCities: string[]
+  languages: string[]
   photoUrl: string | null
   resumeUrl: string | null
 }
@@ -82,6 +90,18 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
   const [isOpenToWork, setIsOpenToWork] = useState(initial?.isOpenToWork ?? true)
   const [prefsLoading, setPrefsLoading] = useState(false)
 
+  // Location preference form
+  const [editLocation, setEditLocation] = useState(false)
+  const [openToRelocate, setOpenToRelocate] = useState(initial?.openToRelocate ?? true)
+  const [preferredCities, setPreferredCities] = useState<string[]>(initial?.preferredCities ?? [])
+  const [locationLoading, setLocationLoading] = useState(false)
+
+  // Languages form
+  const [editLanguages, setEditLanguages] = useState(false)
+  const [languages, setLanguages] = useState<string[]>(initial?.languages ?? [])
+  const [langInput, setLangInput] = useState("")
+  const [languagesLoading, setLanguagesLoading] = useState(false)
+
   // Delete account
   const [deleteConfirm, setDeleteConfirm] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -92,12 +112,8 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: name || displayName,
-        city,
-        bio,
-        skills,
-        preferredJobTypes,
-        experienceYears,
-        isOpenToWork,
+        city, bio, skills, preferredJobTypes, experienceYears,
+        isOpenToWork, openToRelocate, preferredCities, languages,
         ...patch,
       }),
     })
@@ -135,6 +151,26 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
       setEditPrefs(false)
     } finally {
       setPrefsLoading(false)
+    }
+  }
+
+  async function handleSaveLocation() {
+    setLocationLoading(true)
+    try {
+      await saveSection({ openToRelocate, preferredCities })
+      setEditLocation(false)
+    } finally {
+      setLocationLoading(false)
+    }
+  }
+
+  async function handleSaveLanguages() {
+    setLanguagesLoading(true)
+    try {
+      await saveSection({ languages })
+      setEditLanguages(false)
+    } finally {
+      setLanguagesLoading(false)
     }
   }
 
@@ -530,6 +566,159 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   <span className="text-xs text-gray-500">{isOpenToWork ? "Open to work" : "Not looking"}</span>
                 </div>
               </div>
+            )}
+          </div>
+        </div>
+
+        {/* Location Preferences section */}
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+            <h2 className="font-semibold text-gray-800 text-sm">Location Preferences</h2>
+            {!editLocation && (
+              <button onClick={() => setEditLocation(true)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors">
+                <Pencil size={14} />
+              </button>
+            )}
+          </div>
+          <div className="p-4">
+            {editLocation ? (
+              <div className="flex flex-col gap-4">
+                {/* Open to any location toggle */}
+                <div className={`flex items-center justify-between px-3 py-2.5 rounded-lg border transition-colors ${openToRelocate ? "border-green-300 bg-green-50" : "border-gray-200 bg-gray-50"}`}>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">Open to any location</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{openToRelocate ? "Available across all cities" : "Looking in specific cities only"}</p>
+                  </div>
+                  <button type="button" onClick={() => setOpenToRelocate(v => !v)}
+                    className={`relative w-10 h-5 rounded-full transition-colors ${openToRelocate ? "bg-green-500" : "bg-gray-300"}`}>
+                    <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${openToRelocate ? "translate-x-5" : ""}`} />
+                  </button>
+                </div>
+
+                {/* Preferred cities (shown when not open to all) */}
+                {!openToRelocate && (
+                  <div>
+                    <p className="text-xs font-medium text-gray-500 mb-2">Preferred Cities</p>
+                    {preferredCities.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {preferredCities.map(c => (
+                          <span key={c} className="inline-flex items-center gap-1 text-xs bg-[#eef2ff] text-[#1a3461] border border-[#1a3461]/20 px-2.5 py-1 rounded-full">
+                            {c}
+                            <button type="button" onClick={() => setPreferredCities(p => p.filter(x => x !== c))}>
+                              <X size={11} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <select onChange={e => { const v = e.target.value; if (v && !preferredCities.includes(v)) setPreferredCities(p => [...p, v]); e.target.value = "" }}
+                      className={inputCls}>
+                      <option value="">+ Add a city</option>
+                      {cities.filter(c => !preferredCities.includes(c)).map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <button onClick={handleSaveLocation} disabled={locationLoading}
+                    className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
+                    {locationLoading && <Loader2 size={13} className="animate-spin" />}
+                    Save
+                  </button>
+                  <button onClick={() => setEditLocation(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${openToRelocate ? "bg-green-500" : "bg-amber-400"}`} />
+                  <span className="text-sm text-gray-700">
+                    {openToRelocate ? "Open to any location" : "Specific cities only"}
+                  </span>
+                </div>
+                {!openToRelocate && preferredCities.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {preferredCities.map(c => (
+                      <span key={c} className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">{c}</span>
+                    ))}
+                  </div>
+                )}
+                {!openToRelocate && preferredCities.length === 0 && (
+                  <button onClick={() => setEditLocation(true)} className="text-sm text-[#1a3461] font-semibold flex items-center gap-1 hover:underline">
+                    <Plus size={14} /> Add preferred cities
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Languages section */}
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+            <h2 className="font-semibold text-gray-800 text-sm">Languages Known</h2>
+            {!editLanguages && (
+              <button onClick={() => setEditLanguages(true)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors">
+                <Pencil size={14} />
+              </button>
+            )}
+          </div>
+          <div className="p-4">
+            {editLanguages ? (
+              <div className="flex flex-col gap-3">
+                {/* Common language chips */}
+                <div className="flex flex-wrap gap-1.5">
+                  {COMMON_LANGUAGES.map(lang => (
+                    <button key={lang} type="button"
+                      onClick={() => setLanguages(prev => prev.includes(lang) ? prev.filter(l => l !== lang) : [...prev, lang])}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
+                        languages.includes(lang)
+                          ? "bg-[#1a3461] text-white border-[#1a3461]"
+                          : "bg-white text-gray-600 border-gray-200 hover:border-[#1a3461]"
+                      }`}>
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+                {/* Custom language input */}
+                <div className="flex gap-2">
+                  <input type="text" value={langInput} onChange={e => setLangInput(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); const v = langInput.trim(); if (v && !languages.includes(v)) { setLanguages(p => [...p, v]); setLangInput("") } } }}
+                    placeholder="Add another language..."
+                    className={inputCls} />
+                  <button type="button"
+                    onClick={() => { const v = langInput.trim(); if (v && !languages.includes(v)) { setLanguages(p => [...p, v]); setLangInput("") } }}
+                    className="px-3 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">
+                    <Plus size={15} />
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={handleSaveLanguages} disabled={languagesLoading}
+                    className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
+                    {languagesLoading && <Loader2 size={13} className="animate-spin" />}
+                    Save
+                  </button>
+                  <button onClick={() => setEditLanguages(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              languages.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {languages.map(lang => (
+                    <span key={lang} className="text-xs bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-full">
+                      {lang}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <button onClick={() => setEditLanguages(true)} className="text-sm text-[#1a3461] font-semibold flex items-center gap-1 hover:underline">
+                  <Plus size={14} /> Add languages
+                </button>
+              )
             )}
           </div>
         </div>

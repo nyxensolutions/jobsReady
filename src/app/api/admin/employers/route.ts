@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
     },
     orderBy: { createdAt: "asc" },
     take: 100,
+    // All fields returned including docUrls, description, website, gstCin
   })
   return NextResponse.json(employers)
 }

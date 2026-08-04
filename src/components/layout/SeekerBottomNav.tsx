@@ -22,7 +22,7 @@ export default function SeekerBottomNav() {
 
   const tabs = [
     { href: "/jobs",             label: "Jobs",        icon: Search   },
-    { href: "/seeker/dashboard", label: "Responses",   icon: FileText },
+    { href: "/seeker/dashboard#applications", label: "Responses",   icon: FileText },
     { href: "/seeker/profile",   label: "Profile",     icon: User     },
   ]
 

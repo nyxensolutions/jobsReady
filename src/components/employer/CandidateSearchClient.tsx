@@ -14,6 +14,9 @@ type Candidate = {
   skills: string[]
   preferredCategories: string[]
   preferredJobTypes: string[]
+  languages: string[]
+  openToRelocate: boolean
+  preferredCities: string[]
   bio: string | null
   photoUrl: string | null
   updatedAt: string
@@ -204,6 +207,28 @@ function CandidateCard({ candidate, jobs }: { candidate: Candidate; jobs: Job[] 
           </div>
         )}
 
+        {/* Languages */}
+        {candidate.languages.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            <span className="text-xs text-gray-400">Languages:</span>
+            {candidate.languages.map((lang) => (
+              <span key={lang} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
+                {lang}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Location preference */}
+        {!candidate.openToRelocate && candidate.preferredCities.length > 0 && (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-xs text-gray-400 flex items-center gap-0.5"><MapPin size={10} /> Prefers:</span>
+            {candidate.preferredCities.slice(0, 3).map(c => (
+              <span key={c} className="text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">{c}</span>
+            ))}
+          </div>
+        )}
+
         {/* Preferred categories */}
         {candidate.preferredCategories.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
@@ -219,7 +244,7 @@ function CandidateCard({ candidate, jobs }: { candidate: Candidate; jobs: Job[] 
         {/* Action */}
         <button
           onClick={() => setInviteOpen(true)}
-          className="mt-auto w-full flex items-center justify-center gap-2 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-xl transition-colors"
+          className="mt-auto w-full flex items-center justify-center gap-2 py-2.5 bg-orange-500 hover:bg-orange-600 hover:shadow-md active:scale-[0.98] text-white text-sm font-bold rounded-xl transition-all"
         >
           <Send size={14} /> Invite to Apply
         </button>
@@ -248,7 +273,7 @@ export default function CandidateSearchClient({
   activeJobs: Job[]
   categories: Category[]
   cities: City[]
-  filters: { city?: string; category?: string; keyword?: string; minExp?: string }
+  filters: { city?: string; category?: string; keyword?: string; minExp?: string; language?: string }
   companyName: string
 }) {
   const router = useRouter()
@@ -258,33 +283,35 @@ export default function CandidateSearchClient({
   const [category, setCategory] = useState(filters.category ?? "")
   const [keyword, setKeyword] = useState(filters.keyword ?? "")
   const [minExp, setMinExp] = useState(filters.minExp ?? "")
+  const [language, setLanguage] = useState(filters.language ?? "")
 
-  function applyFilters(e?: React.FormEvent) {
-    e?.preventDefault()
+  function buildParams() {
     const params = new URLSearchParams()
     if (city) params.set("city", city)
     if (category) params.set("category", category)
     if (keyword) params.set("q", keyword)
     if (minExp) params.set("minExp", minExp)
-    startTransition(() => router.push(`/employer/candidates?${params.toString()}`))
+    if (language) params.set("language", language)
+    return params
+  }
+
+  function applyFilters(e?: React.FormEvent) {
+    e?.preventDefault()
+    startTransition(() => router.push(`/employer/candidates?${buildParams().toString()}`))
   }
 
   function clearFilters() {
-    setCity(""); setCategory(""); setKeyword(""); setMinExp("")
+    setCity(""); setCategory(""); setKeyword(""); setMinExp(""); setLanguage("")
     startTransition(() => router.push("/employer/candidates"))
   }
 
   function goToPage(p: number) {
-    const params = new URLSearchParams()
-    if (city) params.set("city", city)
-    if (category) params.set("category", category)
-    if (keyword) params.set("q", keyword)
-    if (minExp) params.set("minExp", minExp)
+    const params = buildParams()
     params.set("page", p.toString())
     startTransition(() => router.push(`/employer/candidates?${params.toString()}`))
   }
 
-  const hasActiveFilters = !!(city || category || keyword || minExp)
+  const hasActiveFilters = !!(city || category || keyword || minExp || language)
   const totalPages = Math.ceil(initialTotal / 24)
 
   const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1a3461] bg-white"
@@ -312,7 +339,7 @@ export default function CandidateSearchClient({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Search filters */}
         <form onSubmit={applyFilters} className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 mb-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {/* Keyword */}
             <div className="relative">
               <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -348,6 +375,14 @@ export default function CandidateSearchClient({
             <select value={minExp} onChange={(e) => setMinExp(e.target.value)} className={inputCls}>
               {EXP_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+
+            {/* Language */}
+            <select value={language} onChange={(e) => setLanguage(e.target.value)} className={inputCls}>
+              <option value="">Any language</option>
+              {["Hindi", "English", "Telugu", "Tamil", "Kannada", "Malayalam", "Bengali", "Marathi", "Gujarati", "Punjabi", "Odia", "Urdu"].map(lang => (
+                <option key={lang} value={lang}>{lang}</option>
               ))}
             </select>
           </div>

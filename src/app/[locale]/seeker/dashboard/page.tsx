@@ -192,7 +192,7 @@ export default async function SeekerDashboardPage() {
                         <p className="font-bold text-[#1a3461] text-sm hover:underline truncate">{job.title}</p>
                       </Link>
                       <p className="text-xs text-gray-500 truncate mt-0.5">{job.employer.companyName}</p>
-                      <p className="text-sm font-bold text-green-600 mt-1">{formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit)}</p>
+                      {(() => { const s = formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit); return <p className={`text-sm mt-1 ${s === "Salary not mentioned" ? "text-gray-400" : "font-bold text-green-600"}`}>{s}</p> })()}
                       <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
                         <span className="flex items-center gap-0.5"><MapPin size={10} />{job.city.name}</span>
                         <span>·</span>
@@ -238,7 +238,7 @@ export default async function SeekerDashboardPage() {
 
         {/* Applications list */}
         {applications.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-200">
+          <div id="applications" className="bg-white rounded-2xl border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
               <h2 className="font-semibold text-gray-900">My Applications</h2>
               <span className="text-xs text-gray-400">{applications.length} total</span>

@@ -61,7 +61,7 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
       <button
         onClick={handleApply}
         disabled={status === "loading"}
-        className="w-full py-3 bg-[#1a3461] hover:bg-[#142a52] text-white font-bold rounded-xl transition-colors text-sm disabled:opacity-60 flex items-center justify-center gap-2"
+        className="w-full py-3 bg-[#1a3461] hover:bg-[#142a52] hover:shadow-lg active:scale-[0.98] text-white font-bold rounded-xl transition-all text-sm disabled:opacity-60 flex items-center justify-center gap-2"
       >
         {status === "loading" && <Loader2 size={15} className="animate-spin" />}
         Apply Now — Free
