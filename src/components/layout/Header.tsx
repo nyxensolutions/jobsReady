@@ -85,18 +85,22 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-3">
-            <Link
-              href="/jobs"
-              className="inline-flex items-center px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-[#1a3461] hover:bg-[#f0f4ff] hover:border-[#1a3461] transition-all"
-            >
-              🔍 {t("findJobs")}
-            </Link>
-            <Link
-              href="/employer"
-              className="inline-flex items-center px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-[#1a3461] hover:bg-[#f0f4ff] hover:border-[#1a3461] transition-all"
-            >
-              🏢 {t("forEmployers")}
-            </Link>
+            {authUser?.role !== "EMPLOYER" && (
+              <Link
+                href="/jobs"
+                className="inline-flex items-center px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-[#1a3461] hover:bg-[#f0f4ff] hover:border-[#1a3461] transition-all"
+              >
+                🔍 {t("findJobs")}
+              </Link>
+            )}
+            {authUser?.role !== "SEEKER" && (
+              <Link
+                href="/employer"
+                className="inline-flex items-center px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-[#1a3461] hover:bg-[#f0f4ff] hover:border-[#1a3461] transition-all"
+              >
+                🏢 {t("forEmployers")}
+              </Link>
+            )}
           </nav>
 
           {/* Right actions */}
@@ -130,14 +134,24 @@ export default function Header() {
                         {authUser.role === "EMPLOYER" ? "Employer Dashboard" : authUser.role === "ADMIN" ? "Admin Panel" : "My Dashboard"}
                       </Link>
                       {authUser.role === "SEEKER" && (
-                        <Link
-                          href="/seeker/saved-jobs"
-                          onClick={() => setMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          <User size={15} className="text-gray-400" />
-                          Saved Jobs
-                        </Link>
+                        <>
+                          <Link
+                            href="/seeker/profile"
+                            onClick={() => setMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <User size={15} className="text-gray-400" />
+                            My Profile
+                          </Link>
+                          <Link
+                            href="/seeker/saved-jobs"
+                            onClick={() => setMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <Briefcase size={15} className="text-gray-400" />
+                            Saved Jobs
+                          </Link>
+                        </>
                       )}
                       <div className="border-t border-gray-100 mt-1 pt-1">
                         <button

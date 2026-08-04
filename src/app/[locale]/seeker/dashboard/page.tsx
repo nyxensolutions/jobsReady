@@ -77,8 +77,15 @@ export default async function SeekerDashboardPage() {
     hired: applications.filter((a) => a.status === "HIRED").length,
   }
 
-  const firstName = profile?.name?.split(" ")[0] ?? "there"
-  const profileComplete = profile && profile.name && profile.name !== dbUser.phone && profile.city && profile.skills.length > 0
+  const isPhonePlaceholder = !profile?.name || /^\+?\d+$/.test(profile.name)
+  const firstName = isPhonePlaceholder ? "there" : profile!.name.split(" ")[0]
+  const profileScore = [
+    !isPhonePlaceholder && !!profile?.name,
+    !!profile?.city,
+    (profile?.skills?.length ?? 0) > 0,
+    !!profile?.resumeUrl,
+  ].filter(Boolean).length
+  const profileComplete = profileScore === 4
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,6 +129,34 @@ export default async function SeekerDashboardPage() {
             </div>
           ))}
         </div>
+
+        {/* Profile completion banner — shown prominently if incomplete */}
+        {!profileComplete && (
+          <Link href="/seeker/profile"
+            className="flex items-center gap-4 bg-amber-50 border border-amber-200 rounded-xl p-4 hover:bg-amber-100 transition-colors">
+            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+              <User size={18} className="text-amber-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-amber-800">
+                {profileScore === 0 ? "Complete your profile to get hired faster" : "Your profile is incomplete"}
+              </p>
+              <div className="flex items-center gap-2 mt-1.5">
+                <div className="flex-1 h-1.5 bg-amber-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-amber-500 rounded-full transition-all" style={{ width: `${profileScore * 25}%` }} />
+                </div>
+                <span className="text-xs font-semibold text-amber-600 shrink-0">{profileScore * 25}%</span>
+              </div>
+              <p className="text-xs text-amber-600 mt-1">Add {[
+                !isPhonePlaceholder && !!profile?.name ? null : "name",
+                profile?.city ? null : "city",
+                (profile?.skills?.length ?? 0) > 0 ? null : "skills",
+                profile?.resumeUrl ? null : "resume",
+              ].filter(Boolean).join(", ")} to improve your chances</p>
+            </div>
+            <span className="text-xs font-bold text-amber-700 border border-amber-300 px-3 py-1.5 rounded-lg shrink-0">Update →</span>
+          </Link>
+        )}
 
         {/* Quick category browse */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5">
@@ -250,24 +285,6 @@ export default async function SeekerDashboardPage() {
           </div>
         )}
 
-        {/* Profile — subtle tip at the bottom, not a blocker */}
-        {!profileComplete && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                <User size={16} className="text-amber-600" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-amber-800">Add your name &amp; city</p>
-                <p className="text-xs text-amber-600">Employers are more likely to call candidates with complete profiles</p>
-              </div>
-            </div>
-            <Link href="/seeker/profile"
-              className="shrink-0 text-xs font-bold text-amber-700 border border-amber-300 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors">
-              Update →
-            </Link>
-          </div>
-        )}
 
       </div>
     </div>

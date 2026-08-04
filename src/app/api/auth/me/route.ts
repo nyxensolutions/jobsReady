@@ -11,7 +11,9 @@ export async function GET() {
 
   if (dbUser.role === "SEEKER") {
     const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid }, select: { name: true } })
-    return NextResponse.json({ name: profile?.name ?? null, role: dbUser.role })
+    const name = profile?.name
+    const isPhonePlaceholder = !name || /^\+?\d+$/.test(name)
+    return NextResponse.json({ name: isPhonePlaceholder ? null : name, role: dbUser.role })
   }
 
   if (dbUser.role === "EMPLOYER") {
