@@ -75,8 +75,8 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
+          {/* Logo — goes to dashboard if logged in, home if not */}
+          <Link href={authUser ? dashboardHref : "/"} className="flex items-center gap-2 shrink-0">
             <Image src="/logo-full.png" alt="Job Ready" width={44} height={44} className="object-contain" />
             <span className="font-bold text-lg text-[#1a3461] tracking-tight">
               Job<span className="text-orange-500">Ready</span>
