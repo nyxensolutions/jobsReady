@@ -131,13 +131,40 @@
       "experience": "அனுபவம்",
       "jobType": "வேலை வகை",
       "category": "வகை",
-      "postedWithin": "போஸ்ட் தேதி"
+      "postedWithin": "போஸ்ட் தேதி",
+      "title": "வடிகட்டிகள்",
+      "clearAll": "அனைத்தும் அழி",
+      "datePosted": "பதிவிட்ட தேதி",
+      "last24h": "கடந்த 24 மணி நேரம்",
+      "last7d": "கடந்த 7 நாட்கள்",
+      "qualification": "தகுதி",
+      "freshersOnly": "புதியவர்கள் மட்டும்",
+      "monthlySalary": "மாத சம்பளம்"
     },
     "types": {
       "FULL_TIME": "முழு நேரம்",
       "PART_TIME": "பகுதி நேரம்",
       "CONTRACT": "�'ப்பந்தம்",
       "GIG": "கிக் / ஃப்ரீலான்ஸ்"
+    },
+    "salaryNotMentioned": "சம்பளம் குறிப்பிடவில்லை",
+    "tryFilters": "வேறு வார்த்தைகள் அல்லது வடிகட்டிகளை அகற்றவும்",
+    "opening": "காலிப்பணியிடம்",
+    "openings": "காலிப்பணியிடங்கள்",
+    "freshersOk": "புதியவர்களும் விண்ணப்பிக்கலாம்",
+    "featuredBadge": "சிறப்பு",
+    "sort": {
+      "newest": "புதியது முதலில்",
+      "salary": "அதிக சம்பளம்",
+      "vacancies": "அதிக காலிப்பணியிடங்கள்"
+    },
+    "qualifications": {
+      "below10": "10ம் வகுப்புக்கு கீழ்",
+      "10th": "10ம் வகுப்பு",
+      "12th": "12ம் வகுப்பு",
+      "diploma": "டிப்ளோமா",
+      "graduate": "பட்டதாரி",
+      "postgraduate": "முதுகலை"
     }
   },
   "seeker": {
@@ -150,7 +177,30 @@
       "noApplicationsHint": "வேலைகளை தேடி விண்ணப்பியுங்கள்",
       "browseJobs": "வேலைகள் பார்",
       "appliedOn": "விண்ணப்பித்த தேதி",
-      "viewJob": "வேலை பார்"
+      "viewJob": "வேலை பார்",
+      "welcome": "வரவேற்கிறோம், {name}! 👋",
+      "hello": "வணக்கம், {name}!",
+      "startBrowsing": "வேலைகளை தேடுங்கள் — முற்றிலும் இலவசம்",
+      "youHave": "உங்களுக்கு {count} விண்ணப்பம் உள்ளது",
+      "youHavePlural": "உங்களுக்கு {count} விண்ணப்பங்கள் உள்ளன",
+      "findJobsNear": "அருகில் வேலைகள் தேடுங்கள்",
+      "browseByType": "வகை மூலம் தேடுங்கள்",
+      "recommendedJobs": "பரிந்துரைக்கப்பட்ட வேலைகள்",
+      "seeAll": "அனைத்தும் பார்",
+      "savedJobsDesc": "புக்மார்க் செய்த வேலைகள்",
+      "notificationsTitle": "அறிவிப்புகள்",
+      "notificationsDesc": "விண்ணப்ப புதுப்பிப்புகள்",
+      "myApplications": "என் விண்ணப்பங்கள்",
+      "totalCount": "{count} மொத்தம்",
+      "withdraw": "திரும்பப் பெறு",
+      "confirmWithdraw": "உறுதிப்படுத்துவீரா?",
+      "profileIncomplete": "உங்கள் சுயவிவரம் முழுமையடையவில்லை",
+      "completeToGetHired": "விரைவில் வேலை பெற சுயவிவரம் பூர்த்தி செய்யுங்கள்",
+      "updateProfile": "புதுப்பிக்கவும் →",
+      "allJobs": "அனைத்து வேலைகள் →",
+      "statApplied": "விண்ணப்பித்தது",
+      "statShortlisted": "தேர்ந்தெடுக்கப்பட்டது",
+      "statHired": "நியமிக்கப்பட்டது"
     },
     "profile": {
       "title": "என் சுயவிவரம்",

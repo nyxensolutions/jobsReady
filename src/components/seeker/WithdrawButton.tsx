@@ -2,10 +2,12 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Loader2, X } from "lucide-react"
 
 export default function WithdrawButton({ applicationId }: { applicationId: string }) {
   const router = useRouter()
+  const t = useTranslations("seeker.dashboard")
   const [loading, setLoading] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
 
@@ -30,10 +32,10 @@ export default function WithdrawButton({ applicationId }: { applicationId: strin
           ? "bg-red-600 text-white border-red-600 hover:bg-red-700"
           : "text-gray-400 border-gray-200 hover:border-red-300 hover:text-red-500"
       }`}
-      title={confirmed ? "Click again to confirm" : "Withdraw application"}
+      title={confirmed ? t("confirmWithdraw") : t("withdraw")}
     >
       {loading ? <Loader2 size={11} className="animate-spin" /> : <X size={11} />}
-      {confirmed ? "Confirm?" : "Withdraw"}
+      {confirmed ? t("confirmWithdraw") : t("withdraw")}
     </button>
   )
 }

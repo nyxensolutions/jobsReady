@@ -131,13 +131,40 @@
       "experience": "अनुभव",
       "jobType": "नौकरी का प्रकार",
       "category": "श्रेणी",
-      "postedWithin": "पोस्ट की तारीख"
+      "postedWithin": "पोस्ट की तारीख",
+      "title": "फ़िल्टर",
+      "clearAll": "सभी हटाएं",
+      "datePosted": "पोस्ट तिथि",
+      "last24h": "पिछले 24 घंटे",
+      "last7d": "पिछले 7 दिन",
+      "qualification": "योग्यता",
+      "freshersOnly": "केवल फ्रेशर",
+      "monthlySalary": "मासिक वेतन"
     },
     "types": {
       "FULL_TIME": "पूर्णकालिक",
       "PART_TIME": "अंशकालिक",
       "CONTRACT": "अनुबंध",
       "GIG": "गिग / फ्रीलांस"
+    },
+    "salaryNotMentioned": "वेतन नहीं बताया",
+    "tryFilters": "अलग कीवर्ड या फ़िल्टर हटाकर देखें",
+    "opening": "रिक्ति",
+    "openings": "रिक्तियां",
+    "freshersOk": "नए उम्मीदवार भी",
+    "featuredBadge": "फीचर्ड",
+    "sort": {
+      "newest": "नया पहले",
+      "salary": "सबसे ज्यादा वेतन",
+      "vacancies": "सबसे ज्यादा रिक्तियां"
+    },
+    "qualifications": {
+      "below10": "10वीं से कम",
+      "10th": "10वीं पास",
+      "12th": "12वीं पास",
+      "diploma": "डिप्लोमा",
+      "graduate": "स्नातक",
+      "postgraduate": "स्नातकोत्तर"
     }
   },
   "seeker": {
@@ -150,7 +177,30 @@
       "noApplicationsHint": "नौकरियां खोजें और आवेदन करें",
       "browseJobs": "नौकरियां देखें",
       "appliedOn": "आवेदन किया",
-      "viewJob": "नौकरी देखें"
+      "viewJob": "नौकरी देखें",
+      "welcome": "स्वागत है, {name}! 👋",
+      "hello": "नमस्ते, {name}!",
+      "startBrowsing": "नौकरियां खोजें — बिल्कुल मुफ्त",
+      "youHave": "आपका {count} आवेदन है",
+      "youHavePlural": "आपके {count} आवेदन हैं",
+      "findJobsNear": "पास की नौकरियां खोजें",
+      "browseByType": "नौकरी के प्रकार से खोजें",
+      "recommendedJobs": "सुझाई गई नौकरियां",
+      "seeAll": "सभी देखें",
+      "savedJobsDesc": "सेव की हुई नौकरियां",
+      "notificationsTitle": "सूचनाएं",
+      "notificationsDesc": "आवेदन अपडेट",
+      "myApplications": "मेरे आवेदन",
+      "totalCount": "{count} कुल",
+      "withdraw": "वापस लें",
+      "confirmWithdraw": "पक्का?",
+      "profileIncomplete": "आपका प्रोफ़ाइल अधूरा है",
+      "completeToGetHired": "जल्दी नौकरी पाने के लिए प्रोफ़ाइल पूरा करें",
+      "updateProfile": "अपडेट करें →",
+      "allJobs": "सभी नौकरियां →",
+      "statApplied": "आवेदन किया",
+      "statShortlisted": "शॉर्टलिस्ट",
+      "statHired": "नियुक्त"
     },
     "profile": {
       "title": "मेरी प्रोफ़ाइल",

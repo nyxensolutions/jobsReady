@@ -131,13 +131,40 @@
       "experience": "ਤਜਰਬਾ",
       "jobType": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ",
       "category": "ਸ਼੍ਰੇਣੀ",
-      "postedWithin": "ਪੋਸਟ ਦੀ ਤਾਰੀਖ"
+      "postedWithin": "ਪੋਸਟ ਦੀ ਤਾਰੀਖ",
+      "title": "ਫਿਲਟਰ",
+      "clearAll": "ਸਾਰੇ ਹਟਾਓ",
+      "datePosted": "ਪੋਸਟ ਤਾਰੀਖ",
+      "last24h": "ਪਿਛਲੇ 24 ਘੰਟੇ",
+      "last7d": "ਪਿਛਲੇ 7 ਦਿਨ",
+      "qualification": "ਯੋਗਤਾ",
+      "freshersOnly": "ਕੇਵਲ ਫਰੈਸ਼ਰ",
+      "monthlySalary": "ਮਾਸਿਕ ਤਨਖਾਹ"
     },
     "types": {
       "FULL_TIME": "ਪੂਰੇ ਸਮੇਂ",
       "PART_TIME": "ਅੱਧੇ ਸਮੇਂ",
       "CONTRACT": "ਠੇਕਾ",
       "GIG": "ਗਿਗ / ਫ੍ਰੀਲਾਂਸ"
+    },
+    "salaryNotMentioned": "ਤਨਖਾਹ ਨਹੀਂ ਦੱਸੀ",
+    "tryFilters": "ਵੱਖਰੇ ਕੀਵਰਡ ਜਾਂ ਫਿਲਟਰ ਹਟਾ ਕੇ ਦੇਖੋ",
+    "opening": "ਅਸਾਮੀ",
+    "openings": "ਅਸਾਮੀਆਂ",
+    "freshersOk": "ਨਵੇਂ ਉਮੀਦਵਾਰ ਵੀ",
+    "featuredBadge": "ਫੀਚਰਡ",
+    "sort": {
+      "newest": "ਨਵਾਂ ਪਹਿਲਾਂ",
+      "salary": "ਸਭ ਤੋਂ ਵੱਧ ਤਨਖਾਹ",
+      "vacancies": "ਸਭ ਤੋਂ ਵੱਧ ਅਸਾਮੀਆਂ"
+    },
+    "qualifications": {
+      "below10": "10ਵੀਂ ਤੋਂ ਘੱਟ",
+      "10th": "10ਵੀਂ ਪਾਸ",
+      "12th": "12ਵੀਂ ਪਾਸ",
+      "diploma": "ਡਿਪਲੋਮਾ",
+      "graduate": "ਗ੍ਰੈਜੂਏਟ",
+      "postgraduate": "ਪੋਸਟ ਗ੍ਰੈਜੂਏਟ"
     }
   },
   "seeker": {
@@ -150,7 +177,30 @@
       "noApplicationsHint": "ਨੌਕਰੀਆਂ ਲੱਭੋ ਅਤੇ ਅਰਜ਼ੀ ਦਿਓ",
       "browseJobs": "ਨੌਕਰੀਆਂ ਦੇਖੋ",
       "appliedOn": "ਅਰਜ਼ੀ ਦਿੱਤੀ",
-      "viewJob": "ਨੌਕਰੀ ਦੇਖੋ"
+      "viewJob": "ਨੌਕਰੀ ਦੇਖੋ",
+      "welcome": "ਸੁਆਗਤ ਹੈ, {name}! 👋",
+      "hello": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ, {name}!",
+      "startBrowsing": "ਨੌਕਰੀਆਂ ਲੱਭੋ — ਬਿਲਕੁਲ ਮੁਫ਼ਤ",
+      "youHave": "ਤੁਹਾਡੀ {count} ਅਰਜ਼ੀ ਹੈ",
+      "youHavePlural": "ਤੁਹਾਡੀਆਂ {count} ਅਰਜ਼ੀਆਂ ਹਨ",
+      "findJobsNear": "ਨੇੜੇ ਦੀਆਂ ਨੌਕਰੀਆਂ ਲੱਭੋ",
+      "browseByType": "ਕਿਸਮ ਅਨੁਸਾਰ ਲੱਭੋ",
+      "recommendedJobs": "ਸੁਝਾਈਆਂ ਨੌਕਰੀਆਂ",
+      "seeAll": "ਸਾਰੀਆਂ ਦੇਖੋ",
+      "savedJobsDesc": "ਬੁਕਮਾਰਕ ਕੀਤੀਆਂ ਨੌਕਰੀਆਂ",
+      "notificationsTitle": "ਸੂਚਨਾਵਾਂ",
+      "notificationsDesc": "ਅਰਜ਼ੀ ਅੱਪਡੇਟ",
+      "myApplications": "ਮੇਰੀਆਂ ਅਰਜ਼ੀਆਂ",
+      "totalCount": "{count} ਕੁੱਲ",
+      "withdraw": "ਵਾਪਸ ਲਓ",
+      "confirmWithdraw": "ਪੱਕਾ?",
+      "profileIncomplete": "ਤੁਹਾਡਾ ਪ੍ਰੋਫਾਈਲ ਅਧੂਰਾ ਹੈ",
+      "completeToGetHired": "ਜਲਦੀ ਨੌਕਰੀ ਪਾਉਣ ਲਈ ਪ੍ਰੋਫਾਈਲ ਪੂਰਾ ਕਰੋ",
+      "updateProfile": "ਅੱਪਡੇਟ ਕਰੋ →",
+      "allJobs": "ਸਾਰੀਆਂ ਨੌਕਰੀਆਂ →",
+      "statApplied": "ਅਰਜ਼ੀ",
+      "statShortlisted": "ਸ਼ਾਰਟਲਿਸਟ",
+      "statHired": "ਨਿਯੁਕਤ"
     },
     "profile": {
       "title": "ਮੇਰੀ ਪ੍ਰੋਫਾਈਲ",

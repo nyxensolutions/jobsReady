@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import {
@@ -9,34 +10,45 @@ import {
 import { formatRelativeTime } from "@/lib/utils"
 import WithdrawButton from "@/components/seeker/WithdrawButton"
 
-const APP_STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  APPLIED:     { label: "Applied",     color: "text-blue-700 bg-blue-100" },
-  VIEWED:      { label: "Viewed",      color: "text-purple-700 bg-purple-100" },
-  SHORTLISTED: { label: "Shortlisted", color: "text-green-700 bg-green-100" },
-  REJECTED:    { label: "Rejected",    color: "text-red-600 bg-red-100" },
-  HIRED:       { label: "Hired 🎉",   color: "text-green-800 bg-green-200" },
+const STATUS_COLOR: Record<string, string> = {
+  APPLIED:     "text-blue-700 bg-blue-100",
+  VIEWED:      "text-purple-700 bg-purple-100",
+  SHORTLISTED: "text-green-700 bg-green-100",
+  REJECTED:    "text-red-600 bg-red-100",
+  HIRED:       "text-green-800 bg-green-200",
 }
 
-function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {
+function formatSalary(
+  min?: number | null,
+  max?: number | null,
+  unit = "monthly",
+  salaryNotMentioned = "Salary not mentioned"
+) {
   const suffix = unit === "daily" ? "/day" : "/month"
   const fmt = (n: number) => n >= 1000 ? `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : `₹${n}`
   if (min && max) return `${fmt(min)} – ${fmt(max)}${suffix}`
   if (min) return `From ${fmt(min)}${suffix}`
-  return "Salary not mentioned"
+  return salaryNotMentioned
 }
 
-const QUICK_CATEGORIES = [
-  { label: "Delivery", slug: "delivery" },
-  { label: "Driver", slug: "driver" },
-  { label: "Security", slug: "security" },
-  { label: "Sales", slug: "sales" },
-  { label: "Cook", slug: "cook" },
-  { label: "Factory", slug: "factory" },
+const QUICK_CATEGORY_KEYS = [
+  { tKey: "delivery", slug: "delivery" },
+  { tKey: "driver",   slug: "driver"   },
+  { tKey: "security", slug: "security" },
+  { tKey: "sales",    slug: "sales"    },
+  { tKey: "cook",     slug: "cook"     },
+  { tKey: "factory",  slug: "factory"  },
 ]
 
 export default async function SeekerDashboardPage() {
   const session = await getServerSession()
   if (!session) redirect("/login")
+
+  const [t, tc] = await Promise.all([
+    getTranslations("seeker.dashboard"),
+    getTranslations("categories"),
+  ])
+  const ts = await getTranslations("status")
 
   const [dbUser, profile, recommendedJobs] = await Promise.all([
     prisma.user.findUnique({ where: { id: session.uid } }),
@@ -89,24 +101,30 @@ export default async function SeekerDashboardPage() {
   ].filter(Boolean).length
   const profileComplete = profileScore === 4
 
+  const salaryNotMentioned = t("salaryNotMentioned")
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top bar */}
       <div className="bg-[#1a3461] text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-xl font-bold">
-            {applications.length === 0 ? `Welcome, ${firstName}! 👋` : `Hello, ${firstName}!`}
+            {applications.length === 0
+              ? t("welcome", { name: firstName })
+              : t("hello", { name: firstName })}
           </h1>
           <p className="text-white/70 text-sm mt-0.5">
             {applications.length === 0
-              ? "Start browsing jobs — it's 100% free"
-              : `You have ${stats.applied} application${stats.applied !== 1 ? "s" : ""}`}
+              ? t("startBrowsing")
+              : stats.applied === 1
+                ? t("youHave", { count: stats.applied })
+                : t("youHavePlural", { count: stats.applied })}
           </p>
           <Link
             href="/jobs"
             className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#1a3461] text-sm font-bold rounded-xl hover:bg-gray-100 transition-colors shadow"
           >
-            <Briefcase size={15} /> Find Jobs Near You
+            <Briefcase size={15} /> {t("findJobsNear")}
           </Link>
         </div>
       </div>
@@ -116,9 +134,9 @@ export default async function SeekerDashboardPage() {
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: "Applied", value: stats.applied, icon: Briefcase, color: "text-blue-600 bg-blue-50" },
-            { label: "Shortlisted", value: stats.shortlisted, icon: Star, color: "text-purple-600 bg-purple-50" },
-            { label: "Hired", value: stats.hired, icon: CheckCircle, color: "text-green-600 bg-green-50" },
+            { label: t("statApplied"),     value: stats.applied,     icon: Briefcase,   color: "text-blue-600 bg-blue-50"   },
+            { label: t("statShortlisted"), value: stats.shortlisted, icon: Star,        color: "text-purple-600 bg-purple-50" },
+            { label: t("statHired"),       value: stats.hired,       icon: CheckCircle, color: "text-green-600 bg-green-50" },
           ].map(({ label, value, icon: Icon, color }) => (
             <div key={label} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${color}`}>
@@ -132,7 +150,7 @@ export default async function SeekerDashboardPage() {
           ))}
         </div>
 
-        {/* Profile completion banner — shown prominently if incomplete */}
+        {/* Profile completion banner */}
         {!profileComplete && (
           <Link href="/seeker/profile"
             className="flex items-center gap-4 bg-amber-50 border border-amber-200 rounded-xl p-4 hover:bg-amber-100 transition-colors">
@@ -141,7 +159,7 @@ export default async function SeekerDashboardPage() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-amber-800">
-                {profileScore === 0 ? "Complete your profile to get hired faster" : "Your profile is incomplete"}
+                {profileScore === 0 ? t("completeToGetHired") : t("profileIncomplete")}
               </p>
               <div className="flex items-center gap-2 mt-1.5">
                 <div className="flex-1 h-1.5 bg-amber-200 rounded-full overflow-hidden">
@@ -156,22 +174,24 @@ export default async function SeekerDashboardPage() {
                 profile?.resumeUrl ? null : "resume",
               ].filter(Boolean).join(", ")} to improve your chances</p>
             </div>
-            <span className="text-xs font-bold text-amber-700 border border-amber-300 px-3 py-1.5 rounded-lg shrink-0">Update →</span>
+            <span className="text-xs font-bold text-amber-700 border border-amber-300 px-3 py-1.5 rounded-lg shrink-0">
+              {t("updateProfile")}
+            </span>
           </Link>
         )}
 
         {/* Quick category browse */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <h2 className="font-bold text-gray-800 mb-3 text-sm">Browse by Job Type</h2>
+          <h2 className="font-bold text-gray-800 mb-3 text-sm">{t("browseByType")}</h2>
           <div className="flex flex-wrap gap-2">
-            {QUICK_CATEGORIES.map(c => (
+            {QUICK_CATEGORY_KEYS.map(c => (
               <Link key={c.slug} href={`/jobs?category=${c.slug}`}
                 className="px-3 py-1.5 rounded-full text-xs font-semibold border border-[#1a3461]/20 text-[#1a3461] bg-[#eef2ff] hover:bg-[#1a3461] hover:text-white transition-colors">
-                {c.label}
+                {tc(c.tKey as any)}
               </Link>
             ))}
             <Link href="/jobs" className="px-3 py-1.5 rounded-full text-xs font-semibold border border-gray-200 text-gray-500 hover:border-[#1a3461] hover:text-[#1a3461] transition-colors">
-              All Jobs →
+              {t("allJobs")}
             </Link>
           </div>
         </div>
@@ -180,34 +200,37 @@ export default async function SeekerDashboardPage() {
         {recommendedJobs.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-bold text-gray-800">Recommended Jobs</h2>
-              <Link href="/jobs" className="text-xs text-[#1a3461] font-semibold hover:underline">See all</Link>
+              <h2 className="font-bold text-gray-800">{t("recommendedJobs")}</h2>
+              <Link href="/jobs" className="text-xs text-[#1a3461] font-semibold hover:underline">{t("seeAll")}</Link>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
-              {recommendedJobs.map(job => (
-                <div key={job.id} className="bg-white rounded-xl border border-gray-200 hover:border-[#1a3461]/30 hover:shadow-sm transition-all p-4">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <Link href={`/jobs/${job.id}`}>
-                        <p className="font-bold text-[#1a3461] text-sm hover:underline truncate">{job.title}</p>
-                      </Link>
-                      <p className="text-xs text-gray-500 truncate mt-0.5">{job.employer.companyName}</p>
-                      {(() => { const s = formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit); return <p className={`text-sm mt-1 ${s === "Salary not mentioned" ? "text-gray-400" : "font-bold text-green-600"}`}>{s}</p> })()}
-                      <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
-                        <span className="flex items-center gap-0.5"><MapPin size={10} />{job.city.name}</span>
-                        <span>·</span>
-                        <span>{job.category.nameEn}</span>
+              {recommendedJobs.map(job => {
+                const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit, salaryNotMentioned)
+                return (
+                  <div key={job.id} className="bg-white rounded-xl border border-gray-200 hover:border-[#1a3461]/30 hover:shadow-sm transition-all p-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <Link href={`/jobs/${job.id}`}>
+                          <p className="font-bold text-[#1a3461] text-sm hover:underline truncate">{job.title}</p>
+                        </Link>
+                        <p className="text-xs text-gray-500 truncate mt-0.5">{job.employer.companyName}</p>
+                        <p className={`text-sm mt-1 ${salary === salaryNotMentioned ? "text-gray-400" : "font-bold text-green-600"}`}>{salary}</p>
+                        <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
+                          <span className="flex items-center gap-0.5"><MapPin size={10} />{job.city.name}</span>
+                          <span>·</span>
+                          <span>{job.category.nameEn}</span>
+                        </div>
                       </div>
                     </div>
+                    <div className="mt-3">
+                      <Link href={`/jobs/${job.id}`}
+                        className="w-full flex items-center justify-center py-1.5 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors">
+                        {t("browseJobs")}
+                      </Link>
+                    </div>
                   </div>
-                  <div className="mt-3">
-                    <Link href={`/jobs/${job.id}`}
-                      className="w-full flex items-center justify-center py-1.5 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors">
-                      Apply Now
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         )}
@@ -219,8 +242,8 @@ export default async function SeekerDashboardPage() {
               <Bookmark size={18} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-800">Saved Jobs</p>
-              <p className="text-xs text-gray-400">Jobs you bookmarked</p>
+              <p className="text-sm font-semibold text-gray-800">{t("savedJobs")}</p>
+              <p className="text-xs text-gray-400">{t("savedJobsDesc")}</p>
             </div>
             <ChevronRight size={15} className="text-gray-300 ml-auto" />
           </Link>
@@ -229,8 +252,8 @@ export default async function SeekerDashboardPage() {
               <Bell size={18} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-800">Notifications</p>
-              <p className="text-xs text-gray-400">Application updates</p>
+              <p className="text-sm font-semibold text-gray-800">{t("notificationsTitle")}</p>
+              <p className="text-xs text-gray-400">{t("notificationsDesc")}</p>
             </div>
             <ChevronRight size={15} className="text-gray-300 ml-auto" />
           </Link>
@@ -240,12 +263,14 @@ export default async function SeekerDashboardPage() {
         {applications.length > 0 && (
           <div id="applications" className="bg-white rounded-2xl border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="font-semibold text-gray-900">My Applications</h2>
-              <span className="text-xs text-gray-400">{applications.length} total</span>
+              <h2 className="font-semibold text-gray-900">{t("myApplications")}</h2>
+              <span className="text-xs text-gray-400">{t("totalCount", { count: applications.length })}</span>
             </div>
             <div className="divide-y divide-gray-100">
               {applications.map((app) => {
-                const cfg = APP_STATUS_CONFIG[app.status] ?? APP_STATUS_CONFIG.APPLIED
+                const color = STATUS_COLOR[app.status] ?? STATUS_COLOR.APPLIED
+                let statusLabel: string
+                try { statusLabel = ts(app.status as any) } catch { statusLabel = app.status }
                 return (
                   <div key={app.id} className="px-6 py-4 flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors">
                     <div className="flex-1 min-w-0">
@@ -253,8 +278,8 @@ export default async function SeekerDashboardPage() {
                         <Link href={`/jobs/${app.jobId}`} className="font-semibold text-gray-900 hover:text-blue-700 transition-colors truncate text-sm">
                           {app.job.title}
                         </Link>
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${cfg.color}`}>
-                          {cfg.label}
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${color}`}>
+                          {statusLabel}
                         </span>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-gray-500">
@@ -275,7 +300,6 @@ export default async function SeekerDashboardPage() {
             </div>
           </div>
         )}
-
 
       </div>
     </div>

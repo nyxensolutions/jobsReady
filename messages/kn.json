@@ -131,13 +131,40 @@
       "experience": "ಅನುಭವ",
       "jobType": "ಉದ್ಯೋಗ ಪ್ರಕಾರ",
       "category": "ವರ್ಗ",
-      "postedWithin": "ಪೋಸ್ಟ್ ದಿನಾಂಕ"
+      "postedWithin": "ಪೋಸ್ಟ್ ದಿನಾಂಕ",
+      "title": "ಫಿಲ್ಟರ್‌ಗಳು",
+      "clearAll": "ಎಲ್ಲಾ ತೆರವು",
+      "datePosted": "ಪೋಸ್ಟ್ ದಿನಾಂಕ",
+      "last24h": "ಕಳೆದ 24 ಗಂಟೆ",
+      "last7d": "ಕಳೆದ 7 ದಿನ",
+      "qualification": "ಅರ್ಹತೆ",
+      "freshersOnly": "ಫ್ರೆಶರ್ ಮಾತ್ರ",
+      "monthlySalary": "ಮಾಸಿಕ ವೇತನ"
     },
     "types": {
       "FULL_TIME": "ಪೂರ್ಣ ಸಮಯ",
       "PART_TIME": "ಅರೆಕಾಲಿಕ",
       "CONTRACT": "�'ಪ್ಪಂದ",
       "GIG": "ಗಿಗ್ / ಫ್ರೀಲ್ಯಾನ್ಸ್"
+    },
+    "salaryNotMentioned": "ವೇತನ ನಮೂದಿಸಿಲ್ಲ",
+    "tryFilters": "ಬೇರೆ ಕೀವರ್ಡ್‌ಗಳು ಅಥವಾ ಫಿಲ್ಟರ್ ತೆಗೆದು ನೋಡಿ",
+    "opening": "ಹುದ್ದೆ",
+    "openings": "ಹುದ್ದೆಗಳು",
+    "freshersOk": "ಹೊಸಬರೂ ಅರ್ಜಿ ಹಾಕಬಹುದು",
+    "featuredBadge": "ಫೀಚರ್ಡ್",
+    "sort": {
+      "newest": "ಹೊಸದು ಮೊದಲು",
+      "salary": "ಹೆಚ್ಚು ವೇತನ",
+      "vacancies": "ಹೆಚ್ಚು ಖಾಲಿ ಹುದ್ದೆ"
+    },
+    "qualifications": {
+      "below10": "10ನೇ ಕೆಳಗೆ",
+      "10th": "10ನೇ ಪಾಸ್",
+      "12th": "12ನೇ ಪಾಸ್",
+      "diploma": "ಡಿಪ್ಲೊಮಾ",
+      "graduate": "ಪದವೀಧರ",
+      "postgraduate": "ಸ್ನಾತಕೋತ್ತರ"
     }
   },
   "seeker": {
@@ -150,7 +177,30 @@
       "noApplicationsHint": "ಉದ್ಯೋಗ ಹುಡುಕಿ ಅರ್ಜಿ ಹಾಕಿ",
       "browseJobs": "ಉದ್ಯೋಗ ನೋಡಿ",
       "appliedOn": "ಅರ್ಜಿ ಹಾಕಿದ ದಿನ",
-      "viewJob": "ಉದ್ಯೋಗ ನೋಡಿ"
+      "viewJob": "ಉದ್ಯೋಗ ನೋಡಿ",
+      "welcome": "ಸ್ವಾಗತ, {name}! 👋",
+      "hello": "ನಮಸ್ಕಾರ, {name}!",
+      "startBrowsing": "ಉದ್ಯೋಗ ಹುಡುಕಿ — ಸಂಪೂರ್ಣ ಉಚಿತ",
+      "youHave": "ನಿಮ್ಮ {count} ಅರ್ಜಿ ಇದೆ",
+      "youHavePlural": "ನಿಮ್ಮ {count} ಅರ್ಜಿಗಳಿವೆ",
+      "findJobsNear": "ಹತ್ತಿರದ ಉದ್ಯೋಗ ಹುಡುಕಿ",
+      "browseByType": "ರೀತಿಯ ಪ್ರಕಾರ ಹುಡುಕಿ",
+      "recommendedJobs": "ಶಿಫಾರಸು ಉದ್ಯೋಗಗಳು",
+      "seeAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+      "savedJobsDesc": "ಬುಕ್‌ಮಾರ್ಕ್ ಉದ್ಯೋಗಗಳು",
+      "notificationsTitle": "ಸೂಚನೆಗಳು",
+      "notificationsDesc": "ಅರ್ಜಿ ಅಪ್‌ಡೇಟ್‌ಗಳು",
+      "myApplications": "ನನ್ನ ಅರ್ಜಿಗಳು",
+      "totalCount": "{count} ಒಟ್ಟು",
+      "withdraw": "ಹಿಂಪಡೆ",
+      "confirmWithdraw": "ಖಚಿತಪಡಿಸಿ?",
+      "profileIncomplete": "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಅಪೂರ್ಣವಾಗಿದೆ",
+      "completeToGetHired": "ಬೇಗ ನೇಮಕ ಪಡೆಯಲು ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ",
+      "updateProfile": "ಅಪ್‌ಡೇಟ್ ಮಾಡಿ →",
+      "allJobs": "ಎಲ್ಲ ಉದ್ಯೋಗಗಳು →",
+      "statApplied": "ಅರ್ಜಿ",
+      "statShortlisted": "ಶಾರ್ಟ್‌ಲಿಸ್ಟ್",
+      "statHired": "ನೇಮಕ"
     },
     "profile": {
       "title": "ನನ್ನ ಪ್ರೊಫೈಲ್",

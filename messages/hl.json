@@ -131,13 +131,40 @@
       "experience": "Experience",
       "jobType": "Job type",
       "category": "Category",
-      "postedWithin": "Kab post hua"
+      "postedWithin": "Kab post hua",
+      "title": "Filters",
+      "clearAll": "Sab hatayein",
+      "datePosted": "Post ki tarikh",
+      "last24h": "Pichhle 24 ghante",
+      "last7d": "Pichhle 7 din",
+      "qualification": "Qualification",
+      "freshersOnly": "Sirf Freshers",
+      "monthlySalary": "Maasik Salary"
     },
     "types": {
       "FULL_TIME": "Full Time",
       "PART_TIME": "Part Time",
       "CONTRACT": "Contract",
       "GIG": "Gig / Freelance"
+    },
+    "salaryNotMentioned": "Salary nahi bataya",
+    "tryFilters": "Alag keywords ya filters hatake dekhein",
+    "opening": "vacancy",
+    "openings": "vacancies",
+    "freshersOk": "Freshers bhi apply kar sakte hain",
+    "featuredBadge": "Featured",
+    "sort": {
+      "newest": "Naya pehle",
+      "salary": "Sabse zyada salary",
+      "vacancies": "Sabse zyada vacancies"
+    },
+    "qualifications": {
+      "below10": "10th se neeche",
+      "10th": "10th Pass",
+      "12th": "12th Pass",
+      "diploma": "Diploma",
+      "graduate": "Graduate",
+      "postgraduate": "Post Graduate"
     }
   },
   "seeker": {
@@ -150,7 +177,30 @@
       "noApplicationsHint": "Jobs dhundo aur apply karo",
       "browseJobs": "Jobs Dekhein",
       "appliedOn": "Apply kiya",
-      "viewJob": "Job Dekhein"
+      "viewJob": "Job Dekhein",
+      "welcome": "Swagat hai, {name}! 👋",
+      "hello": "Hello, {name}!",
+      "startBrowsing": "Jobs dhundein — bilkul muft",
+      "youHave": "Aapki {count} application hai",
+      "youHavePlural": "Aapki {count} applications hain",
+      "findJobsNear": "Paas ki Jobs Dhundein",
+      "browseByType": "Job ke prakar se dhundein",
+      "recommendedJobs": "Recommended Jobs",
+      "seeAll": "Sab dekhein",
+      "savedJobsDesc": "Bookmarked jobs",
+      "notificationsTitle": "Notifications",
+      "notificationsDesc": "Application updates",
+      "myApplications": "Meri Applications",
+      "totalCount": "{count} total",
+      "withdraw": "Wapas lo",
+      "confirmWithdraw": "Pakka?",
+      "profileIncomplete": "Aapka profile adhura hai",
+      "completeToGetHired": "Jaldi job pane ke liye profile complete karein",
+      "updateProfile": "Update karein →",
+      "allJobs": "Sabhi Jobs →",
+      "statApplied": "Apply kiya",
+      "statShortlisted": "Shortlist",
+      "statHired": "Hire hua"
     },
     "profile": {
       "title": "Mera Profile",

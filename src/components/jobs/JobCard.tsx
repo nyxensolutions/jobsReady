@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { MapPin, Clock, Users, ChevronRight } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { formatRelativeTime } from "@/lib/utils"
 import SaveJobButton from "@/components/jobs/SaveJobButton"
 
@@ -19,14 +20,6 @@ type Job = {
   isFeatured: boolean
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  FULL_TIME: "Full Time",
-  PART_TIME: "Part Time",
-  CONTRACT: "Contract",
-  GIG: "Gig",
-  WALK_IN: "Walk-in",
-}
-
 const AVATAR_COLORS = [
   "bg-violet-100 text-violet-700",
   "bg-sky-100 text-sky-700",
@@ -37,8 +30,15 @@ const AVATAR_COLORS = [
 ]
 
 export default function JobCard({ job }: { job: Job }) {
+  const t = useTranslations("jobs")
+  const tt = useTranslations("jobs.types")
+
   const avatarSeed = job.company || job.title
   const avatarColor = AVATAR_COLORS[avatarSeed.charCodeAt(0) % AVATAR_COLORS.length]
+
+  const typeLabel = (() => {
+    try { return tt(job.type as any) } catch { return job.type }
+  })()
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 hover:border-[#1a3461]/30 hover:shadow-md transition-all">
@@ -59,7 +59,7 @@ export default function JobCard({ job }: { job: Job }) {
               <div className="flex items-center gap-1 shrink-0">
                 {job.isFeatured && (
                   <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-                    Featured
+                    {t("featuredBadge")}
                   </span>
                 )}
                 <SaveJobButton jobId={job.id} compact />
@@ -72,18 +72,21 @@ export default function JobCard({ job }: { job: Job }) {
             {/* Meta row */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs text-gray-500">
               <span className="flex items-center gap-1"><MapPin size={11} />{job.city}</span>
-              <span className="flex items-center gap-1"><Users size={11} />{job.vacancies} {job.vacancies === 1 ? "opening" : "openings"}</span>
+              <span className="flex items-center gap-1">
+                <Users size={11} />
+                {job.vacancies} {job.vacancies === 1 ? t("opening") : t("openings")}
+              </span>
               <span className="flex items-center gap-1"><Clock size={11} />{formatRelativeTime(job.postedAt)}</span>
             </div>
 
             {/* Chips */}
             <div className="flex flex-wrap gap-1.5 mt-2.5">
               <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">
-                {TYPE_LABELS[job.type] ?? job.type}
+                {typeLabel}
               </span>
               {job.experienceMin === 0 && (
                 <span className="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700 font-medium border border-green-100">
-                  Freshers OK
+                  {t("freshersOk")}
                 </span>
               )}
             </div>
@@ -97,7 +100,7 @@ export default function JobCard({ job }: { job: Job }) {
           href={`/jobs/${job.id}`}
           className="w-full flex items-center justify-center gap-1.5 py-2 bg-[#1a3461] hover:bg-[#142a52] hover:shadow-md active:scale-[0.98] text-white text-xs font-bold rounded-lg transition-all"
         >
-          Apply Now <ChevronRight size={13} />
+          {t("applyNow")} <ChevronRight size={13} />
         </Link>
       </div>
     </div>

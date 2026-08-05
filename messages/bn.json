@@ -131,13 +131,40 @@
       "experience": "অভিজ্ঞতা",
       "jobType": "চাকরির ধরন",
       "category": "বিভাগ",
-      "postedWithin": "পোস্টের তারিখ"
+      "postedWithin": "পোস্টের তারিখ",
+      "title": "ফিল্টার",
+      "clearAll": "সব মুছুন",
+      "datePosted": "পোস্টের তারিখ",
+      "last24h": "গত ২৪ ঘন্টা",
+      "last7d": "গত ৭ দিন",
+      "qualification": "যোগ্যতা",
+      "freshersOnly": "শুধু ফ্রেশার",
+      "monthlySalary": "মাসিক বেতন"
     },
     "types": {
       "FULL_TIME": "পূর্ণকালীন",
       "PART_TIME": "খণ্ডকালীন",
       "CONTRACT": "চুক্তি",
       "GIG": "গিগ / ফ্রিল্যান্স"
+    },
+    "salaryNotMentioned": "বেতন উল্লেখ নেই",
+    "tryFilters": "ভিন্ন কীওয়ার্ড বা ফিল্টার সরিয়ে দেখুন",
+    "opening": "পদ",
+    "openings": "পদসমূহ",
+    "freshersOk": "নতুনরাও আবেদন করতে পারবেন",
+    "featuredBadge": "ফিচার্ড",
+    "sort": {
+      "newest": "নতুন আগে",
+      "salary": "সর্বোচ্চ বেতন",
+      "vacancies": "সর্বোচ্চ শূন্যপদ"
+    },
+    "qualifications": {
+      "below10": "10ম এর নিচে",
+      "10th": "10ম পাস",
+      "12th": "12তম পাস",
+      "diploma": "ডিপ্লোমা",
+      "graduate": "স্নাতক",
+      "postgraduate": "স্নাতকোত্তর"
     }
   },
   "seeker": {
@@ -150,7 +177,30 @@
       "noApplicationsHint": "চাকরি খুঁজুন এবং আবেদন করুন",
       "browseJobs": "চাকরি দেখুন",
       "appliedOn": "আবেদনের তারিখ",
-      "viewJob": "চাকরি দেখুন"
+      "viewJob": "চাকরি দেখুন",
+      "welcome": "স্বাগতম, {name}! 👋",
+      "hello": "হ্যালো, {name}!",
+      "startBrowsing": "চাকরি খুঁজুন — সম্পূর্ণ বিনামূল্যে",
+      "youHave": "আপনার {count}টি আবেদন আছে",
+      "youHavePlural": "আপনার {count}টি আবেদন আছে",
+      "findJobsNear": "কাছের চাকরি খুঁজুন",
+      "browseByType": "ধরন অনুযায়ী খুঁজুন",
+      "recommendedJobs": "প্রস্তাবিত চাকরিগুলো",
+      "seeAll": "সব দেখুন",
+      "savedJobsDesc": "বুকমার্ক করা চাকরিগুলো",
+      "notificationsTitle": "বিজ্ঞপ্তি",
+      "notificationsDesc": "আবেদন আপডেট",
+      "myApplications": "আমার আবেদনগুলো",
+      "totalCount": "{count}টি মোট",
+      "withdraw": "প্রত্যাহার করুন",
+      "confirmWithdraw": "নিশ্চিত?",
+      "profileIncomplete": "আপনার প্রোফাইল অসম্পূর্ণ",
+      "completeToGetHired": "দ্রুত নিয়োগ পেতে প্রোফাইল সম্পূর্ণ করুন",
+      "updateProfile": "আপডেট করুন →",
+      "allJobs": "সব চাকরি →",
+      "statApplied": "আবেদন",
+      "statShortlisted": "শর্টলিস্ট",
+      "statHired": "নিয়োগ"
     },
     "profile": {
       "title": "আমার প্রোফাইল",

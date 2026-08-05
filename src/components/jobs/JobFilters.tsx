@@ -1,42 +1,30 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 
-const CATEGORIES = [
-  { key: "delivery", label: "Delivery" },
-  { key: "driver", label: "Driver" },
-  { key: "sales", label: "Sales" },
-  { key: "bpo", label: "BPO / Telecaller" },
-  { key: "security", label: "Security Guard" },
-  { key: "housekeeping", label: "Housekeeping" },
-  { key: "cook", label: "Cook / Chef" },
-  { key: "dataEntry", label: "Data Entry" },
-  { key: "construction", label: "Construction" },
-  { key: "factory", label: "Factory Worker" },
-  { key: "retail", label: "Retail / Shop" },
-  { key: "fieldWork", label: "Field Work" },
-  { key: "accounting", label: "Accounting" },
-  { key: "teaching", label: "Teaching" },
-  { key: "it", label: "IT / Computer" },
-  { key: "healthcare", label: "Healthcare" },
-  { key: "beauty", label: "Beauty / Salon" },
-  { key: "logistics", label: "Logistics / Warehouse" },
+const CATEGORY_KEYS = [
+  "delivery", "driver", "sales", "bpo", "security", "housekeeping",
+  "cook", "dataEntry", "construction", "factory", "retail",
+  "fieldWork", "accounting", "teaching", "it", "healthcare", "beauty", "logistics",
 ]
 
-const QUALIFICATIONS = [
-  { key: "below10", label: "Below 10th" },
-  { key: "10th", label: "10th Pass" },
-  { key: "12th", label: "12th Pass" },
-  { key: "diploma", label: "Diploma" },
-  { key: "graduate", label: "Graduate" },
-  { key: "postgraduate", label: "Post Graduate" },
-]
+const CATEGORY_LABELS: Record<string, string> = {
+  bpo: "BPO / Telecaller",
+  dataEntry: "Data Entry",
+  accounting: "Accounting",
+  teaching: "Teaching",
+  beauty: "Beauty / Salon",
+  logistics: "Logistics / Warehouse",
+}
 
-const JOB_TYPES = [
-  { key: "FULL_TIME", label: "Full Time" },
-  { key: "PART_TIME", label: "Part Time" },
-  { key: "CONTRACT", label: "Contract" },
-  { key: "GIG", label: "Gig / Freelance" },
+const QUALIFICATION_KEYS = ["below10", "10th", "12th", "diploma", "graduate", "postgraduate"]
+
+const JOB_TYPE_KEYS = [
+  { key: "FULL_TIME" },
+  { key: "PART_TIME" },
+  { key: "CONTRACT" },
+  { key: "GIG" },
   { key: "WALK_IN", label: "Walk-in Interview" },
 ]
 
@@ -57,6 +45,10 @@ type Props = {
 export default function JobFilters({ activeCategory, onFilterApply }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const tf = useTranslations("jobs.filters")
+  const tc = useTranslations("categories")
+  const tq = useTranslations("jobs.qualifications")
+  const tt = useTranslations("jobs.types")
 
   function setFilter(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString())
@@ -80,24 +72,24 @@ export default function JobFilters({ activeCategory, onFilterApply }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 sticky top-20">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-gray-900 text-sm">Filters</h3>
+        <h3 className="font-bold text-gray-900 text-sm">{tf("title")}</h3>
         {hasFilters && (
           <button
             onClick={() => router.push("/jobs")}
             className="text-xs text-red-500 hover:text-red-700 font-medium"
           >
-            Clear all
+            {tf("clearAll")}
           </button>
         )}
       </div>
 
       {/* Date Posted */}
       <div className="mb-5">
-        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Date Posted</h4>
+        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">{tf("datePosted")}</h4>
         <div className="flex flex-col gap-1.5">
           {[
-            { key: "today", label: "Last 24 hours" },
-            { key: "week", label: "Last 7 days" },
+            { key: "today", label: tf("last24h") },
+            { key: "week", label: tf("last7d") },
           ].map((d) => (
             <label key={d.key} className="flex items-center gap-2 cursor-pointer group">
               <input
@@ -117,19 +109,19 @@ export default function JobFilters({ activeCategory, onFilterApply }: Props) {
 
       {/* Qualification */}
       <div className="mb-5">
-        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Qualification</h4>
+        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">{tf("qualification")}</h4>
         <div className="flex flex-col gap-1.5">
-          {QUALIFICATIONS.map((q) => (
-            <label key={q.key} className="flex items-center gap-2 cursor-pointer group">
+          {QUALIFICATION_KEYS.map((qk) => (
+            <label key={qk} className="flex items-center gap-2 cursor-pointer group">
               <input
                 type="radio"
                 name="qualification"
-                checked={currentQual === q.key}
-                onChange={() => setFilter("qualification", q.key)}
+                checked={currentQual === qk}
+                onChange={() => setFilter("qualification", qk)}
                 className="w-3.5 h-3.5 accent-[#1a3461]"
               />
-              <span className={`text-sm transition-colors ${currentQual === q.key ? "text-[#1a3461] font-semibold" : "text-gray-600 group-hover:text-[#1a3461]"}`}>
-                {q.label}
+              <span className={`text-sm transition-colors ${currentQual === qk ? "text-[#1a3461] font-semibold" : "text-gray-600 group-hover:text-[#1a3461]"}`}>
+                {tq(qk as any)}
               </span>
             </label>
           ))}
@@ -145,13 +137,13 @@ export default function JobFilters({ activeCategory, onFilterApply }: Props) {
             onChange={() => setFilter("freshers", currentExp === "1" ? null : "1")}
             className="w-4 h-4 accent-[#1a3461] rounded"
           />
-          <span className="text-sm text-gray-700 font-medium">Freshers Only</span>
+          <span className="text-sm text-gray-700 font-medium">{tf("freshersOnly")}</span>
         </label>
       </div>
 
       {/* Monthly Salary */}
       <div className="mb-5">
-        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Monthly Salary</h4>
+        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">{tf("monthlySalary")}</h4>
         <div className="flex flex-col gap-1.5">
           {SALARY_RANGES.map((s) => (
             <label key={s.key} className="flex items-center gap-2 cursor-pointer group">
@@ -172,19 +164,19 @@ export default function JobFilters({ activeCategory, onFilterApply }: Props) {
 
       {/* Job Type */}
       <div className="mb-5">
-        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Job Type</h4>
+        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">{tf("jobType")}</h4>
         <div className="flex flex-col gap-1.5">
-          {JOB_TYPES.map((t) => (
-            <label key={t.key} className="flex items-center gap-2 cursor-pointer group">
+          {JOB_TYPE_KEYS.map(({ key, label }) => (
+            <label key={key} className="flex items-center gap-2 cursor-pointer group">
               <input
                 type="radio"
                 name="jobtype"
-                checked={currentType === t.key}
-                onChange={() => setFilter("type", t.key)}
+                checked={currentType === key}
+                onChange={() => setFilter("type", key)}
                 className="w-3.5 h-3.5 accent-[#1a3461]"
               />
-              <span className={`text-sm transition-colors ${currentType === t.key ? "text-[#1a3461] font-semibold" : "text-gray-600 group-hover:text-[#1a3461]"}`}>
-                {t.label}
+              <span className={`text-sm transition-colors ${currentType === key ? "text-[#1a3461] font-semibold" : "text-gray-600 group-hover:text-[#1a3461]"}`}>
+                {label ?? tt(key as any)}
               </span>
             </label>
           ))}
@@ -193,21 +185,30 @@ export default function JobFilters({ activeCategory, onFilterApply }: Props) {
 
       {/* Category */}
       <div>
-        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Category</h4>
+        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">{tf("category")}</h4>
         <div className="flex flex-col gap-1">
-          {CATEGORIES.map((c) => (
-            <button
-              key={c.key}
-              onClick={() => setFilter("category", c.key)}
-              className={`text-left text-sm px-2 py-1.5 rounded-lg transition-colors ${
-                activeCategory === c.key
-                  ? "bg-[#eef2ff] text-[#1a3461] font-semibold"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              {c.label}
-            </button>
-          ))}
+          {CATEGORY_KEYS.map((key) => {
+            // Some categories don't have a direct locale key; fall back to hardcoded label
+            let label: string
+            try {
+              label = CATEGORY_LABELS[key] ?? tc(key as any)
+            } catch {
+              label = CATEGORY_LABELS[key] ?? key
+            }
+            return (
+              <button
+                key={key}
+                onClick={() => setFilter("category", key)}
+                className={`text-left text-sm px-2 py-1.5 rounded-lg transition-colors ${
+                  activeCategory === key
+                    ? "bg-[#eef2ff] text-[#1a3461] font-semibold"
+                    : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                {label}
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>

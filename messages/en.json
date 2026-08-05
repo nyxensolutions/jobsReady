@@ -131,13 +131,40 @@
       "experience": "Experience",
       "jobType": "Job type",
       "category": "Category",
-      "postedWithin": "Posted within"
+      "postedWithin": "Posted within",
+      "title": "Filters",
+      "clearAll": "Clear all",
+      "datePosted": "Date Posted",
+      "last24h": "Last 24 hours",
+      "last7d": "Last 7 days",
+      "qualification": "Qualification",
+      "freshersOnly": "Freshers Only",
+      "monthlySalary": "Monthly Salary"
     },
     "types": {
       "FULL_TIME": "Full Time",
       "PART_TIME": "Part Time",
       "CONTRACT": "Contract",
       "GIG": "Gig / Freelance"
+    },
+    "salaryNotMentioned": "Salary not mentioned",
+    "tryFilters": "Try different keywords or remove filters",
+    "opening": "opening",
+    "openings": "openings",
+    "freshersOk": "Freshers OK",
+    "featuredBadge": "Featured",
+    "sort": {
+      "newest": "Newest first",
+      "salary": "Highest salary",
+      "vacancies": "Most vacancies"
+    },
+    "qualifications": {
+      "below10": "Below 10th",
+      "10th": "10th Pass",
+      "12th": "12th Pass",
+      "diploma": "Diploma",
+      "graduate": "Graduate",
+      "postgraduate": "Post Graduate"
     }
   },
   "seeker": {
@@ -150,7 +177,30 @@
       "noApplicationsHint": "Browse jobs and apply — your applications appear here",
       "browseJobs": "Browse Jobs",
       "appliedOn": "Applied on",
-      "viewJob": "View Job"
+      "viewJob": "View Job",
+      "welcome": "Welcome, {name}! 👋",
+      "hello": "Hello, {name}!",
+      "startBrowsing": "Start browsing jobs — it's 100% free",
+      "youHave": "You have {count} application",
+      "youHavePlural": "You have {count} applications",
+      "findJobsNear": "Find Jobs Near You",
+      "browseByType": "Browse by Job Type",
+      "recommendedJobs": "Recommended Jobs",
+      "seeAll": "See all",
+      "savedJobsDesc": "Jobs you bookmarked",
+      "notificationsTitle": "Notifications",
+      "notificationsDesc": "Application updates",
+      "myApplications": "My Applications",
+      "totalCount": "{count} total",
+      "withdraw": "Withdraw",
+      "confirmWithdraw": "Confirm?",
+      "profileIncomplete": "Your profile is incomplete",
+      "completeToGetHired": "Complete your profile to get hired faster",
+      "updateProfile": "Update →",
+      "allJobs": "All Jobs →",
+      "statApplied": "Applied",
+      "statShortlisted": "Shortlisted",
+      "statHired": "Hired"
     },
     "profile": {
       "title": "My Profile",
@@ -314,4 +364,3 @@
     "healthcare": "Healthcare"
   }
 }
-
