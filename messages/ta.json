@@ -29,7 +29,25 @@
     "applications": "என் விண்ணப்பங்கள்",
     "logout": "வெளியேறு",
     "forJobSeekers": "வேலை தேடுபவர்களுக்கு",
-    "forEmployers": "முதலாளிகளுக்கு"
+    "forEmployers": "முதலாளிகளுக்கு",
+    "myJobs": "என் வேலைகள்",
+    "responses": "பதில்கள்",
+    "talentSearch": "திறமை தேடல்",
+    "savedJobs": "சேமித்த வேலைகள்",
+    "signOut": "வெளியேறு",
+    "myDashboard": "என் டாஷ்போர்டு",
+    "employerDashboard": "முதலாளி டாஷ்போர்டு",
+    "adminPanel": "நிர்வாக பலகம்",
+    "jobSeekers": "வேலை தேடுபவர்கள்",
+    "employers": "முதலாளிகள்",
+    "company": "நிறுவனம்",
+    "createProfile": "சுயவிவரம் உருவாக்குங்கள்",
+    "browseCategories": "வகைகளை உலாவுங்கள்",
+    "aboutUs": "எங்களைப் பற்றி",
+    "registerCompany": "நிறுவனத்தை பதிவு செய்யுங்கள்",
+    "privacyPolicy": "தனியுரிமை கொள்கை",
+    "termsOfUse": "பயன்பாட்டு விதிமுறைகள்",
+    "contact": "தொடர்பு"
   },
   "home": {
     "hero": {
@@ -127,7 +145,12 @@
       "title": "என் டாஷ்போர்டு",
       "appliedJobs": "விண்ணப்பித்த வேலைகள்",
       "profileStrength": "சுயவிவர வலிமை",
-      "completeProfile": "சிறந்த பொருத்தங்களுக்கு உங்கள் சுயவிவரத்தை நிறைவு செய்யுங்கள்"
+      "completeProfile": "சிறந்த பொருத்தங்களுக்கு உங்கள் சுயவிவரத்தை நிறைவு செய்யுங்கள்",
+      "noApplications": "விண்ணப்பங்கள் இல்லை",
+      "noApplicationsHint": "வேலைகளை தேடி விண்ணப்பியுங்கள்",
+      "browseJobs": "வேலைகள் பார்",
+      "appliedOn": "விண்ணப்பித்த தேதி",
+      "viewJob": "வேலை பார்"
     },
     "profile": {
       "title": "என் சுயவிவரம்",
@@ -140,7 +163,24 @@
       "preferredCategories": "விரும்பிய வேலை வகைகள்",
       "resume": "ரெஸ்யூமே",
       "uploadResume": "ரெஸ்யூமே பதிவேற்றவும்",
-      "buildResume": "ரெஸ்யூமே உருவாக்கவும்"
+      "buildResume": "ரெஸ்யூமே உருவாக்கவும்",
+      "jobPreferences": "வேலை விருப்பங்கள்",
+      "locationPreferences": "இட விருப்பங்கள்",
+      "openToAnyLocation": "எந்த இடத்திலும்",
+      "preferSpecificCities": "குறிப்பிட்ட நகரங்கள்",
+      "preferredCities": "விரும்பிய நகரங்கள்",
+      "languagesKnown": "தெரிந்த மொழிகள்",
+      "openToWork": "வேலைக்கு தயார்",
+      "workPreferences": "பணி விருப்பங்கள்",
+      "bio": "என்னைப் பற்றி",
+      "noResume": "ரெஸ்யூமே இல்லை"
+    },
+    "apply": {
+      "title": "இந்த வேலைக்கு விண்ணப்பிக்கவும்",
+      "coverNote": "கவர் குறிப்பு",
+      "coverNotePlaceholder": "நீங்கள் ஏன் தகுதியானவர் என்று சொல்லுங்கள்...",
+      "submit": "விண்ணப்பம் சமர்ப்பி",
+      "alreadyApplied": "நீங்கள் ஏற்கனவே விண்ணப்பித்துள்ளீர்கள்"
     }
   },
   "employer": {
@@ -172,6 +212,46 @@
       "contactPerson": "தொடர்பு நபரின் பெயர்",
       "uploadDocs": "சரிபார்ப்பு ஆவணங்களை பதிவேற்றவும்",
       "docsHint": "GST சான்றிதழ், நிறுவன பதிவு, அல்லது வணிக உரிமம்"
+    },
+    "responses": {
+      "title": "பதில்கள்",
+      "allJobs": "அனைத்து வேலைகளிலும்",
+      "newCount": "புதியவை",
+      "shortlistedCount": "தேர்ந்தெடுக்கப்பட்டவை",
+      "hiredCount": "நியமிக்கப்பட்டவை",
+      "noResponses": "பதில்கள் இல்லை",
+      "noResponsesHint": "விண்ணப்பங்கள் வந்தால் இங்கே தெரியும்",
+      "noInCategory": "இந்த வகையில் விண்ணப்பங்கள் இல்லை",
+      "noInCategoryHint": "வேறு தாவலை தேர்ந்தெடுங்கள்",
+      "appliedFor": "விண்ணப்பித்தவர்",
+      "about": "பற்றி",
+      "coverNote": "கவர் குறிப்பு",
+      "noInfo": "கூடுதல் தகவல் இல்லை."
+    },
+    "candidates": {
+      "title": "திறமை தேடல்",
+      "subtitle": "விண்ணப்பதாரர்களை தேடி அழைக்கவும்",
+      "filterCity": "நகரம்",
+      "filterCategory": "வகை",
+      "filterExp": "குறைந்தபட்ச அனுபவம்",
+      "filterLanguage": "மொழி",
+      "filterKeyword": "தேடு",
+      "keywordPlaceholder": "திறன்கள், சுயவிவரம்",
+      "search": "தேடு",
+      "clear": "அழி",
+      "noCandidates": "விண்ணப்பதாரர்கள் இல்லை",
+      "noCandidatesHint": "வேறு வடிகட்டி முயற்சிக்கவும்",
+      "experience": "ஆண்டு அனுபவம்",
+      "openToAnywhere": "எங்கும் வேலை செய்ய தயார்",
+      "prefers": "விரும்பும்"
+    },
+    "applicants": {
+      "for": "க்கான விண்ணப்பதாரர்கள்",
+      "total": "மொத்த விண்ணப்பம்",
+      "totalPlural": "மொத்த விண்ணப்பங்கள்",
+      "noApplicants": "இன்னும் விண்ணப்பதாரர்கள் இல்லை",
+      "noApplicantsHint": "விண்ணப்பதாரர்கள் வந்தால் இங்கே தெரியும்",
+      "exportCsv": "CSV ஏற்றுமதி"
     }
   },
   "categories": {
@@ -187,6 +267,50 @@
     "fieldWork": "களப்பணி",
     "it": "IT / கணினி",
     "healthcare": "சுகாதாரம்"
+  },
+  "status": {
+    "APPLIED": "விண்ணப்பிக்கப்பட்டது",
+    "VIEWED": "பார்க்கப்பட்டது",
+    "SHORTLISTED": "தேர்ந்தெடுக்கப்பட்டது",
+    "REJECTED": "நிராகரிக்கப்பட்டது",
+    "HIRED": "நியமிக்கப்பட்டது 🎉",
+    "ACTIVE": "செயலில்",
+    "PENDING_REVIEW": "மதிப்பாய்வில்",
+    "CLOSED": "மூடப்பட்டது",
+    "EXPIRED": "காலாவதி"
+  },
+  "actions": {
+    "edit": "திருத்து",
+    "approve": "அனுமதி",
+    "reject": "நிராகரி",
+    "shortlist": "தேர்வு ✓",
+    "hire": "நியமி",
+    "markViewed": "பார்த்ததாக குறி",
+    "reconsider": "மறுபரிசீலனை",
+    "viewDetails": "விவரங்கள் பார்",
+    "hideDetails": "விவரங்கள் மறை",
+    "exportCsv": "CSV ஏற்றுமதி",
+    "viewResume": "ரெஸ்யூமே பார்",
+    "inviteToApply": "அழைப்பு அனுப்பு",
+    "inviteSent": "அழைப்பு அனுப்பப்பட்டது!",
+    "uploadPhoto": "புகைப்படம் பதிவேற்று",
+    "uploadResume": "ரெஸ்யூமே பதிவேற்று",
+    "saveChanges": "மாற்றங்கள் சேமி",
+    "addSkill": "திறன் சேர்",
+    "addLanguage": "மொழி சேர்",
+    "addCity": "நகரம் சேர்"
+  },
+  "admin": {
+    "title": "நிர்வாக பலகம்",
+    "pendingJobs": "நிலுவையிலுள்ள வேலைகள்",
+    "pendingEmployers": "நிலுவையிலுள்ள முதலாளிகள்",
+    "noItems": "நிலுவையிலுள்ள உருப்படிகள் இல்லை",
+    "viewDetails": "முழு விவரங்கள்",
+    "hideDetails": "விவரங்கள் மறை",
+    "documents": "ஆவணங்கள்",
+    "noDocuments": "ஆவணங்கள் பதிவேற்றவில்லை",
+    "website": "இணையதளம்",
+    "description": "விளக்கம்",
+    "gstCin": "GST / CIN"
   }
 }
-

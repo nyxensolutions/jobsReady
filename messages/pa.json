@@ -29,7 +29,25 @@
     "applications": "ਮੇਰੀਆਂ ਅਰਜ਼ੀਆਂ",
     "logout": "ਲੌਗ ਆਊਟ",
     "forJobSeekers": "ਨੌਕਰੀ ਭਾਲਕਾਂ ਲਈ",
-    "forEmployers": "ਨਿਯੋਕਤਾਵਾਂ ਲਈ"
+    "forEmployers": "ਨਿਯੋਕਤਾਵਾਂ ਲਈ",
+    "myJobs": "ਮੇਰੀਆਂ ਨੌਕਰੀਆਂ",
+    "responses": "ਜਵਾਬ",
+    "talentSearch": "ਪ੍ਰਤਿਭਾ ਖੋਜ",
+    "savedJobs": "ਸੇਵ ਕੀਤੀਆਂ ਨੌਕਰੀਆਂ",
+    "signOut": "ਸਾਈਨ ਆਊਟ",
+    "myDashboard": "ਮੇਰਾ ਡੈਸ਼ਬੋਰਡ",
+    "employerDashboard": "ਨਿਯੋਕਤਾ ਡੈਸ਼ਬੋਰਡ",
+    "adminPanel": "ਐਡਮਿਨ ਪੈਨਲ",
+    "jobSeekers": "ਨੌਕਰੀ ਭਾਲਕ",
+    "employers": "ਨਿਯੋਕਤਾ",
+    "company": "ਕੰਪਨੀ",
+    "createProfile": "ਪ੍ਰੋਫਾਈਲ ਬਣਾਓ",
+    "browseCategories": "ਸ਼੍ਰੇਣੀਆਂ ਵੇਖੋ",
+    "aboutUs": "ਸਾਡੇ ਬਾਰੇ",
+    "registerCompany": "ਕੰਪਨੀ ਰਜਿਸਟਰ ਕਰੋ",
+    "privacyPolicy": "ਗੋਪਨੀਯਤਾ ਨੀਤੀ",
+    "termsOfUse": "ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ",
+    "contact": "ਸੰਪਰਕ"
   },
   "home": {
     "hero": {
@@ -127,7 +145,12 @@
       "title": "ਮੇਰਾ ਡੈਸ਼ਬੋਰਡ",
       "appliedJobs": "ਅਰਜ਼ੀ ਦਿੱਤੀਆਂ ਨੌਕਰੀਆਂ",
       "profileStrength": "ਪ੍ਰੋਫਾਈਲ ਦੀ ਮਜ਼ਬੂਤੀ",
-      "completeProfile": "ਬਿਹਤਰ ਮੇਲ ਲਈ ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਪੂਰੀ ਕਰੋ"
+      "completeProfile": "ਬਿਹਤਰ ਮੇਲ ਲਈ ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਪੂਰੀ ਕਰੋ",
+      "noApplications": "ਕੋਈ ਅਰਜ਼ੀ ਨਹੀਂ",
+      "noApplicationsHint": "ਨੌਕਰੀਆਂ ਲੱਭੋ ਅਤੇ ਅਰਜ਼ੀ ਦਿਓ",
+      "browseJobs": "ਨੌਕਰੀਆਂ ਦੇਖੋ",
+      "appliedOn": "ਅਰਜ਼ੀ ਦਿੱਤੀ",
+      "viewJob": "ਨੌਕਰੀ ਦੇਖੋ"
     },
     "profile": {
       "title": "ਮੇਰੀ ਪ੍ਰੋਫਾਈਲ",
@@ -140,7 +163,24 @@
       "preferredCategories": "ਪਸੰਦੀਦਾ ਨੌਕਰੀ ਸ਼੍ਰੇਣੀਆਂ",
       "resume": "ਰੈਜ਼ਿਊਮੇ",
       "uploadResume": "ਰੈਜ਼ਿਊਮੇ ਅਪਲੋਡ ਕਰੋ",
-      "buildResume": "ਰੈਜ਼ਿਊਮੇ ਬਣਾ�"
+      "buildResume": "ਰੈਜ਼ਿਊਮੇ ਬਣਾ�",
+      "jobPreferences": "ਨੌਕਰੀ ਦੀਆਂ ਤਰਜੀਹਾਂ",
+      "locationPreferences": "ਸਥਾਨ ਤਰਜੀਹਾਂ",
+      "openToAnyLocation": "ਕਿਸੇ ਵੀ ਥਾਂ",
+      "preferSpecificCities": "ਖਾਸ ਸ਼ਹਿਰ",
+      "preferredCities": "ਪਸੰਦੀਦਾ ਸ਼ਹਿਰ",
+      "languagesKnown": "ਜਾਣੀਆਂ ਭਾਸ਼ਾਵਾਂ",
+      "openToWork": "ਕੰਮ ਲਈ ਤਿਆਰ",
+      "workPreferences": "ਕੰਮ ਦੀਆਂ ਤਰਜੀਹਾਂ",
+      "bio": "ਮੇਰੇ ਬਾਰੇ",
+      "noResume": "ਕੋਈ ਰੈਜ਼ਿਊਮੇ ਅਪਲੋਡ ਨਹੀਂ"
+    },
+    "apply": {
+      "title": "ਇਸ ਨੌਕਰੀ ਲਈ ਅਰਜ਼ੀ",
+      "coverNote": "ਕਵਰ ਨੋਟ",
+      "coverNotePlaceholder": "ਦੱਸੋ ਤੁਸੀਂ ਕਿਉਂ ਯੋਗ ਹੋ...",
+      "submit": "ਅਰਜ਼ੀ ਜਮ੍ਹਾ ਕਰੋ",
+      "alreadyApplied": "ਤੁਸੀਂ ਪਹਿਲਾਂ ਹੀ ਅਰਜ਼ੀ ਦੇ ਚੁੱਕੇ ਹੋ"
     }
   },
   "employer": {
@@ -172,6 +212,46 @@
       "contactPerson": "ਸੰਪਰਕ ਵਿਅਕਤੀ ਦਾ ਨਾਮ",
       "uploadDocs": "ਤਸਦੀਕ ਦਸਤਾਵੇਜ਼ ਅਪਲੋਡ ਕਰੋ",
       "docsHint": "GST ਸਰਟੀਫਿਕੇਟ, ਕੰਪਨੀ ਰਜਿਸਟ੍ਰੇਸ਼ਨ, ਜਾਂ ਵਪਾਰ ਲਾਇਸੈਂਸ"
+    },
+    "responses": {
+      "title": "ਜਵਾਬ",
+      "allJobs": "ਸਾਰੀਆਂ ਨੌਕਰੀਆਂ ਵਿੱਚ",
+      "newCount": "ਨਵੇਂ",
+      "shortlistedCount": "ਸ਼ਾਰਟਲਿਸਟ",
+      "hiredCount": "ਨਿਯੁਕਤ",
+      "noResponses": "ਕੋਈ ਜਵਾਬ ਨਹੀਂ",
+      "noResponsesHint": "ਜਦੋਂ ਅਰਜ਼ੀਆਂ ਆਉਣਗੀਆਂ ਤਾਂ ਇੱਥੇ ਦਿਖੇਗਾ",
+      "noInCategory": "ਇਸ ਸ਼੍ਰੇਣੀ ਵਿੱਚ ਕੋਈ ਅਰਜ਼ੀ ਨਹੀਂ",
+      "noInCategoryHint": "ਕੋਈ ਹੋਰ ਟੈਬ ਦੇਖੋ",
+      "appliedFor": "ਅਰਜ਼ੀ ਦਿੱਤੀ",
+      "about": "ਬਾਰੇ",
+      "coverNote": "ਕਵਰ ਨੋਟ",
+      "noInfo": "ਕੋਈ ਵਾਧੂ ਜਾਣਕਾਰੀ ਨਹੀਂ।"
+    },
+    "candidates": {
+      "title": "ਪ੍ਰਤਿਭਾ ਖੋਜ",
+      "subtitle": "ਉਮੀਦਵਾਰ ਲੱਭੋ ਅਤੇ ਸੱਦੋ",
+      "filterCity": "ਸ਼ਹਿਰ",
+      "filterCategory": "ਸ਼੍ਰੇਣੀ",
+      "filterExp": "ਘੱਟੋ-ਘੱਟ ਤਜਰਬਾ",
+      "filterLanguage": "ਭਾਸ਼ਾ",
+      "filterKeyword": "ਖੋਜੋ",
+      "keywordPlaceholder": "ਹੁਨਰ, ਬਾਇਓ",
+      "search": "ਖੋਜੋ",
+      "clear": "ਸਾਫ਼",
+      "noCandidates": "ਕੋਈ ਉਮੀਦਵਾਰ ਨਹੀਂ",
+      "noCandidatesHint": "ਵੱਖਰੇ ਫਿਲਟਰ ਅਜ਼ਮਾਓ",
+      "experience": "ਸਾਲ ਦਾ ਤਜਰਬਾ",
+      "openToAnywhere": "ਕਿਤੇ ਵੀ ਕੰਮ ਕਰਨ ਲਈ ਤਿਆਰ",
+      "prefers": "ਪਸੰਦ"
+    },
+    "applicants": {
+      "for": "ਲਈ ਅਰਜ਼ੀਦਾਰ",
+      "total": "ਕੁੱਲ ਅਰਜ਼ੀ",
+      "totalPlural": "ਕੁੱਲ ਅਰਜ਼ੀਆਂ",
+      "noApplicants": "ਅਜੇ ਕੋਈ ਅਰਜ਼ੀਦਾਰ ਨਹੀਂ",
+      "noApplicantsHint": "ਜਦੋਂ ਉਮੀਦਵਾਰ ਅਰਜ਼ੀ ਦੇਣਗੇ ਤਾਂ ਇੱਥੇ ਦਿਖੇਗਾ",
+      "exportCsv": "CSV ਨਿਰਯਾਤ"
     }
   },
   "categories": {
@@ -187,6 +267,50 @@
     "fieldWork": "ਫੀਲਡ ਵਰਕ",
     "it": "IT / ਕੰਪਿਊਟਰ",
     "healthcare": "ਸਿਹਤ ਸੇਵਾ"
+  },
+  "status": {
+    "APPLIED": "ਅਰਜ਼ੀ ਦਿੱਤੀ",
+    "VIEWED": "ਦੇਖਿਆ ਗਿਆ",
+    "SHORTLISTED": "ਸ਼ਾਰਟਲਿਸਟ",
+    "REJECTED": "ਰੱਦ ਕੀਤਾ",
+    "HIRED": "ਨਿਯੁਕਤ 🎉",
+    "ACTIVE": "ਸਰਗਰਮ",
+    "PENDING_REVIEW": "ਸਮੀਖਿਆ ਅਧੀਨ",
+    "CLOSED": "ਬੰਦ",
+    "EXPIRED": "ਮਿਆਦ ਪੁੱਗ ਗਈ"
+  },
+  "actions": {
+    "edit": "ਸੰਪਾਦਿਤ ਕਰੋ",
+    "approve": "ਮਨਜ਼ੂਰ ਕਰੋ",
+    "reject": "ਰੱਦ ਕਰੋ",
+    "shortlist": "ਸ਼ਾਰਟਲਿਸਟ ✓",
+    "hire": "ਨਿਯੁਕਤ ਕਰੋ",
+    "markViewed": "ਦੇਖਿਆ ਗਿਆ",
+    "reconsider": "ਦੁਬਾਰਾ ਸੋਚੋ",
+    "viewDetails": "ਵੇਰਵੇ ਦੇਖੋ",
+    "hideDetails": "ਵੇਰਵੇ ਲੁਕਾਓ",
+    "exportCsv": "CSV ਨਿਰਯਾਤ",
+    "viewResume": "ਰੈਜ਼ਿਊਮੇ ਦੇਖੋ",
+    "inviteToApply": "ਸੱਦਾ ਭੇਜੋ",
+    "inviteSent": "ਸੱਦਾ ਭੇਜਿਆ!",
+    "uploadPhoto": "ਫੋਟੋ ਅਪਲੋਡ",
+    "uploadResume": "ਰੈਜ਼ਿਊਮੇ ਅਪਲੋਡ",
+    "saveChanges": "ਬਦਲਾਅ ਸੇਵ ਕਰੋ",
+    "addSkill": "ਹੁਨਰ ਜੋੜੋ",
+    "addLanguage": "ਭਾਸ਼ਾ ਜੋੜੋ",
+    "addCity": "ਸ਼ਹਿਰ ਜੋੜੋ"
+  },
+  "admin": {
+    "title": "ਐਡਮਿਨ ਪੈਨਲ",
+    "pendingJobs": "ਲੰਬਿਤ ਨੌਕਰੀਆਂ",
+    "pendingEmployers": "ਲੰਬਿਤ ਨਿਯੋਕਤਾ",
+    "noItems": "ਕੋਈ ਲੰਬਿਤ ਆਈਟਮ ਨਹੀਂ",
+    "viewDetails": "ਪੂਰੀ ਜਾਣਕਾਰੀ",
+    "hideDetails": "ਜਾਣਕਾਰੀ ਲੁਕਾਓ",
+    "documents": "ਦਸਤਾਵੇਜ਼",
+    "noDocuments": "ਕੋਈ ਦਸਤਾਵੇਜ਼ ਅਪਲੋਡ ਨਹੀਂ",
+    "website": "ਵੈੱਬਸਾਈਟ",
+    "description": "ਵੇਰਵਾ",
+    "gstCin": "GST / CIN"
   }
 }
-

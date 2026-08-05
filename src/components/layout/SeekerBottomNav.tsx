@@ -2,11 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Search, FileText, User } from "lucide-react"
 import { useEffect, useState } from "react"
 
 export default function SeekerBottomNav() {
   const pathname = usePathname()
+  const t = useTranslations("nav")
   const [isSeeker, setIsSeeker] = useState(false)
 
   useEffect(() => {
@@ -21,9 +23,9 @@ export default function SeekerBottomNav() {
   const stripped = pathname.replace(/^\/[a-z]{2}(?=\/)/, "")
 
   const tabs = [
-    { href: "/jobs",             label: "Jobs",        icon: Search   },
-    { href: "/seeker/dashboard#applications", label: "Responses",   icon: FileText },
-    { href: "/seeker/profile",   label: "Profile",     icon: User     },
+    { href: "/jobs",             label: t("findJobs"),    icon: Search   },
+    { href: "/seeker/dashboard#applications", label: t("applications"), icon: FileText },
+    { href: "/seeker/profile",   label: t("profile"),     icon: User     },
   ]
 
   return (

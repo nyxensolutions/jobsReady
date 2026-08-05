@@ -29,7 +29,25 @@
     "applications": "मेरे आवेदन",
     "logout": "लॉग आउट",
     "forJobSeekers": "नौकरी खोजने वालों के लिए",
-    "forEmployers": "नियोक्ता�ं के लिए"
+    "forEmployers": "नियोक्ता�ं के लिए",
+    "myJobs": "मेरी नौकरियां",
+    "responses": "प्रतिक्रियाएं",
+    "talentSearch": "प्रतिभा खोज",
+    "savedJobs": "सेव की नौकरियां",
+    "signOut": "साइन आउट",
+    "myDashboard": "मेरा डैशबोर्ड",
+    "employerDashboard": "नियोक्ता डैशबोर्ड",
+    "adminPanel": "एडमिन पैनल",
+    "jobSeekers": "नौकरी खोजने वाले",
+    "employers": "नियोक्ता",
+    "company": "कंपनी",
+    "createProfile": "प्रोफ़ाइल बनाएं",
+    "browseCategories": "श्रेणियां देखें",
+    "aboutUs": "हमारे बारे में",
+    "registerCompany": "कंपनी रजिस्टर करें",
+    "privacyPolicy": "गोपनीयता नीति",
+    "termsOfUse": "उपयोग की शर्तें",
+    "contact": "संपर्क"
   },
   "home": {
     "hero": {
@@ -127,7 +145,12 @@
       "title": "मेरा डैशबोर्ड",
       "appliedJobs": "आवेदित नौकरियां",
       "profileStrength": "प्रोफ़ाइल की मज़बूती",
-      "completeProfile": "बेहतर मैच के लिए प्रोफ़ाइल पूरी करें"
+      "completeProfile": "बेहतर मैच के लिए प्रोफ़ाइल पूरी करें",
+      "noApplications": "अभी कोई आवेदन नहीं",
+      "noApplicationsHint": "नौकरियां खोजें और आवेदन करें",
+      "browseJobs": "नौकरियां देखें",
+      "appliedOn": "आवेदन किया",
+      "viewJob": "नौकरी देखें"
     },
     "profile": {
       "title": "मेरी प्रोफ़ाइल",
@@ -140,7 +163,24 @@
       "preferredCategories": "पसंदीदा नौकरी श्रेणियां",
       "resume": "रेज़्यूमे",
       "uploadResume": "रेज़्यूमे अपलोड करें",
-      "buildResume": "रेज़्यूमे बनाएं"
+      "buildResume": "रेज़्यूमे बनाएं",
+      "jobPreferences": "नौकरी प्राथमिकताएं",
+      "locationPreferences": "स्थान प्राथमिकताएं",
+      "openToAnyLocation": "किसी भी स्थान पर",
+      "preferSpecificCities": "विशिष्ट शहर चुनें",
+      "preferredCities": "पसंदीदा शहर",
+      "languagesKnown": "ज्ञात भाषाएं",
+      "openToWork": "काम के लिए तैयार",
+      "workPreferences": "कार्य प्राथमिकताएं",
+      "bio": "मेरे बारे में",
+      "noResume": "कोई रेज़्यूमे अपलोड नहीं"
+    },
+    "apply": {
+      "title": "इस नौकरी के लिए आवेदन",
+      "coverNote": "कवर नोट",
+      "coverNotePlaceholder": "नियोक्ता को बताएं कि आप क्यों उपयुक्त हैं...",
+      "submit": "आवेदन जमा करें",
+      "alreadyApplied": "आप पहले ही आवेदन कर चुके हैं"
     }
   },
   "employer": {
@@ -172,6 +212,46 @@
       "contactPerson": "संपर्क व्यक्ति का नाम",
       "uploadDocs": "सत्यापन दस्तावेज़ अपलोड करें",
       "docsHint": "GST प्रमाणपत्र, कंपनी पंजीकरण, या ट्रेड लाइसेंस"
+    },
+    "responses": {
+      "title": "प्रतिक्रियाएं",
+      "allJobs": "सभी नौकरियों में",
+      "newCount": "नए",
+      "shortlistedCount": "शॉर्टलिस्ट",
+      "hiredCount": "नियुक्त",
+      "noResponses": "अभी कोई प्रतिक्रिया नहीं",
+      "noResponsesHint": "जब आवेदन आएंगे तो यहाँ दिखेगा",
+      "noInCategory": "इस श्रेणी में कोई आवेदन नहीं",
+      "noInCategoryHint": "दूसरा टैब चुनें",
+      "appliedFor": "आवेदन किया",
+      "about": "के बारे में",
+      "coverNote": "कवर नोट",
+      "noInfo": "अतिरिक्त जानकारी नहीं।"
+    },
+    "candidates": {
+      "title": "प्रतिभा खोज",
+      "subtitle": "उम्मीदवार खोजें और आमंत्रित करें",
+      "filterCity": "शहर",
+      "filterCategory": "श्रेणी",
+      "filterExp": "न्यूनतम अनुभव",
+      "filterLanguage": "भाषा",
+      "filterKeyword": "खोजें",
+      "keywordPlaceholder": "कौशल, बायो कीवर्ड",
+      "search": "खोजें",
+      "clear": "साफ़",
+      "noCandidates": "कोई उम्मीदवार नहीं",
+      "noCandidatesHint": "अलग फ़िल्टर आज़माएं",
+      "experience": "साल का अनुभव",
+      "openToAnywhere": "किसी भी स्थान पर उपलब्ध",
+      "prefers": "पसंद"
+    },
+    "applicants": {
+      "for": "के लिए आवेदक",
+      "total": "कुल आवेदन",
+      "totalPlural": "कुल आवेदन",
+      "noApplicants": "अभी कोई आवेदक नहीं",
+      "noApplicantsHint": "जब उम्मीदवार आवेदन करेंगे तो यहाँ दिखेगा",
+      "exportCsv": "CSV निर्यात"
     }
   },
   "categories": {
@@ -187,6 +267,50 @@
     "fieldWork": "फील्ड वर्क",
     "it": "IT / कंप्यूटर",
     "healthcare": "स्वास्थ्य सेवा"
+  },
+  "status": {
+    "APPLIED": "आवेदन किया",
+    "VIEWED": "देखा गया",
+    "SHORTLISTED": "शॉर्टलिस्ट",
+    "REJECTED": "अस्वीकार",
+    "HIRED": "नियुक्त 🎉",
+    "ACTIVE": "सक्रिय",
+    "PENDING_REVIEW": "समीक्षाधीन",
+    "CLOSED": "बंद",
+    "EXPIRED": "समाप्त"
+  },
+  "actions": {
+    "edit": "संपादित करें",
+    "approve": "स्वीकृत करें",
+    "reject": "अस्वीकार",
+    "shortlist": "शॉर्टलिस्ट ✓",
+    "hire": "नियुक्त करें",
+    "markViewed": "देखा गया",
+    "reconsider": "पुनर्विचार",
+    "viewDetails": "विवरण देखें",
+    "hideDetails": "विवरण छुपाएं",
+    "exportCsv": "CSV निर्यात",
+    "viewResume": "रेज़्यूमे देखें",
+    "inviteToApply": "आमंत्रण भेजें",
+    "inviteSent": "आमंत्रण भेजा!",
+    "uploadPhoto": "फ़ोटो अपलोड",
+    "uploadResume": "रेज़्यूमे अपलोड",
+    "saveChanges": "बदलाव सेव करें",
+    "addSkill": "कौशल जोड़ें",
+    "addLanguage": "भाषा जोड़ें",
+    "addCity": "शहर जोड़ें"
+  },
+  "admin": {
+    "title": "एडमिन पैनल",
+    "pendingJobs": "लंबित नौकरियां",
+    "pendingEmployers": "लंबित नियोक्ता",
+    "noItems": "कोई लंबित आइटम नहीं",
+    "viewDetails": "पूरा विवरण देखें",
+    "hideDetails": "विवरण छुपाएं",
+    "documents": "दस्तावेज़",
+    "noDocuments": "कोई दस्तावेज़ अपलोड नहीं",
+    "website": "वेबसाइट",
+    "description": "विवरण",
+    "gstCin": "GST / CIN"
   }
 }
-

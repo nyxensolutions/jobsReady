@@ -29,7 +29,25 @@
     "applications": "Meri Applications",
     "logout": "Logout",
     "forJobSeekers": "Job Seekers Ke Liye",
-    "forEmployers": "Employers Ke Liye"
+    "forEmployers": "Employers Ke Liye",
+    "myJobs": "Meri Jobs",
+    "responses": "Responses",
+    "talentSearch": "Talent Dhundein",
+    "savedJobs": "Saved Jobs",
+    "signOut": "Sign Out",
+    "myDashboard": "Mera Dashboard",
+    "employerDashboard": "Employer Dashboard",
+    "adminPanel": "Admin Panel",
+    "jobSeekers": "Job Seekers",
+    "employers": "Employers",
+    "company": "Company",
+    "createProfile": "Profile Banayein",
+    "browseCategories": "Categories Dekhein",
+    "aboutUs": "Hamare Baare Mein",
+    "registerCompany": "Company Register Karein",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "contact": "Contact"
   },
   "home": {
     "hero": {
@@ -127,7 +145,12 @@
       "title": "Mera Dashboard",
       "appliedJobs": "Apply Ki Hui Jobs",
       "profileStrength": "Profile ki taakat",
-      "completeProfile": "Jaldi hire hone ke liye profile complete karein"
+      "completeProfile": "Jaldi hire hone ke liye profile complete karein",
+      "noApplications": "Abhi koi application nahi",
+      "noApplicationsHint": "Jobs dhundo aur apply karo",
+      "browseJobs": "Jobs Dekhein",
+      "appliedOn": "Apply kiya",
+      "viewJob": "Job Dekhein"
     },
     "profile": {
       "title": "Mera Profile",
@@ -140,7 +163,24 @@
       "preferredCategories": "Pasandida Job Categories",
       "resume": "Resume",
       "uploadResume": "Resume Upload Karein",
-      "buildResume": "Resume Banayein"
+      "buildResume": "Resume Banayein",
+      "jobPreferences": "Job Preferences",
+      "locationPreferences": "Location Preferences",
+      "openToAnyLocation": "Kahin bhi kaam karna chahta hoon",
+      "preferSpecificCities": "Khaas sheher",
+      "preferredCities": "Pasandida Sheher",
+      "languagesKnown": "Jaani Bhashayein",
+      "openToWork": "Kaam Ke Liye Taiyaar",
+      "workPreferences": "Kaam Ki Pasand",
+      "bio": "Mere Baare Mein",
+      "noResume": "Koi resume upload nahi"
+    },
+    "apply": {
+      "title": "Is job ke liye apply karein",
+      "coverNote": "Cover Note",
+      "coverNotePlaceholder": "Employer ko batayein ki aap kyun sahi hain...",
+      "submit": "Application Submit Karein",
+      "alreadyApplied": "Aap pehle hi apply kar chuke hain"
     }
   },
   "employer": {
@@ -172,6 +212,46 @@
       "contactPerson": "Contact Person Ka Naam",
       "uploadDocs": "Verification Documents Upload Karein",
       "docsHint": "GST certificate, company registration, ya trade licence"
+    },
+    "responses": {
+      "title": "Responses",
+      "allJobs": "sabhi jobs mein",
+      "newCount": "Nayi",
+      "shortlistedCount": "Shortlisted",
+      "hiredCount": "Hire",
+      "noResponses": "Abhi koi response nahi",
+      "noResponsesHint": "Jab log apply karein to yahan dikhega",
+      "noInCategory": "Is category mein koi application nahi",
+      "noInCategoryHint": "Doosra tab dekho",
+      "appliedFor": "Apply kiya",
+      "about": "Ke baare mein",
+      "coverNote": "Cover Note",
+      "noInfo": "Koi additional info nahi."
+    },
+    "candidates": {
+      "title": "Talent Dhundein",
+      "subtitle": "Candidates dhundo aur invite karein",
+      "filterCity": "Sheher",
+      "filterCategory": "Category",
+      "filterExp": "Min Exp",
+      "filterLanguage": "Bhasha",
+      "filterKeyword": "Search",
+      "keywordPlaceholder": "Skills, bio keywords",
+      "search": "Search Karein",
+      "clear": "Clear",
+      "noCandidates": "Koi candidate nahi",
+      "noCandidatesHint": "Alag filter try karein",
+      "experience": "saal ka experience",
+      "openToAnywhere": "Kahin bhi kaam kar sakte hain",
+      "prefers": "Pasand"
+    },
+    "applicants": {
+      "for": "ke liye applicants",
+      "total": "kul application",
+      "totalPlural": "kul applications",
+      "noApplicants": "Abhi koi applicant nahi",
+      "noApplicantsHint": "Jab candidates apply karein to yahan dikhega",
+      "exportCsv": "Export CSV"
     }
   },
   "categories": {
@@ -187,5 +267,50 @@
     "fieldWork": "Field Work",
     "it": "IT / Computer",
     "healthcare": "Healthcare"
+  },
+  "status": {
+    "APPLIED": "Apply Ho Gaya",
+    "VIEWED": "Dekha Gaya",
+    "SHORTLISTED": "Shortlist",
+    "REJECTED": "Reject",
+    "HIRED": "Hire Ho Gaye 🎉",
+    "ACTIVE": "Active",
+    "PENDING_REVIEW": "Review Mein",
+    "CLOSED": "Closed",
+    "EXPIRED": "Expired"
+  },
+  "actions": {
+    "edit": "Edit Karein",
+    "approve": "Approve Karein",
+    "reject": "Reject Karein",
+    "shortlist": "Shortlist ✓",
+    "hire": "Hire Karein",
+    "markViewed": "Dekha Hua Mark Karein",
+    "reconsider": "Dobara Sochein",
+    "viewDetails": "Details Dekhein",
+    "hideDetails": "Details Chhupayein",
+    "exportCsv": "CSV Export",
+    "viewResume": "Resume Dekhein",
+    "inviteToApply": "Invite Bhejein",
+    "inviteSent": "Invite Bheja!",
+    "uploadPhoto": "Photo Upload",
+    "uploadResume": "Resume Upload",
+    "saveChanges": "Changes Save Karein",
+    "addSkill": "Skill Jodein",
+    "addLanguage": "Bhasha Jodein",
+    "addCity": "Sheher Jodein"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "pendingJobs": "Pending Jobs",
+    "pendingEmployers": "Pending Employers",
+    "noItems": "Koi pending item nahi",
+    "viewDetails": "Poori details",
+    "hideDetails": "Details chhupayein",
+    "documents": "Documents",
+    "noDocuments": "Koi document upload nahi",
+    "website": "Website",
+    "description": "Description",
+    "gstCin": "GST / CIN"
   }
 }

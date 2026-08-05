@@ -38,31 +38,31 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-3">Job Seekers</h4>
+            <h4 className="text-white font-semibold mb-3">{t("jobSeekers")}</h4>
             <ul className="space-y-2">
               <li><Link href="/jobs" className="hover:text-white transition-colors">{t("findJobs")}</Link></li>
-              <li><Link href="/login" className="hover:text-white transition-colors">Create Profile</Link></li>
-              <li><Link href="/categories" className="hover:text-white transition-colors">Browse Categories</Link></li>
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/login" className="hover:text-white transition-colors">{t("createProfile")}</Link></li>
+              <li><Link href="/categories" className="hover:text-white transition-colors">{t("browseCategories")}</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">{t("aboutUs")}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-3">Employers</h4>
+            <h4 className="text-white font-semibold mb-3">{t("employers")}</h4>
             <ul className="space-y-2">
               <li><Link href="/employer/post-job" className="hover:text-white transition-colors">{t("postJob")}</Link></li>
-              <li><Link href="/employer/register" className="hover:text-white transition-colors">Register Company</Link></li>
-              <li><Link href="/employer/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
+              <li><Link href="/employer/register" className="hover:text-white transition-colors">{t("registerCompany")}</Link></li>
+              <li><Link href="/employer/dashboard" className="hover:text-white transition-colors">{t("dashboard")}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-3">Company</h4>
+            <h4 className="text-white font-semibold mb-3">{t("company")}</h4>
             <ul className="space-y-2">
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Use</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">{t("aboutUs")}</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors">{t("contact")}</Link></li>
+              <li><Link href="/privacy" className="hover:text-white transition-colors">{t("privacyPolicy")}</Link></li>
+              <li><Link href="/terms" className="hover:text-white transition-colors">{t("termsOfUse")}</Link></li>
             </ul>
           </div>
         </div>

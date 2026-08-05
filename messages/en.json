@@ -29,7 +29,25 @@
     "applications": "My Applications",
     "logout": "Log out",
     "forJobSeekers": "For Job Seekers",
-    "forEmployers": "For Employers"
+    "forEmployers": "For Employers",
+    "myJobs": "My Jobs",
+    "responses": "Responses",
+    "talentSearch": "Talent Search",
+    "savedJobs": "Saved Jobs",
+    "signOut": "Sign Out",
+    "myDashboard": "My Dashboard",
+    "employerDashboard": "Employer Dashboard",
+    "adminPanel": "Admin Panel",
+    "jobSeekers": "Job Seekers",
+    "employers": "Employers",
+    "company": "Company",
+    "createProfile": "Create Profile",
+    "browseCategories": "Browse Categories",
+    "aboutUs": "About Us",
+    "registerCompany": "Register Company",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "contact": "Contact"
   },
   "home": {
     "hero": {
@@ -127,7 +145,12 @@
       "title": "My Dashboard",
       "appliedJobs": "Applied Jobs",
       "profileStrength": "Profile strength",
-      "completeProfile": "Complete your profile to get better matches"
+      "completeProfile": "Complete your profile to get better matches",
+      "noApplications": "No applications yet",
+      "noApplicationsHint": "Browse jobs and apply — your applications appear here",
+      "browseJobs": "Browse Jobs",
+      "appliedOn": "Applied on",
+      "viewJob": "View Job"
     },
     "profile": {
       "title": "My Profile",
@@ -140,7 +163,24 @@
       "preferredCategories": "Preferred Job Categories",
       "resume": "Resume",
       "uploadResume": "Upload Resume",
-      "buildResume": "Build Resume"
+      "buildResume": "Build Resume",
+      "jobPreferences": "Job Preferences",
+      "locationPreferences": "Location Preferences",
+      "openToAnyLocation": "Open to any location",
+      "preferSpecificCities": "Prefer specific cities",
+      "preferredCities": "Preferred Cities",
+      "languagesKnown": "Languages Known",
+      "openToWork": "Open to Work",
+      "workPreferences": "Work Preferences",
+      "bio": "About Me",
+      "noResume": "No resume uploaded"
+    },
+    "apply": {
+      "title": "Apply for this job",
+      "coverNote": "Cover Note",
+      "coverNotePlaceholder": "Tell the employer why you're a good fit...",
+      "submit": "Submit Application",
+      "alreadyApplied": "You have already applied for this job"
     }
   },
   "employer": {
@@ -172,7 +212,92 @@
       "contactPerson": "Contact Person Name",
       "uploadDocs": "Upload Verification Documents",
       "docsHint": "GST certificate, company registration, or trade licence"
+    },
+    "responses": {
+      "title": "Responses",
+      "allJobs": "across all your jobs",
+      "newCount": "New",
+      "shortlistedCount": "Shortlisted",
+      "hiredCount": "Hired",
+      "noResponses": "No responses yet",
+      "noResponsesHint": "When job seekers apply to your jobs, their responses will appear here",
+      "noInCategory": "No applications in this category",
+      "noInCategoryHint": "Try switching to a different filter tab above",
+      "appliedFor": "Applied for",
+      "about": "About",
+      "coverNote": "Cover Note",
+      "noInfo": "No additional information provided."
+    },
+    "candidates": {
+      "title": "Talent Search",
+      "subtitle": "Find and invite candidates to your jobs",
+      "filterCity": "City",
+      "filterCategory": "Category",
+      "filterExp": "Min Exp (yrs)",
+      "filterLanguage": "Language",
+      "filterKeyword": "Search",
+      "keywordPlaceholder": "Skills, bio keywords",
+      "search": "Search",
+      "clear": "Clear",
+      "noCandidates": "No candidates found",
+      "noCandidatesHint": "Try different filters to find candidates",
+      "experience": "yrs exp",
+      "openToAnywhere": "Open to any location",
+      "prefers": "Prefers"
+    },
+    "applicants": {
+      "for": "Applicants for",
+      "total": "total application",
+      "totalPlural": "total applications",
+      "noApplicants": "No applicants yet",
+      "noApplicantsHint": "When candidates apply, they'll appear here",
+      "exportCsv": "Export CSV"
     }
+  },
+  "status": {
+    "APPLIED": "Applied",
+    "VIEWED": "Viewed",
+    "SHORTLISTED": "Shortlisted",
+    "REJECTED": "Rejected",
+    "HIRED": "Hired 🎉",
+    "ACTIVE": "Active",
+    "PENDING_REVIEW": "Pending Review",
+    "CLOSED": "Closed",
+    "EXPIRED": "Expired"
+  },
+  "actions": {
+    "edit": "Edit",
+    "approve": "Approve",
+    "reject": "Reject",
+    "shortlist": "Shortlist ✓",
+    "hire": "Mark Hired",
+    "markViewed": "Mark Viewed",
+    "reconsider": "Reconsider",
+    "viewDetails": "View Details",
+    "hideDetails": "Hide Details",
+    "exportCsv": "Export CSV",
+    "viewResume": "View Resume",
+    "inviteToApply": "Invite to Apply",
+    "inviteSent": "Invite Sent!",
+    "uploadPhoto": "Upload Photo",
+    "uploadResume": "Upload Resume",
+    "saveChanges": "Save Changes",
+    "addSkill": "Add Skill",
+    "addLanguage": "Add Language",
+    "addCity": "Add City"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "pendingJobs": "Pending Jobs",
+    "pendingEmployers": "Pending Employers",
+    "noItems": "No pending items",
+    "viewDetails": "View full details",
+    "hideDetails": "Hide details",
+    "documents": "Documents",
+    "noDocuments": "No documents uploaded yet",
+    "website": "Website",
+    "description": "Description",
+    "gstCin": "GST / CIN"
   },
   "categories": {
     "delivery": "Delivery",

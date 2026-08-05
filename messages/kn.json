@@ -29,7 +29,25 @@
     "applications": "ನನ್ನ ಅರ್ಜಿಗಳು",
     "logout": "ಲಾಗ್�ಟ್",
     "forJobSeekers": "ಉದ್ಯೋಗಾರ್ಥಿಗಳಿಗೆ",
-    "forEmployers": "ಉದ್ಯೋಗದಾತರಿಗೆ"
+    "forEmployers": "ಉದ್ಯೋಗದಾತರಿಗೆ",
+    "myJobs": "ನನ್ನ ಉದ್ಯೋಗಗಳು",
+    "responses": "ಪ್ರತಿಕ್ರಿಯೆಗಳು",
+    "talentSearch": "ಪ್ರತಿಭೆ ಹುಡುಕಿ",
+    "savedJobs": "ಉಳಿಸಿದ ಉದ್ಯೋಗಗಳು",
+    "signOut": "ಸೈನ್ ಔಟ್",
+    "myDashboard": "ನನ್ನ ಡ್ಯಾಶ್ಬೋರ್ಡ್",
+    "employerDashboard": "ಉದ್ಯೋಗದಾತ ಡ್ಯಾಶ್ಬೋರ್ಡ್",
+    "adminPanel": "ಆಡ್ಮಿನ್ ಪ್ಯಾನೆಲ್",
+    "jobSeekers": "ಉದ್ಯೋಗಾರ್ಥಿಗಳು",
+    "employers": "ಉದ್ಯೋಗದಾತರು",
+    "company": "ಕಂಪನಿ",
+    "createProfile": "ಪ್ರೊಫೈಲ್ ರಚಿಸಿ",
+    "browseCategories": "ವರ್ಗಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ",
+    "aboutUs": "ನಮ್ಮ ಬಗ್ಗೆ",
+    "registerCompany": "ಕಂಪನಿ ನೋಂದಾಯಿಸಿ",
+    "privacyPolicy": "ಗೌಪ್ಯತಾ ನೀತಿ",
+    "termsOfUse": "ಬಳಕೆಯ ನಿಯಮಗಳು",
+    "contact": "ಸಂಪರ್ಕ"
   },
   "home": {
     "hero": {
@@ -127,7 +145,12 @@
       "title": "ನನ್ನ ಡ್ಯಾಶ್ಬೋರ್ಡ್",
       "appliedJobs": "ಅರ್ಜಿ ಹಾಕಿದ ಉದ್ಯೋಗಗಳು",
       "profileStrength": "ಪ್ರೊಫೈಲ್ ಬಲ",
-      "completeProfile": "ಉತ್ತಮ ಹೊಂದಾಣಿಕೆಗಾಗಿ ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ"
+      "completeProfile": "ಉತ್ತಮ ಹೊಂದಾಣಿಕೆಗಾಗಿ ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ",
+      "noApplications": "ಅರ್ಜಿಗಳಿಲ್ಲ",
+      "noApplicationsHint": "ಉದ್ಯೋಗ ಹುಡುಕಿ ಅರ್ಜಿ ಹಾಕಿ",
+      "browseJobs": "ಉದ್ಯೋಗ ನೋಡಿ",
+      "appliedOn": "ಅರ್ಜಿ ಹಾಕಿದ ದಿನ",
+      "viewJob": "ಉದ್ಯೋಗ ನೋಡಿ"
     },
     "profile": {
       "title": "ನನ್ನ ಪ್ರೊಫೈಲ್",
@@ -140,7 +163,24 @@
       "preferredCategories": "ಆದ್ಯತೆಯ ಉದ್ಯೋಗ ವರ್ಗಗಳು",
       "resume": "ರೆಸ್ಯೂಮೆ",
       "uploadResume": "ರೆಸ್ಯೂಮೆ ಅಪ್ಲೋಡ್ ಮಾಡಿ",
-      "buildResume": "ರೆಸ್ಯೂಮೆ ತಯಾರಿಸಿ"
+      "buildResume": "ರೆಸ್ಯೂಮೆ ತಯಾರಿಸಿ",
+      "jobPreferences": "ಉದ್ಯೋಗ ಆದ್ಯತೆಗಳು",
+      "locationPreferences": "ಸ್ಥಳ ಆದ್ಯತೆಗಳು",
+      "openToAnyLocation": "ಯಾವುದೇ ಸ್ಥಳಕ್ಕೆ",
+      "preferSpecificCities": "ನಿರ್ದಿಷ್ಟ ನಗರಗಳು",
+      "preferredCities": "ಆದ್ಯತೆಯ ನಗರಗಳು",
+      "languagesKnown": "ತಿಳಿದ ಭಾಷೆಗಳು",
+      "openToWork": "ಕೆಲಸಕ್ಕೆ ಸಿದ್ಧ",
+      "workPreferences": "ಕೆಲಸದ ಆದ್ಯತೆ",
+      "bio": "ನನ್ನ ಬಗ್ಗೆ",
+      "noResume": "ರೆಸ್ಯೂಮೆ ಅಪ್ಲೋಡ್ ಆಗಿಲ್ಲ"
+    },
+    "apply": {
+      "title": "ಈ ಉದ್ಯೋಗಕ್ಕೆ ಅರ್ಜಿ",
+      "coverNote": "ಕವರ್ ನೋಟ್",
+      "coverNotePlaceholder": "ನೀವು ಏಕೆ ಸೂಕ್ತ ಎಂದು ತಿಳಿಸಿ...",
+      "submit": "ಅರ್ಜಿ ಸಲ್ಲಿಸಿ",
+      "alreadyApplied": "ನೀವು ಈಗಾಗಲೇ ಅರ್ಜಿ ಹಾಕಿದ್ದೀರಿ"
     }
   },
   "employer": {
@@ -172,6 +212,46 @@
       "contactPerson": "ಸಂಪರ್ಕ ವ್ಯಕ್ತಿಯ ಹೆಸರು",
       "uploadDocs": "ಪರಿಶೀಲನೆ ದಾಖಲೆಗಳನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ",
       "docsHint": "GST ಪ್ರಮಾಣಪತ್ರ, ಕಂಪನಿ ನೋಂದಣಿ, ಅಥವಾ ವ್ಯಾಪಾರ ಪರವಾನಗಿ"
+    },
+    "responses": {
+      "title": "ಪ್ರತಿಕ್ರಿಯೆಗಳು",
+      "allJobs": "ಎಲ್ಲ ಉದ್ಯೋಗಗಳಲ್ಲಿ",
+      "newCount": "ಹೊಸವು",
+      "shortlistedCount": "ಶಾರ್ಟ್‌ಲಿಸ್ಟ್",
+      "hiredCount": "ನೇಮಕ",
+      "noResponses": "ಪ್ರತಿಕ್ರಿಯೆಗಳಿಲ್ಲ",
+      "noResponsesHint": "ಅರ್ಜಿಗಳು ಬಂದಾಗ ಇಲ್ಲಿ ತೋರಿಸುತ್ತದೆ",
+      "noInCategory": "ಈ ವರ್ಗದಲ್ಲಿ ಅರ್ಜಿಗಳಿಲ್ಲ",
+      "noInCategoryHint": "ಬೇರೆ ಟ್ಯಾಬ್ ಆಯ್ಕೆ ಮಾಡಿ",
+      "appliedFor": "ಅರ್ಜಿ ಹಾಕಿದ್ದಾರೆ",
+      "about": "ಬಗ್ಗೆ",
+      "coverNote": "ಕವರ್ ನೋಟ್",
+      "noInfo": "ಹೆಚ್ಚುವರಿ ಮಾಹಿತಿ ಇಲ್ಲ."
+    },
+    "candidates": {
+      "title": "ಪ್ರತಿಭೆ ಹುಡುಕಿ",
+      "subtitle": "ಅಭ್ಯರ್ಥಿಗಳನ್ನು ಹುಡುಕಿ ಆಹ್ವಾನಿಸಿ",
+      "filterCity": "ನಗರ",
+      "filterCategory": "ವರ್ಗ",
+      "filterExp": "ಕನಿಷ್ಠ ಅನುಭವ",
+      "filterLanguage": "ಭಾಷೆ",
+      "filterKeyword": "ಹುಡುಕಿ",
+      "keywordPlaceholder": "ಕೌಶಲ್ಯ, ಬಯೋ",
+      "search": "ಹುಡುಕಿ",
+      "clear": "ತೆರವು",
+      "noCandidates": "ಅಭ್ಯರ್ಥಿಗಳಿಲ್ಲ",
+      "noCandidatesHint": "ಬೇರೆ ಫಿಲ್ಟರ್ ಪ್ರಯತ್ನಿಸಿ",
+      "experience": "ವರ್ಷ ಅನುಭವ",
+      "openToAnywhere": "ಎಲ್ಲಿಯಾದರೂ ಕೆಲಸ",
+      "prefers": "ಆದ್ಯತೆ"
+    },
+    "applicants": {
+      "for": "ಗಾಗಿ ಅರ್ಜಿದಾರರು",
+      "total": "ಒಟ್ಟು ಅರ್ಜಿ",
+      "totalPlural": "ಒಟ್ಟು ಅರ್ಜಿಗಳು",
+      "noApplicants": "ಇನ್ನೂ ಅರ್ಜಿದಾರರಿಲ್ಲ",
+      "noApplicantsHint": "ಅಭ್ಯರ್ಥಿಗಳು ಅರ್ಜಿ ಹಾಕಿದಾಗ ಇಲ್ಲಿ ತೋರಿಸುತ್ತದೆ",
+      "exportCsv": "CSV ರಫ್ತು"
     }
   },
   "categories": {
@@ -187,6 +267,50 @@
     "fieldWork": "ಕ್ಷೇತ್ರ ಕೆಲಸ",
     "it": "IT / ಕಂಪ್ಯೂಟರ್",
     "healthcare": "ಆರೋಗ್ಯ ಸೇವೆ"
+  },
+  "status": {
+    "APPLIED": "ಅರ್ಜಿ ಹಾಕಲಾಗಿದೆ",
+    "VIEWED": "ನೋಡಲಾಗಿದೆ",
+    "SHORTLISTED": "ಶಾರ್ಟ್‌ಲಿಸ್ಟ್",
+    "REJECTED": "ತಿರಸ್ಕರಿಸಲಾಗಿದೆ",
+    "HIRED": "ನೇಮಕ ಮಾಡಲಾಗಿದೆ 🎉",
+    "ACTIVE": "ಸಕ್ರಿಯ",
+    "PENDING_REVIEW": "ಪರಿಶೀಲನೆಯಲ್ಲಿ",
+    "CLOSED": "ಮುಚ್ಚಲಾಗಿದೆ",
+    "EXPIRED": "ಅವಧಿ ಮೀರಿದೆ"
+  },
+  "actions": {
+    "edit": "ತಿದ್ದು",
+    "approve": "ಅನುಮೋದಿಸಿ",
+    "reject": "ತಿರಸ್ಕರಿಸಿ",
+    "shortlist": "ಶಾರ್ಟ್‌ಲಿಸ್ಟ್ ✓",
+    "hire": "ನೇಮಿಸಿ",
+    "markViewed": "ನೋಡಿದ್ದು ಗುರುತಿಸಿ",
+    "reconsider": "ಮರುಪರಿಶೀಲಿಸಿ",
+    "viewDetails": "ವಿವರ ನೋಡಿ",
+    "hideDetails": "ವಿವರ ಮರೆಮಾಡಿ",
+    "exportCsv": "CSV ರಫ್ತು",
+    "viewResume": "ರೆಸ್ಯೂಮೆ ನೋಡಿ",
+    "inviteToApply": "ಆಮಂತ್ರಣ ಕಳುಹಿಸಿ",
+    "inviteSent": "ಆಮಂತ್ರಣ ಕಳುಹಿಸಲಾಗಿದೆ!",
+    "uploadPhoto": "ಫೋಟೋ ಅಪ್ಲೋಡ್",
+    "uploadResume": "ರೆಸ್ಯೂಮೆ ಅಪ್ಲೋಡ್",
+    "saveChanges": "ಬದಲಾವಣೆ ಉಳಿಸಿ",
+    "addSkill": "ಕೌಶಲ್ಯ ಸೇರಿಸಿ",
+    "addLanguage": "ಭಾಷೆ ಸೇರಿಸಿ",
+    "addCity": "ನಗರ ಸೇರಿಸಿ"
+  },
+  "admin": {
+    "title": "ಆಡ್ಮಿನ್ ಪ್ಯಾನೆಲ್",
+    "pendingJobs": "ಬಾಕಿ ಉದ್ಯೋಗಗಳು",
+    "pendingEmployers": "ಬಾಕಿ ಉದ್ಯೋಗದಾತರು",
+    "noItems": "ಯಾವುದೇ ಬಾಕಿ ಇಲ್ಲ",
+    "viewDetails": "ಪೂರ್ಣ ವಿವರ",
+    "hideDetails": "ವಿವರ ಮರೆಮಾಡಿ",
+    "documents": "ದಾಖಲೆಗಳು",
+    "noDocuments": "ದಾಖಲೆಗಳು ಅಪ್ಲೋಡ್ ಆಗಿಲ್ಲ",
+    "website": "ವೆಬ್‌ಸೈಟ್",
+    "description": "ವಿವರಣೆ",
+    "gstCin": "GST / CIN"
   }
 }
-

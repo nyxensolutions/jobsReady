@@ -29,7 +29,25 @@
     "applications": "আমার আবেদনগুলো",
     "logout": "লগ আউট",
     "forJobSeekers": "চাকরিপ্রার্থীদের জন্য",
-    "forEmployers": "নিয়োগকর্তাদের জন্য"
+    "forEmployers": "নিয়োগকর্তাদের জন্য",
+    "myJobs": "আমার চাকরিগুলো",
+    "responses": "সাড়াগুলো",
+    "talentSearch": "প্রতিভা অনুসন্ধান",
+    "savedJobs": "সেভ করা চাকরিগুলো",
+    "signOut": "সাইন আউট",
+    "myDashboard": "আমার ড্যাশবোর্ড",
+    "employerDashboard": "নিয়োগকর্তা ড্যাশবোর্ড",
+    "adminPanel": "অ্যাডমিন প্যানেল",
+    "jobSeekers": "চাকরিপ্রার্থীরা",
+    "employers": "নিয়োগকর্তারা",
+    "company": "কোম্পানি",
+    "createProfile": "প্রোফাইল তৈরি করুন",
+    "browseCategories": "বিভাগ ব্রাউজ করুন",
+    "aboutUs": "আমাদের সম্পর্কে",
+    "registerCompany": "কোম্পানি নিবন্ধন করুন",
+    "privacyPolicy": "গোপনীয়তা নীতি",
+    "termsOfUse": "ব্যবহারের শর্তাবলী",
+    "contact": "যোগাযোগ"
   },
   "home": {
     "hero": {
@@ -127,7 +145,12 @@
       "title": "আমার ড্যাশবোর্ড",
       "appliedJobs": "আবেদন করা চাকরিগুলো",
       "profileStrength": "প্রোফাইলের শক্তি",
-      "completeProfile": "আর� ভালো ম্যাচের জন্য আপনার প্রোফাইল সম্পূর্ণ করুন"
+      "completeProfile": "আর� ভালো ম্যাচের জন্য আপনার প্রোফাইল সম্পূর্ণ করুন",
+      "noApplications": "কোনো আবেদন নেই",
+      "noApplicationsHint": "চাকরি খুঁজুন এবং আবেদন করুন",
+      "browseJobs": "চাকরি দেখুন",
+      "appliedOn": "আবেদনের তারিখ",
+      "viewJob": "চাকরি দেখুন"
     },
     "profile": {
       "title": "আমার প্রোফাইল",
@@ -140,7 +163,24 @@
       "preferredCategories": "পছন্দের চাকরির বিভাগ",
       "resume": "রেজুমে",
       "uploadResume": "রেজুমে আপলোড করুন",
-      "buildResume": "রেজুমে তৈরি করুন"
+      "buildResume": "রেজুমে তৈরি করুন",
+      "jobPreferences": "চাকরির পছন্দ",
+      "locationPreferences": "অবস্থান পছন্দ",
+      "openToAnyLocation": "যেকোনো জায়গায়",
+      "preferSpecificCities": "নির্দিষ্ট শহর",
+      "preferredCities": "পছন্দের শহর",
+      "languagesKnown": "জানা ভাষাগুলো",
+      "openToWork": "কাজের জন্য প্রস্তুত",
+      "workPreferences": "কাজের পছন্দ",
+      "bio": "আমার সম্পর্কে",
+      "noResume": "রেজুমে আপলোড হয়নি"
+    },
+    "apply": {
+      "title": "এই চাকরির জন্য আবেদন",
+      "coverNote": "কভার নোট",
+      "coverNotePlaceholder": "কেন আপনি উপযুক্ত তা বলুন...",
+      "submit": "আবেদন জমা দিন",
+      "alreadyApplied": "আপনি ইতিমধ্যে আবেদন করেছেন"
     }
   },
   "employer": {
@@ -172,6 +212,46 @@
       "contactPerson": "যোগাযোগের ব্যক্তির নাম",
       "uploadDocs": "যাচাইকরণ নথি আপলোড করুন",
       "docsHint": "GST সার্টিফিকেট, কোম্পানি নিবন্ধন বা ট্রেড লাইসেন্স"
+    },
+    "responses": {
+      "title": "সাড়াগুলো",
+      "allJobs": "সব চাকরিতে",
+      "newCount": "নতুন",
+      "shortlistedCount": "শর্টলিস্টেড",
+      "hiredCount": "নিয়োগ",
+      "noResponses": "কোনো সাড়া নেই",
+      "noResponsesHint": "আবেদন আসলে এখানে দেখাবে",
+      "noInCategory": "এই বিভাগে আবেদন নেই",
+      "noInCategoryHint": "অন্য ট্যাব দেখুন",
+      "appliedFor": "আবেদন করেছেন",
+      "about": "সম্পর্কে",
+      "coverNote": "কভার নোট",
+      "noInfo": "অতিরিক্ত তথ্য নেই।"
+    },
+    "candidates": {
+      "title": "প্রতিভা অনুসন্ধান",
+      "subtitle": "প্রার্থী খুঁজুন এবং আমন্ত্রণ জানান",
+      "filterCity": "শহর",
+      "filterCategory": "বিভাগ",
+      "filterExp": "ন্যূনতম অভিজ্ঞতা",
+      "filterLanguage": "ভাষা",
+      "filterKeyword": "খুঁজুন",
+      "keywordPlaceholder": "দক্ষতা, বায়ো",
+      "search": "খুঁজুন",
+      "clear": "মুছুন",
+      "noCandidates": "কোনো প্রার্থী নেই",
+      "noCandidatesHint": "ভিন্ন ফিল্টার চেষ্টা করুন",
+      "experience": "বছরের অভিজ্ঞতা",
+      "openToAnywhere": "যেকোনো জায়গায় কাজ করতে ইচ্ছুক",
+      "prefers": "পছন্দ"
+    },
+    "applicants": {
+      "for": "এর জন্য আবেদনকারীরা",
+      "total": "মোট আবেদন",
+      "totalPlural": "মোট আবেদন",
+      "noApplicants": "এখনো আবেদনকারী নেই",
+      "noApplicantsHint": "প্রার্থীরা আবেদন করলে এখানে দেখাবে",
+      "exportCsv": "CSV রফতানি"
     }
   },
   "categories": {
@@ -187,6 +267,50 @@
     "fieldWork": "মাঠকর্মী",
     "it": "IT / কম্পিউটার",
     "healthcare": "স্বাস্থ্যসেবা"
+  },
+  "status": {
+    "APPLIED": "আবেদন করা হয়েছে",
+    "VIEWED": "দেখা হয়েছে",
+    "SHORTLISTED": "শর্টলিস্টেড",
+    "REJECTED": "প্রত্যাখ্যাত",
+    "HIRED": "নিয়োগ পেয়েছেন 🎉",
+    "ACTIVE": "সক্রিয়",
+    "PENDING_REVIEW": "পর্যালোচনাধীন",
+    "CLOSED": "বন্ধ",
+    "EXPIRED": "মেয়াদ শেষ"
+  },
+  "actions": {
+    "edit": "সম্পাদনা",
+    "approve": "অনুমোদন",
+    "reject": "প্রত্যাখ্যান",
+    "shortlist": "শর্টলিস্ট ✓",
+    "hire": "নিয়োগ দিন",
+    "markViewed": "দেখা হয়েছে",
+    "reconsider": "পুনর্বিবেচনা",
+    "viewDetails": "বিবরণ দেখুন",
+    "hideDetails": "বিবরণ লুকান",
+    "exportCsv": "CSV রফতানি",
+    "viewResume": "রেজুমে দেখুন",
+    "inviteToApply": "আমন্ত্রণ পাঠান",
+    "inviteSent": "আমন্ত্রণ পাঠানো হয়েছে!",
+    "uploadPhoto": "ছবি আপলোড",
+    "uploadResume": "রেজুমে আপলোড",
+    "saveChanges": "পরিবর্তন সংরক্ষণ",
+    "addSkill": "দক্ষতা যোগ করুন",
+    "addLanguage": "ভাষা যোগ করুন",
+    "addCity": "শহর যোগ করুন"
+  },
+  "admin": {
+    "title": "অ্যাডমিন প্যানেল",
+    "pendingJobs": "মুলতুবি চাকরিগুলো",
+    "pendingEmployers": "মুলতুবি নিয়োগকর্তারা",
+    "noItems": "কোনো মুলতুবি আইটেম নেই",
+    "viewDetails": "সম্পূর্ণ বিবরণ",
+    "hideDetails": "বিবরণ লুকান",
+    "documents": "দলিল",
+    "noDocuments": "কোনো দলিল আপলোড হয়নি",
+    "website": "ওয়েবসাইট",
+    "description": "বিবরণ",
+    "gstCin": "GST / CIN"
   }
 }
-

@@ -104,26 +104,26 @@ export default function Header({ initialAuth }: Props) {
             {authUser?.role === "SEEKER" && (
               <>
                 <Link href="/seeker/dashboard#applications" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
-                  My Applications
+                  {t("applications")}
                 </Link>
                 <Link href="/seeker/saved-jobs" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
-                  Saved Jobs
+                  {t("savedJobs")}
                 </Link>
               </>
             )}
             {authUser?.role === "EMPLOYER" && (
               <>
                 <Link href="/employer/dashboard" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
-                  Dashboard
+                  {t("dashboard")}
                 </Link>
                 <Link href="/employer/dashboard#jobs" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
-                  My Jobs
+                  {t("myJobs")}
                 </Link>
                 <Link href="/employer/responses" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
-                  Responses
+                  {t("responses")}
                 </Link>
                 <Link href="/employer/candidates" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
-                  Talent Search
+                  {t("talentSearch")}
                 </Link>
               </>
             )}
@@ -157,7 +157,7 @@ export default function Header({ initialAuth }: Props) {
                         className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
                         <Briefcase size={15} className="text-gray-400" />
-                        {authUser.role === "EMPLOYER" ? "Employer Dashboard" : authUser.role === "ADMIN" ? "Admin Panel" : "My Dashboard"}
+                        {authUser.role === "EMPLOYER" ? t("employerDashboard") : authUser.role === "ADMIN" ? t("adminPanel") : t("myDashboard")}
                       </Link>
                       {authUser.role === "SEEKER" && (
                         <>
@@ -167,7 +167,7 @@ export default function Header({ initialAuth }: Props) {
                             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <User size={15} className="text-gray-400" />
-                            My Profile
+                            {t("profile")}
                           </Link>
                           <Link
                             href="/seeker/saved-jobs"
@@ -175,7 +175,7 @@ export default function Header({ initialAuth }: Props) {
                             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <Briefcase size={15} className="text-gray-400" />
-                            Saved Jobs
+                            {t("savedJobs")}
                           </Link>
                         </>
                       )}
@@ -184,7 +184,7 @@ export default function Header({ initialAuth }: Props) {
                           onClick={signOut}
                           className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
                         >
-                          <LogOut size={15} /> Sign Out
+                          <LogOut size={15} /> {t("signOut")}
                         </button>
                       </div>
                     </div>
@@ -234,20 +234,20 @@ export default function Header({ initialAuth }: Props) {
           )}
           {authUser?.role === "SEEKER" && (
             <>
-              <Link href="/seeker/dashboard#applications" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Applications</Link>
-              <Link href="/seeker/saved-jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Saved Jobs</Link>
+              <Link href="/seeker/dashboard#applications" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">{t("applications")}</Link>
+              <Link href="/seeker/saved-jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">{t("savedJobs")}</Link>
             </>
           )}
           {authUser?.role === "EMPLOYER" && (
             <>
-              <Link href="/employer/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Dashboard</Link>
-              <Link href="/employer/dashboard#jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">My Jobs</Link>
-              <Link href="/employer/responses" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Responses</Link>
-              <Link href="/employer/candidates" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">Talent Search</Link>
+              <Link href="/employer/dashboard" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">{t("dashboard")}</Link>
+              <Link href="/employer/dashboard#jobs" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">{t("myJobs")}</Link>
+              <Link href="/employer/responses" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">{t("responses")}</Link>
+              <Link href="/employer/candidates" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm font-semibold text-[#1a3461]">{t("talentSearch")}</Link>
             </>
           )}
           {authUser ? (
-            <button onClick={signOut} className="text-left px-4 py-2 text-sm text-red-600">Sign Out</button>
+            <button onClick={signOut} className="text-left px-4 py-2 text-sm text-red-600">{t("signOut")}</button>
           ) : (
             <>
               <Link href="/login" onClick={() => setMobileOpen(false)} className="px-4 py-2 text-sm text-slate-600">{t("login")}</Link>
