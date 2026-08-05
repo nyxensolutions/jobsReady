@@ -56,7 +56,8 @@
       "searchPlaceholder": "Job title, skill ya company",
       "locationPlaceholder": "Sheher ya area",
       "searchButton": "Naukri Dhundein",
-      "popularSearches": "Popular searches"
+      "popularSearches": "Popular searches",
+      "badge": "पूरे भारत में 50,000+ नौकरियाँ उपलब्ध"
     },
     "stats": {
       "jobsPosted": "Jobs Posted",
@@ -65,15 +66,17 @@
       "successfulHires": "Log Hire Ho Gaye"
     },
     "categories": {
-      "title": "Category Se Dhundein",
-      "subtitle": "Apne kaam ki naukri dhundein"
+      "title": "आप किस तरह की नौकरी चाहते हैं?",
+      "subtitle": "नौकरी के प्रकार से खोजें — नज़दीकी verified नौकरियाँ पाएँ",
+      "viewAll": "सभी नौकरियाँ देखें",
+      "jobs": "नौकरियाँ"
     },
     "featured": {
       "title": "Featured Jobs",
       "subtitle": "Top companies abhi hire kar rahi hain"
     },
     "howItWorks": {
-      "title": "Job Ready kaise kaam karta hai",
+      "title": "यह कैसे काम करता है",
       "seeker": {
         "step1": "Apna profile banayein",
         "step2": "Search karein aur apply karein",
@@ -83,7 +86,40 @@
         "step1": "Company register karein",
         "step2": "Job post karein",
         "step3": "Candidates dhundein"
-      }
+      },
+      "subtitle": "3 आसान चरणों में नौकरी पाएँ — 100% मुफ़्त",
+      "step1Label": "मुफ़्त साइन अप करें",
+      "step1Desc": "अपने मोबाइल से त्वरित OTP लॉगिन — कोई रेज़्यूमे नहीं चाहिए",
+      "step2Label": "नौकरियाँ खोजें",
+      "step2Desc": "भूमिका, वेतन, शहर और योग्यता के अनुसार खोजें",
+      "step3Label": "नियुक्त हों",
+      "step3Desc": "सीधे HR को कॉल करें और interview के लिए जाएँ",
+      "ctaSeeker": "अभी नौकरी पाएँ — मुफ़्त",
+      "ctaEmployer": "नौकरी पोस्ट करें — मुफ़्त"
+    },
+    "getJob": {
+      "freeBadge": "100% मुफ़्त — कोई पंजीकरण शुल्क नहीं",
+      "title": "अभी नौकरी पाएँ — बिल्कुल मुफ़्त!",
+      "subtitle": "अपना मोबाइल नंबर दर्ज करें और हम तुरंत आपके पास नौकरियाँ खोजेंगे।",
+      "phonePlaceholder": "मोबाइल नंबर दर्ज करें",
+      "button": "नौकरी पाएँ",
+      "benefit1": "मुफ़्त पंजीकरण",
+      "benefit2": "OTP लॉगिन",
+      "benefit3": "आपके शहर में नौकरियाँ",
+      "benefit4": "नियोक्ता को सीधे कॉल करें",
+      "popularTypes": "लोकप्रिय नौकरी प्रकार",
+      "invalidPhone": "कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें"
+    },
+    "qualifications": {
+      "title": "आपकी योग्यता क्या है?",
+      "subtitle": "अपने शिक्षा स्तर के अनुसार नौकरियाँ खोजें",
+      "vacancies": "रिक्तियाँ"
+    },
+    "cities": {
+      "title": "दिल्ली NCR और आस-पास के शहरों में नौकरियाँ",
+      "subtitle": "अपने पास verified स्थानीय नौकरियाँ खोजें",
+      "nearYou": "आपके पास नौकरियाँ",
+      "browseAll": "सभी शहर देखें"
     }
   },
   "auth": {
@@ -124,7 +160,35 @@
       "about": "Is job ke baare mein",
       "requirements": "Requirements",
       "perks": "Perks aur Benefits",
-      "aboutCompany": "Company ke baare mein"
+      "aboutCompany": "Company ke baare mein",
+      "highlights": "Job Ki Khaas Jaankaari",
+      "education": "Shiksha",
+      "allLevels": "Sabhi star",
+      "openings": "Vacancies",
+      "salary": "Salary",
+      "experience": "Experience",
+      "location": "Jagah",
+      "jobType": "Job ka Prakar",
+      "benefits": "Fayde",
+      "otherDetails": "Anya Jaankaari",
+      "posted": "Post kiya",
+      "faq": "Aksar Pooche Jaane Wale Sawaal",
+      "faqFreshers": "Kya {category} job ke liye freshers apply kar sakte hain?",
+      "faqFreshersYes": "Haan, is post ke liye freshers ka swagat hai.",
+      "faqFreshersNo": "Kam se kam {years} saal ka experience chahiye.",
+      "faqSalaryQ": "Is {title} job ki salary kya hai?",
+      "faqSalaryA": "Is job ki salary {salary} hai.",
+      "faqOpeningsQ": "Kitni vacancies hain?",
+      "faqOpeningsA": "Is post ke liye {count} vacancies available hain.",
+      "faqLocationQ": "Yeh job kahan hai?",
+      "faqLocationA": "Yeh job {city} mein hai.",
+      "moreJobs": "Aur {category} Jobs",
+      "fresherJobs": "Fresher Jobs",
+      "jobsInCity": "{city} mein Jobs",
+      "monthlySalary": "Maasik Salary",
+      "dailyWage": "Rozana Majdoori",
+      "shareWhatsapp": "WhatsApp par share karein",
+      "fresherYrsExp": "{years}+ saal"
     },
     "filters": {
       "salary": "Salary range",
@@ -165,7 +229,16 @@
       "diploma": "Diploma",
       "graduate": "Graduate",
       "postgraduate": "Post Graduate"
-    }
+    },
+    "asPerInterview": "Interview mein decide hoga",
+    "breadcrumb": "Jobs",
+    "applyNowFree": "Abhi Apply Karein — Free",
+    "applicationSubmitted": "Application submit ho gayi!",
+    "alreadyAppliedMsg": "Pehle hi apply kar chuke hain",
+    "networkError": "Network error. Dobara try karein.",
+    "saveJob": "Job Save Karein",
+    "savedJob": "Save Hua",
+    "removeFromSaved": "Save se hatayein"
   },
   "seeker": {
     "dashboard": {
@@ -316,7 +389,13 @@
     "retail": "Retail",
     "fieldWork": "Field Work",
     "it": "IT / Computer",
-    "healthcare": "Healthcare"
+    "healthcare": "Healthcare",
+    "bpo": "BPO / टेलीकॉलर",
+    "dataEntry": "डेटा एंट्री",
+    "teaching": "शिक्षण",
+    "accounting": "लेखांकन",
+    "beauty": "ब्यूटी / सैलून",
+    "logistics": "वेयरहाउस"
   },
   "status": {
     "APPLIED": "Apply Ho Gaya",

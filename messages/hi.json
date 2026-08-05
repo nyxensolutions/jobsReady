@@ -14,7 +14,7 @@
     "filter": "फ़िल्टर",
     "clear": "साफ़ करें",
     "viewAll": "सभी देखें",
-    "seeMore": "�र देखें",
+    "seeMore": "और देखें",
     "required": "ज़रूरी",
     "optional": "वैकल्पिक"
   },
@@ -29,7 +29,7 @@
     "applications": "मेरे आवेदन",
     "logout": "लॉग आउट",
     "forJobSeekers": "नौकरी खोजने वालों के लिए",
-    "forEmployers": "नियोक्ता�ं के लिए",
+    "forEmployers": "नियोक्ताओं के लिए",
     "myJobs": "मेरी नौकरियां",
     "responses": "प्रतिक्रियाएं",
     "talentSearch": "प्रतिभा खोज",
@@ -52,11 +52,12 @@
   "home": {
     "hero": {
       "title": "आपकी अगली नौकरी तैयार है।",
-      "subtitle": "अपने शहर में डिलीवरी, सेल्स, सिक्योरिटी, ड्राइविंग �र अन्य लाखों नौकरियां खोजें।",
+      "subtitle": "अपने शहर में डिलीवरी, सेल्स, सिक्योरिटी, ड्राइविंग और अन्य लाखों नौकरियां खोजें।",
       "searchPlaceholder": "नौकरी का नाम, कौशल या कंपनी",
       "locationPlaceholder": "शहर या इलाका",
       "searchButton": "नौकरी खोजें",
-      "popularSearches": "लोकप्रिय खोजें"
+      "popularSearches": "लोकप्रिय खोजें",
+      "badge": "भारत भर में 50,000+ नौकरियां उपलब्ध"
     },
     "stats": {
       "jobsPosted": "नौकरियां पोस्ट",
@@ -65,25 +66,60 @@
       "successfulHires": "सफल नियुक्तियां"
     },
     "categories": {
-      "title": "श्रेणी के अनुसार खोजें",
-      "subtitle": "अपने क्षेत्र में नौकरी खोजें"
+      "title": "आप किस तरह की नौकरी चाहते हैं?",
+      "subtitle": "नौकरी के प्रकार से खोजें — अपने आस-पास verified नौकरियां पाएं",
+      "viewAll": "सभी नौकरियां देखें",
+      "jobs": "नौकरियां"
     },
     "featured": {
       "title": "फ़ीचर्ड नौकरियां",
       "subtitle": "शीर्ष कंपनियां अभी भर्ती कर रही हैं"
     },
     "howItWorks": {
-      "title": "Job Ready कैसे काम करता है",
+      "title": "यह कैसे काम करता है",
       "seeker": {
         "step1": "अपनी प्रोफ़ाइल बनाएं",
-        "step2": "खोजें �र आवेदन करें",
+        "step2": "खोजें और आवेदन करें",
         "step3": "नौकरी पाएं"
       },
       "employer": {
         "step1": "कंपनी रजिस्टर करें",
         "step2": "नौकरी पोस्ट करें",
         "step3": "उम्मीदवार खोजें"
-      }
+      },
+      "subtitle": "3 आसान चरणों में नौकरी पाएं — 100% मुफ़्त",
+      "step1Label": "मुफ़्त साइन अप करें",
+      "step1Desc": "अपने मोबाइल से त्वरित OTP लॉगिन — कोई रेज़्यूमे नहीं चाहिए",
+      "step2Label": "नौकरियां खोजें",
+      "step2Desc": "भूमिका, वेतन, शहर और योग्यता के अनुसार खोजें",
+      "step3Label": "नियुक्त हों",
+      "step3Desc": "सीधे HR को कॉल करें और interview के लिए जाएं",
+      "ctaSeeker": "अभी नौकरी पाएं — मुफ़्त",
+      "ctaEmployer": "नौकरी पोस्ट करें — मुफ़्त"
+    },
+    "getJob": {
+      "freeBadge": "100% मुफ़्त — कोई पंजीकरण शुल्क नहीं",
+      "title": "अभी नौकरी पाएं — बिल्कुल मुफ़्त!",
+      "subtitle": "अपना मोबाइल नंबर दर्ज करें और हम तुरंत आपके पास नौकरियां खोजेंगे।",
+      "phonePlaceholder": "मोबाइल नंबर दर्ज करें",
+      "button": "नौकरी पाएं",
+      "benefit1": "मुफ़्त पंजीकरण",
+      "benefit2": "OTP लॉगिन",
+      "benefit3": "आपके शहर में नौकरियां",
+      "benefit4": "नियोक्ता को सीधे कॉल करें",
+      "popularTypes": "लोकप्रिय नौकरी प्रकार",
+      "invalidPhone": "कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें"
+    },
+    "qualifications": {
+      "title": "आपकी योग्यता क्या है?",
+      "subtitle": "अपनी शिक्षा स्तर के अनुसार नौकरियां खोजें",
+      "vacancies": "रिक्तियां"
+    },
+    "cities": {
+      "title": "दिल्ली NCR और आस-पास के शहरों में नौकरियां",
+      "subtitle": "अपने पास verified local नौकरियां खोजें — पैदल दूरी पर",
+      "nearYou": "आपके पास नौकरियां",
+      "browseAll": "सभी शहर देखें"
     }
   },
   "auth": {
@@ -96,7 +132,7 @@
     "otpLabel": "OTP दर्ज करें",
     "otpPlaceholder": "6 अंकों का OTP",
     "sendOtp": "OTP भेजें",
-    "verifyOtp": "सत्यापित करें �र जारी रखें",
+    "verifyOtp": "सत्यापित करें और जारी रखें",
     "resendOtp": "OTP फिर भेजें",
     "otpSent": "{phone} पर OTP भेजा गया",
     "iAmSeeker": "मुझे नौकरी चाहिए",
@@ -123,8 +159,36 @@
     "jobDetail": {
       "about": "इस नौकरी के बारे में",
       "requirements": "योग्यता",
-      "perks": "लाभ �र सुविधाएं",
-      "aboutCompany": "कंपनी के बारे में"
+      "perks": "लाभ और सुविधाएं",
+      "aboutCompany": "कंपनी के बारे में",
+      "highlights": "नौकरी की मुख्य जानकारी",
+      "education": "शिक्षा",
+      "allLevels": "सभी स्तर",
+      "openings": "रिक्तियां",
+      "salary": "वेतन",
+      "experience": "अनुभव",
+      "location": "स्थान",
+      "jobType": "नौकरी प्रकार",
+      "benefits": "लाभ",
+      "otherDetails": "अन्य विवरण",
+      "posted": "पोस्ट किया",
+      "faq": "अक्सर पूछे जाने वाले प्रश्न",
+      "faqFreshers": "क्या {category} के लिए नए उम्मीदवार आवेदन कर सकते हैं?",
+      "faqFreshersYes": "हाँ, इस पद के लिए नए उम्मीदवारों का स्वागत है।",
+      "faqFreshersNo": "न्यूनतम {years} वर्ष का अनुभव आवश्यक है।",
+      "faqSalaryQ": "इस {title} नौकरी का वेतन क्या है?",
+      "faqSalaryA": "इस नौकरी का वेतन {salary} है।",
+      "faqOpeningsQ": "कितनी रिक्तियां हैं?",
+      "faqOpeningsA": "इस पद के लिए {count} रिक्तियां उपलब्ध हैं।",
+      "faqLocationQ": "यह नौकरी कहाँ है?",
+      "faqLocationA": "यह नौकरी {city} में है।",
+      "moreJobs": "और {category} नौकरियां",
+      "fresherJobs": "फ्रेशर नौकरियां",
+      "jobsInCity": "{city} में नौकरियां",
+      "monthlySalary": "मासिक वेतन",
+      "dailyWage": "दैनिक मजदूरी",
+      "shareWhatsapp": "WhatsApp पर शेयर करें",
+      "fresherYrsExp": "{years}+ साल"
     },
     "filters": {
       "salary": "वेतन सीमा",
@@ -165,7 +229,16 @@
       "diploma": "डिप्लोमा",
       "graduate": "स्नातक",
       "postgraduate": "स्नातकोत्तर"
-    }
+    },
+    "asPerInterview": "साक्षात्कार अनुसार",
+    "breadcrumb": "नौकरियां",
+    "applyNowFree": "अभी आवेदन करें — मुफ्त",
+    "applicationSubmitted": "आवेदन जमा हो गया!",
+    "alreadyAppliedMsg": "पहले ही आवेदन किया",
+    "networkError": "नेटवर्क त्रुटि। कृपया पुनः प्रयास करें।",
+    "saveJob": "नौकरी सेव करें",
+    "savedJob": "सेव किया",
+    "removeFromSaved": "सेव से हटाएं"
   },
   "seeker": {
     "dashboard": {
@@ -308,15 +381,21 @@
     "delivery": "डिलीवरी",
     "driver": "ड्राइवर",
     "sales": "सेल्स",
-    "security": "सिक्योरिटी गार्ड",
+    "security": "सुरक्षा गार्ड",
     "housekeeping": "हाउसकीपिंग",
-    "cook": "रसोइया / शेफ",
+    "cook": "कुक / शेफ",
     "construction": "निर्माण",
-    "factory": "फैक्ट्री कर्मचारी",
-    "retail": "रिटेल",
+    "factory": "फैक्ट्री वर्कर",
+    "retail": "रिटेल / दुकान",
     "fieldWork": "फील्ड वर्क",
-    "it": "IT / कंप्यूटर",
-    "healthcare": "स्वास्थ्य सेवा"
+    "it": "आईटी / कंप्यूटर",
+    "healthcare": "स्वास्थ्य सेवा",
+    "bpo": "BPO / टेलीकॉलर",
+    "dataEntry": "डेटा एंट्री",
+    "teaching": "शिक्षण",
+    "accounting": "लेखांकन",
+    "beauty": "ब्यूटी / सैलून",
+    "logistics": "वेयरहाउस"
   },
   "status": {
     "APPLIED": "आवेदन किया",

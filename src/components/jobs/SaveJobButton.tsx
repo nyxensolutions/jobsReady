@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Bookmark, BookmarkCheck, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 type Props = {
   jobId: string
@@ -13,6 +14,7 @@ type Props = {
 
 export default function SaveJobButton({ jobId, initialSaved = false, locale = "en", compact = false }: Props) {
   const router = useRouter()
+  const t = useTranslations("jobs")
   const [saved, setSaved] = useState(initialSaved)
   const [loading, setLoading] = useState(false)
 
@@ -39,7 +41,7 @@ export default function SaveJobButton({ jobId, initialSaved = false, locale = "e
       <button
         onClick={toggle}
         disabled={loading}
-        title={saved ? "Remove from saved" : "Save job"}
+        title={saved ? t("removeFromSaved") : t("saveJob")}
         className={`p-2.5 rounded-xl border transition-colors disabled:opacity-50 ${
           saved
             ? "border-[#1a3461] bg-[#eef2ff] text-[#1a3461]"
@@ -62,7 +64,7 @@ export default function SaveJobButton({ jobId, initialSaved = false, locale = "e
       }`}
     >
       {loading ? <Loader2 size={15} className="animate-spin" /> : saved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
-      {saved ? "Saved" : "Save Job"}
+      {saved ? t("savedJob") : t("saveJob")}
     </button>
   )
 }

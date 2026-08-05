@@ -50,27 +50,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  FULL_TIME: "Full Time",
-  PART_TIME: "Part Time",
-  CONTRACT: "Contract",
-  GIG: "Gig / Freelance",
-  WALK_IN: "Walk-in Interview",
-}
-
-function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {
+function formatSalary(
+  min?: number | null,
+  max?: number | null,
+  unit = "monthly",
+  asPerInterview = "As per interview"
+) {
   const suffix = unit === "daily" ? "/day" : "/month"
   const fmt = (n: number) =>
     n >= 1000 ? `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : `₹${n}`
   if (min && max) return `${fmt(min)} – ${fmt(max)}${suffix}`
   if (min) return `From ${fmt(min)}${suffix}`
   if (max) return `Up to ${fmt(max)}${suffix}`
-  return "As per interview"
+  return asPerInterview
 }
 
 export default async function JobDetailPage({ params }: Props) {
   const { id, locale } = await params
   const t = await getTranslations("jobs")
+  const tt = await getTranslations("jobs.types")
 
   const job = await prisma.jobListing.findUnique({
     where: { id },
@@ -117,38 +115,44 @@ export default async function JobDetailPage({ params }: Props) {
     // non-fatal — default false
   }
 
-  const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit)
+  const asPerInterview = t("asPerInterview")
+  const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit, asPerInterview)
   const companyInitial = (displayCompany ?? job.category.nameEn)[0].toUpperCase()
+  const fresherExp = t("freshersOk")
+
+  const typeLabel = (() => { try { return tt(job.jobType as any) } catch { return job.jobType } })()
 
   const otherDetails = [
-    { label: "Job Type", value: TYPE_LABELS[job.jobType] ?? job.jobType },
-    { label: "Experience", value: job.experienceMin === 0 ? "Freshers OK" : `${job.experienceMin}+ years` },
-    { label: "Openings", value: `${job.vacancies}` },
-    { label: "Salary", value: salary },
-    { label: "Location", value: job.city.name },
-    { label: "Posted", value: formatRelativeTime(job.createdAt) },
+    { label: t("jobDetail.jobType"),    value: typeLabel },
+    { label: t("jobDetail.experience"), value: job.experienceMin === 0 ? fresherExp : `${job.experienceMin}+ years` },
+    { label: t("jobDetail.openings"),   value: `${job.vacancies}` },
+    { label: t("jobDetail.salary"),     value: salary },
+    { label: t("jobDetail.location"),   value: job.city.name },
+    { label: t("jobDetail.posted"),     value: formatRelativeTime(job.createdAt) },
   ]
 
   const faqs = [
     {
-      q: `Can freshers apply for this ${job.category.nameEn} role?`,
+      q: t("jobDetail.faqFreshers", { category: job.category.nameEn }),
       a: job.experienceMin === 0
-        ? "Yes, freshers are welcome to apply for this role."
-        : `Minimum ${job.experienceMin} year(s) of experience required.`,
+        ? t("jobDetail.faqFreshersYes")
+        : t("jobDetail.faqFreshersNo", { years: job.experienceMin }),
     },
     {
-      q: `What is the salary for this ${job.title} job?`,
-      a: `The salary for this job is ${salary}.`,
+      q: t("jobDetail.faqSalaryQ", { title: job.title }),
+      a: t("jobDetail.faqSalaryA", { salary }),
     },
     {
-      q: "How many openings are there?",
-      a: `There are ${job.vacancies} opening${job.vacancies !== 1 ? "s" : ""} available for this position.`,
+      q: t("jobDetail.faqOpeningsQ"),
+      a: t("jobDetail.faqOpeningsA", { count: job.vacancies }),
     },
     {
-      q: "Where is this job located?",
-      a: `This job is located in ${job.city.name}.`,
+      q: t("jobDetail.faqLocationQ"),
+      a: t("jobDetail.faqLocationA", { city: job.city.name }),
     },
   ]
+
+  const whatsappText = encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: https://jobready.in/jobs/${job.id}`)
 
   const jsonLd = {
     "@context": "https://schema.org/",
@@ -158,17 +162,10 @@ export default async function JobDetailPage({ params }: Props) {
     datePosted: job.createdAt.toISOString(),
     validThrough: job.expiresAt?.toISOString(),
     employmentType: job.jobType === "FULL_TIME" ? "FULL_TIME" : job.jobType === "PART_TIME" ? "PART_TIME" : "CONTRACTOR",
-    hiringOrganization: {
-      "@type": "Organization",
-      name: displayCompany ?? "Company",
-    },
+    hiringOrganization: { "@type": "Organization", name: displayCompany ?? "Company" },
     jobLocation: {
       "@type": "Place",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: job.city.name,
-        addressCountry: "IN",
-      },
+      address: { "@type": "PostalAddress", addressLocality: job.city.name, addressCountry: "IN" },
     },
     baseSalary: job.salaryMin
       ? {
@@ -182,24 +179,19 @@ export default async function JobDetailPage({ params }: Props) {
           },
         }
       : undefined,
-    experienceRequirements: job.experienceMin === 0
-      ? "no requirements"
-      : `${job.experienceMin} years`,
+    experienceRequirements: job.experienceMin === 0 ? "no requirements" : `${job.experienceMin} years`,
     totalJobOpenings: job.vacancies,
   }
 
   return (
     <div className="min-h-screen bg-[#f5f7fa]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
           <Link href="/jobs" className="hover:text-[#1a3461] flex items-center gap-1">
-            <ArrowLeft size={13} /> Jobs
+            <ArrowLeft size={13} /> {t("breadcrumb")}
           </Link>
           <ChevronRight size={12} />
           <Link href={`/jobs?category=${job.category.slug}`} className="hover:text-[#1a3461]">
@@ -218,7 +210,7 @@ export default async function JobDetailPage({ params }: Props) {
             <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
               {job.isFeatured && (
                 <span className="inline-flex items-center text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full mb-3">
-                  ★ Featured
+                  ★ {t("featuredBadge")}
                 </span>
               )}
 
@@ -230,22 +222,23 @@ export default async function JobDetailPage({ params }: Props) {
                   <h1 className="text-xl sm:text-2xl font-bold text-[#1a3461] leading-tight">{job.title}</h1>
                   {displayCompany && <p className="text-gray-500 mt-1 text-sm">{displayCompany}</p>}
 
-                  {/* Salary — most prominent */}
                   <p className="text-2xl font-black text-green-600 mt-2">{salary}</p>
 
                   <div className="flex flex-wrap items-center gap-2 mt-3 text-xs text-gray-500">
                     <span className="flex items-center gap-1"><MapPin size={12} />{job.city.name}</span>
-                    <span className="flex items-center gap-1"><Users size={12} />{job.vacancies} openings</span>
+                    <span className="flex items-center gap-1">
+                      <Users size={12} />{job.vacancies} {job.vacancies === 1 ? t("opening") : t("openings")}
+                    </span>
                     <span className="flex items-center gap-1"><Clock size={12} />{formatRelativeTime(job.createdAt)}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-2 mt-3">
                     <span className="text-xs bg-gray-100 text-gray-700 font-semibold px-2.5 py-1 rounded-full">
-                      {TYPE_LABELS[job.jobType] ?? job.jobType}
+                      {typeLabel}
                     </span>
                     {job.experienceMin === 0 && (
                       <span className="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full border border-green-100">
-                        Freshers OK
+                        {fresherExp}
                       </span>
                     )}
                     <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">
@@ -255,17 +248,16 @@ export default async function JobDetailPage({ params }: Props) {
                 </div>
               </div>
 
-              {/* Mobile CTA (hidden on lg) */}
+              {/* Mobile CTA */}
               <div className="lg:hidden mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2">
                 <ApplyButton jobId={job.id} locale={locale} />
                 <SaveJobButton jobId={job.id} initialSaved={isSaved} locale={locale} />
                 <a
-                  href={`https://wa.me/?text=${encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: https://jobready.in/jobs/${job.id}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`https://wa.me/?text=${whatsappText}`}
+                  target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 py-2 border border-green-500 text-green-700 rounded-xl text-sm font-bold hover:bg-green-50 transition-colors"
                 >
-                  <Share2 size={15} /> Share on WhatsApp
+                  <Share2 size={15} /> {t("jobDetail.shareWhatsapp")}
                 </a>
               </div>
             </div>
@@ -274,34 +266,34 @@ export default async function JobDetailPage({ params }: Props) {
             <div className="bg-[#eef2ff] border border-[#dde5ff] rounded-2xl p-5">
               <h2 className="font-bold text-[#1a3461] mb-4 flex items-center gap-2">
                 <Briefcase size={16} className="text-[#1a3461]" />
-                Job Highlights
+                {t("jobDetail.highlights")}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <div className="bg-white rounded-xl p-3 border border-[#dde5ff]">
-                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><GraduationCap size={12} /> Education</p>
-                  <p className="text-sm font-semibold text-[#1a3461]">All levels</p>
+                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><GraduationCap size={12} /> {t("jobDetail.education")}</p>
+                  <p className="text-sm font-semibold text-[#1a3461]">{t("jobDetail.allLevels")}</p>
                 </div>
                 <div className="bg-white rounded-xl p-3 border border-[#dde5ff]">
-                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><Users size={12} /> Openings</p>
+                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><Users size={12} /> {t("jobDetail.openings")}</p>
                   <p className="text-sm font-semibold text-[#1a3461]">{job.vacancies}</p>
                 </div>
                 <div className="bg-white rounded-xl p-3 border border-[#dde5ff]">
-                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><IndianRupee size={12} /> Salary</p>
+                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><IndianRupee size={12} /> {t("jobDetail.salary")}</p>
                   <p className="text-sm font-semibold text-green-600">{salary}</p>
                 </div>
                 <div className="bg-white rounded-xl p-3 border border-[#dde5ff]">
-                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><Calendar size={12} /> Experience</p>
+                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><Calendar size={12} /> {t("jobDetail.experience")}</p>
                   <p className="text-sm font-semibold text-[#1a3461]">
-                    {job.experienceMin === 0 ? "Freshers OK" : `${job.experienceMin}+ yrs`}
+                    {job.experienceMin === 0 ? fresherExp : t("jobDetail.fresherYrsExp", { years: job.experienceMin })}
                   </p>
                 </div>
                 <div className="bg-white rounded-xl p-3 border border-[#dde5ff]">
-                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><MapPin size={12} /> Location</p>
+                  <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><MapPin size={12} /> {t("jobDetail.location")}</p>
                   <p className="text-sm font-semibold text-[#1a3461]">{job.city.name}</p>
                 </div>
                 <div className="bg-white rounded-xl p-3 border border-[#dde5ff]">
-                  <p className="text-xs text-gray-400 mb-1">Job Type</p>
-                  <p className="text-sm font-semibold text-[#1a3461]">{TYPE_LABELS[job.jobType] ?? job.jobType}</p>
+                  <p className="text-xs text-gray-400 mb-1">{t("jobDetail.jobType")}</p>
+                  <p className="text-sm font-semibold text-[#1a3461]">{typeLabel}</p>
                 </div>
               </div>
             </div>
@@ -309,7 +301,7 @@ export default async function JobDetailPage({ params }: Props) {
             {/* Perks */}
             {job.perks.length > 0 && (
               <div className="bg-white rounded-2xl border border-gray-200 p-5">
-                <h2 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide text-gray-500">Benefits</h2>
+                <h2 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide text-gray-500">{t("jobDetail.benefits")}</h2>
                 <div className="flex flex-wrap gap-2">
                   {job.perks.map((p, i) => (
                     <span key={i} className="text-xs bg-orange-50 text-orange-700 border border-orange-100 px-3 py-1.5 rounded-full font-medium">
@@ -345,7 +337,7 @@ export default async function JobDetailPage({ params }: Props) {
 
             {/* Other Details */}
             <div className="bg-white rounded-2xl border border-gray-200 p-5">
-              <h2 className="font-bold text-gray-900 mb-4">Other Details</h2>
+              <h2 className="font-bold text-gray-900 mb-4">{t("jobDetail.otherDetails")}</h2>
               <div className="grid grid-cols-2 gap-3">
                 {otherDetails.map(({ label, value }) => (
                   <div key={label} className="flex flex-col gap-0.5">
@@ -366,7 +358,7 @@ export default async function JobDetailPage({ params }: Props) {
 
             {/* FAQ */}
             <div className="bg-white rounded-2xl border border-gray-200 p-5">
-              <h2 className="font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <h2 className="font-bold text-gray-900 mb-4">{t("jobDetail.faq")}</h2>
               <div className="flex flex-col divide-y divide-gray-100">
                 {faqs.map(({ q, a }) => (
                   <div key={q} className="py-3">
@@ -381,14 +373,14 @@ export default async function JobDetailPage({ params }: Props) {
             {similarJobs.length > 0 && (
               <div className="bg-white rounded-2xl border border-gray-200 p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-bold text-gray-900">More {job.category.nameEn} Jobs</h2>
+                  <h2 className="font-bold text-gray-900">{t("jobDetail.moreJobs", { category: job.category.nameEn })}</h2>
                   <Link href={`/jobs?category=${job.category.slug}`} className="text-xs text-[#1a3461] font-semibold hover:underline">
-                    See all →
+                    {t("jobDetail.seeAll" as any) ?? "See all →"}
                   </Link>
                 </div>
                 <div className="flex flex-col divide-y divide-gray-100">
                   {similarJobs.map((sj) => {
-                    const sjSalary = formatSalary(sj.salaryMin, sj.salaryMax, sj.salaryUnit)
+                    const sjSalary = formatSalary(sj.salaryMin, sj.salaryMax, sj.salaryUnit, asPerInterview)
                     const sjCompany = sj.source === "SCRAPED" ? sj.city.name : sj.employer.companyName
                     return (
                       <Link key={sj.id} href={`/jobs/${sj.id}`} className="py-3 flex items-start justify-between gap-3 hover:bg-gray-50 -mx-5 px-5 transition-colors">
@@ -403,14 +395,14 @@ export default async function JobDetailPage({ params }: Props) {
                 </div>
                 <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
                   <Link href={`/jobs?category=${job.category.slug}`} className="text-xs px-3 py-1.5 rounded-full bg-[#eef2ff] text-[#1a3461] font-medium hover:bg-[#dde5ff] transition-colors">
-                    {job.category.nameEn} Jobs
+                    {job.category.nameEn} {t("breadcrumb")}
                   </Link>
                   <Link href={`/jobs?city=${job.city.name}`} className="text-xs px-3 py-1.5 rounded-full bg-[#eef2ff] text-[#1a3461] font-medium hover:bg-[#dde5ff] transition-colors">
-                    Jobs in {job.city.name}
+                    {t("jobDetail.jobsInCity", { city: job.city.name })}
                   </Link>
                   {job.experienceMin === 0 && (
                     <Link href="/jobs?freshers=1" className="text-xs px-3 py-1.5 rounded-full bg-[#eef2ff] text-[#1a3461] font-medium hover:bg-[#dde5ff] transition-colors">
-                      Fresher Jobs
+                      {t("jobDetail.fresherJobs")}
                     </Link>
                   )}
                 </div>
@@ -423,7 +415,9 @@ export default async function JobDetailPage({ params }: Props) {
           <div className="hidden lg:block lg:col-span-1">
             <div className="bg-white rounded-2xl border border-gray-200 p-5 sticky top-20">
               <div className="text-center mb-5 pb-4 border-b border-gray-100">
-                <p className="text-xs text-gray-400 mb-1">{job.salaryUnit === "daily" ? "Daily Wage" : "Monthly Salary"}</p>
+                <p className="text-xs text-gray-400 mb-1">
+                  {job.salaryUnit === "daily" ? t("jobDetail.dailyWage") : t("jobDetail.monthlySalary")}
+                </p>
                 <p className="text-2xl font-black text-green-600">{salary}</p>
               </div>
 
@@ -438,36 +432,35 @@ export default async function JobDetailPage({ params }: Props) {
 
               <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2.5 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-400 text-xs">Openings</span>
+                  <span className="text-gray-400 text-xs">{t("jobDetail.openings")}</span>
                   <span className="font-semibold text-gray-700 text-xs">{job.vacancies}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400 text-xs">Experience</span>
+                  <span className="text-gray-400 text-xs">{t("jobDetail.experience")}</span>
                   <span className="font-semibold text-gray-700 text-xs">
-                    {job.experienceMin === 0 ? "Freshers OK" : `${job.experienceMin}+ yrs`}
+                    {job.experienceMin === 0 ? fresherExp : t("jobDetail.fresherYrsExp", { years: job.experienceMin })}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400 text-xs">Job type</span>
-                  <span className="font-semibold text-gray-700 text-xs">{TYPE_LABELS[job.jobType] ?? job.jobType}</span>
+                  <span className="text-gray-400 text-xs">{t("jobDetail.jobType")}</span>
+                  <span className="font-semibold text-gray-700 text-xs">{typeLabel}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400 text-xs">Location</span>
+                  <span className="text-gray-400 text-xs">{t("jobDetail.location")}</span>
                   <span className="font-semibold text-gray-700 text-xs">{job.city.name}</span>
                 </div>
               </div>
 
               <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
                 <a
-                  href={`https://wa.me/?text=${encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: https://jobready.in/jobs/${job.id}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`https://wa.me/?text=${whatsappText}`}
+                  target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 py-2 border border-green-500 text-green-700 rounded-xl text-xs font-bold hover:bg-green-50 transition-colors"
                 >
-                  <Share2 size={14} /> Share on WhatsApp
+                  <Share2 size={14} /> {t("jobDetail.shareWhatsapp")}
                 </a>
                 <p className="text-xs text-gray-400 text-center">
-                  Posted {formatRelativeTime(job.createdAt)}
+                  {t("jobDetail.posted")} {formatRelativeTime(job.createdAt)}
                 </p>
               </div>
             </div>

@@ -56,7 +56,8 @@
       "searchPlaceholder": "ਨੌਕਰੀ ਦਾ ਨਾਮ, ਹੁਨਰ ਜਾਂ ਕੰਪਨੀ",
       "locationPlaceholder": "ਸ਼ਹਿਰ ਜਾਂ ਇਲਾਕਾ",
       "searchButton": "ਨੌਕਰੀ ਲੱਭੋ",
-      "popularSearches": "ਪ੍ਰਸਿੱਧ ਖੋਜਾਂ"
+      "popularSearches": "ਪ੍ਰਸਿੱਧ ਖੋਜਾਂ",
+      "badge": "ਭਾਰਤ ਭਰ ਵਿੱਚ 50,000+ ਨੌਕਰੀਆਂ ਉਪਲਬਧ"
     },
     "stats": {
       "jobsPosted": "ਨੌਕਰੀਆਂ ਪੋਸਟ",
@@ -65,30 +66,65 @@
       "successfulHires": "ਸਫਲ ਨਿਯੁਕਤੀਆਂ"
     },
     "categories": {
-      "title": "ਸ਼੍ਰੇਣੀ ਅਨੁਸਾਰ ਲੱਭੋ",
-      "subtitle": "ਆਪਣੇ ਖੇਤਰ ਵਿੱਚ ਨੌਕਰੀਆਂ ਲੱਭੋ"
+      "title": "ਤੁਸੀਂ ਕਿਸ ਤਰ੍ਹਾਂ ਦੀ ਨੌਕਰੀ ਚਾਹੁੰਦੇ ਹੋ?",
+      "subtitle": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ ਅਨੁਸਾਰ ਖੋਜੋ — ਨੇੜੇ verified ਨੌਕਰੀਆਂ ਲੱਭੋ",
+      "viewAll": "ਸਾਰੀਆਂ ਨੌਕਰੀਆਂ ਦੇਖੋ",
+      "jobs": "ਨੌਕਰੀਆਂ"
     },
     "featured": {
       "title": "ਵਿਸ਼ੇਸ਼ ਨੌਕਰੀਆਂ",
       "subtitle": "ਚੋਟੀ ਦੀਆਂ ਕੰਪਨੀਆਂ ਹੁਣ ਭਰਤੀ ਕਰ ਰਹੀਆਂ ਹਨ"
     },
     "howItWorks": {
-      "title": "Job Ready ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ",
+      "title": "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ",
       "seeker": {
-        "step1": "ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਬਣਾ�",
-        "step2": "ਲੱਭੋ ਅਤੇ ਅਰਜ਼ੀ ਦਿ�",
-        "step3": "ਨੌਕਰੀ ਪਾ�"
+        "step1": "ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਬਣਾਓ",
+        "step2": "ਲੱਭੋ ਅਤੇ ਅਰਜ਼ੀ ਦਿਓ",
+        "step3": "ਨੌਕਰੀ ਪਾਓ"
       },
       "employer": {
         "step1": "ਕੰਪਨੀ ਰਜਿਸਟਰ ਕਰੋ",
         "step2": "ਨੌਕਰੀ ਪੋਸਟ ਕਰੋ",
         "step3": "ਉਮੀਦਵਾਰ ਲੱਭੋ"
-      }
+      },
+      "subtitle": "3 ਆਸਾਨ ਕਦਮਾਂ ਵਿੱਚ ਨੌਕਰੀ ਪਾਓ — 100% ਮੁਫ਼ਤ",
+      "step1Label": "ਮੁਫ਼ਤ ਸਾਈਨ ਅੱਪ ਕਰੋ",
+      "step1Desc": "ਆਪਣੇ ਮੋਬਾਈਲ ਨਾਲ ਤੇਜ਼ OTP ਲਾਗਇਨ — ਕੋਈ ਰਿਜ਼ੂਮੇ ਦੀ ਲੋੜ ਨਹੀਂ",
+      "step2Label": "ਨੌਕਰੀਆਂ ਲੱਭੋ",
+      "step2Desc": "ਭੂਮਿਕਾ, ਤਨਖਾਹ, ਸ਼ਹਿਰ ਅਤੇ ਯੋਗਤਾ ਅਨੁਸਾਰ ਖੋਜੋ",
+      "step3Label": "ਨੌਕਰੀ ਪਾਓ",
+      "step3Desc": "ਸਿੱਧੇ HR ਨੂੰ ਕਾਲ ਕਰੋ ਅਤੇ ਇੰਟਰਵਿਊ ਲਈ ਜਾਓ",
+      "ctaSeeker": "ਹੁਣੇ ਨੌਕਰੀ ਪਾਓ — ਮੁਫ਼ਤ",
+      "ctaEmployer": "ਨੌਕਰੀ ਪੋਸਟ ਕਰੋ — ਮੁਫ਼ਤ"
+    },
+    "getJob": {
+      "freeBadge": "100% ਮੁਫ਼ਤ — ਕੋਈ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਫੀਸ ਨਹੀਂ",
+      "title": "ਹੁਣੇ ਨੌਕਰੀ ਪਾਓ — ਬਿਲਕੁਲ ਮੁਫ਼ਤ!",
+      "subtitle": "ਆਪਣਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ ਅਤੇ ਅਸੀਂ ਤੁਰੰਤ ਤੁਹਾਡੇ ਕੋਲ ਨੌਕਰੀਆਂ ਲੱਭਾਂਗੇ।",
+      "phonePlaceholder": "ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ",
+      "button": "ਨੌਕਰੀ ਪਾਓ",
+      "benefit1": "ਮੁਫ਼ਤ ਰਜਿਸਟ੍ਰੇਸ਼ਨ",
+      "benefit2": "OTP ਲਾਗਇਨ",
+      "benefit3": "ਤੁਹਾਡੇ ਸ਼ਹਿਰ ਵਿੱਚ ਨੌਕਰੀਆਂ",
+      "benefit4": "ਮਾਲਕ ਨੂੰ ਸਿੱਧੇ ਕਾਲ ਕਰੋ",
+      "popularTypes": "ਪ੍ਰਸਿੱਧ ਨੌਕਰੀ ਦੀਆਂ ਕਿਸਮਾਂ",
+      "invalidPhone": "ਕਿਰਪਾ ਕਰਕੇ ਸਹੀ 10-ਅੰਕ ਦਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ"
+    },
+    "qualifications": {
+      "title": "ਤੁਹਾਡੀ ਯੋਗਤਾ ਕੀ ਹੈ?",
+      "subtitle": "ਆਪਣੇ ਸਿੱਖਿਆ ਪੱਧਰ ਅਨੁਸਾਰ ਨੌਕਰੀਆਂ ਲੱਭੋ",
+      "vacancies": "ਅਸਾਮੀਆਂ"
+    },
+    "cities": {
+      "title": "Delhi NCR ਅਤੇ ਨੇੜੇ ਦੇ ਸ਼ਹਿਰਾਂ ਵਿੱਚ ਨੌਕਰੀਆਂ",
+      "subtitle": "ਨੇੜੇ verified ਸਥਾਨਕ ਨੌਕਰੀਆਂ ਲੱਭੋ — ਪੈਦਲ ਦੂਰੀ 'ਤੇ",
+      "nearYou": "ਤੁਹਾਡੇ ਕੋਲ ਨੌਕਰੀਆਂ",
+      "browseAll": "ਸਾਰੇ ਸ਼ਹਿਰ ਦੇਖੋ"
     }
   },
   "auth": {
     "loginTitle": "ਜੀ ਆਇਆਂ ਨੂੰ",
-    "registerTitle": "ਖਾਤਾ ਬਣਾ�",
+    "registerTitle": "ਖਾਤਾ ਬਣਾਓ",
     "phoneLabel": "ਮੋਬਾਈਲ ਨੰਬਰ",
     "phonePlaceholder": "10 ਅੰਕਾਂ ਦਾ ਮੋਬਾਈਲ ਨੰਬਰ",
     "emailLabel": "ਈਮੇਲ ਪਤਾ",
@@ -108,7 +144,7 @@
   },
   "jobs": {
     "searchResults": "{count} ਨੌਕਰੀਆਂ ਮਿਲੀਆਂ",
-    "noResults": "ਕੋਈ ਨੌਕਰੀ ਨਹੀਂ ਮਿਲੀ। ਵੱਖਰੇ ਕੀਵਰਡ ਅਜ਼ਮਾ�।",
+    "noResults": "ਕੋਈ ਨੌਕਰੀ ਨਹੀਂ ਮਿਲੀ। ਵੱਖਰੇ ਕੀਵਰਡ ਅਜ਼ਮਾਓ।",
     "postedAgo": "{time} ਪਹਿਲਾਂ ਪੋਸਟ",
     "vacancies": "{count} ਅਸਾਮੀ",
     "vacancies_plural": "{count} ਅਸਾਮੀਆਂ",
@@ -116,7 +152,7 @@
     "experience": "ਤਜਰਬਾ",
     "jobType": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ",
     "location": "ਸਥਾਨ",
-    "applyNow": "ਹੁਣੇ ਅਰਜ਼ੀ ਦਿ�",
+    "applyNow": "ਹੁਣੇ ਅਰਜ਼ੀ ਦਿਓ",
     "applied": "ਅਰਜ਼ੀ ਦਿੱਤੀ",
     "callHr": "HR ਨੂੰ ਕਾਲ ਕਰੋ",
     "similarJobs": "ਮਿਲਦੀਆਂ-ਜੁਲਦੀਆਂ ਨੌਕਰੀਆਂ",
@@ -124,7 +160,35 @@
       "about": "ਇਸ ਨੌਕਰੀ ਬਾਰੇ",
       "requirements": "ਲੋੜਾਂ",
       "perks": "ਲਾਭ ਅਤੇ ਸਹੂਲਤਾਂ",
-      "aboutCompany": "ਕੰਪਨੀ ਬਾਰੇ"
+      "aboutCompany": "ਕੰਪਨੀ ਬਾਰੇ",
+      "highlights": "ਨੌਕਰੀ ਦੀਆਂ ਮੁੱਖ ਗੱਲਾਂ",
+      "education": "ਸਿੱਖਿਆ",
+      "allLevels": "ਸਾਰੇ ਪੱਧਰ",
+      "openings": "ਅਸਾਮੀਆਂ",
+      "salary": "ਤਨਖਾਹ",
+      "experience": "ਤਜਰਬਾ",
+      "location": "ਸਥਾਨ",
+      "jobType": "ਨੌਕਰੀ ਦੀ ਕਿਸਮ",
+      "benefits": "ਲਾਭ",
+      "otherDetails": "ਹੋਰ ਵੇਰਵੇ",
+      "posted": "ਪੋਸਟ ਕੀਤਾ",
+      "faq": "ਅਕਸਰ ਪੁੱਛੇ ਜਾਂਦੇ ਸਵਾਲ",
+      "faqFreshers": "ਕੀ {category} ਅਸਾਮੀ ਲਈ ਨਵੇਂ ਉਮੀਦਵਾਰ ਅਰਜ਼ੀ ਦੇ ਸਕਦੇ ਹਨ?",
+      "faqFreshersYes": "ਹਾਂ, ਇਸ ਅਸਾਮੀ ਲਈ ਨਵੇਂ ਉਮੀਦਵਾਰਾਂ ਦਾ ਸੁਆਗਤ ਹੈ।",
+      "faqFreshersNo": "ਘੱਟੋ-ਘੱਟ {years} ਸਾਲ ਦਾ ਤਜਰਬਾ ਚਾਹੀਦਾ ਹੈ।",
+      "faqSalaryQ": "ਇਸ {title} ਨੌਕਰੀ ਦੀ ਤਨਖਾਹ ਕਿੰਨੀ ਹੈ?",
+      "faqSalaryA": "ਇਸ ਨੌਕਰੀ ਦੀ ਤਨਖਾਹ {salary} ਹੈ।",
+      "faqOpeningsQ": "ਕਿੰਨੀਆਂ ਅਸਾਮੀਆਂ ਹਨ?",
+      "faqOpeningsA": "ਇਸ ਅਸਾਮੀ ਲਈ {count} ਅਸਾਮੀਆਂ ਉਪਲਬਧ ਹਨ।",
+      "faqLocationQ": "ਇਹ ਨੌਕਰੀ ਕਿੱਥੇ ਹੈ?",
+      "faqLocationA": "ਇਹ ਨੌਕਰੀ {city} ਵਿੱਚ ਹੈ।",
+      "moreJobs": "ਹੋਰ {category} ਨੌਕਰੀਆਂ",
+      "fresherJobs": "ਫਰੈਸ਼ਰ ਨੌਕਰੀਆਂ",
+      "jobsInCity": "{city} ਵਿੱਚ ਨੌਕਰੀਆਂ",
+      "monthlySalary": "ਮਾਸਿਕ ਤਨਖਾਹ",
+      "dailyWage": "ਰੋਜ਼ਾਨਾ ਮਜ਼ਦੂਰੀ",
+      "shareWhatsapp": "WhatsApp ਤੇ ਸ਼ੇਅਰ ਕਰੋ",
+      "fresherYrsExp": "{years}+ ਸਾਲ"
     },
     "filters": {
       "salary": "ਤਨਖ਼ਾਹ ਰੇਂਜ",
@@ -165,7 +229,16 @@
       "diploma": "ਡਿਪਲੋਮਾ",
       "graduate": "ਗ੍ਰੈਜੂਏਟ",
       "postgraduate": "ਪੋਸਟ ਗ੍ਰੈਜੂਏਟ"
-    }
+    },
+    "asPerInterview": "ਇੰਟਰਵਿਊ ਅਨੁਸਾਰ",
+    "breadcrumb": "ਨੌਕਰੀਆਂ",
+    "applyNowFree": "ਹੁਣੇ ਅਰਜ਼ੀ ਦਿਓ — ਮੁਫ਼ਤ",
+    "applicationSubmitted": "ਅਰਜ਼ੀ ਜਮ੍ਹਾ ਹੋ ਗਈ!",
+    "alreadyAppliedMsg": "ਪਹਿਲਾਂ ਹੀ ਅਰਜ਼ੀ ਦਿੱਤੀ",
+    "networkError": "ਨੈੱਟਵਰਕ ਗੜਬੜ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+    "saveJob": "ਨੌਕਰੀ ਸੇਵ ਕਰੋ",
+    "savedJob": "ਸੇਵ ਕੀਤਾ",
+    "removeFromSaved": "ਸੇਵ ਤੋਂ ਹਟਾਓ"
   },
   "seeker": {
     "dashboard": {
@@ -213,7 +286,7 @@
       "preferredCategories": "ਪਸੰਦੀਦਾ ਨੌਕਰੀ ਸ਼੍ਰੇਣੀਆਂ",
       "resume": "ਰੈਜ਼ਿਊਮੇ",
       "uploadResume": "ਰੈਜ਼ਿਊਮੇ ਅਪਲੋਡ ਕਰੋ",
-      "buildResume": "ਰੈਜ਼ਿਊਮੇ ਬਣਾ�",
+      "buildResume": "ਰੈਜ਼ਿਊਮੇ ਬਣਾਓ",
       "jobPreferences": "ਨੌਕਰੀ ਦੀਆਂ ਤਰਜੀਹਾਂ",
       "locationPreferences": "ਸਥਾਨ ਤਰਜੀਹਾਂ",
       "openToAnyLocation": "ਕਿਸੇ ਵੀ ਥਾਂ",
@@ -316,7 +389,13 @@
     "retail": "ਰਿਟੇਲ",
     "fieldWork": "ਫੀਲਡ ਵਰਕ",
     "it": "IT / ਕੰਪਿਊਟਰ",
-    "healthcare": "ਸਿਹਤ ਸੇਵਾ"
+    "healthcare": "ਸਿਹਤ ਸੇਵਾ",
+    "bpo": "BPO / ਟੈਲੀਕਾਲਰ",
+    "dataEntry": "ਡੇਟਾ ਐਂਟਰੀ",
+    "teaching": "ਅਧਿਆਪਨ",
+    "accounting": "ਲੇਖਾਕਾਰੀ",
+    "beauty": "ਸੁੰਦਰਤਾ / ਸੈਲੂਨ",
+    "logistics": "ਵੇਅਰਹਾਊਸ"
   },
   "status": {
     "APPLIED": "ਅਰਜ਼ੀ ਦਿੱਤੀ",

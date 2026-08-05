@@ -44,9 +44,10 @@ export default async function SeekerDashboardPage() {
   const session = await getServerSession()
   if (!session) redirect("/login")
 
-  const [t, tc] = await Promise.all([
+  const [t, tc, tn] = await Promise.all([
     getTranslations("seeker.dashboard"),
     getTranslations("categories"),
+    getTranslations("nav"),
   ])
   const ts = await getTranslations("status")
 
@@ -242,7 +243,7 @@ export default async function SeekerDashboardPage() {
               <Bookmark size={18} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-800">{t("savedJobs")}</p>
+              <p className="text-sm font-semibold text-gray-800">{tn("savedJobs")}</p>
               <p className="text-xs text-gray-400">{t("savedJobsDesc")}</p>
             </div>
             <ChevronRight size={15} className="text-gray-300 ml-auto" />

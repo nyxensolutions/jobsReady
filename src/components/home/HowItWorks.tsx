@@ -1,19 +1,22 @@
 import Link from "next/link"
 import Image from "next/image"
+import { getTranslations } from "next-intl/server"
 
-const SEEKER_STEPS = [
-  { num: "1", img: "/images/step-register.jpg", label: "Sign Up Free", desc: "Quick OTP login with your mobile — no resume needed" },
-  { num: "2", img: "/images/step-post.jpg",     label: "Browse Jobs",  desc: "Search by role, salary, city, and qualification" },
-  { num: "3", img: "/images/step-hire.jpg",     label: "Get Hired",    desc: "Call HR directly and walk in for the interview" },
-]
+export default async function HowItWorks() {
+  const t = await getTranslations("home.howItWorks")
 
-export default function HowItWorks() {
+  const SEEKER_STEPS = [
+    { num: "1", img: "/images/step-register.jpg", label: t("step1Label"), desc: t("step1Desc") },
+    { num: "2", img: "/images/step-post.jpg",     label: t("step2Label"), desc: t("step2Desc") },
+    { num: "3", img: "/images/step-hire.jpg",     label: t("step3Label"), desc: t("step3Desc") },
+  ]
+
   return (
     <section className="py-14 bg-white border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">How It Works</h2>
-          <p className="text-sm text-gray-400 mt-1">Find a job in 3 easy steps — 100% free</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{t("title")}</h2>
+          <p className="text-sm text-gray-400 mt-1">{t("subtitle")}</p>
         </div>
 
         {/* Step cards with photos */}
@@ -40,13 +43,13 @@ export default function HowItWorks() {
             href="/login"
             className="flex items-center justify-center py-3.5 rounded-2xl bg-[#b45309] text-white font-bold text-sm hover:bg-[#92400e] transition-colors shadow-sm"
           >
-            Get a Job Now — Free
+            {t("ctaSeeker")}
           </Link>
           <Link
             href="/employer/register"
             className="flex items-center justify-center py-3.5 rounded-2xl bg-[#1a3461] text-white font-bold text-sm hover:bg-[#142a52] transition-colors shadow-sm"
           >
-            Post a Job — Free
+            {t("ctaEmployer")}
           </Link>
         </div>
       </div>

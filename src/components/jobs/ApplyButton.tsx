@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Loader2, CheckCircle } from "lucide-react"
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
 
 export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
   const router = useRouter()
+  const t = useTranslations("jobs")
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "duplicate" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState("")
 
@@ -27,7 +29,6 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
       const data = await res.json()
 
       if (res.status === 401) {
-        // Not logged in — redirect to login then come back
         router.push(`/${locale}/login?next=/jobs/${jobId}`)
         return
       }
@@ -36,13 +37,13 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
         return
       }
       if (!res.ok) {
-        setErrorMsg(data.error ?? "Something went wrong")
+        setErrorMsg(data.error ?? t("common" as any))
         setStatus("error")
         return
       }
       router.push(`/${locale}/jobs/${jobId}/applied`)
     } catch {
-      setErrorMsg("Network error. Please try again.")
+      setErrorMsg(t("networkError"))
       setStatus("error")
     }
   }
@@ -51,7 +52,7 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
     return (
       <div className="w-full py-3 rounded-xl bg-green-50 border border-green-200 flex items-center justify-center gap-2 text-green-700 font-semibold text-sm">
         <CheckCircle size={16} />
-        {status === "done" ? "Application submitted!" : "Already applied"}
+        {status === "done" ? t("applicationSubmitted") : t("alreadyAppliedMsg")}
       </div>
     )
   }
@@ -64,7 +65,7 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
         className="w-full py-3 bg-[#1a3461] hover:bg-[#142a52] hover:shadow-lg active:scale-[0.98] text-white font-bold rounded-xl transition-all text-sm disabled:opacity-60 flex items-center justify-center gap-2"
       >
         {status === "loading" && <Loader2 size={15} className="animate-spin" />}
-        Apply Now — Free
+        {t("applyNowFree")}
       </button>
 
       {status === "error" && (

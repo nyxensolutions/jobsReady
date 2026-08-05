@@ -56,7 +56,8 @@
       "searchPlaceholder": "Job title, skill or company",
       "locationPlaceholder": "City or area",
       "searchButton": "Find Jobs",
-      "popularSearches": "Popular searches"
+      "popularSearches": "Popular searches",
+      "badge": "50,000+ jobs available across India"
     },
     "stats": {
       "jobsPosted": "Jobs Posted",
@@ -65,15 +66,17 @@
       "successfulHires": "Successful Hires"
     },
     "categories": {
-      "title": "Browse by Category",
-      "subtitle": "Find jobs in your field"
+      "title": "What kind of job do you want?",
+      "subtitle": "Browse by job type — find verified openings near you",
+      "viewAll": "View all jobs",
+      "jobs": "jobs"
     },
     "featured": {
       "title": "Featured Jobs",
       "subtitle": "Top employers hiring now"
     },
     "howItWorks": {
-      "title": "How Job Ready works",
+      "title": "How It Works",
       "seeker": {
         "step1": "Create your profile",
         "step2": "Search and apply",
@@ -83,7 +86,40 @@
         "step1": "Register your company",
         "step2": "Post a job",
         "step3": "Find candidates"
-      }
+      },
+      "subtitle": "Find a job in 3 easy steps — 100% free",
+      "step1Label": "Sign Up Free",
+      "step1Desc": "Quick OTP login with your mobile — no resume needed",
+      "step2Label": "Browse Jobs",
+      "step2Desc": "Search by role, salary, city, and qualification",
+      "step3Label": "Get Hired",
+      "step3Desc": "Call HR directly and walk in for the interview",
+      "ctaSeeker": "Get a Job Now — Free",
+      "ctaEmployer": "Post a Job — Free"
+    },
+    "getJob": {
+      "freeBadge": "100% Free — No registration fee",
+      "title": "Get a Job Now — It's Free!",
+      "subtitle": "Enter your mobile number and we'll find jobs near you instantly.",
+      "phonePlaceholder": "Enter mobile number",
+      "button": "Get Job Now",
+      "benefit1": "Free registration",
+      "benefit2": "OTP login",
+      "benefit3": "Jobs in your city",
+      "benefit4": "Direct call to employer",
+      "popularTypes": "Popular job types",
+      "invalidPhone": "Please enter a valid 10-digit mobile number"
+    },
+    "qualifications": {
+      "title": "What is your Qualification?",
+      "subtitle": "Find jobs that match your education level",
+      "vacancies": "Vacancies"
+    },
+    "cities": {
+      "title": "Jobs in Delhi NCR & Nearby Cities",
+      "subtitle": "Find verified local jobs near you — walk-in distance",
+      "nearYou": "Jobs near you",
+      "browseAll": "Browse All Cities"
     }
   },
   "auth": {
@@ -124,7 +160,35 @@
       "about": "About this job",
       "requirements": "Requirements",
       "perks": "Perks & Benefits",
-      "aboutCompany": "About the company"
+      "aboutCompany": "About the company",
+      "highlights": "Job Highlights",
+      "education": "Education",
+      "allLevels": "All levels",
+      "openings": "Openings",
+      "salary": "Salary",
+      "experience": "Experience",
+      "location": "Location",
+      "jobType": "Job Type",
+      "benefits": "Benefits",
+      "otherDetails": "Other Details",
+      "posted": "Posted",
+      "faq": "Frequently Asked Questions",
+      "faqFreshers": "Can freshers apply for this {category} role?",
+      "faqFreshersYes": "Yes, freshers are welcome to apply for this role.",
+      "faqFreshersNo": "Minimum {years} year(s) of experience required.",
+      "faqSalaryQ": "What is the salary for this {title} job?",
+      "faqSalaryA": "The salary for this job is {salary}.",
+      "faqOpeningsQ": "How many openings are there?",
+      "faqOpeningsA": "There are {count} opening(s) available for this position.",
+      "faqLocationQ": "Where is this job located?",
+      "faqLocationA": "This job is located in {city}.",
+      "moreJobs": "More {category} Jobs",
+      "fresherJobs": "Fresher Jobs",
+      "jobsInCity": "Jobs in {city}",
+      "monthlySalary": "Monthly Salary",
+      "dailyWage": "Daily Wage",
+      "shareWhatsapp": "Share on WhatsApp",
+      "fresherYrsExp": "{years}+ yrs"
     },
     "filters": {
       "salary": "Salary range",
@@ -165,7 +229,16 @@
       "diploma": "Diploma",
       "graduate": "Graduate",
       "postgraduate": "Post Graduate"
-    }
+    },
+    "asPerInterview": "As per interview",
+    "breadcrumb": "Jobs",
+    "applyNowFree": "Apply Now — Free",
+    "applicationSubmitted": "Application submitted!",
+    "alreadyAppliedMsg": "Already applied",
+    "networkError": "Network error. Please try again.",
+    "saveJob": "Save Job",
+    "savedJob": "Saved",
+    "removeFromSaved": "Remove from saved"
   },
   "seeker": {
     "dashboard": {
@@ -358,9 +431,15 @@
     "cook": "Cook / Chef",
     "construction": "Construction",
     "factory": "Factory Worker",
-    "retail": "Retail",
+    "retail": "Retail / Shop",
     "fieldWork": "Field Work",
     "it": "IT / Computer",
-    "healthcare": "Healthcare"
+    "healthcare": "Healthcare",
+    "bpo": "BPO / Telecaller",
+    "dataEntry": "Data Entry",
+    "teaching": "Teaching",
+    "accounting": "Accounting",
+    "beauty": "Beauty / Salon",
+    "logistics": "Warehouse"
   }
 }

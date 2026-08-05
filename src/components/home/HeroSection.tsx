@@ -33,7 +33,7 @@ export default function HeroSection() {
           <div>
             <div className="inline-flex items-center gap-1.5 bg-orange-50 border border-orange-100 text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-              50,000+ jobs available across India
+              {t("badge")}
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1a3461] leading-tight mb-4">
