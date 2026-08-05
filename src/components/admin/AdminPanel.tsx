@@ -1,6 +1,10 @@
 "use client"
 import { useEffect, useState } from "react"
-import { CheckCircle, XCircle, Star, StarOff, ExternalLink, Phone, Building2, MapPin, Tag, Users, ChevronDown, ChevronUp, FileText, Globe } from "lucide-react"
+import {
+  CheckCircle, XCircle, Star, StarOff, ExternalLink, Phone,
+  Building2, MapPin, Tag, Users, ChevronDown, ChevronUp,
+  FileText, Globe, Loader2, AlertTriangle,
+} from "lucide-react"
 
 type Job = {
   id: string
@@ -27,9 +31,6 @@ type Job = {
   _count: { applications: number }
 }
 
-const JOB_STATUS_TABS = ["PENDING_REVIEW", "ACTIVE", "REJECTED"]
-const EMP_STATUS_TABS = ["PENDING", "VERIFIED", "REJECTED", "SUSPENDED"]
-
 type Employer = {
   id: string
   companyName: string
@@ -47,6 +48,50 @@ type Employer = {
   _count: { jobListings: number }
 }
 
+const JOB_STATUS_TABS = ["PENDING_REVIEW", "ACTIVE", "REJECTED"]
+const EMP_STATUS_TABS = ["PENDING", "VERIFIED", "REJECTED", "SUSPENDED"]
+
+// ── Confirm dialog ─────────────────────────────────────────────────────────
+function ConfirmDialog({
+  message,
+  onConfirm,
+  onCancel,
+}: {
+  message: string
+  onConfirm: () => void
+  onCancel: () => void
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 max-w-sm w-full mx-4">
+        <div className="flex items-start gap-3 mb-5">
+          <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+            <AlertTriangle size={20} className="text-amber-600" />
+          </div>
+          <div>
+            <p className="font-bold text-gray-900 text-sm">Are you sure?</p>
+            <p className="text-sm text-gray-500 mt-1">{message}</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-2 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-2 bg-[#1a3461] text-white rounded-xl text-sm font-semibold hover:bg-[#142a52] transition-colors"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function AdminPanel() {
   const [section, setSection] = useState<"jobs" | "employers">("jobs")
 
@@ -55,6 +100,7 @@ export default function AdminPanel() {
   const [jobTab, setJobTab] = useState("PENDING_REVIEW")
   const [jobLoading, setJobLoading] = useState(false)
   const [actioning, setActioning] = useState<string | null>(null)
+  const [bulkLoading, setBulkLoading] = useState(false)
   const [expandedJob, setExpandedJob] = useState<string | null>(null)
   const [expandedEmp, setExpandedEmp] = useState<string | null>(null)
 
@@ -62,6 +108,9 @@ export default function AdminPanel() {
   const [employers, setEmployers] = useState<Employer[]>([])
   const [empTab, setEmpTab] = useState("PENDING")
   const [empLoading, setEmpLoading] = useState(false)
+
+  // Confirm dialog state
+  const [confirm, setConfirm] = useState<{ message: string; onConfirm: () => void } | null>(null)
 
   async function fetchJobs(status: string) {
     setJobLoading(true)
@@ -82,18 +131,68 @@ export default function AdminPanel() {
   useEffect(() => { if (section === "jobs") fetchJobs(jobTab) }, [section, jobTab])
   useEffect(() => { if (section === "employers") fetchEmployers(empTab) }, [section, empTab])
 
+  // ── Per-item actions ──────────────────────────────────────────────────────
   async function jobAction(jobId: string, act: string) {
     setActioning(jobId + act)
-    await fetch(`/api/admin/jobs/${jobId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: act }) })
+    await fetch(`/api/admin/jobs/${jobId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: act }),
+    })
     setActioning(null)
     fetchJobs(jobTab)
   }
 
   async function empAction(empId: string, act: string) {
     setActioning(empId + act)
-    await fetch(`/api/admin/employers/${empId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: act }) })
+    await fetch(`/api/admin/employers/${empId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: act }),
+    })
     setActioning(null)
     fetchEmployers(empTab)
+  }
+
+  // ── Bulk actions ──────────────────────────────────────────────────────────
+  function askThenBulkJob(action: string, label: string) {
+    const count = jobs.length
+    setConfirm({
+      message: `This will ${label.toLowerCase()} all ${count} job${count !== 1 ? "s" : ""} in this tab. This cannot be undone.`,
+      onConfirm: async () => {
+        setConfirm(null)
+        setBulkLoading(true)
+        const res = await fetch("/api/admin/jobs/bulk", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action, fromStatus: jobTab }),
+        })
+        const data = await res.json()
+        setBulkLoading(false)
+        fetchJobs(jobTab)
+        alert(`Done — ${data.count} job${data.count !== 1 ? "s" : ""} updated.`)
+      },
+    })
+  }
+
+  function askThenBulkEmp(action: string, label: string) {
+    const count = employers.length
+    setConfirm({
+      message: `This will ${label.toLowerCase()} all ${count} employer${count !== 1 ? "s" : ""} in this tab. This cannot be undone.`,
+      onConfirm: async () => {
+        setConfirm(null)
+        setBulkLoading(true)
+        const res = await fetch("/api/admin/employers/bulk", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action, fromStatus: empTab }),
+        })
+        const data = await res.json()
+        setBulkLoading(false)
+        fetchEmployers(empTab)
+        alert(`Done — ${data.count} employer${data.count !== 1 ? "s" : ""} updated.`)
+      },
+    })
   }
 
   const formatSalary = (min: number | null, max: number | null, unit = "monthly") => {
@@ -107,6 +206,14 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {confirm && (
+        <ConfirmDialog
+          message={confirm.message}
+          onConfirm={confirm.onConfirm}
+          onCancel={() => setConfirm(null)}
+        />
+      )}
+
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -135,18 +242,71 @@ export default function AdminPanel() {
         {/* ── JOBS SECTION ── */}
         {section === "jobs" && (
           <>
-            <div className="flex gap-1 bg-gray-100 rounded-xl p-1 w-fit mb-5">
-              {JOB_STATUS_TABS.map(tab => (
-                <button key={tab} onClick={() => setJobTab(tab)}
-                  className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${jobTab === tab ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-                >
-                  {tab === "PENDING_REVIEW" ? "Pending" : tab === "ACTIVE" ? "Active" : "Rejected"}
-                </button>
-              ))}
+            {/* Tab bar + count + bulk actions */}
+            <div className="flex flex-wrap items-center gap-3 mb-5">
+              <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+                {JOB_STATUS_TABS.map(tab => (
+                  <button key={tab} onClick={() => setJobTab(tab)}
+                    className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${jobTab === tab ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                  >
+                    {tab === "PENDING_REVIEW" ? "Pending" : tab === "ACTIVE" ? "Active" : "Rejected"}
+                    {jobTab === tab && !jobLoading && (
+                      <span className="ml-1.5 text-xs bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-full font-bold">
+                        {jobs.length}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Bulk action buttons — only show when items exist */}
+              {!jobLoading && jobs.length > 0 && (
+                <div className="flex items-center gap-2 ml-auto">
+                  {bulkLoading && <Loader2 size={15} className="animate-spin text-gray-400" />}
+                  {jobTab === "PENDING_REVIEW" && (
+                    <>
+                      <button
+                        onClick={() => askThenBulkJob("reject", "Reject All")}
+                        disabled={bulkLoading}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
+                      >
+                        <XCircle size={15} /> Reject All ({jobs.length})
+                      </button>
+                      <button
+                        onClick={() => askThenBulkJob("approve", "Approve All")}
+                        disabled={bulkLoading}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                      >
+                        <CheckCircle size={15} /> Approve All ({jobs.length})
+                      </button>
+                    </>
+                  )}
+                  {jobTab === "ACTIVE" && (
+                    <button
+                      onClick={() => askThenBulkJob("deactivate", "Deactivate All")}
+                      disabled={bulkLoading}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
+                    >
+                      <XCircle size={15} /> Deactivate All ({jobs.length})
+                    </button>
+                  )}
+                  {jobTab === "REJECTED" && (
+                    <button
+                      onClick={() => askThenBulkJob("reapprove", "Re-approve All")}
+                      disabled={bulkLoading}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                    >
+                      <CheckCircle size={15} /> Re-approve All ({jobs.length})
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
             {jobLoading ? (
-              <div className="flex items-center justify-center py-20 text-gray-400">Loading...</div>
+              <div className="flex items-center justify-center py-20 text-gray-400">
+                <Loader2 size={24} className="animate-spin mr-2" /> Loading...
+              </div>
             ) : jobs.length === 0 ? (
               <div className="text-center py-20 text-gray-400">
                 <CheckCircle size={40} className="mx-auto mb-3 opacity-30" />
@@ -217,7 +377,7 @@ export default function AdminPanel() {
                           )}
                         </div>
                       </div>
-                      {/* Toggle full details */}
+
                       <button
                         onClick={() => setExpandedJob(expandedJob === job.id ? null : job.id)}
                         className="mt-3 flex items-center gap-1 text-xs font-semibold text-[#1a3461] hover:underline"
@@ -227,15 +387,12 @@ export default function AdminPanel() {
                       </button>
                     </div>
 
-                    {/* Expanded details */}
                     {expandedJob === job.id && (
                       <div className="border-t border-gray-100 px-5 py-4 bg-gray-50 flex flex-col gap-4">
-                        {/* Job description */}
                         <div>
                           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Job Description</p>
                           <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">{job.description}</p>
                         </div>
-                        {/* Requirements & perks */}
                         <div className="grid sm:grid-cols-2 gap-4">
                           {job.requirements.length > 0 && (
                             <div>
@@ -254,12 +411,10 @@ export default function AdminPanel() {
                             </div>
                           )}
                         </div>
-                        {/* Candidate requirements */}
                         <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
                           {job.qualificationRequired && <span><span className="font-semibold">Qualification:</span> {job.qualificationRequired}</span>}
                           <span><span className="font-semibold">Experience:</span> {job.experienceMin === 0 ? "Freshers OK" : `${job.experienceMin}+ yrs`}</span>
                         </div>
-                        {/* Employer docs */}
                         {job.employer.docUrls.length > 0 && (
                           <div>
                             <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Employer Documents</p>
@@ -291,18 +446,70 @@ export default function AdminPanel() {
         {/* ── EMPLOYERS SECTION ── */}
         {section === "employers" && (
           <>
-            <div className="flex gap-1 bg-gray-100 rounded-xl p-1 w-fit mb-5">
-              {EMP_STATUS_TABS.map(tab => (
-                <button key={tab} onClick={() => setEmpTab(tab)}
-                  className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${empTab === tab ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-                >
-                  {tab.charAt(0) + tab.slice(1).toLowerCase()}
-                </button>
-              ))}
+            {/* Tab bar + count + bulk actions */}
+            <div className="flex flex-wrap items-center gap-3 mb-5">
+              <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+                {EMP_STATUS_TABS.map(tab => (
+                  <button key={tab} onClick={() => setEmpTab(tab)}
+                    className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${empTab === tab ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                  >
+                    {tab.charAt(0) + tab.slice(1).toLowerCase()}
+                    {empTab === tab && !empLoading && (
+                      <span className="ml-1.5 text-xs bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-full font-bold">
+                        {employers.length}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {!empLoading && employers.length > 0 && (
+                <div className="flex items-center gap-2 ml-auto">
+                  {bulkLoading && <Loader2 size={15} className="animate-spin text-gray-400" />}
+                  {empTab === "PENDING" && (
+                    <>
+                      <button
+                        onClick={() => askThenBulkEmp("reject", "Reject All")}
+                        disabled={bulkLoading}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
+                      >
+                        <XCircle size={15} /> Reject All ({employers.length})
+                      </button>
+                      <button
+                        onClick={() => askThenBulkEmp("verify", "Verify All")}
+                        disabled={bulkLoading}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                      >
+                        <CheckCircle size={15} /> Verify All ({employers.length})
+                      </button>
+                    </>
+                  )}
+                  {empTab === "VERIFIED" && (
+                    <button
+                      onClick={() => askThenBulkEmp("suspend", "Suspend All")}
+                      disabled={bulkLoading}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
+                    >
+                      <XCircle size={15} /> Suspend All ({employers.length})
+                    </button>
+                  )}
+                  {(empTab === "REJECTED" || empTab === "SUSPENDED") && (
+                    <button
+                      onClick={() => askThenBulkEmp("restore", "Restore All")}
+                      disabled={bulkLoading}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-white bg-[#1a3461] rounded-lg hover:bg-[#142a52] transition-colors disabled:opacity-50"
+                    >
+                      <CheckCircle size={15} /> Restore All ({employers.length})
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
             {empLoading ? (
-              <div className="flex items-center justify-center py-20 text-gray-400">Loading...</div>
+              <div className="flex items-center justify-center py-20 text-gray-400">
+                <Loader2 size={24} className="animate-spin mr-2" /> Loading...
+              </div>
             ) : employers.length === 0 ? (
               <div className="text-center py-20 text-gray-400">
                 <Users size={40} className="mx-auto mb-3 opacity-30" />
@@ -379,7 +586,6 @@ export default function AdminPanel() {
                       </button>
                     </div>
 
-                    {/* Expanded employer details */}
                     {expandedEmp === emp.id && (
                       <div className="border-t border-gray-100 px-5 py-4 bg-gray-50 flex flex-col gap-4">
                         {emp.description && (
@@ -397,7 +603,6 @@ export default function AdminPanel() {
                           )}
                           {emp.user.email && <span><span className="font-semibold">Email:</span> {emp.user.email}</span>}
                         </div>
-                        {/* Uploaded documents */}
                         {emp.docUrls.length > 0 ? (
                           <div>
                             <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
