@@ -114,11 +114,18 @@ export default async function EmployerDashboardPage() {
             </Link>
           </div>
           <Link
+            href="/employer/responses"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 font-medium text-sm transition-colors"
+          >
+            <Users size={18} />
+            Responses
+          </Link>
+          <Link
             href="/employer/candidates"
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 font-medium text-sm transition-colors"
           >
             <UserSearch size={18} />
-            Database
+            Talent Search
           </Link>
           <Link
             href="/employer/profile"
