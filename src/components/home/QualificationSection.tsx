@@ -8,7 +8,7 @@ const QUALIFICATIONS = [
   { key: "12th",     labelKey: "12th",     icon: BookMarked,    vacancies: "4,00,000+",  color: "bg-yellow-50 text-yellow-600 border-yellow-100" },
   { key: "diploma",  labelKey: "diploma",  icon: Award,         vacancies: "40,000+",    color: "bg-green-50 text-green-600 border-green-100"  },
   { key: "graduate", labelKey: "graduate", icon: GraduationCap, vacancies: "2,50,000+",  color: "bg-indigo-50 text-indigo-500 border-indigo-100"},
-  { key: "postgrad", labelKey: "postgrad", icon: ScrollText,    vacancies: "10,000+",    color: "bg-purple-50 text-purple-500 border-purple-100"},
+  { key: "postgrad", labelKey: "postgrad",     icon: ScrollText, vacancies: "10,000+",    color: "bg-purple-50 text-purple-500 border-purple-100"},
 ]
 
 export default async function QualificationSection() {

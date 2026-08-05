@@ -228,7 +228,8 @@
       "12th": "12তম পাস",
       "diploma": "ডিপ্লোমা",
       "graduate": "স্নাতক",
-      "postgraduate": "স্নাতকোত্তর"
+      "postgraduate": "স্নাতকোত্তর",
+      "postgrad": "স্নাতকোত্তর"
     },
     "asPerInterview": "সাক্ষাৎকার অনুযায়ী",
     "breadcrumb": "চাকরিগুলো",

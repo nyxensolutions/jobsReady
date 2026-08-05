@@ -228,7 +228,8 @@
       "12th": "12th Pass",
       "diploma": "Diploma",
       "graduate": "Graduate",
-      "postgraduate": "Post Graduate"
+      "postgraduate": "Post Graduate",
+      "postgrad": "Post Graduate"
     },
     "asPerInterview": "As per interview",
     "breadcrumb": "Jobs",

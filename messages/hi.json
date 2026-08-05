@@ -228,7 +228,8 @@
       "12th": "12वीं पास",
       "diploma": "डिप्लोमा",
       "graduate": "स्नातक",
-      "postgraduate": "स्नातकोत्तर"
+      "postgraduate": "स्नातकोत्तर",
+      "postgrad": "स्नातकोत्तर"
     },
     "asPerInterview": "साक्षात्कार अनुसार",
     "breadcrumb": "नौकरियां",
