@@ -325,9 +325,9 @@ export default function PlansClient({ plans, activeSub, activeJobCount, razorpay
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 divide-x divide-y divide-slate-100">
             {[
               { icon: <Briefcase size={16} />, color: "bg-[#eef2ff] text-[#1a3461]", title: "Active Job Limit", desc: "When you're at your limit and try posting a new job, you'll see an upgrade prompt. Closing or filling a role frees a slot immediately." },
-              { icon: <Users size={16} />, color: "bg-orange-50 text-orange-500", title: "Candidate Unlocks", desc: "Seeker phone numbers are blurred by default. Clicking "View Contact" spends 1 credit and reveals their details permanently for you." },
+              { icon: <Users size={16} />, color: "bg-orange-50 text-orange-500", title: "Candidate Unlocks", desc: "Seeker phone numbers are blurred by default. Clicking 'View Contact' spends 1 credit and reveals their details permanently for you." },
               { icon: <TrendingUp size={16} />, color: "bg-emerald-50 text-emerald-600", title: "Job Boosts", desc: "One boost pushes your job to the top of search results and into recommended feeds for matching seekers for 7 days." },
-              { icon: <Search size={16} />, color: "bg-amber-50 text-amber-600", title: "High vs Limited Reach", desc: "High reach jobs are proactively shown via push notifications and the "For You" feed. Limited reach only appears in direct search." },
+              { icon: <Search size={16} />, color: "bg-amber-50 text-amber-600", title: "High vs Limited Reach", desc: "High reach jobs are proactively shown via push notifications and the 'For You' feed. Limited reach only appears in direct search." },
               { icon: <Calendar size={16} />, color: "bg-[#eef2ff] text-[#1a3461]", title: "Validity Period", desc: "Credits and active job slots expire with the plan. Jobs under an expired plan are automatically paused until you renew." },
               { icon: <Shield size={16} />, color: "bg-emerald-50 text-emerald-600", title: "Unlimited Responses", desc: "Receive as many applications as candidates send — no per-application fee. You only spend credits to reveal contact info." },
             ].map((f) => (
