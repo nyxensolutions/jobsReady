@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import {
   CheckCircle, ChevronRight, Plus, X, Minus, Loader2, MapPin, Briefcase, IndianRupee,
 } from "lucide-react"
+import JobTitleInput from "@/components/employer/JobTitleInput"
 
 type Category = { id: string; slug: string; nameEn: string }
 type City = { id: string; slug: string; name: string; stateName: string }
@@ -267,14 +268,12 @@ function Step1({
       {/* Job Title */}
       <div>
         <label className={label}>Job Title <span className="text-red-500">*</span></label>
-        <input
-          type="text"
+        <JobTitleInput
           value={data.title}
-          onChange={(e) => update("title", e.target.value)}
-          placeholder="Select or type your job title..."
-          className={input}
-          autoFocus
+          onChange={(v) => update("title", v)}
+          placeholder="Search or type job title…"
         />
+        {/* Quick-pick chips */}
         <div className="flex flex-wrap gap-2 mt-2">
           {JOB_TITLE_CHIPS.map((t) => (
             <button

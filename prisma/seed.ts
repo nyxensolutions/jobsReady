@@ -34,6 +34,11 @@ async function main() {
     { slug: "peon", nameEn: "Peon / Office Boy", nameHi: "चपरासी / ऑफिस बॉय", nameTe: "పియోన్ / ఆఫీస్ బాయ్", nameTa: "அலுவலக உதவியாளர்", nameKn: "ಪ್ಯಾದೆ / ಆಫೀಸ್ ಬಾಯ್", nameBn: "পিয়ন / অফিস বয়", namePa: "ਚਪੜਾਸੀ / ਆਫਿਸ ਬੁਆਏ", icon: "User", sortOrder: 21 },
     { slug: "accounting", nameEn: "Accounting / Finance", nameHi: "अकाउंटिंग / फाइनेंस", nameTe: "అకౌంటింగ్ / ఫైనాన్స్", nameTa: "கணக்கியல் / நிதி", nameKn: "ಅಕೌಂಟಿಂಗ್ / ಫೈನಾನ್ಸ್", nameBn: "অ্যাকাউন্টিং / ফাইন্যান্স", namePa: "ਅਕਾਊਂਟਿੰਗ / ਫਾਈਨੈਂਸ", icon: "Calculator", sortOrder: 22 },
     { slug: "teaching", nameEn: "Teaching / Tutor", nameHi: "शिक्षक / ट्यूटर", nameTe: "టీచర్ / ట్యూటర్", nameTa: "ஆசிரியர் / பயிற்சியாளர்", nameKn: "ಶಿಕ್ಷಕ / ಟ್ಯೂಟರ್", nameBn: "শিক্ষক / টিউটর", namePa: "ਅਧਿਆਪਕ / ਟਿਊਟਰ", icon: "BookOpen", sortOrder: 23 },
+    { slug: "warehouse", nameEn: "Warehouse / Logistics", nameHi: "वेयरहाउस / लॉजिस्टिक्स", nameTe: "వేర్‌హౌస్ / లాజిస్టిక్స్", nameTa: "கிடங்கு / தளவாடம்", nameKn: "ವೇರ್‌ಹೌಸ್ / ಲಾಜಿಸ್ಟಿಕ್ಸ್", nameBn: "গুদাম / লজিস্টিক্স", namePa: "ਵੇਅਰਹਾਊਸ / ਲੌਜਿਸਟਿਕਸ", icon: "Warehouse", sortOrder: 24 },
+    { slug: "hospitality", nameEn: "Hospitality / Hotel", nameHi: "हॉस्पिटैलिटी / होटल", nameTe: "హాస్పిటాలిటీ / హోటల్", nameTa: "விருந்தோம்பல் / ஹோட்டல்", nameKn: "ಆತಿಥ್ಯ / ಹೋಟೆಲ್", nameBn: "আতিথেয়তা / হোটেল", namePa: "ਪ੍ਰਾਹੁਣਚਾਰੀ / ਹੋਟਲ", icon: "Hotel", sortOrder: 25 },
+    { slug: "banking", nameEn: "Banking / Insurance", nameHi: "बैंकिंग / बीमा", nameTe: "బ్యాంకింగ్ / ఇన్సూరెన్స్", nameTa: "வங்கியியல் / காப்பீடு", nameKn: "ಬ್ಯಾಂಕಿಂಗ್ / ವಿಮೆ", nameBn: "ব্যাংকিং / বীমা", namePa: "ਬੈਂਕਿੰਗ / ਬੀਮਾ", icon: "Landmark", sortOrder: 26 },
+    { slug: "hr-admin", nameEn: "HR / Admin", nameHi: "HR / एडमिन", nameTe: "HR / అడ్మిన్", nameTa: "HR / நிர்வாகம்", nameKn: "HR / ಆಡಳಿತ", nameBn: "HR / অ্যাডমিন", namePa: "HR / ਪ੍ਰਸ਼ਾਸਨ", icon: "Users", sortOrder: 27 },
+    { slug: "marketing", nameEn: "Marketing / Digital", nameHi: "मार्केटिंग / डिजिटल", nameTe: "మార్కెటింగ్ / డిజిటల్", nameTa: "சந்தைப்படுத்தல் / டிஜிட்டல்", nameKn: "ಮಾರ್ಕೆಟಿಂಗ್ / ಡಿಜಿಟಲ್", nameBn: "মার্কেটিং / ডিজিটাল", namePa: "ਮਾਰਕੀਟਿੰਗ / ਡਿਜੀਟਲ", icon: "Megaphone", sortOrder: 28 },
   ]
 
   for (const cat of categories) {
@@ -84,7 +89,64 @@ async function main() {
     })
   }
 
-  console.log("Done! Categories and cities seeded.")
+  console.log("Seeding plans…")
+
+  const plans = [
+    // ── Single Hire ──────────────────────────────────────────────
+    {
+      slug: "trial", name: "3-Day Trial", type: "SINGLE_HIRE" as const,
+      durationDays: 3, priceRupees: 1,
+      activeJobLimit: 1, candidateUnlockCredits: 5, boostCredits: 0,
+      isTrial: true, isPopular: false, sortOrder: 1,
+    },
+    {
+      slug: "single-1m", name: "Single Hire · 1 Month", type: "SINGLE_HIRE" as const,
+      durationDays: 30, priceRupees: 999,
+      activeJobLimit: 1, candidateUnlockCredits: 50, boostCredits: 2,
+      isTrial: false, isPopular: false, sortOrder: 2,
+    },
+    {
+      slug: "single-3m", name: "Single Hire · 3 Months", type: "SINGLE_HIRE" as const,
+      durationDays: 90, priceRupees: 2499,
+      activeJobLimit: 1, candidateUnlockCredits: 150, boostCredits: 6,
+      isTrial: false, isPopular: false, sortOrder: 3,
+    },
+    {
+      slug: "single-1y", name: "Single Hire · 1 Year", type: "SINGLE_HIRE" as const,
+      durationDays: 365, priceRupees: 7999,
+      activeJobLimit: 1, candidateUnlockCredits: 500, boostCredits: 24,
+      isTrial: false, isPopular: true, sortOrder: 4,
+    },
+    // ── Multi Hire ───────────────────────────────────────────────
+    {
+      slug: "multi-1m", name: "Multi Hire · 1 Month", type: "MULTI_HIRE" as const,
+      durationDays: 30, priceRupees: 1999,
+      activeJobLimit: 3, candidateUnlockCredits: 150, boostCredits: 5,
+      isTrial: false, isPopular: true, sortOrder: 5,
+    },
+    {
+      slug: "multi-3m", name: "Multi Hire · 3 Months", type: "MULTI_HIRE" as const,
+      durationDays: 90, priceRupees: 4999,
+      activeJobLimit: 3, candidateUnlockCredits: 400, boostCredits: 15,
+      isTrial: false, isPopular: false, sortOrder: 6,
+    },
+    {
+      slug: "multi-1y", name: "Multi Hire · 1 Year", type: "MULTI_HIRE" as const,
+      durationDays: 365, priceRupees: 14999,
+      activeJobLimit: 3, candidateUnlockCredits: 1200, boostCredits: 48,
+      isTrial: false, isPopular: false, sortOrder: 7,
+    },
+  ]
+
+  for (const plan of plans) {
+    await prisma.plan.upsert({
+      where: { slug: plan.slug },
+      create: plan,
+      update: plan,
+    })
+  }
+
+  console.log("Done! Categories, cities, and plans seeded.")
 }
 
 main()

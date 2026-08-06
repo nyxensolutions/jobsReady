@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { checkPostJobLimit, getPlanLimits } from "@/lib/subscription"
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession()
@@ -39,6 +40,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Complete employer registration first" }, { status: 403 })
   }
 
+  // ── Plan guard: active job limit ───────────────────────────────
+  const limitError = await checkPostJobLimit(employer.id)
+  if (limitError) {
+    return NextResponse.json({ error: "UPGRADE_REQUIRED", message: limitError }, { status: 402 })
+  }
+
   const [category, city] = await Promise.all([
     prisma.category.findUnique({ where: { slug: categorySlug } }),
     prisma.city.findUnique({ where: { slug: citySlug } }),
@@ -66,6 +73,7 @@ export async function POST(req: NextRequest) {
       qualificationRequired: qualificationRequired ?? null,
       languagesRequired: Array.isArray(languagesRequired) ? languagesRequired.filter(Boolean) : [],
       status: "PENDING_REVIEW",
+      isHighReach: (await getPlanLimits(employer.id)).isHighReach,
     },
   })
 

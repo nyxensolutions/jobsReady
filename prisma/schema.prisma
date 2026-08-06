@@ -46,6 +46,18 @@ enum JobType {
   WALK_IN
 }
 
+enum PlanType {
+  SINGLE_HIRE
+  MULTI_HIRE
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
 // ─── Core ────────────────────────────────────────────────────────────────────
 
 model User {
@@ -114,8 +126,9 @@ model EmployerProfile {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  jobListings JobListing[]
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobListings   JobListing[]
+  subscriptions Subscription[]
 
   @@map("employer_profiles")
 }
@@ -184,11 +197,14 @@ model JobListing {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+  isHighReach  Boolean   @default(false)
+
   employer     EmployerProfile @relation(fields: [employerId], references: [id], onDelete: Cascade)
   category     Category        @relation(fields: [categoryId], references: [id])
   city         City            @relation(fields: [cityId], references: [id])
   applications Application[]
   savedBy      SavedJob[]
+  boost        JobBoost?
 
   @@index([status, cityId])
   @@index([status, categoryId])
@@ -235,6 +251,80 @@ model OtpCode {
   expiresAt DateTime
 
   @@map("otp_codes")
+}
+
+// ─── Plans & Payments ────────────────────────────────────────────────────────
+
+model Plan {
+  id                     String   @id @default(uuid())
+  slug                   String   @unique
+  name                   String
+  type                   PlanType
+  durationDays           Int
+  priceRupees            Int      // full upfront price in ₹
+  activeJobLimit         Int
+  candidateUnlockCredits Int
+  boostCredits           Int
+  isPopular              Boolean  @default(false)
+  isTrial                Boolean  @default(false)
+  isActive               Boolean  @default(true)
+  sortOrder              Int      @default(0)
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Subscription {
+  id                   String             @id @default(uuid())
+  employerId           String
+  planId               String
+  status               SubscriptionStatus @default(ACTIVE)
+  startedAt            DateTime           @default(now())
+  expiresAt            DateTime
+  candidateUnlocksUsed Int                @default(0)
+  boostsUsed           Int                @default(0)
+  razorpayOrderId      String?
+  razorpayPaymentId    String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  employer         EmployerProfile   @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  plan             Plan              @relation(fields: [planId], references: [id])
+  candidateUnlocks CandidateUnlock[]
+  jobBoosts        JobBoost[]
+
+  @@index([employerId, status])
+  @@map("subscriptions")
+}
+
+model CandidateUnlock {
+  id             String   @id @default(uuid())
+  employerId     String
+  seekerId       String
+  subscriptionId String
+  unlockedAt     DateTime @default(now())
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  @@unique([employerId, seekerId])
+  @@index([employerId])
+  @@map("candidate_unlocks")
+}
+
+model JobBoost {
+  id             String   @id @default(uuid())
+  jobId          String   @unique
+  employerId     String
+  subscriptionId String
+  boostedAt      DateTime @default(now())
+  expiresAt      DateTime
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  job          JobListing   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([employerId])
+  @@map("job_boosts")
 }
 
 // ─── Notifications ───────────────────────────────────────────────────────────
