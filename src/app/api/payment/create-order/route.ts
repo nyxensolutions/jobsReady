@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-import { razorpay } from "@/lib/razorpay"
+import { getRazorpay } from "@/lib/razorpay"
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     // Amount in paise (₹ × 100)
     const amount = plan.priceRupees * 100
 
-    const order = await razorpay.orders.create({
+    const order = await getRazorpay().orders.create({
       amount,
       currency: "INR",
       receipt: `jr_${employer.id.slice(0, 8)}_${Date.now()}`,

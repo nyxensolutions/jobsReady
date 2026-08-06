@@ -1,14 +1,19 @@
 import Razorpay from "razorpay"
 import crypto from "crypto"
 
-if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-  console.warn("[Razorpay] Keys not set — payment features will not work.")
+/**
+ * Returns a Razorpay instance initialised with env keys.
+ * Called lazily at request time — never at module evaluation — so the build
+ * succeeds even when the keys are not yet set in the build environment.
+ */
+export function getRazorpay(): Razorpay {
+  const key_id = process.env.RAZORPAY_KEY_ID
+  const key_secret = process.env.RAZORPAY_KEY_SECRET
+  if (!key_id || !key_secret) {
+    throw new Error("[Razorpay] RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET must be set in environment variables.")
+  }
+  return new Razorpay({ key_id, key_secret })
 }
-
-export const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID ?? "",
-  key_secret: process.env.RAZORPAY_KEY_SECRET ?? "",
-})
 
 /** Verify Razorpay payment signature (HMAC-SHA256). */
 export function verifyPaymentSignature({
