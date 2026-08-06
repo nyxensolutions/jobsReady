@@ -6,6 +6,7 @@ import {
   CheckCircle, ChevronRight, Plus, X, Minus, Loader2, MapPin, Briefcase, IndianRupee,
 } from "lucide-react"
 import JobTitleInput from "@/components/employer/JobTitleInput"
+import UpgradeModal from "@/components/employer/UpgradeModal"
 
 type Category = { id: string; slug: string; nameEn: string }
 type City = { id: string; slug: string; name: string; stateName: string }
@@ -745,6 +746,7 @@ export default function PostJobWizard({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [submittedJobId, setSubmittedJobId] = useState<string | null>(null)
+  const [showUpgrade, setShowUpgrade] = useState(false)
 
   const selectedCity = cities.find((c) => c.slug === data.citySlug)
   const selectedCategory = categories.find((c) => c.slug === data.categorySlug)
@@ -826,7 +828,11 @@ export default function PostJobWizard({
         }),
       })
       const result = await res.json()
-      if (!res.ok) throw new Error(result.error ?? "Failed to post job")
+      if (res.status === 402) {
+        setShowUpgrade(true)
+        return
+      }
+      if (!res.ok) throw new Error(result.message ?? result.error ?? "Failed to post job")
       setSubmittedJobId(result.jobId)
     } catch (err: any) {
       setError(err.message)
@@ -868,6 +874,13 @@ export default function PostJobWizard({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Upgrade paywall modal */}
+      {showUpgrade && (
+        <UpgradeModal
+          message="You have 1 active job on the free plan. Upgrade to post more jobs and reach more candidates."
+          onClose={() => setShowUpgrade(false)}
+        />
+      )}
       {/* Step indicator */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="flex overflow-x-auto">
