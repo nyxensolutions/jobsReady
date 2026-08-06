@@ -155,7 +155,7 @@ function LoginPageContent() {
               <Image src="/logo-full.png" alt="Jobs Ready" width={48} height={48} className="object-contain" />
             </div>
             <h1 className="text-xl font-bold text-gray-900">Jobs Ready</h1>
-            <p className="text-sm text-gray-500 mt-1">Sign in to continue</p>
+            <p className="text-sm text-gray-500 mt-1">{t("signInToContinue")}</p>
           </div>
 
           {/* Step: Choose role */}
@@ -170,7 +170,7 @@ function LoginPageContent() {
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold text-gray-900 text-sm">{t("iAmSeeker")}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Login with mobile OTP</div>
+                  <div className="text-xs text-gray-500 mt-0.5">{t("loginWithMobileOtp")}</div>
                 </div>
                 <ArrowRight size={15} className="text-gray-400 group-hover:text-orange-500" />
               </button>
@@ -184,7 +184,7 @@ function LoginPageContent() {
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold text-gray-900 text-sm">{t("iAmEmployer")}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Phone OTP or Google</div>
+                  <div className="text-xs text-gray-500 mt-0.5">{t("phoneOtpOrGoogle")}</div>
                 </div>
                 <ArrowRight size={15} className="text-gray-400 group-hover:text-[#1a3461]" />
               </button>
@@ -199,11 +199,11 @@ function LoginPageContent() {
                 onClick={() => setStep(role === "employer" ? "employer" : "role")}
                 className="text-sm text-gray-500 hover:text-gray-700 text-left flex items-center gap-1"
               >
-                ← Back
+                {t("backButton")}
               </button>
               {role === "employer" && (
                 <div className="bg-[#1a3461]/5 rounded-xl px-3 py-2 text-xs text-[#1a3461] font-medium">
-                  Employer · Phone OTP login
+                  {t("employerPhoneLogin")}
                 </div>
               )}
               <div>
@@ -244,7 +244,7 @@ function LoginPageContent() {
                 <p className="text-sm text-gray-600">
                   {t("otpSent", { phone: `+91 ${phone}` })}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">Check your SMS · Valid for a few minutes</p>
+                <p className="text-xs text-gray-400 mt-1">{t("checkSms")}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">{t("otpLabel")}</label>
@@ -286,11 +286,11 @@ function LoginPageContent() {
                 onClick={() => setStep("role")}
                 className="text-sm text-gray-500 hover:text-gray-700 text-left"
               >
-                ← Back
+                {t("backButton")}
               </button>
               <div className="text-center py-1">
-                <p className="text-sm font-semibold text-gray-800 mb-1">Sign in as Employer</p>
-                <p className="text-xs text-gray-400">Post jobs and find candidates</p>
+                <p className="text-sm font-semibold text-gray-800 mb-1">{t("signInAsEmployer")}</p>
+                <p className="text-xs text-gray-400">{t("postJobsDesc")}</p>
               </div>
 
               {/* Phone OTP option */}
@@ -299,12 +299,12 @@ function LoginPageContent() {
                 className="w-full py-3 rounded-xl border-2 border-gray-200 hover:border-[#1a3461] hover:bg-[#1a3461]/5 text-gray-700 font-semibold text-sm transition-all flex items-center justify-center gap-3"
               >
                 <Phone size={17} className="text-[#1a3461]" />
-                Enter your mobile number
+                {t("enterMobile")}
               </button>
 
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-gray-200" />
-                <span className="text-xs text-gray-400">or</span>
+                <span className="text-xs text-gray-400">{t("orDivider")}</span>
                 <div className="flex-1 h-px bg-gray-200" />
               </div>
 
@@ -318,23 +318,23 @@ function LoginPageContent() {
                 {loading ? (
                   <Loader2 size={18} className="animate-spin" />
                 ) : (
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                     <path d="M17.64 9.2c0-.638-.057-1.252-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
                     <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
                     <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
                     <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
                   </svg>
                 )}
-                Continue with Google
+                {t("continueWithGoogle")}
               </button>
             </div>
           )}
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-5">
-          Looking for a job?{" "}
+          {t("lookingForJob")}{" "}
           <Link href="/login?role=seeker" className="text-[#1a3461] font-medium hover:underline">
-            Job seeker login
+            {t("jobSeekerLogin")}
           </Link>
         </p>
       </div>

@@ -2,24 +2,12 @@
 
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import {
   Camera, FileText, Loader2, CheckCircle, X, Plus,
   Pencil, MapPin, Phone, Briefcase, Trash2
 } from "lucide-react"
-
-const JOB_TYPES = [
-  { value: "FULL_TIME",  label: "Full Time" },
-  { value: "PART_TIME",  label: "Part Time" },
-  { value: "CONTRACT",   label: "Contract" },
-  { value: "GIG",        label: "Gig / Daily wage" },
-  { value: "WALK_IN",    label: "Walk-in Interview" },
-]
-
-const COMMON_LANGUAGES = [
-  "Hindi", "English", "Telugu", "Tamil", "Kannada", "Malayalam",
-  "Bengali", "Marathi", "Gujarati", "Punjabi", "Odia", "Urdu",
-]
 
 type Profile = {
   name: string
@@ -51,6 +39,22 @@ function maskPhone(phone: string | null) {
 
 export default function SeekerProfileClient({ initial, phone, cities }: Props) {
   const router = useRouter()
+  const t = useTranslations("seeker.profile")
+  const tc = useTranslations("common")
+  const tt = useTranslations("jobs.types")
+
+  const JOB_TYPES = [
+    { value: "FULL_TIME",  label: (() => { try { return tt("FULL_TIME") } catch { return "Full Time" } })() },
+    { value: "PART_TIME",  label: (() => { try { return tt("PART_TIME") } catch { return "Part Time" } })() },
+    { value: "CONTRACT",   label: (() => { try { return tt("CONTRACT") } catch { return "Contract" } })() },
+    { value: "GIG",        label: (() => { try { return tt("GIG") } catch { return "Gig / Daily wage" } })() },
+    { value: "WALK_IN",    label: (() => { try { return tt("WALK_IN" as any) } catch { return "Walk-in Interview" } })() },
+  ]
+
+  const COMMON_LANGUAGES = [
+    "Hindi", "English", "Telugu", "Tamil", "Kannada", "Malayalam",
+    "Bengali", "Marathi", "Gujarati", "Punjabi", "Odia", "Urdu",
+  ]
 
   const isPhonePlaceholder = !initial?.name || /^\+?\d+$/.test(initial.name)
   const displayName = isPhonePlaceholder ? "" : initial!.name
@@ -178,8 +182,8 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
     const file = e.target.files?.[0]
     if (!file) return
     setPhotoError("")
-    if (!file.type.startsWith("image/")) { setPhotoError("Only image files are allowed"); return }
-    if (file.size > 2 * 1024 * 1024) { setPhotoError("Photo must be under 2 MB"); return }
+    if (!file.type.startsWith("image/")) { setPhotoError(t("photoError")); return }
+    if (file.size > 2 * 1024 * 1024) { setPhotoError(t("photoSizeError")); return }
     setPhotoPreview(URL.createObjectURL(file))
     setPhotoUploading(true)
     try {
@@ -202,8 +206,8 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
     if (!file) return
     setResumeError("")
     const allowed = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
-    if (!allowed.includes(file.type)) { setResumeError("Only PDF or Word files allowed"); return }
-    if (file.size > 5 * 1024 * 1024) { setResumeError("File must be under 5 MB"); return }
+    if (!allowed.includes(file.type)) { setResumeError(t("resumeTypeError")); return }
+    if (file.size > 5 * 1024 * 1024) { setResumeError(t("resumeSizeError")); return }
     setResumeUploading(true)
     try {
       const fd = new FormData()
@@ -232,12 +236,18 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
 
   // Completeness
   const completeness = [
-    { label: "Name", done: !!displayName || !!name },
-    { label: "City", done: !!city },
-    { label: "Skills", done: skills.length > 0 },
-    { label: "Resume", done: !!resumeUrl },
+    { label: t("completenessName"),   done: !!displayName || !!name },
+    { label: t("completenessCity"),   done: !!city },
+    { label: t("completenessSkills"), done: skills.length > 0 },
+    { label: t("completenessResume"), done: !!resumeUrl },
   ]
   const score = completeness.filter(c => c.done).length
+
+  const expLabel = (val: string) => {
+    const n = Number(val)
+    if (n === 0) return t("fresher")
+    return n === 1 ? t("expYear", { n }) : t("expYears", { n })
+  }
 
   const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#1a3461]/30 focus:border-[#1a3461] bg-white"
 
@@ -255,7 +265,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 onClick={() => photoInputRef.current?.click()}
               >
                 {photoPreview ? (
-                  <Image src={photoPreview} alt="Profile photo" fill className="object-cover" unoptimized />
+                  <Image src={photoPreview} alt={t("title")} fill className="object-cover" unoptimized />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-white/60">
                     <Camera size={24} />
@@ -279,7 +289,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
             {/* Name + details */}
             <div className="flex-1 min-w-0">
               <h1 className="text-white font-bold text-lg leading-tight">
-                {name || displayName || "Add your name"}
+                {name || displayName || t("addYourName")}
               </h1>
               {city && (
                 <p className="text-white/70 text-sm flex items-center gap-1 mt-0.5">
@@ -293,7 +303,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
               )}
               {isOpenToWork && (
                 <span className="mt-2 inline-block text-xs font-semibold bg-green-500 text-white px-2.5 py-0.5 rounded-full">
-                  Open to Work
+                  {t("openToWorkBadge")}
                 </span>
               )}
             </div>
@@ -311,7 +321,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
         {/* Profile completeness */}
         {score < 4 && (
           <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <p className="text-sm font-bold text-gray-800 mb-2">Your hiring chances will improve</p>
+            <p className="text-sm font-bold text-gray-800 mb-2">{t("hiringChances")}</p>
             <div className="flex items-center gap-2 mb-3">
               <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                 <div className="h-full bg-[#1a3461] rounded-full transition-all" style={{ width: `${score * 25}%` }} />
@@ -331,7 +341,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
         {/* Basic info section */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-800 text-sm">Basic Details</h2>
+            <h2 className="font-semibold text-gray-800 text-sm">{t("basicDetails")}</h2>
             {!editBasic && (
               <button onClick={() => setEditBasic(true)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors">
                 <Pencil size={14} />
@@ -342,55 +352,57 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
           {editBasic ? (
             <div className="p-4 flex flex-col gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Full Name *</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{t("fullNameRequired")}</label>
                 <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Ravi Kumar" className={inputCls} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">City</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">{t("city")}</label>
                   <select value={city} onChange={e => setCity(e.target.value)} className={inputCls}>
-                    <option value="">Select city</option>
+                    <option value="">{t("selectCity")}</option>
                     {cities.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Experience</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">{t("experience")}</label>
                   <select value={experienceYears} onChange={e => setExperienceYears(e.target.value)} className={inputCls}>
-                    <option value="0">Fresher</option>
-                    <option value="1">1 year</option>
-                    <option value="2">2 years</option>
-                    <option value="3">3 years</option>
-                    <option value="5">5+ years</option>
-                    <option value="10">10+ years</option>
+                    <option value="0">{t("fresher")}</option>
+                    <option value="1">{t("expYear", { n: 1 })}</option>
+                    <option value="2">{t("expYears", { n: 2 })}</option>
+                    <option value="3">{t("expYears", { n: 3 })}</option>
+                    <option value="5">{t("expYears", { n: 5 })}+</option>
+                    <option value="10">{t("expYears", { n: 10 })}+</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">About Yourself <span className="text-gray-400 font-normal">(optional)</span></label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {t("aboutYourself")} <span className="text-gray-400 font-normal">({t("optional")})</span>
+                </label>
                 <textarea value={bio} onChange={e => setBio(e.target.value)} rows={3}
-                  placeholder="e.g. 3 years delivery experience, own a bike, Hindi + English..."
+                  placeholder={t("aboutPlaceholder")}
                   className={inputCls + " resize-none"} />
               </div>
               <div className="flex gap-2 pt-1">
                 <button onClick={handleSaveBasic} disabled={basicLoading || !name.trim()}
                   className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
                   {basicLoading && <Loader2 size={13} className="animate-spin" />}
-                  Save
+                  {tc("save")}
                 </button>
                 <button onClick={() => setEditBasic(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-                  Cancel
+                  {tc("cancel")}
                 </button>
               </div>
             </div>
           ) : (
             <div className="p-4 flex flex-col gap-2.5">
-              <Row label="Name" value={name || displayName || <span className="text-gray-400 italic text-xs">Not added</span>} />
-              <Row label="City" value={city || <span className="text-gray-400 italic text-xs">Not added</span>} />
-              <Row label="Experience" value={experienceYears === "0" ? "Fresher" : `${experienceYears} year${Number(experienceYears) > 1 ? "s" : ""}`} />
-              {bio && <Row label="About" value={bio} />}
+              <Row label={t("nameRow")} value={name || displayName || <span className="text-gray-400 italic text-xs">{t("notAdded")}</span>} />
+              <Row label={t("city")} value={city || <span className="text-gray-400 italic text-xs">{t("notAdded")}</span>} />
+              <Row label={t("experience")} value={expLabel(experienceYears)} />
+              {bio && <Row label={t("aboutRow")} value={bio} />}
               {basicSaved && (
                 <div className="flex items-center gap-1.5 text-green-700 text-xs">
-                  <CheckCircle size={13} /> Saved!
+                  <CheckCircle size={13} /> {t("savedConfirm")}
                 </div>
               )}
             </div>
@@ -400,7 +412,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
         {/* Resume section */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-800 text-sm">Resume</h2>
+            <h2 className="font-semibold text-gray-800 text-sm">{t("resume")}</h2>
           </div>
           <div className="p-4">
             {resumeUrl ? (
@@ -410,20 +422,20 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 </div>
                 <div className="flex-1">
                   <a href={resumeUrl} target="_blank" rel="noreferrer" className="text-sm font-semibold text-green-700 hover:underline">
-                    View uploaded resume
+                    {t("viewUploadedResume")}
                   </a>
-                  <p className="text-xs text-gray-400 mt-0.5">PDF or Word document</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{t("pdfOrWord")}</p>
                 </div>
                 <button onClick={() => resumeInputRef.current?.click()}
                   className="text-xs font-semibold text-[#1a3461] border border-[#1a3461]/30 px-3 py-1.5 rounded-lg hover:bg-[#1a3461]/5 transition-colors">
-                  Replace
+                  {t("replace")}
                 </button>
               </div>
             ) : (
               <button onClick={() => resumeInputRef.current?.click()}
                 className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-[#1a3461] hover:text-[#1a3461] transition-colors">
                 {resumeUploading ? <Loader2 size={16} className="animate-spin" /> : <FileText size={16} />}
-                {resumeUploading ? "Uploading..." : "Upload Resume (PDF or Word)"}
+                {resumeUploading ? t("uploading") : t("uploadResumePlaceholder")}
               </button>
             )}
             <input ref={resumeInputRef} type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={handleResumeChange} />
@@ -434,7 +446,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
         {/* Skills section */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-800 text-sm">Skills</h2>
+            <h2 className="font-semibold text-gray-800 text-sm">{t("skills")}</h2>
             {!editSkills && (
               <button onClick={() => setEditSkills(true)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors">
                 <Pencil size={14} />
@@ -459,7 +471,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 <div className="flex gap-2">
                   <input type="text" value={skillInput} onChange={e => setSkillInput(e.target.value)}
                     onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); const v = skillInput.trim(); if (v && !skills.includes(v)) { setSkills(p => [...p, v]); setSkillInput("") } } }}
-                    placeholder="e.g. Driving, MS Excel, Hindi"
+                    placeholder={t("skillsPlaceholder")}
                     className={inputCls} />
                   <button type="button"
                     onClick={() => { const v = skillInput.trim(); if (v && !skills.includes(v)) { setSkills(p => [...p, v]); setSkillInput("") } }}
@@ -471,10 +483,10 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   <button onClick={handleSaveSkills} disabled={skillsLoading}
                     className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
                     {skillsLoading && <Loader2 size={13} className="animate-spin" />}
-                    Save
+                    {tc("save")}
                   </button>
                   <button onClick={() => setEditSkills(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-                    Cancel
+                    {tc("cancel")}
                   </button>
                 </div>
               </div>
@@ -489,7 +501,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 </div>
               ) : (
                 <button onClick={() => setEditSkills(true)} className="text-sm text-[#1a3461] font-semibold flex items-center gap-1 hover:underline">
-                  <Plus size={14} /> Add skills
+                  <Plus size={14} /> {t("addSkills")}
                 </button>
               )
             )}
@@ -499,7 +511,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
         {/* Job Preferences section */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-800 text-sm">Job Preferences</h2>
+            <h2 className="font-semibold text-gray-800 text-sm">{t("jobPreferences")}</h2>
             {!editPrefs && (
               <button onClick={() => setEditPrefs(true)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors">
                 <Pencil size={14} />
@@ -510,7 +522,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
             {editPrefs ? (
               <div className="flex flex-col gap-4">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-2">Preferred Job Types</p>
+                  <p className="text-xs font-medium text-gray-500 mb-2">{t("preferredJobTypesLabel")}</p>
                   <div className="flex flex-wrap gap-2">
                     {JOB_TYPES.map(({ value, label }) => (
                       <button key={value} type="button"
@@ -527,8 +539,8 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 </div>
                 <div className={`flex items-center justify-between px-3 py-2.5 rounded-lg border transition-colors ${isOpenToWork ? "border-green-300 bg-green-50" : "border-gray-200 bg-gray-50"}`}>
                   <div>
-                    <p className="text-sm font-semibold text-gray-800">Open to Work</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{isOpenToWork ? "Visible to employers" : "Hidden from employers"}</p>
+                    <p className="text-sm font-semibold text-gray-800">{t("openToWorkToggle")}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{isOpenToWork ? t("visibleToEmployers") : t("hiddenFromEmployers")}</p>
                   </div>
                   <button type="button" onClick={() => setIsOpenToWork(v => !v)}
                     className={`relative w-10 h-5 rounded-full transition-colors ${isOpenToWork ? "bg-green-500" : "bg-gray-300"}`}>
@@ -539,10 +551,10 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   <button onClick={handleSavePrefs} disabled={prefsLoading}
                     className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
                     {prefsLoading && <Loader2 size={13} className="animate-spin" />}
-                    Save
+                    {tc("save")}
                   </button>
                   <button onClick={() => setEditPrefs(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-                    Cancel
+                    {tc("cancel")}
                   </button>
                 </div>
               </div>
@@ -550,20 +562,20 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
               <div className="flex flex-col gap-2">
                 {preferredJobTypes.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5">
-                    {preferredJobTypes.map(t => (
-                      <span key={t} className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">
-                        {JOB_TYPES.find(j => j.value === t)?.label ?? t}
+                    {preferredJobTypes.map(v => (
+                      <span key={v} className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">
+                        {JOB_TYPES.find(j => j.value === v)?.label ?? v}
                       </span>
                     ))}
                   </div>
                 ) : (
                   <button onClick={() => setEditPrefs(true)} className="text-sm text-[#1a3461] font-semibold flex items-center gap-1 hover:underline">
-                    <Plus size={14} /> Add job preferences
+                    <Plus size={14} /> {t("addJobPrefs")}
                   </button>
                 )}
                 <div className="flex items-center gap-2 mt-1">
                   <span className={`w-2 h-2 rounded-full ${isOpenToWork ? "bg-green-500" : "bg-gray-300"}`} />
-                  <span className="text-xs text-gray-500">{isOpenToWork ? "Open to work" : "Not looking"}</span>
+                  <span className="text-xs text-gray-500">{isOpenToWork ? t("openToWorkStatus") : t("notLooking")}</span>
                 </div>
               </div>
             )}
@@ -573,7 +585,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
         {/* Location Preferences section */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-800 text-sm">Location Preferences</h2>
+            <h2 className="font-semibold text-gray-800 text-sm">{t("locationPreferences")}</h2>
             {!editLocation && (
               <button onClick={() => setEditLocation(true)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors">
                 <Pencil size={14} />
@@ -583,11 +595,10 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
           <div className="p-4">
             {editLocation ? (
               <div className="flex flex-col gap-4">
-                {/* Open to any location toggle */}
                 <div className={`flex items-center justify-between px-3 py-2.5 rounded-lg border transition-colors ${openToRelocate ? "border-green-300 bg-green-50" : "border-gray-200 bg-gray-50"}`}>
                   <div>
-                    <p className="text-sm font-semibold text-gray-800">Open to any location</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{openToRelocate ? "Available across all cities" : "Looking in specific cities only"}</p>
+                    <p className="text-sm font-semibold text-gray-800">{t("openToAnyLocationLabel")}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{openToRelocate ? t("availableAllCities") : t("specificCitiesOnly")}</p>
                   </div>
                   <button type="button" onClick={() => setOpenToRelocate(v => !v)}
                     className={`relative w-10 h-5 rounded-full transition-colors ${openToRelocate ? "bg-green-500" : "bg-gray-300"}`}>
@@ -595,10 +606,9 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   </button>
                 </div>
 
-                {/* Preferred cities (shown when not open to all) */}
                 {!openToRelocate && (
                   <div>
-                    <p className="text-xs font-medium text-gray-500 mb-2">Preferred Cities</p>
+                    <p className="text-xs font-medium text-gray-500 mb-2">{t("preferredCities")}</p>
                     {preferredCities.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 mb-2">
                         {preferredCities.map(c => (
@@ -613,7 +623,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                     )}
                     <select onChange={e => { const v = e.target.value; if (v && !preferredCities.includes(v)) setPreferredCities(p => [...p, v]); e.target.value = "" }}
                       className={inputCls}>
-                      <option value="">+ Add a city</option>
+                      <option value="">{t("addCityPlaceholder")}</option>
                       {cities.filter(c => !preferredCities.includes(c)).map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
@@ -623,10 +633,10 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   <button onClick={handleSaveLocation} disabled={locationLoading}
                     className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
                     {locationLoading && <Loader2 size={13} className="animate-spin" />}
-                    Save
+                    {tc("save")}
                   </button>
                   <button onClick={() => setEditLocation(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-                    Cancel
+                    {tc("cancel")}
                   </button>
                 </div>
               </div>
@@ -635,7 +645,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${openToRelocate ? "bg-green-500" : "bg-amber-400"}`} />
                   <span className="text-sm text-gray-700">
-                    {openToRelocate ? "Open to any location" : "Specific cities only"}
+                    {openToRelocate ? t("openToAnyLocationLabel") : t("specificCitiesStatus")}
                   </span>
                 </div>
                 {!openToRelocate && preferredCities.length > 0 && (
@@ -647,7 +657,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 )}
                 {!openToRelocate && preferredCities.length === 0 && (
                   <button onClick={() => setEditLocation(true)} className="text-sm text-[#1a3461] font-semibold flex items-center gap-1 hover:underline">
-                    <Plus size={14} /> Add preferred cities
+                    <Plus size={14} /> {t("addPreferredCities")}
                   </button>
                 )}
               </div>
@@ -658,7 +668,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
         {/* Languages section */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-800 text-sm">Languages Known</h2>
+            <h2 className="font-semibold text-gray-800 text-sm">{t("languagesKnown")}</h2>
             {!editLanguages && (
               <button onClick={() => setEditLanguages(true)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors">
                 <Pencil size={14} />
@@ -668,7 +678,6 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
           <div className="p-4">
             {editLanguages ? (
               <div className="flex flex-col gap-3">
-                {/* Common language chips */}
                 <div className="flex flex-wrap gap-1.5">
                   {COMMON_LANGUAGES.map(lang => (
                     <button key={lang} type="button"
@@ -682,11 +691,10 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                     </button>
                   ))}
                 </div>
-                {/* Custom language input */}
                 <div className="flex gap-2">
                   <input type="text" value={langInput} onChange={e => setLangInput(e.target.value)}
                     onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); const v = langInput.trim(); if (v && !languages.includes(v)) { setLanguages(p => [...p, v]); setLangInput("") } } }}
-                    placeholder="Add another language..."
+                    placeholder={t("addLanguagePlaceholder")}
                     className={inputCls} />
                   <button type="button"
                     onClick={() => { const v = langInput.trim(); if (v && !languages.includes(v)) { setLanguages(p => [...p, v]); setLangInput("") } }}
@@ -698,10 +706,10 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   <button onClick={handleSaveLanguages} disabled={languagesLoading}
                     className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
                     {languagesLoading && <Loader2 size={13} className="animate-spin" />}
-                    Save
+                    {tc("save")}
                   </button>
                   <button onClick={() => setEditLanguages(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-                    Cancel
+                    {tc("cancel")}
                   </button>
                 </div>
               </div>
@@ -716,7 +724,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 </div>
               ) : (
                 <button onClick={() => setEditLanguages(true)} className="text-sm text-[#1a3461] font-semibold flex items-center gap-1 hover:underline">
-                  <Plus size={14} /> Add languages
+                  <Plus size={14} /> {t("addLanguages")}
                 </button>
               )
             )}
@@ -730,9 +738,9 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
               deleteConfirm ? "bg-red-600 text-white border-red-600" : "text-red-500 border-red-200 hover:bg-red-50"
             }`}>
             {deleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
-            {deleteConfirm ? "Tap again to confirm deletion" : "Deactivate account"}
+            {deleteConfirm ? t("confirmDelete") : t("deactivateAccount")}
           </button>
-          {deleteConfirm && <p className="text-xs text-red-400 mt-1.5 ml-1">This will permanently delete your account and all data.</p>}
+          {deleteConfirm && <p className="text-xs text-red-400 mt-1.5 ml-1">{t("permanentDeleteMsg")}</p>}
         </div>
 
       </div>

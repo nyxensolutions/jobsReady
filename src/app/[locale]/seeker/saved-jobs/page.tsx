@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Bookmark, MapPin, ChevronRight } from "lucide-react"
 
@@ -9,7 +10,7 @@ interface SavedJob {
   job: {
     id: string
     title: string
-    salaryMin: number
+    salaryMin: number | null
     salaryMax: number | null
     status: string
     employer: { companyName: string }
@@ -18,12 +19,16 @@ interface SavedJob {
   }
 }
 
-function formatSalary(min: number, max: number | null) {
+function formatSalary(min: number | null, max: number | null): string | null {
+  if (!min && !max) return null
   const fmt = (n: number) => n >= 1000 ? `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : `₹${n}`
-  return max ? `${fmt(min)}–${fmt(max)}/mo` : `${fmt(min)}+/mo`
+  if (!min && max) return `${fmt(max)}/mo`
+  if (!max) return `${fmt(min!)}/mo`
+  return `${fmt(min!)}–${fmt(max)}/mo`
 }
 
 export default function SavedJobsPage() {
+  const t = useTranslations("seeker.savedJobs")
   const [saved, setSaved] = useState<SavedJob[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -35,9 +40,18 @@ export default function SavedJobsPage() {
   }, [])
 
   async function unsave(jobId: string) {
-    await fetch("/api/seeker/saved-jobs", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jobId }) })
+    await fetch("/api/seeker/saved-jobs", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jobId }),
+    })
     setSaved(prev => prev.filter(s => s.job.id !== jobId))
   }
+
+  const savedCount = saved.length
+  const countLabel = savedCount === 1
+    ? t("jobsSaved", { count: savedCount })
+    : t("jobsSavedPlural", { count: savedCount })
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -47,8 +61,10 @@ export default function SavedJobsPage() {
             <Bookmark size={20} className="text-[#1a3461]" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Saved Jobs</h1>
-            <p className="text-sm text-gray-500">{loading ? "Loading..." : `${saved.length} job${saved.length !== 1 ? "s" : ""} saved`}</p>
+            <h1 className="text-xl font-bold text-gray-900">{t("title")}</h1>
+            <p className="text-sm text-gray-500">
+              {loading ? t("loadingText") : countLabel}
+            </p>
           </div>
         </div>
 
@@ -64,45 +80,59 @@ export default function SavedJobsPage() {
         ) : saved.length === 0 ? (
           <div className="text-center py-20">
             <Bookmark size={48} className="mx-auto mb-4 text-gray-300" />
-            <p className="font-semibold text-gray-500">No saved jobs yet</p>
-            <p className="text-sm text-gray-400 mt-1">Tap the bookmark icon on any job to save it</p>
-            <Link href="/jobs" className="mt-6 inline-block bg-[#1a3461] text-white px-6 py-2 rounded-lg font-semibold text-sm hover:bg-[#142a52] transition-colors">
-              Browse Jobs
+            <p className="font-semibold text-gray-500">{t("noSavedYet")}</p>
+            <p className="text-sm text-gray-400 mt-1">{t("noSavedHint")}</p>
+            <Link
+              href="/jobs"
+              className="mt-6 inline-block bg-[#1a3461] text-white px-6 py-2 rounded-lg font-semibold text-sm hover:bg-[#142a52] transition-colors"
+            >
+              {t("browseJobs")}
             </Link>
           </div>
         ) : (
           <div className="space-y-3">
-            {saved.map(({ id, job, createdAt }) => (
-              <div key={id} className="bg-white rounded-xl border border-gray-200 hover:border-[#1a3461]/30 hover:shadow-sm transition-all">
-                <div className="p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <Link href={`/jobs/${job.id}`}>
-                        <h3 className="font-bold text-[#1a3461] text-sm hover:underline truncate">{job.title}</h3>
-                      </Link>
-                      <p className="text-xs text-gray-500 truncate mt-0.5">{job.employer.companyName}</p>
-                      <p className="text-sm font-bold text-green-600 mt-1.5">{formatSalary(job.salaryMin, job.salaryMax)}</p>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
-                        <span className="flex items-center gap-1"><MapPin size={11} />{job.city.name}</span>
-                        <span>Saved {new Date(createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
+            {saved.map(({ id, job, createdAt }) => {
+              const salary = formatSalary(job.salaryMin, job.salaryMax)
+              return (
+                <div key={id} className="bg-white rounded-xl border border-gray-200 hover:border-[#1a3461]/30 hover:shadow-sm transition-all">
+                  <div className="p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <Link href={`/jobs/${job.id}`}>
+                          <h3 className="font-bold text-[#1a3461] text-sm hover:underline truncate">{job.title}</h3>
+                        </Link>
+                        <p className="text-xs text-gray-500 truncate mt-0.5">{job.employer.companyName}</p>
+                        {salary && (
+                          <p className="text-sm font-bold text-green-600 mt-1.5">{salary}</p>
+                        )}
+                        <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                          <span className="flex items-center gap-1"><MapPin size={11} />{job.city.name}</span>
+                          <span>
+                            {t("savedOn")}{" "}
+                            {new Date(createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                          </span>
+                        </div>
                       </div>
+                      <button
+                        onClick={() => unsave(job.id)}
+                        className="p-2 rounded-full text-[#1a3461] hover:text-gray-400 hover:bg-gray-100 transition-colors"
+                        title={t("title")}
+                      >
+                        <Bookmark size={16} fill="currentColor" />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => unsave(job.id)}
-                      className="p-2 rounded-full text-[#1a3461] hover:text-gray-400 hover:bg-gray-100 transition-colors"
-                      title="Remove from saved"
+                  </div>
+                  <div className="px-4 pb-4">
+                    <Link
+                      href={`/jobs/${job.id}`}
+                      className="w-full flex items-center justify-center gap-1 py-2 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors"
                     >
-                      <Bookmark size={16} fill="currentColor" />
-                    </button>
+                      {t("applyNow")} <ChevronRight size={13} />
+                    </Link>
                   </div>
                 </div>
-                <div className="px-4 pb-4">
-                  <Link href={`/jobs/${job.id}`} className="w-full flex items-center justify-center gap-1 py-2 bg-[#1a3461] hover:bg-[#142a52] text-white text-xs font-bold rounded-lg transition-colors">
-                    Apply Now <ChevronRight size={13} />
-                  </Link>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
