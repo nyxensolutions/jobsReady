@@ -13,12 +13,19 @@ function withAlternates(path: string) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const jobs = await prisma.jobListing.findMany({
-    where: { status: "ACTIVE" },
-    select: { id: true, updatedAt: true },
-    orderBy: { updatedAt: "desc" },
-    take: 5000,
-  })
+  // A DB blip must not take down the whole sitemap — static and blog routes
+  // are known without a query, so serve those rather than returning a 500.
+  let jobs: Array<{ id: string; updatedAt: Date }> = []
+  try {
+    jobs = await prisma.jobListing.findMany({
+      where: { status: "ACTIVE" },
+      select: { id: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+      take: 5000,
+    })
+  } catch {
+    jobs = []
+  }
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: APP_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1, alternates: withAlternates("/") },
