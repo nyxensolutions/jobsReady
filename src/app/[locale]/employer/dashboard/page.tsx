@@ -2,27 +2,33 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import {
   PlusCircle, Users, Clock, CheckCircle, XCircle, AlertCircle,
-  Briefcase, Upload, Info, Eye, TrendingUp, ArrowUpRight,
+  Briefcase, Eye, TrendingUp, ArrowUpRight, Upload, Info,
+  Zap, BarChart2, MapPin, Tag, IndianRupee, ChevronRight,
 } from "lucide-react"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import EmployerJobActions from "@/components/employer/EmployerJobActions"
+import { getActiveSub } from "@/lib/subscription"
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; icon: typeof CheckCircle }> = {
-  ACTIVE:         { label: "Active",       color: "text-green-700 bg-green-50 border-green-200",  icon: CheckCircle },
-  PENDING_REVIEW: { label: "Under Review", color: "text-amber-700 bg-amber-50 border-amber-200",  icon: Clock },
-  DRAFT:          { label: "Draft",        color: "text-gray-600 bg-gray-50 border-gray-200",    icon: AlertCircle },
-  EXPIRED:        { label: "Expired",      color: "text-red-600 bg-red-50 border-red-200",       icon: XCircle },
-  CLOSED:         { label: "Closed",       color: "text-gray-500 bg-gray-50 border-gray-200",    icon: XCircle },
-  REJECTED:       { label: "Rejected",     color: "text-red-700 bg-red-50 border-red-200",       icon: XCircle },
+const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string; icon: typeof CheckCircle }> = {
+  ACTIVE:         { label: "Active",       color: "text-emerald-700 bg-emerald-50 border-emerald-200", dot: "bg-emerald-500", icon: CheckCircle },
+  PENDING_REVIEW: { label: "Under Review", color: "text-amber-700 bg-amber-50 border-amber-200",       dot: "bg-amber-400",  icon: Clock },
+  DRAFT:          { label: "Draft",        color: "text-slate-500 bg-slate-50 border-slate-200",       dot: "bg-slate-400",  icon: AlertCircle },
+  EXPIRED:        { label: "Expired",      color: "text-red-600 bg-red-50 border-red-200",             dot: "bg-red-400",    icon: XCircle },
+  CLOSED:         { label: "Closed",       color: "text-slate-500 bg-slate-50 border-slate-200",       dot: "bg-slate-300",  icon: XCircle },
+  REJECTED:       { label: "Rejected",     color: "text-red-700 bg-red-50 border-red-200",             dot: "bg-red-500",    icon: XCircle },
 }
 
 function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {
-  const suffix = unit === "daily" ? "/day" : "/month"
+  const suffix = unit === "daily" ? "/day" : "/mo"
   const fmt = (n: number) => n >= 1000 ? `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : `₹${n}`
   if (min && max) return `${fmt(min)} – ${fmt(max)}${suffix}`
-  if (min) return `From ${fmt(min)}${suffix}`
-  return "—"
+  if (min) return `from ${fmt(min)}${suffix}`
+  return "Salary not set"
+}
+
+function daysLeft(iso: string) {
+  return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000))
 }
 
 export default async function EmployerDashboardPage() {
@@ -36,155 +42,194 @@ export default async function EmployerDashboardPage() {
   if (!dbUser || dbUser.role !== "EMPLOYER") redirect("/login")
   if (!employer) redirect("/employer/register")
 
-  const jobs = await prisma.jobListing.findMany({
-    where: { employerId: employer.id },
-    include: {
-      category: { select: { nameEn: true } },
-      city: { select: { name: true } },
-      _count: { select: { applications: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  })
+  const [jobs, activeSub] = await Promise.all([
+    prisma.jobListing.findMany({
+      where: { employerId: employer.id },
+      include: {
+        category: { select: { nameEn: true, slug: true } },
+        city: { select: { name: true } },
+        _count: { select: { applications: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+    getActiveSub(employer.id),
+  ])
 
   const stats = {
-    live: jobs.filter((j) => j.status === "ACTIVE").length,
-    underReview: jobs.filter((j) => j.status === "PENDING_REVIEW").length,
-    applications: jobs.reduce((sum, j) => sum + j._count.applications, 0),
-    views: jobs.reduce((sum, j) => sum + j.viewCount, 0),
+    live:         jobs.filter(j => j.status === "ACTIVE").length,
+    underReview:  jobs.filter(j => j.status === "PENDING_REVIEW").length,
+    applications: jobs.reduce((s, j) => s + j._count.applications, 0),
+    views:        jobs.reduce((s, j) => s + j.viewCount, 0),
   }
 
-  // Verification steps
   const steps = [
-    { label: "Create an account", done: true },
-    { label: "Post your first job", done: jobs.length > 0 },
-    { label: "Email Verification", done: !!dbUser.email },
-    { label: "Document Submission", done: (employer.docUrls ?? []).length > 0, action: { label: "Upload", href: "/employer/setup/verify-docs", icon: "upload" } },
-    { label: "Verification", done: employer.status === "VERIFIED", action: { label: "Info", href: "#", icon: "info" } },
+    { label: "Create account",      done: true },
+    { label: "Post first job",      done: jobs.length > 0 },
+    { label: "Email verified",      done: !!dbUser.email },
+    { label: "Upload documents",    done: (employer.docUrls ?? []).length > 0, action: "/employer/setup/verify-docs", actionIcon: "upload" },
+    { label: "Account verified",    done: employer.status === "VERIFIED" },
   ]
-  const completedSteps = steps.filter((s) => s.done).length
-  const progressPct = Math.round((completedSteps / steps.length) * 100)
+  const pct = Math.round(steps.filter(s => s.done).length / steps.length * 100)
+  const firstName = employer.contactPerson?.split(" ")[0] || employer.companyName
 
   return (
-    <div className="min-h-screen bg-[#f7f9fc]">
+    <div className="min-h-screen bg-slate-50">
 
-      {/* Top header */}
-      <div className="bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-[5] shadow-sm">
-        <div>
-          <h1 className="text-base font-bold text-gray-900">
-            Welcome back, {employer.contactPerson?.split(" ")[0] || employer.companyName}! 👋
-          </h1>
-          <p className="text-xs text-gray-400 mt-0.5">Here's what's happening with your jobs today.</p>
+      {/* ── Hero header ──────────────────────────────────────────── */}
+      <div className="bg-gradient-to-br from-[#1a3461] via-[#1e3d73] to-[#243f7a] px-6 sm:px-8 pt-8 pb-0">
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div>
+            <p className="text-blue-300 text-xs font-semibold tracking-widest uppercase mb-1">Recruiter Dashboard</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+              Welcome back, {firstName}! 👋
+            </h1>
+            <p className="text-blue-200/70 text-sm mt-1">{employer.companyName}</p>
+          </div>
+          <Link
+            href="/employer/post-job"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-[#f97316] hover:bg-[#ea6c0a] text-white text-sm font-bold rounded-xl shadow-lg hover:shadow-xl transition-all shrink-0"
+          >
+            <PlusCircle size={16} />
+            <span className="hidden sm:inline">Post a Job</span>
+            <span className="sm:hidden">Post</span>
+          </Link>
         </div>
-        <Link
-          href="/employer/post-job"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#1a3461] text-white text-sm font-bold rounded-xl hover:bg-[#142a52] transition-all shadow-sm hover:shadow"
-        >
-          <PlusCircle size={16} />
-          <span className="hidden sm:inline">Post a Job</span>
-          <span className="sm:hidden">Post</span>
-        </Link>
+
+        {/* Stat strip — lives in the header, tabs into body */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 -mb-5">
+          {[
+            { label: "Live Jobs",     value: stats.live,         icon: Briefcase, accent: "text-emerald-400", sub: "currently active"  },
+            { label: "Under Review",  value: stats.underReview,  icon: Clock,     accent: "text-amber-400",   sub: "awaiting approval" },
+            { label: "Applications",  value: stats.applications, icon: Users,     accent: "text-blue-300",    sub: "total received"    },
+            { label: "Total Views",   value: stats.views,        icon: Eye,       accent: "text-violet-300",  sub: "across all jobs"   },
+          ].map(({ label, value, icon: Icon, accent, sub }) => (
+            <div key={label} className="bg-white rounded-2xl shadow-md border border-slate-100 px-5 py-4 flex items-center gap-4">
+              <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0">
+                <Icon size={20} className={accent} />
+              </div>
+              <div className="min-w-0">
+                <div className="text-2xl font-extrabold text-slate-800 leading-none">{value}</div>
+                <div className="text-xs text-slate-500 mt-0.5 font-medium">{label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="px-4 sm:px-6 py-6 w-full max-w-6xl">
-        <div className="grid xl:grid-cols-3 gap-5 items-start">
+      {/* ── Body ─────────────────────────────────────────────────── */}
+      <div className="px-6 sm:px-8 pt-10 pb-10">
+        <div className="grid xl:grid-cols-[1fr_340px] gap-6 items-start">
 
-          {/* ── Left column ── */}
-          <div className="xl:col-span-2 flex flex-col gap-5">
+          {/* ── LEFT: Jobs ──────────────────────────────────────── */}
+          <div className="flex flex-col gap-6">
 
-            {/* Stat cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { label: "Live Jobs",    value: stats.live,         icon: Briefcase,  bg: "bg-green-50",   iconColor: "text-green-500",  numColor: "text-green-700"  },
-                { label: "Under Review", value: stats.underReview,  icon: Clock,      bg: "bg-amber-50",   iconColor: "text-amber-500",  numColor: "text-amber-700"  },
-                { label: "Applications", value: stats.applications, icon: Users,      bg: "bg-blue-50",    iconColor: "text-blue-500",   numColor: "text-blue-700"   },
-                { label: "Total Views",  value: stats.views,        icon: Eye,        bg: "bg-purple-50",  iconColor: "text-purple-500", numColor: "text-purple-700" },
-              ].map(({ label, value, icon: Icon, bg, iconColor, numColor }) => (
-                <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col items-start relative overflow-hidden hover:shadow-md transition-shadow">
-                  <div className={`absolute top-4 right-4 w-8 h-8 rounded-xl ${bg} flex items-center justify-center`}>
-                    <Icon size={16} className={iconColor} />
-                  </div>
-                  <span className={`text-3xl font-extrabold ${numColor} leading-none mt-1`}>{value}</span>
-                  <span className="text-xs text-gray-400 font-medium mt-2">{label}</span>
+            {/* Jobs panel */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+              <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h2 className="font-bold text-slate-800 text-base">Your Job Listings</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">{jobs.length} total · {stats.live} active</p>
                 </div>
-              ))}
-            </div>
-
-            {/* Jobs list */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden" id="jobs">
-              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h2 className="font-bold text-gray-900">Your Job Listings</h2>
                 <Link
                   href="/employer/post-job"
-                  className="text-sm text-[#1a3461] font-bold hover:underline flex items-center gap-1"
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1a3461] bg-[#eef2ff] px-4 py-2 rounded-xl hover:bg-[#dce6ff] transition-colors"
                 >
                   <PlusCircle size={14} /> Post Job
                 </Link>
               </div>
 
               {jobs.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center mb-4">
-                    <Briefcase size={28} className="text-gray-300" />
+                <div className="flex flex-col items-center justify-center py-20 text-center px-6">
+                  <div className="w-20 h-20 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center mb-5">
+                    <Briefcase size={32} className="text-slate-300" />
                   </div>
-                  <p className="font-bold text-gray-700">No jobs posted yet</p>
-                  <p className="text-sm text-gray-400 mt-1 mb-6">Post your first job to start getting candidates</p>
+                  <p className="font-bold text-slate-700 text-lg">No jobs posted yet</p>
+                  <p className="text-sm text-slate-400 mt-2 mb-8 max-w-xs">
+                    Post your first opening to start receiving applications from verified candidates.
+                  </p>
                   <Link
                     href="/employer/post-job"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a3461] text-white text-sm font-bold rounded-xl hover:bg-[#142a52] transition-colors shadow-sm hover:shadow"
+                    className="inline-flex items-center gap-2 px-7 py-3 bg-[#1a3461] text-white text-sm font-bold rounded-xl hover:bg-[#142a52] transition-colors shadow-sm"
                   >
-                    <PlusCircle size={16} /> Post a Job
+                    <PlusCircle size={16} /> Post Your First Job
                   </Link>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-50">
-                  {jobs.map((job) => {
+                <div className="divide-y divide-slate-50">
+                  {jobs.map(job => {
                     const cfg = STATUS_CONFIG[job.status] ?? STATUS_CONFIG.DRAFT
                     const StatusIcon = cfg.icon
-                    const canEdit = !["CLOSED", "EXPIRED"].includes(job.status)
-                    const canClose = job.status === "ACTIVE" || job.status === "PENDING_REVIEW"
-                    const canRepost = ["CLOSED", "EXPIRED", "REJECTED"].includes(job.status)
+                    const canEdit   = !["CLOSED","EXPIRED"].includes(job.status)
+                    const canClose  = job.status === "ACTIVE" || job.status === "PENDING_REVIEW"
+                    const canRepost = ["CLOSED","EXPIRED","REJECTED"].includes(job.status)
 
                     return (
-                      <div key={job.id} className="px-5 py-4 hover:bg-gray-50/70 transition-colors">
-                        <div className="flex items-start justify-between gap-4">
+                      <div key={job.id} className="px-6 py-5 hover:bg-slate-50/70 transition-colors group">
+                        <div className="flex items-start gap-4">
+                          {/* Category icon block */}
+                          <div className="w-11 h-11 rounded-xl bg-[#eef2ff] flex items-center justify-center shrink-0 mt-0.5">
+                            <Briefcase size={18} className="text-[#1a3461]" />
+                          </div>
+
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
+                            {/* Title + status */}
+                            <div className="flex items-center gap-2.5 flex-wrap">
                               <Link
                                 href={`/jobs/${job.id}`}
-                                className="font-bold text-gray-900 hover:text-[#1a3461] transition-colors text-sm"
+                                className="font-bold text-slate-900 hover:text-[#1a3461] transition-colors text-[15px] leading-snug"
                               >
                                 {job.title}
                               </Link>
                               <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${cfg.color}`}>
-                                <StatusIcon size={10} /> {cfg.label}
+                                <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                                {cfg.label}
                               </span>
                             </div>
-                            <div className="flex flex-wrap items-center gap-1.5 mt-1 text-xs text-gray-400">
-                              <span>{job.city.name}</span>
-                              <span className="text-gray-200">·</span>
-                              <span>{job.category.nameEn}</span>
-                              <span className="text-gray-200">·</span>
-                              <span className="font-semibold text-gray-500">{formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit)}</span>
+
+                            {/* Meta row */}
+                            <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-slate-400">
+                              <span className="flex items-center gap-1">
+                                <MapPin size={11} /> {job.city.name}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Tag size={11} /> {job.category.nameEn}
+                              </span>
+                              <span className="flex items-center gap-1 font-semibold text-slate-500">
+                                <IndianRupee size={11} /> {formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit)}
+                              </span>
+                            </div>
+
+                            {/* Action row */}
+                            <div className="flex items-center gap-2 mt-3.5 flex-wrap">
+                              <Link
+                                href={`/employer/jobs/${job.id}/applicants`}
+                                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a3461] bg-[#eef2ff] border border-[#1a3461]/15 px-3.5 py-1.5 rounded-xl hover:bg-[#dce6ff] transition-colors"
+                              >
+                                <Users size={12} /> {job._count.applications} Applicants
+                              </Link>
+                              <Link
+                                href={`/jobs/${job.id}`}
+                                className="text-xs font-semibold text-slate-500 border border-slate-200 px-3.5 py-1.5 rounded-xl hover:bg-slate-50 transition-colors"
+                              >
+                                Preview
+                              </Link>
+                              {canEdit && (
+                                <Link
+                                  href={`/employer/jobs/${job.id}/edit`}
+                                  className="text-xs font-semibold text-slate-500 border border-slate-200 px-3.5 py-1.5 rounded-xl hover:bg-slate-50 transition-colors"
+                                >
+                                  Edit
+                                </Link>
+                              )}
+                              <EmployerJobActions jobId={job.id} canClose={canClose} canRepost={canRepost} />
                             </div>
                           </div>
-                          <div className="text-center hidden sm:flex flex-col items-center shrink-0 min-w-[48px]">
-                            <div className="text-xl font-extrabold text-gray-900">{job._count.applications}</div>
-                            <div className="text-[10px] text-gray-400 font-medium">applicants</div>
+
+                          {/* Right: applicant count big */}
+                          <div className="hidden sm:flex flex-col items-center text-center shrink-0 min-w-[52px]">
+                            <span className="text-2xl font-extrabold text-slate-800 leading-none">{job._count.applications}</span>
+                            <span className="text-[10px] text-slate-400 font-medium mt-1">applicants</span>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2 mt-3 flex-wrap">
-                          <Link href={`/jobs/${job.id}`} className="text-xs font-semibold text-gray-500 border border-gray-200 px-3 py-1.5 rounded-xl hover:bg-gray-50 transition-colors">
-                            View
-                          </Link>
-                          <Link href={`/employer/jobs/${job.id}/applicants`} className="text-xs font-semibold text-[#1a3461] border border-[#1a3461]/20 bg-[#eef2ff] px-3 py-1.5 rounded-xl hover:bg-[#1a3461]/10 transition-colors flex items-center gap-1">
-                            <Users size={11} /> {job._count.applications} Applicants
-                          </Link>
-                          {canEdit && (
-                            <Link href={`/employer/jobs/${job.id}/edit`} className="text-xs font-semibold text-gray-600 border border-gray-200 px-3 py-1.5 rounded-xl hover:bg-gray-50 transition-colors">
-                              Edit
-                            </Link>
-                          )}
-                          <EmployerJobActions jobId={job.id} canClose={canClose} canRepost={canRepost} />
                         </div>
                       </div>
                     )
@@ -192,94 +237,172 @@ export default async function EmployerDashboardPage() {
                 </div>
               )}
             </div>
+
+            {/* Quick links */}
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[
+                { href: "/employer/candidates", label: "Search Talent", sub: "Browse verified job seekers", icon: Users,       bg: "bg-violet-50",  iconColor: "text-violet-500" },
+                { href: "/employer/responses",  label: "Responses",     sub: "View all job applications",    icon: BarChart2,   bg: "bg-blue-50",    iconColor: "text-blue-500"   },
+                { href: "/employer/plans",      label: "Upgrade Plan",  sub: "Unlock candidate contacts",    icon: Zap,         bg: "bg-orange-50",  iconColor: "text-orange-500" },
+              ].map(({ href, label, sub, icon: Icon, bg, iconColor }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-center gap-4 hover:shadow-md hover:border-slate-200 transition-all group"
+                >
+                  <div className={`w-11 h-11 rounded-2xl ${bg} flex items-center justify-center shrink-0`}>
+                    <Icon size={20} className={iconColor} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-bold text-slate-800 text-sm">{label}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{sub}</p>
+                  </div>
+                  <ChevronRight size={15} className="text-slate-300 group-hover:text-slate-500 shrink-0 transition-colors" />
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* ── Right column ── */}
+          {/* ── RIGHT: Sidebar cards ─────────────────────────────── */}
           <div className="flex flex-col gap-5">
 
-            {/* Plans CTA */}
-            <Link
-              href="/employer/plans"
-              className="bg-gradient-to-br from-[#1a3461] to-[#2a4a7f] rounded-2xl p-5 text-white block hover:shadow-lg transition-shadow group"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
-                  <TrendingUp size={18} className="text-orange-300" />
-                </div>
-                <div>
-                  <p className="font-bold text-sm">Free Plan Active</p>
-                  <p className="text-xs text-white/60">1 job · No contact unlocks</p>
-                </div>
-              </div>
-              <p className="text-xs text-white/70 mb-3 leading-relaxed">
-                Upgrade to unlock candidate contacts, boost jobs to top, and post multiple openings.
-              </p>
-              <div className="flex items-center gap-1 text-orange-300 text-xs font-bold group-hover:gap-2 transition-all">
-                View Plans <ArrowUpRight size={13} />
-              </div>
-            </Link>
-
-            {/* Verification Steps */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="px-5 py-4 border-b border-gray-100">
-                <div className="flex items-center gap-2 mb-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-[#1a3461]/10 flex items-center justify-center">
-                    <CheckCircle size={14} className="text-[#1a3461]" />
+            {/* Subscription status */}
+            {activeSub ? (
+              <div className="bg-gradient-to-br from-[#1a3461] to-[#243f7a] rounded-2xl p-5 text-white shadow-md">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                      <TrendingUp size={16} className="text-orange-300" />
+                    </div>
+                    <span className="font-bold text-sm">{activeSub.plan.name}</span>
                   </div>
-                  <span className="font-bold text-gray-800 text-sm">Setup Checklist</span>
-                  <span className="ml-auto text-xs font-extrabold text-[#1a3461] bg-[#eef2ff] px-2 py-0.5 rounded-full">{progressPct}%</span>
+                  <span className="text-xs font-bold bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-400/20">
+                    {activeSub.status}
+                  </span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="grid grid-cols-3 gap-2 text-center mb-4">
+                  <div className="bg-white/10 rounded-xl p-2.5">
+                    <p className="text-base font-extrabold">{activeSub.plan.activeJobLimit}</p>
+                    <p className="text-[10px] text-white/60 mt-0.5">Job slots</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-2.5">
+                    <p className="text-base font-extrabold">{activeSub.plan.candidateUnlockCredits - activeSub.candidateUnlocksUsed}</p>
+                    <p className="text-[10px] text-white/60 mt-0.5">Unlocks left</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-2.5">
+                    <p className="text-base font-extrabold">{activeSub.plan.boostCredits - activeSub.boostsUsed}</p>
+                    <p className="text-[10px] text-white/60 mt-0.5">Boosts left</p>
+                  </div>
+                </div>
+                <p className="text-xs text-white/50 mb-3">Expires in {daysLeft(activeSub.expiresAt.toISOString())} days</p>
+                <Link href="/employer/plans" className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-xs font-bold text-white">
+                  Manage Plan <ArrowUpRight size={13} />
+                </Link>
+              </div>
+            ) : (
+              <div className="bg-gradient-to-br from-[#1a3461] to-[#243f7a] rounded-2xl p-5 text-white shadow-md">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                    <Zap size={18} className="text-orange-300" fill="currentColor" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm">Free Plan</p>
+                    <p className="text-xs text-white/50">1 job · no contact unlocks</p>
+                  </div>
+                </div>
+                <p className="text-xs text-white/70 leading-relaxed mb-4">
+                  Upgrade to unlock candidate phone numbers, boost jobs to the top, and post multiple openings simultaneously.
+                </p>
+                <div className="flex flex-col gap-2 mb-4">
+                  {["Unlock candidate contacts", "Post unlimited jobs", "Boost to top of search", "High-reach push notifications"].map(f => (
+                    <div key={f} className="flex items-center gap-2 text-xs text-white/80">
+                      <CheckCircle size={12} className="text-emerald-400 shrink-0" />
+                      {f}
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  href="/employer/plans"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#f97316] hover:bg-[#ea6c0a] transition-colors text-sm font-bold text-white shadow-sm"
+                >
+                  <Zap size={14} fill="currentColor" /> View Plans
+                </Link>
+              </div>
+            )}
+
+            {/* Setup checklist */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+              <div className="px-5 py-4 border-b border-slate-100">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-bold text-slate-800 text-sm">Account Setup</span>
+                  <span className="text-xs font-extrabold text-[#1a3461] bg-[#eef2ff] px-2.5 py-1 rounded-full">{pct}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-[#1a3461] to-[#3b6cb7] rounded-full transition-all duration-500"
-                    style={{ width: `${progressPct}%` }}
+                    className="h-full bg-gradient-to-r from-[#1a3461] to-[#3b6cb7] rounded-full transition-all duration-700"
+                    style={{ width: `${pct}%` }}
                   />
                 </div>
               </div>
-              <div className="divide-y divide-gray-50">
-                {steps.map((s) => (
+              <div className="divide-y divide-slate-50">
+                {steps.map(s => (
                   <div key={s.label} className="flex items-center gap-3 px-5 py-3.5">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
-                      s.done ? "bg-green-500 shadow-sm" : "border-2 border-gray-200 bg-gray-50"
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
+                      s.done ? "bg-emerald-500" : "border-2 border-slate-200 bg-slate-50"
                     }`}>
                       {s.done
-                        ? <CheckCircle size={13} className="text-white" />
-                        : <div className="w-2 h-2 rounded-full bg-gray-300" />
+                        ? <CheckCircle size={12} className="text-white" />
+                        : <div className="w-2 h-2 rounded-full bg-slate-300" />
                       }
                     </div>
-                    <span className={`flex-1 text-sm ${s.done ? "text-gray-400 line-through" : "text-gray-700"}`}>{s.label}</span>
+                    <span className={`flex-1 text-sm ${s.done ? "text-slate-400 line-through decoration-slate-300" : "text-slate-700 font-medium"}`}>
+                      {s.label}
+                    </span>
                     {s.action && !s.done ? (
-                      <Link
-                        href={s.action.href}
-                        className="text-xs text-[#1a3461] font-bold flex items-center gap-1 hover:underline shrink-0"
-                      >
-                        {s.action.icon === "upload" ? <Upload size={11} /> : s.action.icon === "info" ? <Info size={11} /> : null}
-                        {s.action.label}
+                      <Link href={s.action} className="text-xs text-[#1a3461] font-bold flex items-center gap-1 hover:underline shrink-0">
+                        {s.actionIcon === "upload" ? <Upload size={11} /> : <Info size={11} />}
+                        Do it
                       </Link>
                     ) : s.done ? (
-                      <span className="text-[11px] font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full shrink-0">Done</span>
-                    ) : (
-                      <span className="text-[11px] text-gray-400 shrink-0">Pending</span>
-                    )}
+                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">✓</span>
+                    ) : null}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Help card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <p className="font-bold text-gray-800 mb-1">Need Help?</p>
-              <p className="text-xs text-gray-400 mb-4">Our team is here to help you hire faster</p>
+            {/* Help & contact */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+              <p className="font-bold text-slate-800 mb-0.5">Need help hiring?</p>
+              <p className="text-xs text-slate-400 mb-4">Talk to our team — we're here to help you get started.</p>
               <div className="flex flex-col gap-2.5">
                 <a
                   href="mailto:support@jobsready.in"
-                  className="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 hover:bg-[#eef2ff] border border-transparent hover:border-[#1a3461]/10 transition-all group"
+                  className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-[#eef2ff] border border-transparent hover:border-[#1a3461]/10 transition-all group"
                 >
-                  <div>
-                    <p className="text-sm font-bold text-gray-800">Contact Support</p>
-                    <p className="text-xs text-gray-400">support@jobsready.in</p>
+                  <div className="w-8 h-8 rounded-lg bg-[#eef2ff] flex items-center justify-center shrink-0">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a3461" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                   </div>
-                  <ArrowUpRight size={15} className="text-gray-300 group-hover:text-[#1a3461] transition-colors" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-slate-700">Email Support</p>
+                    <p className="text-xs text-slate-400 truncate">support@jobsready.in</p>
+                  </div>
+                  <ArrowUpRight size={14} className="text-slate-300 group-hover:text-[#1a3461] transition-colors shrink-0" />
+                </a>
+                <a
+                  href="https://wa.me/919953699143"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition-all group"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-slate-700">WhatsApp Support</p>
+                    <p className="text-xs text-slate-400">+91 99536 99143</p>
+                  </div>
+                  <ArrowUpRight size={14} className="text-slate-300 group-hover:text-emerald-500 transition-colors shrink-0" />
                 </a>
               </div>
             </div>
