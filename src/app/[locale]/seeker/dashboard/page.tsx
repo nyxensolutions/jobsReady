@@ -104,8 +104,8 @@ export default async function SeekerDashboardPage() {
 
   const salaryNotMentioned = t("salaryNotMentioned")
 
-  // Avatar initial
-  const avatarLetter = isPhonePlaceholder ? "?" : profile!.name[0].toUpperCase()
+  // Avatar initial — show first name letter; if name is a phone placeholder, fall back to "U"
+  const avatarLetter = isPhonePlaceholder ? "U" : profile!.name[0].toUpperCase()
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">

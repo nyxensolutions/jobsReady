@@ -103,7 +103,7 @@ export default function Header({ initialAuth }: Props) {
             )}
             {!authUser && (
               <Link
-                href="/employer"
+                href="/login?role=employer"
                 className="inline-flex items-center px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-[#1a3461] hover:bg-[#f0f4ff] hover:border-[#1a3461] transition-all"
               >
                 🏢 {t("forEmployers")}
@@ -236,7 +236,7 @@ export default function Header({ initialAuth }: Props) {
             </Link>
           )}
           {!authUser && (
-            <Link href="/employer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
+            <Link href="/login?role=employer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
               🏢 {t("forEmployers")}
             </Link>
           )}

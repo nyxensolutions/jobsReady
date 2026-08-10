@@ -1,9 +1,10 @@
 "use client"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import {
   CheckCircle, XCircle, Star, StarOff, ExternalLink, Phone,
   Building2, MapPin, Tag, Users, ChevronDown, ChevronUp,
-  FileText, Globe, Loader2, AlertTriangle,
+  FileText, Globe, Loader2, AlertTriangle, LogOut, Eye,
 } from "lucide-react"
 
 type Job = {
@@ -220,7 +221,24 @@ export default function AdminPanel() {
             <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
             <p className="text-sm text-gray-500 mt-0.5">Manage jobs and employers</p>
           </div>
-          <span className="text-xs bg-red-100 text-red-700 font-bold px-3 py-1 rounded-full uppercase tracking-wide">Admin Only</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs bg-red-100 text-red-700 font-bold px-3 py-1 rounded-full uppercase tracking-wide">Admin Only</span>
+            <Link
+              href="/jobs"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Eye size={14} /> View Site
+            </Link>
+            <button
+              onClick={async () => {
+                await fetch("/api/auth/session", { method: "DELETE" })
+                window.location.href = "/"
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+            >
+              <LogOut size={14} /> Sign Out
+            </button>
+          </div>
         </div>
 
         {/* Section switcher */}

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import {
   CheckCircle, ChevronRight, Plus, X, Minus, Loader2, MapPin, Briefcase, IndianRupee,
+  Phone, AlertTriangle,
 } from "lucide-react"
 import JobTitleInput from "@/components/employer/JobTitleInput"
 import UpgradeModal from "@/components/employer/UpgradeModal"
@@ -38,6 +39,9 @@ type WizardData = {
   perks: string[]
   pincode: string
   languagesRequired: string[]
+  // Call-to-HR
+  callToHrEnabled: boolean
+  callToHrPhone: string
 }
 
 const INITIAL: WizardData = {
@@ -46,6 +50,7 @@ const INITIAL: WizardData = {
   gender: "Any", qualification: "Any", experienceMin: "0", experienceMax: "",
   freshersOnly: false, skills: [], description: "",
   requirements: [], perks: [], pincode: "", languagesRequired: [],
+  callToHrEnabled: false, callToHrPhone: "",
 }
 
 const JOB_TITLE_CHIPS = ["Delivery Boy", "Driver", "Security Guard", "Picker / Packer", "Telecaller", "Data Entry"]
@@ -605,10 +610,62 @@ function Step4({
   update: <K extends keyof WizardData>(k: K, v: WizardData[K]) => void
 }) {
   const [showTemplate, setShowTemplate] = useState(true)
+  const [showCallConsent, setShowCallConsent] = useState(false)
   const template = TEMPLATE(data.title, data.salaryMin, data.salaryMax)
+
+  function handleCallToggle() {
+    if (!data.callToHrEnabled) {
+      // About to enable — show consent warning first
+      setShowCallConsent(true)
+    } else {
+      // Disabling — clear phone
+      update("callToHrEnabled", false)
+      update("callToHrPhone", "")
+    }
+  }
+
+  function confirmCallConsent() {
+    update("callToHrEnabled", true)
+    setShowCallConsent(false)
+  }
 
   return (
     <div className="flex flex-col gap-6 p-6 max-w-2xl mx-auto w-full">
+      {/* Consent warning modal */}
+      {showCallConsent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 max-w-sm w-full">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
+                <AlertTriangle size={20} className="text-orange-600" />
+              </div>
+              <div>
+                <p className="font-bold text-gray-900 text-sm">Enable Call-to-HR?</p>
+                <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                  When you enable this, your provided phone number will be <strong>publicly visible</strong> on the job listing.
+                  Candidates will be able to <strong>directly call you or reveal your number</strong>.
+                  Only enable this if you are comfortable with candidates contacting you directly.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowCallConsent(false)}
+                className="flex-1 py-2 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmCallConsent}
+                className="flex-1 py-2 bg-orange-500 text-white rounded-xl text-sm font-semibold hover:bg-orange-600 transition-colors"
+              >
+                I Understand, Enable
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Suggested template */}
       {showTemplate && (
         <div className="border border-gray-200 rounded-xl overflow-hidden">
@@ -637,6 +694,58 @@ function Step4({
           className={input + " resize-y font-mono text-xs leading-relaxed"}
         />
         <p className="text-xs text-gray-400 mt-1">{data.description.length} characters</p>
+      </div>
+
+      {/* ── Call-to-HR option ── */}
+      <div className={`rounded-xl border p-4 transition-colors ${data.callToHrEnabled ? "border-orange-300 bg-orange-50" : "border-gray-200 bg-white"}`}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-3">
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${data.callToHrEnabled ? "bg-orange-500" : "bg-gray-100"}`}>
+              <Phone size={16} className={data.callToHrEnabled ? "text-white" : "text-gray-500"} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-gray-900">Enable Call-to-HR</p>
+              <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                Let candidates call you directly from the job listing. Your phone number will be visible to all visitors.
+              </p>
+            </div>
+          </div>
+          {/* Toggle switch */}
+          <button
+            type="button"
+            onClick={handleCallToggle}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
+              data.callToHrEnabled ? "bg-orange-500" : "bg-gray-300"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform ${
+                data.callToHrEnabled ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+        </div>
+
+        {data.callToHrEnabled && (
+          <div className="mt-4">
+            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+              HR Contact Number <span className="text-red-500">*</span>
+              <span className="ml-1.5 font-normal text-orange-600">(will be publicly visible)</span>
+            </label>
+            <div className="flex items-center border border-orange-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-orange-400">
+              <span className="px-3 py-2.5 bg-orange-50 text-gray-500 text-sm border-r border-orange-200 shrink-0">+91</span>
+              <input
+                type="tel"
+                inputMode="numeric"
+                maxLength={10}
+                value={data.callToHrPhone}
+                onChange={(e) => update("callToHrPhone", e.target.value.replace(/\D/g, ""))}
+                placeholder="10-digit mobile number"
+                className="flex-1 px-3 py-2.5 text-sm text-gray-900 outline-none bg-transparent"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -825,6 +934,8 @@ export default function PostJobWizard({
           perks,
           pincode: data.pincode,
           languagesRequired: data.languagesRequired ?? [],
+          callToHrEnabled: data.callToHrEnabled,
+          callToHrPhone: data.callToHrEnabled ? data.callToHrPhone : null,
         }),
       })
       const result = await res.json()

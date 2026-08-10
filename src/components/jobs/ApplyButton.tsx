@@ -29,7 +29,8 @@ export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
       const data = await res.json()
 
       if (res.status === 401) {
-        router.push(`/${locale}/login?next=/jobs/${jobId}`)
+        // Go straight to seeker phone login, skip role-selector screen
+        router.push(`/${locale}/login?role=seeker&next=/jobs/${jobId}`)
         return
       }
       if (res.status === 409 || data.code === "DUPLICATE") {

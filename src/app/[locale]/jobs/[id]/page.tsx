@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
 import Link from "next/link"
-import { MapPin, Clock, Users, ArrowLeft, CheckCircle, IndianRupee, Briefcase, Calendar, GraduationCap, ChevronRight, Share2 } from "lucide-react"
+import { MapPin, Clock, Users, ArrowLeft, CheckCircle, IndianRupee, Briefcase, Calendar, GraduationCap, ChevronRight, Share2, Phone } from "lucide-react"
 import { formatRelativeTime } from "@/lib/utils"
 import { prisma } from "@/lib/db"
 import { getServerSession } from "@/lib/firebase/session"
@@ -80,6 +80,9 @@ export default async function JobDetailPage({ params }: Props) {
       city: { select: { name: true } },
     },
   })
+
+  // Call-to-HR: only surface if enabled AND phone is set
+  const callToHrPhone = job?.callToHrEnabled && job?.callToHrPhone ? job.callToHrPhone : null
 
   const isScraped = job?.source === "SCRAPED"
   const displayCompany = isScraped ? null : job?.employer.companyName
@@ -251,6 +254,14 @@ export default async function JobDetailPage({ params }: Props) {
               {/* Mobile CTA */}
               <div className="lg:hidden mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2">
                 <ApplyButton jobId={job.id} locale={locale} />
+                {callToHrPhone && (
+                  <a
+                    href={`tel:+91${callToHrPhone}`}
+                    className="flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-orange-400 text-orange-600 font-bold text-sm hover:bg-orange-50 transition-colors"
+                  >
+                    <Phone size={15} /> Call HR: +91 {callToHrPhone}
+                  </a>
+                )}
                 <SaveJobButton jobId={job.id} initialSaved={isSaved} locale={locale} />
                 <a
                   href={`https://wa.me/?text=${whatsappText}`}
@@ -426,6 +437,14 @@ export default async function JobDetailPage({ params }: Props) {
                 contactPhone={job.employer.contactPhone}
                 locale={locale}
               />
+              {callToHrPhone && (
+                <a
+                  href={`tel:+91${callToHrPhone}`}
+                  className="mt-2 flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-orange-400 text-orange-600 font-bold text-sm hover:bg-orange-50 transition-colors"
+                >
+                  <Phone size={15} /> Call HR: +91 {callToHrPhone}
+                </a>
+              )}
               <div className="mt-2">
                 <SaveJobButton jobId={job.id} initialSaved={isSaved} locale={locale} />
               </div>

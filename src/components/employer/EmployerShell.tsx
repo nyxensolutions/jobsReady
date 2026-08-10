@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useLocale } from "next-intl"
 import {
@@ -65,17 +66,31 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
       >
         {/* Top: Logo + toggle */}
         <div className="h-14 border-b border-gray-100 flex items-center shrink-0 px-3 gap-2">
-          <Link href="/" className={`flex items-center gap-2 flex-1 min-w-0 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-8 h-8 rounded-lg bg-[#1a3461] flex items-center justify-center text-white font-extrabold text-sm shrink-0">J</div>
-            {!collapsed && <span className="text-sm font-extrabold text-[#1a3461] tracking-tight truncate">Jobs Ready</span>}
-          </Link>
-          <button
-            onClick={() => setCollapsed(c => !c)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-[#1a3461] hover:bg-[#eef2ff] transition-colors shrink-0"
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
-          </button>
+          {collapsed ? (
+            /* Collapsed: just toggle button centered */
+            <button
+              onClick={() => setCollapsed(false)}
+              className="flex-1 flex items-center justify-center p-1.5 rounded-lg text-gray-400 hover:text-[#1a3461] hover:bg-[#eef2ff] transition-colors"
+              title="Expand sidebar"
+            >
+              <PanelLeftOpen size={18} />
+            </button>
+          ) : (
+            /* Expanded: logo + wordmark + collapse button */
+            <>
+              <Link href="/" className="flex items-center gap-2 flex-1 min-w-0">
+                <Image src="/logo-full.png" alt="Jobs Ready" width={30} height={30} className="object-contain shrink-0" />
+                <span className="text-sm font-extrabold text-[#1a3461] tracking-tight truncate">Jobs Ready</span>
+              </Link>
+              <button
+                onClick={() => setCollapsed(true)}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#1a3461] hover:bg-[#eef2ff] transition-colors shrink-0"
+                title="Collapse sidebar"
+              >
+                <PanelLeftClose size={16} />
+              </button>
+            </>
+          )}
         </div>
 
         {/* User info */}

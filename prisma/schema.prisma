@@ -197,7 +197,11 @@ model JobListing {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  isHighReach  Boolean   @default(false)
+  isHighReach      Boolean  @default(false)
+
+  // ── Call-to-HR: employer can expose their phone for direct candidate calls ──
+  callToHrEnabled  Boolean  @default(false)
+  callToHrPhone    String?
 
   employer     EmployerProfile @relation(fields: [employerId], references: [id], onDelete: Cascade)
   category     Category        @relation(fields: [categoryId], references: [id])

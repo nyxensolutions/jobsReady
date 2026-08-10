@@ -24,6 +24,8 @@ export async function POST(req: NextRequest) {
     perks,
     pincode,
     languagesRequired,
+    callToHrEnabled,
+    callToHrPhone,
   } = body
 
   if (!title || !categorySlug || !citySlug || !jobType || !description) {
@@ -74,6 +76,8 @@ export async function POST(req: NextRequest) {
       languagesRequired: Array.isArray(languagesRequired) ? languagesRequired.filter(Boolean) : [],
       status: "PENDING_REVIEW",
       isHighReach: (await getPlanLimits(employer.id)).isHighReach,
+      callToHrEnabled: callToHrEnabled === true,
+      callToHrPhone: callToHrEnabled === true ? (callToHrPhone?.trim() || null) : null,
     },
   })
 
