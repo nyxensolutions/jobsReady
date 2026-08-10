@@ -109,6 +109,14 @@ export default function Header({ initialAuth }: Props) {
                 🏢 {t("forEmployers")}
               </Link>
             )}
+            {authUser?.role !== "EMPLOYER" && (
+              <Link
+                href="/blog"
+                className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors"
+              >
+                Career Guide
+              </Link>
+            )}
             {authUser?.role === "SEEKER" && (
               <>
                 <Link href="/seeker/dashboard#applications" className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors">
@@ -238,6 +246,11 @@ export default function Header({ initialAuth }: Props) {
           {!authUser && (
             <Link href="/login?role=employer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
               🏢 {t("forEmployers")}
+            </Link>
+          )}
+          {authUser?.role !== "EMPLOYER" && (
+            <Link href="/blog" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
+              📖 Career Guide
             </Link>
           )}
           {authUser?.role === "SEEKER" && (

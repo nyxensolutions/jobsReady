@@ -2,7 +2,6 @@ import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { routing } from "@/i18n/routing"
-import type { Metadata } from "next"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import SeekerBottomNav from "@/components/layout/SeekerBottomNav"
@@ -12,10 +11,6 @@ import { prisma } from "@/lib/db"
 type Props = {
   children: React.ReactNode
   params: Promise<{ locale: string }>
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  return {}
 }
 
 export function generateStaticParams() {
