@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl"
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 import { Menu, X, User, Briefcase, LogOut, ChevronDown } from "lucide-react"
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher"
 import NotificationBell from "@/components/layout/NotificationBell"
@@ -20,8 +21,12 @@ type Props = {
   initialAuth?: AuthUser | null
 }
 
+// Segments where the public header should be hidden (they have their own nav)
+const HIDE_HEADER_SEGMENTS = ["/employer/", "/seeker/", "/admin"]
+
 export default function Header({ initialAuth }: Props) {
   const t = useTranslations("nav")
+  const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [authUser, setAuthUser] = useState<AuthUser | null>(initialAuth ?? null)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -69,6 +74,9 @@ export default function Header({ initialAuth }: Props) {
   const dashboardHref = authUser?.role === "EMPLOYER" ? "/employer/dashboard"
     : authUser?.role === "ADMIN" ? "/admin"
     : "/seeker/dashboard"
+
+  // Hide on portal pages — they have their own sidebar nav
+  if (HIDE_HEADER_SEGMENTS.some(s => pathname.includes(s))) return null
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-sm">

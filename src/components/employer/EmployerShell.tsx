@@ -8,6 +8,8 @@ import {
   Home, Briefcase, Users, UserSearch, TrendingUp, Settings,
   PlusCircle, PanelLeftClose, PanelLeftOpen, LogOut,
 } from "lucide-react"
+import { auth } from "@/lib/firebase/client"
+import { signOut as firebaseSignOut } from "firebase/auth"
 
 interface EmployerData {
   companyName: string
@@ -36,6 +38,14 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
   const [collapsed, setCollapsed] = useState(false)
   const pathname = usePathname()
   const locale = useLocale()
+
+  async function handleSignOut() {
+    await Promise.all([
+      firebaseSignOut(auth),
+      fetch("/api/auth/session", { method: "DELETE" }),
+    ])
+    window.location.href = `/${locale}`
+  }
 
   const sidebarW = collapsed ? W_COLLAPSED : W_EXPANDED
 
@@ -134,13 +144,13 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
                 <p className="text-xs font-bold text-gray-700 truncate">{companyName}</p>
                 <p className="text-[10px] text-gray-400">{jobCount} job{jobCount !== 1 ? "s" : ""} posted</p>
               </div>
-              <a
-                href={`/${locale}/logout`}
+              <button
+                onClick={handleSignOut}
                 className="p-1.5 rounded-lg text-gray-300 hover:text-red-400 transition-colors"
                 title="Sign out"
               >
                 <LogOut size={13} />
-              </a>
+              </button>
             </div>
           )}
         </div>

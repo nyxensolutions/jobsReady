@@ -65,6 +65,13 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE() {
   const response = NextResponse.json({ success: true })
-  response.cookies.delete(SESSION_COOKIE)
+  // Explicitly expire the cookie — more reliable than cookies.delete() across all browsers/CDNs
+  response.cookies.set(SESSION_COOKIE, "", {
+    maxAge: 0,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  })
   return response
 }
