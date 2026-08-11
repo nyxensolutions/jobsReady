@@ -69,8 +69,8 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
           {collapsed ? (
             /* Collapsed: logo icon on top, then expand toggle below */
             <>
-              <Link href="/" title="Jobs Ready">
-                <Image src="/logo-full.png" alt="Jobs Ready" width={32} height={32} className="object-contain" />
+              <Link href="/" title="Jobs24India">
+                <Image src="/job24.png" alt="Jobs24India" width={32} height={32} className="object-contain" />
               </Link>
               <button
                 onClick={() => setCollapsed(false)}
@@ -84,8 +84,8 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
             /* Expanded: bigger logo + wordmark + collapse button */
             <>
               <Link href="/" className="flex items-center gap-2.5 flex-1 min-w-0">
-                <Image src="/logo-full.png" alt="Jobs Ready" width={38} height={38} className="object-contain shrink-0" />
-                <span className="text-base font-extrabold text-[#1a3461] tracking-tight truncate">Jobs Ready</span>
+                <Image src="/job24.png" alt="Jobs24India" width={38} height={38} className="object-contain shrink-0" />
+                <span className="text-base font-extrabold text-[#1a3461] tracking-tight truncate">Jobs<span className="text-orange-500">24</span>India</span>
               </Link>
               <button
                 onClick={() => setCollapsed(true)}

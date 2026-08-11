@@ -89,7 +89,7 @@ export default function PlansClient({ plans, activeSub, activeJobCount, razorpay
         amount: data.amount,
         currency: data.currency,
         order_id: data.orderId,
-        name: "Jobs Ready",
+        name: "Jobs24India",
         description: data.planName,
         theme: { color: "#1a3461" },
         handler: async (response: any) => {

@@ -15,22 +15,22 @@ export const metadata: Metadata = {
   // Required for relative OG/Twitter image URLs to resolve to absolute ones.
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Jobs Ready — Find Jobs. Hire People.",
-    template: "%s | Jobs Ready",
+    default: "Jobs24India — Find Jobs. Hire People.",
+    template: "%s | Jobs24India",
   },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: "Jobs Ready — Find Jobs. Hire People.",
+    title: "Jobs24India — Find Jobs. Hire People.",
     description: DESCRIPTION,
     url: SITE_URL,
     locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jobs Ready — Find Jobs. Hire People.",
+    title: "Jobs24India — Find Jobs. Hire People.",
     description: DESCRIPTION,
   },
   robots: {

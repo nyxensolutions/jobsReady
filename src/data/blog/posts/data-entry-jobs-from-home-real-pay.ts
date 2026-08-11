@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "data-entry-jobs-from-home-real-pay",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "Genuine data entry job salary in India, what the work actually involves, the difference between real employers and typing scams, required skills, and how to apply.",
   excerpt:
     "\"Data entry from home, earn ₹40,000\" is almost always a scam headline. The genuine version of this job pays a third of that — and is still worth having.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-17",
   keywords: [
     "data entry jobs from home",
@@ -122,7 +122,7 @@ const post: BlogPost = {
     },
     {
       type: "cta",
-      text: "Genuine data entry and back office openings are updated daily on Jobs Ready.",
+      text: "Genuine data entry and back office openings are updated daily on Jobs24India.",
       label: "See data entry jobs",
       href: "/jobs?category=data-entry",
     },

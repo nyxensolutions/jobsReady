@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Cookie Policy — Jobs Ready",
+  title: "Cookie Policy — Jobs24India",
   description:
-    "Cookie Policy for Jobs Ready by NyxenCloud Solution Pvt. Ltd. Learn what cookies we use, why we use them, and how to manage your preferences.",
+    "Cookie Policy for Jobs24India by NyxenCloud Solution Pvt. Ltd. Learn what cookies we use, why we use them, and how to manage your preferences.",
 }
 
 const LAST_UPDATED = "10 August 2026"
@@ -30,7 +30,7 @@ export default function CookiePolicyPage() {
               <p className="mt-3">
                 This Cookie Policy explains how <strong>NyxenCloud Solution Pvt. Ltd.</strong> ("<strong>we</strong>",
                 "<strong>us</strong>", "<strong>our</strong>") uses cookies and similar tracking technologies on the
-                <strong> Jobs Ready</strong> platform at <strong>jobready.in</strong> and related mobile applications
+                <strong> Jobs24India</strong> platform at <strong>jobs24india.com</strong> and related mobile applications
                 (collectively, the "<strong>Platform</strong>").
               </p>
             </section>
@@ -213,9 +213,9 @@ export default function CookiePolicyPage() {
               </p>
               <div className="mt-3 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm space-y-1">
                 <p><strong>NyxenCloud Solution Pvt. Ltd.</strong></p>
-                <p>Email: <a href="mailto:support@jobready.in" className="text-[#1a3461] hover:underline">support@jobready.in</a></p>
+                <p>Email: <a href="mailto:support@jobs24india.com" className="text-[#1a3461] hover:underline">support@jobs24india.com</a></p>
                 <p>Phone: <a href="tel:+919953699143" className="text-[#1a3461] hover:underline">+91 99536 99143</a></p>
-                <p>Website: <a href="https://jobready.in" className="text-[#1a3461] hover:underline">jobready.in</a></p>
+                <p>Website: <a href="https://jobs24india.com" className="text-[#1a3461] hover:underline">jobs24india.com</a></p>
               </div>
               <p className="mt-4">
                 You may also view our{" "}

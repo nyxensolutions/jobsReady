@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server"
+﻿import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
 import Link from "next/link"
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `${job.title} in ${metaCompany}. ${salary ? salary + ". " : ""}${job.description.slice(0, 140)}`
 
   return {
-    title: `${job.title} in ${metaCompany} — Jobs Ready`,
+    title: `${job.title} in ${metaCompany} — Jobs24India`,
     description,
     openGraph: {
       title: `${job.title} — ${metaCompany}`,
@@ -155,7 +155,7 @@ export default async function JobDetailPage({ params }: Props) {
     },
   ]
 
-  const whatsappText = encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: https://jobready.in/jobs/${job.id}`)
+  const whatsappText = encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: https://jobs24india.com/jobs/${job.id}`)
 
   const jsonLd = {
     "@context": "https://schema.org/",

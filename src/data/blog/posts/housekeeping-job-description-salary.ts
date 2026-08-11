@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "housekeeping-job-description-salary",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "Housekeeping job description and salary in India across hotels, hospitals, corporate offices and residential societies, required skills, shift patterns and career growth.",
   excerpt:
     "The same job title pays very differently depending on where you work it. Here is how hotel, hospital, office and society housekeeping compare.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-17",
   keywords: [
     "housekeeping job salary",
@@ -122,7 +122,7 @@ const post: BlogPost = {
       type: "ol",
       items: [
         "Keep Aadhaar, PAN, photos and any hospitality certificate ready",
-        "Apply to housekeeping openings on Jobs Ready across hotels, offices, hospitals and societies",
+        "Apply to housekeeping openings on Jobs24India across hotels, offices, hospitals and societies",
         "Complete police verification, which is standard and can take 1 to 2 weeks",
         "Confirm the shift pattern, uniform policy, and whether PF and ESI are deposited",
         "Ask specifically who your employer of record is if hired through a contractor",
@@ -130,7 +130,7 @@ const post: BlogPost = {
     },
     {
       type: "cta",
-      text: "Housekeeping jobs across hotels, offices, hospitals and societies are updated daily on Jobs Ready.",
+      text: "Housekeeping jobs across hotels, offices, hospitals and societies are updated daily on Jobs24India.",
       label: "See housekeeping jobs",
       href: "/jobs?category=housekeeping",
     },

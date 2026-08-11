@@ -22,7 +22,7 @@ type Props = {
 }
 
 // Segments where the public header should be hidden (they have their own nav)
-const HIDE_HEADER_SEGMENTS = ["/employer/", "/seeker/", "/admin"]
+const HIDE_HEADER_SEGMENTS = ["/employer/", "/admin"]
 
 export default function Header({ initialAuth }: Props) {
   const t = useTranslations("nav")
@@ -85,9 +85,9 @@ export default function Header({ initialAuth }: Props) {
 
           {/* Logo — goes to dashboard if logged in, home if not */}
           <Link href={authUser ? dashboardHref : "/"} className="flex items-center gap-2 shrink-0">
-            <Image src="/logo-full.png" alt="Jobs Ready" width={44} height={44} className="object-contain" />
+            <Image src="/job24.png" alt="Jobs24India" width={44} height={44} className="object-contain" />
             <span className="font-bold text-lg text-[#1a3461] tracking-tight">
-              Jobs<span className="text-orange-500">Ready</span>
+              Jobs<span className="text-orange-500">24</span>India
             </span>
           </Link>
 

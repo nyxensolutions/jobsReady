@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import Link from "next/link"
 import { Mail, MapPin, Clock, AlertCircle, Phone } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Get in touch with Jobs Ready support team. We're here to help job seekers and employers.",
+  description: "Get in touch with Jobs24India support team. We're here to help job seekers and employers.",
 }
 
 export default function ContactPage() {
@@ -32,8 +32,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-400 mb-0.5">Email Support</p>
-                    <a href="mailto:support@jobready.in" className="text-sm font-semibold text-[#1a3461] hover:underline">
-                      support@jobready.in
+                    <a href="mailto:support@jobs24india.com" className="text-sm font-semibold text-[#1a3461] hover:underline">
+                      support@jobs24india.com
                     </a>
                     <p className="text-xs text-gray-400 mt-0.5">Response within 24 hours</p>
                   </div>
@@ -44,8 +44,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-400 mb-0.5">Employer Queries</p>
-                    <a href="mailto:employers@jobready.in" className="text-sm font-semibold text-[#1a3461] hover:underline">
-                      employers@jobready.in
+                    <a href="mailto:employers@jobs24india.com" className="text-sm font-semibold text-[#1a3461] hover:underline">
+                      employers@jobs24india.com
                     </a>
                   </div>
                 </div>
@@ -99,7 +99,7 @@ export default function ContactPage() {
                 <p><strong>Name:</strong> S Verma</p>
                 <p><strong>Designation:</strong> Grievance Officer</p>
                 <p><strong>Email:</strong>{" "}
-                  <a href="mailto:grievance@jobready.in" className="underline">grievance@jobready.in</a>
+                  <a href="mailto:grievance@jobs24india.com" className="underline">grievance@jobs24india.com</a>
                 </p>
                 <p><strong>Address:</strong> NyxenCloud Solution Pvt. Ltd., B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, UP — 201012</p>
                 <p className="text-amber-600 mt-2">Response time: Within 24 hours of receipt, resolved within 15 days.</p>
@@ -113,11 +113,11 @@ export default function ContactPage() {
             <div className="flex flex-col divide-y divide-gray-100">
               {[
                 { q: "How do I apply for a job?", a: "Search for a job, click 'Apply Now', and log in with your mobile number via OTP. No email or CV needed." },
-                { q: "Is Jobs Ready free for job seekers?", a: "Yes, completely free. Job seekers can apply to unlimited jobs at no cost." },
+                { q: "Is Jobs24India free for job seekers?", a: "Yes, completely free. Job seekers can apply to unlimited jobs at no cost." },
                 { q: "How do I post a job as an employer?", a: "Register your company, verify your email, and use the dashboard to post and manage job listings." },
-                { q: "I didn't receive my OTP. What should I do?", a: "Wait 60 seconds and retry. If the issue persists, email us at support@jobready.in with your mobile number." },
-                { q: "How do I delete my account?", a: "Go to your Profile page and scroll to the bottom — there is a 'Delete Account' button. Alternatively, call or email us at support@jobready.in." },
-                { q: "How do I report a fraudulent job posting?", a: "Click 'Report' on the job listing, or email grievance@jobready.in with the job ID and details." },
+                { q: "I didn't receive my OTP. What should I do?", a: "Wait 60 seconds and retry. If the issue persists, email us at support@jobs24india.com with your mobile number." },
+                { q: "How do I delete my account?", a: "Go to your Profile page and scroll to the bottom — there is a 'Delete Account' button. Alternatively, call or email us at support@jobs24india.com." },
+                { q: "How do I report a fraudulent job posting?", a: "Click 'Report' on the job listing, or email grievance@jobs24india.com with the job ID and details." },
               ].map(({ q, a }) => (
                 <div key={q} className="py-3.5">
                   <p className="text-sm font-semibold text-gray-800 mb-1">{q}</p>
@@ -129,7 +129,7 @@ export default function ContactPage() {
             <div className="mt-5 pt-4 border-t border-gray-100 text-center">
               <p className="text-xs text-gray-400 mb-3">Still need help?</p>
               <a
-                href="mailto:support@jobready.in"
+                href="mailto:support@jobs24india.com"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1a3461] hover:bg-[#142a52] text-white text-sm font-semibold rounded-xl transition-colors"
               >
                 <Mail size={14} /> Email Support

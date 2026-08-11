@@ -1,4 +1,4 @@
-// Content model for the Jobs Ready career blog.
+﻿// Content model for the Jobs24India career blog.
 //
 // Posts are plain typed data rather than MDX so that every article shares one
 // renderer, one anchor scheme and one set of structured-data rules. That keeps

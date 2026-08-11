@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "how-to-get-promoted-from-executive-to-supervisor",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "A practical guide to getting promoted from an entry-level executive role into a supervisor or team leader position — what companies actually look for, and a realistic timeline.",
   excerpt:
     "The jump from executive to supervisor is the single biggest pay increase most frontline workers will ever get. Here is what actually earns it.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-17",
   keywords: [
     "how to become a team leader",
@@ -107,7 +107,7 @@ const post: BlogPost = {
     },
     {
       type: "cta",
-      text: "Team lead and supervisor openings across multiple sectors are updated daily on Jobs Ready.",
+      text: "Team lead and supervisor openings across multiple sectors are updated daily on Jobs24India.",
       label: "Browse supervisor roles",
       href: "/jobs",
     },

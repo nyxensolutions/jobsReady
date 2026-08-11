@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "how-to-spot-a-fake-job-offer",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "Learn to identify fake job offers and job scams in India — registration fee frauds, fake offer letters, WhatsApp task scams — plus how to verify a company and where to report fraud.",
   excerpt:
     "No genuine employer in India charges you to give you a job. That one rule catches most scams — but not all of them. Here are the other nine.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-10",
   keywords: [
     "fake job offer",
@@ -149,7 +149,7 @@ const post: BlogPost = {
     },
     {
       type: "jobs",
-      heading: "Verified openings on Jobs Ready",
+      heading: "Verified openings on Jobs24India",
     },
     { type: "h2", text: "What to Do If You Have Already Paid" },
     {

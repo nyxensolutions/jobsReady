@@ -36,7 +36,7 @@ export default async function BlogIndexPage() {
       {/* Hero */}
       <div className="bg-[#1a3461] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-2xl sm:text-4xl font-black mb-3">Jobs Ready Career Guide</h1>
+          <h1 className="text-2xl sm:text-4xl font-black mb-3">Jobs24India Career Guide</h1>
           <p className="text-blue-100 max-w-2xl leading-relaxed">
             Honest salary breakdowns, job descriptions and hiring advice for frontline and blue-collar work in
             India — written for people looking for a job today, not for a career ten years away.

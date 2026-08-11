@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "factory-worker-salary-shifts-benefits",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "Factory worker and machine operator salary in India, shift allowance rules, PF and ESI benefits, skill-based pay tiers, and how to get hired at a manufacturing unit.",
   excerpt:
     "Factory pay is set by a skill category most workers have never heard of. Knowing which one you fall into explains most of the gap between offers.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-17",
   keywords: [
     "factory worker salary",
@@ -120,7 +120,7 @@ const post: BlogPost = {
       type: "ol",
       items: [
         "Keep your Aadhaar, PAN, ITI certificate (if any) and bank details ready",
-        "Apply to factory openings on Jobs Ready and note the shift pattern before applying",
+        "Apply to factory openings on Jobs24India and note the shift pattern before applying",
         "Ask directly which skill category you are being hired into, and its notified minimum wage",
         "Attend the walk-in interview, common for factory hiring, with original documents plus photocopies",
         "Confirm PF, ESI and the payment date before you start",
@@ -128,7 +128,7 @@ const post: BlogPost = {
     },
     {
       type: "cta",
-      text: "Factory and production line openings across NCR are updated daily on Jobs Ready.",
+      text: "Factory and production line openings across NCR are updated daily on Jobs24India.",
       label: "See factory jobs",
       href: "/jobs?category=factory",
     },

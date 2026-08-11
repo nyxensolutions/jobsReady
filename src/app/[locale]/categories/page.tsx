@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import Link from "next/link"
 import {
   Truck, Car, TrendingUp, Shield, Sparkles, UtensilsCrossed,
@@ -71,7 +71,7 @@ export default function CategoriesPage() {
           <h2 className="text-lg font-bold text-[#1a3461] mb-4">Find Blue-Collar Jobs Across India</h2>
           <div className="text-sm text-gray-500 leading-relaxed space-y-3">
             <p>
-              Jobs Ready is India's leading platform for blue-collar and frontline employment. Whether you're
+              Jobs24India is India's leading platform for blue-collar and frontline employment. Whether you're
               looking for a <Link href="/jobs?category=delivery" className="text-blue-700 hover:underline">delivery job</Link>,{" "}
               <Link href="/jobs?category=driver" className="text-blue-700 hover:underline">driving job</Link>,{" "}
               <Link href="/jobs?category=security" className="text-blue-700 hover:underline">security guard job</Link>, or{" "}

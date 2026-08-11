@@ -1,8 +1,8 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy for Jobs Ready by NyxenCloud Solution Pvt. Ltd. Learn how we collect, use, and protect your personal data.",
+  description: "Privacy Policy for Jobs24India by NyxenCloud Solution Pvt. Ltd. Learn how we collect, use, and protect your personal data.",
 }
 
 const LAST_UPDATED = "1 July 2026"
@@ -22,12 +22,12 @@ export default function PrivacyPage() {
               <h2 className="text-lg font-bold text-gray-800 mb-3">1. Introduction</h2>
               <p>
                 NyxenCloud Solution Pvt. Ltd. ("<strong>Company</strong>", "<strong>we</strong>", "<strong>us</strong>", or "<strong>our</strong>")
-                operates the Jobs Ready platform available at <strong>jobready.in</strong> and related mobile applications
+                operates the Jobs24India platform available at <strong>jobs24india.com</strong> and related mobile applications
                 (collectively, the "<strong>Platform</strong>").
               </p>
               <p className="mt-3">
                 This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Platform.
-                By using Jobs Ready, you agree to the collection and use of information as described in this policy.
+                By using Jobs24India, you agree to the collection and use of information as described in this policy.
                 If you do not agree, please discontinue use of the Platform.
               </p>
               <p className="mt-3">
@@ -114,7 +114,7 @@ export default function PrivacyPage() {
                 <li><strong>Nominate:</strong> Nominate another individual to exercise rights on your behalf in case of death or incapacity.</li>
               </ul>
               <p className="mt-3">
-                To exercise any of these rights, email <a href="mailto:privacy@jobready.in" className="text-blue-700 hover:underline">privacy@jobready.in</a> from your registered contact.
+                To exercise any of these rights, email <a href="mailto:privacy@jobs24india.com" className="text-blue-700 hover:underline">privacy@jobs24india.com</a> from your registered contact.
                 We will respond within 30 days.
               </p>
             </section>
@@ -147,7 +147,7 @@ export default function PrivacyPage() {
               <div className="mt-3 bg-gray-50 rounded-xl border border-gray-100 p-4 text-sm space-y-1">
                 <p><strong>Name:</strong> S Verma</p>
                 <p><strong>Designation:</strong> Grievance Officer, NyxenCloud Solution Pvt. Ltd.</p>
-                <p><strong>Email:</strong> <a href="mailto:grievance@jobready.in" className="text-blue-700 hover:underline">grievance@jobready.in</a></p>
+                <p><strong>Email:</strong> <a href="mailto:grievance@jobs24india.com" className="text-blue-700 hover:underline">grievance@jobs24india.com</a></p>
                 <p><strong>Address:</strong> B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, Uttar Pradesh — 201012, India</p>
                 <p className="text-gray-500 mt-2">Complaints will be acknowledged within 24 hours and resolved within 15 days of receipt.</p>
               </div>
@@ -165,7 +165,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-lg font-bold text-gray-800 mb-3">11. Contact</h2>
               <p>
-                For privacy-related queries, email <a href="mailto:privacy@jobready.in" className="text-blue-700 hover:underline">privacy@jobready.in</a>.
+                For privacy-related queries, email <a href="mailto:privacy@jobs24india.com" className="text-blue-700 hover:underline">privacy@jobs24india.com</a>.
                 For general support, see our <a href="/contact" className="text-blue-700 hover:underline">Contact page</a>.
               </p>
             </section>

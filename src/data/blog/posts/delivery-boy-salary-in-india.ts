@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "delivery-boy-salary-in-india",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "How much do delivery boys actually earn in India? Per-order rates, monthly take-home after fuel, company-wise comparison for Zomato, Swiggy, Blinkit, Zepto, Flipkart and Amazon.",
   excerpt:
     "The advertised ₹40,000 a month and the amount that reaches your pocket are two very different numbers. Here is the arithmetic, company by company.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-10",
   keywords: [
     "delivery boy salary",
@@ -146,7 +146,7 @@ const post: BlogPost = {
       type: "ol",
       items: [
         "Keep soft copies of Aadhaar, PAN, licence and RC on your phone before applying",
-        "Apply to two or three delivery openings on Jobs Ready rather than just one",
+        "Apply to two or three delivery openings on Jobs24India rather than just one",
         "Answer the verification call the same day — most drop-offs happen here",
         "Attend the onboarding session, usually 60 to 90 minutes at a local hub",
         "Complete app training and the first test order",

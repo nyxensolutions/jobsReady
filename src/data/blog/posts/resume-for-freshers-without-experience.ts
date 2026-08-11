@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "resume-for-freshers-without-experience",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "A step-by-step resume format for freshers with no work experience, with a copy-ready sample, what to write instead of experience, and the mistakes that get resumes rejected.",
   excerpt:
     "Everyone has done work. Most freshers just don't recognise it as work. Here is how to turn what you already have into one page a recruiter will read.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-10",
   keywords: [
     "resume for freshers",
@@ -167,7 +167,7 @@ const post: BlogPost = {
     { type: "h2", text: "Where to Send It" },
     {
       type: "p",
-      text: "For frontline and entry-level roles in India, a resume rarely travels alone. Upload it to your Jobs Ready profile so it is attached automatically to every application, keep a PDF copy on your phone to send on WhatsApp within minutes of a recruiter asking, and carry two printed copies to any walk-in.",
+      text: "For frontline and entry-level roles in India, a resume rarely travels alone. Upload it to your Jobs24India profile so it is attached automatically to every application, keep a PDF copy on your phone to send on WhatsApp within minutes of a recruiter asking, and carry two printed copies to any walk-in.",
     },
     {
       type: "jobs",
@@ -175,7 +175,7 @@ const post: BlogPost = {
     },
     {
       type: "cta",
-      text: "Create your Jobs Ready profile once and apply to any job with a single tap.",
+      text: "Create your Jobs24India profile once and apply to any job with a single tap.",
       label: "Create your profile",
       href: "/login",
     },

@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "field-sales-executive-salary-incentives",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "Field sales executive job description, salary and incentive structure in India, how targets work, required skills, and career growth into business development and management.",
   excerpt:
     "In field sales, the fixed salary is the floor, not the ceiling. Here is how the incentive math actually works, and how to read an offer honestly.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-17",
   keywords: [
     "field sales executive salary",
@@ -133,14 +133,14 @@ const post: BlogPost = {
       items: [
         "Practise a 60-second pitch for a product you know well — this is often the interview test itself",
         "Keep your two-wheeler licence and RC ready",
-        "Apply to field sales openings on Jobs Ready and ask about the fixed-to-incentive ratio upfront",
+        "Apply to field sales openings on Jobs24India and ask about the fixed-to-incentive ratio upfront",
         "Ask what the team's median monthly incentive was last quarter",
         "Confirm travel allowance and reimbursement policy before accepting",
       ],
     },
     {
       type: "cta",
-      text: "Field sales and business development openings across India are updated daily on Jobs Ready.",
+      text: "Field sales and business development openings across India are updated daily on Jobs24India.",
       label: "Browse sales jobs",
       href: "/jobs?category=sales",
     },

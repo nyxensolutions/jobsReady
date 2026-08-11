@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "common-interview-questions-freshers-answers",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "The 10 most common interview questions freshers face for frontline and entry-level jobs in India, with sample answers, what interviewers are really checking, and mistakes to avoid.",
   excerpt:
     "Most fresher interviews ask the same ten questions in a different order. Prepare these properly and you have prepared for almost every interview you will face.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-17",
   keywords: [
     "interview questions for freshers",

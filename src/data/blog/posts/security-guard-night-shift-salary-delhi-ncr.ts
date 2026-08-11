@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "security-guard-night-shift-salary-delhi-ncr",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "Night shift security guard salary across Delhi, Noida, Gurugram and Ghaziabad — night allowance rules, 12-hour shift pay, PSARA licensing, PF and ESI, and how to get hired.",
   excerpt:
     "Night duty pays more, but not always in the way agencies describe it. Here is what the allowance is really worth and what to check before signing.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-10",
   keywords: [
     "security guard night shift salary",
@@ -145,7 +145,7 @@ const post: BlogPost = {
       type: "ol",
       items: [
         "Keep Aadhaar, PAN, bank passbook, photos and your 10th marksheet ready",
-        "Apply to security openings on Jobs Ready and note which state the site is in — it sets your wage floor",
+        "Apply to security openings on Jobs24India and note which state the site is in — it sets your wage floor",
         "Ask the agency for its PSARA licence number during the first call",
         "Confirm in writing: fixed salary, night allowance, PF and ESI, and the payment date",
         "Complete police verification, which typically takes 7 to 15 days",
@@ -154,7 +154,7 @@ const post: BlogPost = {
     },
     {
       type: "cta",
-      text: "Security guard openings across Delhi, Noida, Gurugram and Ghaziabad are updated daily on Jobs Ready.",
+      text: "Security guard openings across Delhi, Noida, Gurugram and Ghaziabad are updated daily on Jobs24India.",
       label: "See security guard jobs",
       href: "/jobs?category=security",
     },

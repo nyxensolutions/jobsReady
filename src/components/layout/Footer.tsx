@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 
-const NO_FOOTER_SEGMENTS = ["/employer/", "/seeker/", "/admin"]
+const NO_FOOTER_SEGMENTS = ["/employer/", "/admin"]
 
 export default function Footer() {
   const t = useTranslations("nav")
@@ -19,8 +19,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-1">
-              <Image src="/logo-full.png" alt="Jobs Ready" width={32} height={32} className="object-contain" />
-              <span className="font-bold text-white text-base">Jobs<span className="text-blue-400">Ready</span></span>
+              <Image src="/job24.png" alt="Jobs24India" width={32} height={32} className="object-contain" />
+              <span className="font-bold text-white text-base">Jobs<span className="text-orange-400">24</span>India</span>
             </div>
             <p className="text-gray-600 text-xs mb-3">
               A product of{" "}

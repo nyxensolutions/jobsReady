@@ -1,8 +1,8 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Terms of Use",
-  description: "Terms of Use for Jobs Ready by NyxenCloud Solution Pvt. Ltd. Read the rules governing your use of our job platform.",
+  description: "Terms of Use for Jobs24India by NyxenCloud Solution Pvt. Ltd. Read the rules governing your use of our job platform.",
 }
 
 const LAST_UPDATED = "1 July 2026"
@@ -21,8 +21,8 @@ export default function TermsPage() {
             <section>
               <h2 className="text-lg font-bold text-gray-800 mb-3">1. Acceptance of Terms</h2>
               <p>
-                By accessing or using the Jobs Ready platform ("<strong>Platform</strong>") — including the website
-                jobready.in and any associated mobile application — you agree to be bound by these Terms of Use
+                By accessing or using the Jobs24India platform ("<strong>Platform</strong>") — including the website
+                jobs24india.com and any associated mobile application — you agree to be bound by these Terms of Use
                 ("<strong>Terms</strong>") and our <a href="/privacy" className="text-blue-700 hover:underline">Privacy Policy</a>.
               </p>
               <p className="mt-3">
@@ -59,7 +59,7 @@ export default function TermsPage() {
                 <li>Job Seekers may use the Platform to search and apply for jobs, create and maintain a profile, and receive notifications about job opportunities.</li>
                 <li>Your profile information, including name, contact number, and experience, will be shared with employers when you apply for a job.</li>
                 <li>You agree that the information in your profile is accurate and does not infringe any third-party rights.</li>
-                <li>Jobs Ready is a free service for job seekers. We will never charge you to apply for a job.</li>
+                <li>Jobs24India is a free service for job seekers. We will never charge you to apply for a job.</li>
                 <li>We do not guarantee employment or interview calls. The hiring decision rests solely with the employer.</li>
               </ul>
             </section>
@@ -136,7 +136,7 @@ export default function TermsPage() {
               <p>
                 We reserve the right to suspend or terminate your account at any time, without prior notice,
                 for violation of these Terms or for any conduct we deem harmful to other users or the Platform.
-                You may terminate your account by emailing <a href="mailto:support@jobready.in" className="text-blue-700 hover:underline">support@jobready.in</a>.
+                You may terminate your account by emailing <a href="mailto:support@jobs24india.com" className="text-blue-700 hover:underline">support@jobs24india.com</a>.
               </p>
             </section>
 
@@ -158,7 +158,7 @@ export default function TermsPage() {
               </p>
               <div className="mt-3 bg-gray-50 rounded-xl border border-gray-100 p-4 text-sm space-y-1">
                 <p><strong>Name:</strong> S Verma</p>
-                <p><strong>Email:</strong> <a href="mailto:grievance@jobready.in" className="text-blue-700 hover:underline">grievance@jobready.in</a></p>
+                <p><strong>Email:</strong> <a href="mailto:grievance@jobs24india.com" className="text-blue-700 hover:underline">grievance@jobs24india.com</a></p>
                 <p><strong>Address:</strong> NyxenCloud Solution Pvt. Ltd., B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, UP — 201012, India</p>
                 <p className="text-gray-500 mt-2">Complaints acknowledged within 24 hours, resolved within 15 days.</p>
               </div>
@@ -175,7 +175,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-lg font-bold text-gray-800 mb-3">14. Contact</h2>
               <p>
-                Questions about these Terms? Email <a href="mailto:legal@jobready.in" className="text-blue-700 hover:underline">legal@jobready.in</a>{" "}
+                Questions about these Terms? Email <a href="mailto:legal@jobs24india.com" className="text-blue-700 hover:underline">legal@jobs24india.com</a>{" "}
                 or visit our <a href="/contact" className="text-blue-700 hover:underline">Contact page</a>.
               </p>
             </section>

@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "delivery-boy-salary-in-ghaziabad",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "What delivery boys earn in Ghaziabad — area-wise demand in Indirapuram, Vaishali, Kaushambi and Raj Nagar, company comparison, fuel costs and how to join in 48 hours.",
   excerpt:
     "Ghaziabad pays slightly below Gurugram but costs far less to work in. For riders living in the Trans-Hindon belt, that trade is usually worth it.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-10",
   keywords: [
     "delivery boy salary in ghaziabad",
@@ -117,7 +117,7 @@ const post: BlogPost = {
       type: "ol",
       items: [
         "Keep Aadhaar, PAN, licence, RC and bank details as photos on your phone",
-        "Apply to two or three Ghaziabad delivery listings on Jobs Ready",
+        "Apply to two or three Ghaziabad delivery listings on Jobs24India",
         "Take the verification call the same day it comes",
         "Attend onboarding at the nearest hub — most Trans-Hindon riders are assigned to Indirapuram or Vaishali",
         "Complete app training and one test order",

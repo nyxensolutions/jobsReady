@@ -1,7 +1,7 @@
 import { locales, defaultLocale } from "@/i18n/config"
 
-export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://jobsready.in"
-export const SITE_NAME = "Jobs Ready"
+export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://jobs24india.com"
+export const SITE_NAME = "Jobs24India"
 
 /** Absolute URL for a site-relative path. */
 export function absoluteUrl(path = "/"): string {

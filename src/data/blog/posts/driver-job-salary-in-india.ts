@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "driver-job-salary-in-india",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "What drivers actually earn in India — company driver, cab driver, truck driver and app-based driver salary compared, licence requirements, and how to get hired.",
   excerpt:
     "\"Driver\" covers four very different jobs with four very different pay structures. Knowing which one you're being offered changes everything.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-17",
   keywords: [
     "driver salary in india",
@@ -120,7 +120,7 @@ const post: BlogPost = {
       items: [
         "Renew or upgrade your licence before applying — an expired licence is the most common reason applications get rejected outright",
         "Get your police verification done in advance; it can take 1 to 2 weeks",
-        "Apply to driver openings on Jobs Ready, filtering by vehicle type",
+        "Apply to driver openings on Jobs24India, filtering by vehicle type",
         "Be ready for a practical driving test, standard for most employers",
         "Confirm the salary structure — fixed, per-trip, or a mix — before accepting",
         "Ask about accident liability and vehicle damage policy before starting",

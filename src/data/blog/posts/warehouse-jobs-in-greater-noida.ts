@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "warehouse-jobs-in-greater-noida",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "Warehouse and logistics jobs in Greater Noida — picker, packer, loader and inventory roles, monthly salary, shift patterns, PF and ESI, hiring clusters and how to apply.",
   excerpt:
     "Greater Noida has quietly become one of North India's densest warehousing belts. Here is what the jobs pay and where the hubs actually are.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-10",
   keywords: [
     "warehouse jobs in greater noida",
@@ -123,7 +123,7 @@ const post: BlogPost = {
       type: "ol",
       items: [
         "Keep Aadhaar, PAN, bank passbook and photos as soft copies",
-        "Apply to several Greater Noida warehouse listings on Jobs Ready rather than one",
+        "Apply to several Greater Noida warehouse listings on Jobs24India rather than one",
         "Confirm on the first call: employer entity, salary, shift, transport and PF status",
         "Attend the walk-in — most warehouse hiring is done through same-day walk-ins at the site or hub",
         "Carry originals plus two photocopy sets of every document",

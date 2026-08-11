@@ -1,4 +1,4 @@
-import type { BlogPost } from "../types"
+﻿import type { BlogPost } from "../types"
 
 const post: BlogPost = {
   slug: "telecaller-job-description-salary-skills",
@@ -9,7 +9,7 @@ const post: BlogPost = {
     "What does a telecaller actually do? Full job description, salary in India for freshers and experienced staff, required skills, growth path and how to get hired.",
   excerpt:
     "Telecalling is the single largest entry point into office work for 12th-pass candidates in India. Here is the honest version — what the job involves, what it pays, and where it leads.",
-  author: "Jobs Ready Careers Desk",
+  author: "Jobs24India Careers Desk",
   publishedAt: "2026-08-10",
   keywords: [
     "telecaller job description",
@@ -183,14 +183,14 @@ const post: BlogPost = {
         "Complete 10th or 12th — keep the marksheet and Aadhaar ready as soft copies",
         "Write a one-page resume; you do not need work experience to have one",
         "Practise speaking about yourself for 60 seconds in the process language, out loud",
-        "Apply to openings on Jobs Ready and shortlist those that state a fixed salary",
+        "Apply to openings on Jobs24India and shortlist those that state a fixed salary",
         "Clear the HR round, which is usually a spoken-language screening rather than a knowledge test",
         "Complete the 3 to 7 day product training the company provides before going live on calls",
       ],
     },
     {
       type: "cta",
-      text: "Telecaller and BPO openings across Delhi NCR and other cities are updated daily on Jobs Ready.",
+      text: "Telecaller and BPO openings across Delhi NCR and other cities are updated daily on Jobs24India.",
       label: "Browse telecaller jobs",
       href: "/jobs?category=telecaller",
     },
