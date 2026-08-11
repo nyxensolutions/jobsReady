@@ -19,8 +19,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-1">
-              <Image src="/job24.png" alt="Jobs24India" width={32} height={32} className="object-contain" />
-              <span className="font-bold text-white text-base">Jobs<span className="text-orange-400">24</span>India</span>
+              <Image src="/logo-full.png" alt="Jobs24India" width={48} height={48} className="object-contain" />
+              <Image src="/job24.png" alt="Jobs24India" width={110} height={38} className="object-contain" />
             </div>
             <p className="text-gray-600 text-xs mb-3">
               A product of{" "}
