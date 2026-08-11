@@ -65,12 +65,12 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
         className="hidden md:flex flex-col bg-white border-r border-gray-100 fixed top-0 left-0 h-screen z-20 shadow-sm transition-[width] duration-200 overflow-hidden"
       >
         {/* Top: Logo + toggle */}
-        <div className={`border-b border-gray-100 flex shrink-0 ${collapsed ? "flex-col items-center justify-center py-3 px-2 gap-2 min-h-[72px]" : "h-16 items-center px-3 gap-2"}`}>
+        <div className={`border-b border-gray-100 flex shrink-0 ${collapsed ? "flex-col items-center justify-center py-2 px-1 gap-1.5 min-h-[80px]" : "h-16 items-center px-3 gap-2"}`}>
           {collapsed ? (
-            /* Collapsed: running guy logo on top, then expand toggle below */
+            /* Collapsed: running guy centered, then expand toggle */
             <>
-              <Link href="/" title="Jobs24India">
-                <Image src="/logo-full.png" alt="Jobs24India" width={36} height={36} className="object-contain" />
+              <Link href="/" title="Jobs24India" className="flex items-center justify-center">
+                <Image src="/logo-full.png" alt="Jobs24India" width={44} height={44} className="object-contain" />
               </Link>
               <button
                 onClick={() => setCollapsed(false)}
@@ -81,10 +81,10 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
               </button>
             </>
           ) : (
-            /* Expanded: job24 brand logo + collapse button */
+            /* Expanded: job24 brand logo fills header + collapse toggle */
             <>
-              <Link href="/" className="flex items-center gap-2 flex-1 min-w-0">
-                <Image src="/job24.png" alt="Jobs24India" width={110} height={36} className="object-contain shrink-0" />
+              <Link href="/" className="flex items-center flex-1 min-w-0">
+                <Image src="/job24.png" alt="Jobs24India" width={130} height={40} className="object-contain shrink-0" />
               </Link>
               <button
                 onClick={() => setCollapsed(true)}

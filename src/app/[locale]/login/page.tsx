@@ -151,10 +151,10 @@ function LoginPageContent() {
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
           {/* Logo */}
           <div className="text-center mb-7">
-            <div className="mx-auto mb-4 w-12 h-12 flex items-center justify-center">
-              <Image src="/job24.png" alt="Jobs24India" width={48} height={48} className="object-contain" />
+            <div className="flex flex-col items-center gap-2 mb-3">
+              <Image src="/logo-full.png" alt="Jobs24India" width={72} height={72} className="object-contain" />
+              <Image src="/job24.png" alt="Jobs24India" width={130} height={44} className="object-contain" />
             </div>
-            <h1 className="text-xl font-bold text-gray-900">Jobs<span className="text-orange-500">24</span>India</h1>
             <p className="text-sm text-gray-500 mt-1">{t("signInToContinue")}</p>
           </div>
 
