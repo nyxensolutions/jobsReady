@@ -3,12 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
+import Image from "next/image"
 import { Phone, ArrowRight, CheckCircle } from "lucide-react"
-
-const QUICK_JOBS = [
-  "Delivery Executive", "BPO Executive", "Telecaller", "Driver", "Security Guard",
-  "Sales Executive", "Cook", "Data Entry", "Helper", "Factory Worker", "Warehouse", "Nurse"
-]
 
 export default function GetJobNowSection() {
   const t = useTranslations("home.getJob")
@@ -36,18 +32,18 @@ export default function GetJobNowSection() {
   return (
     <section className="bg-[#EBF3FF] py-10 sm:py-14 border-y border-[#d0e6ff]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
 
-          {/* Left: CTA */}
+          {/* Left: CTA — now uses the bigger heading style */}
           <div>
             <div className="inline-flex items-center gap-1.5 bg-white border border-[#c8dff7] text-[#1a3461] text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
               {t("freeBadge")}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#1a3461] leading-tight mb-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-[#1a3461] leading-[1.15] mb-4">
               {t("title")}
             </h2>
-            <p className="text-slate-500 text-sm sm:text-base mb-6">
+            <p className="text-slate-500 text-base sm:text-lg mb-8 max-w-lg leading-relaxed">
               {t("subtitle")}
             </p>
 
@@ -82,21 +78,33 @@ export default function GetJobNowSection() {
             </div>
           </div>
 
-          {/* Right: popular job quick-links */}
-          <div>
-            <p className="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-3">
-              {t("popularTypes")}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {QUICK_JOBS.map((job) => (
-                <button
-                  key={job}
-                  onClick={() => router.push(`/jobs?q=${encodeURIComponent(job)}`)}
-                  className="bg-white hover:bg-[#1a3461] hover:text-white text-[#1a3461] text-sm font-medium px-4 py-2 rounded-full transition-colors border border-[#c8dff7] shadow-sm"
-                >
-                  {job}
-                </button>
-              ))}
+          {/* Right: hero image (stays on top where it originally was) */}
+          <div className="hidden lg:flex justify-center items-center relative">
+            <div className="relative w-full max-w-md aspect-[4/3]">
+              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                <Image
+                  src="/images/hero-seeker.jpg"
+                  alt="Blue-collar workers finding jobs in India"
+                  width={560}
+                  height={420}
+                  className="object-cover w-full h-full"
+                  priority
+                />
+              </div>
+              <div className="absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-lg">💼</div>
+                <div>
+                  <p className="text-sm font-extrabold text-gray-900">50,000+</p>
+                  <p className="text-[10px] text-gray-400 font-medium">Active Jobs</p>
+                </div>
+              </div>
+              <div className="absolute -top-4 -right-8 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-lg">🏢</div>
+                <div>
+                  <p className="text-sm font-extrabold text-gray-900">5,000+</p>
+                  <p className="text-[10px] text-gray-400 font-medium">Companies Hiring</p>
+                </div>
+              </div>
             </div>
           </div>
 

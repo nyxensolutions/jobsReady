@@ -65,22 +65,27 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
         className="hidden md:flex flex-col bg-white border-r border-gray-100 fixed top-0 left-0 h-screen z-20 shadow-sm transition-[width] duration-200 overflow-hidden"
       >
         {/* Top: Logo + toggle */}
-        <div className="h-14 border-b border-gray-100 flex items-center shrink-0 px-3 gap-2">
+        <div className={`border-b border-gray-100 flex shrink-0 ${collapsed ? "flex-col items-center justify-center py-3 px-2 gap-2 min-h-[72px]" : "h-16 items-center px-3 gap-2"}`}>
           {collapsed ? (
-            /* Collapsed: just toggle button centered */
-            <button
-              onClick={() => setCollapsed(false)}
-              className="flex-1 flex items-center justify-center p-1.5 rounded-lg text-gray-400 hover:text-[#1a3461] hover:bg-[#eef2ff] transition-colors"
-              title="Expand sidebar"
-            >
-              <PanelLeftOpen size={18} />
-            </button>
-          ) : (
-            /* Expanded: logo + wordmark + collapse button */
+            /* Collapsed: logo icon on top, then expand toggle below */
             <>
-              <Link href="/" className="flex items-center gap-2 flex-1 min-w-0">
-                <Image src="/logo-full.png" alt="Jobs Ready" width={30} height={30} className="object-contain shrink-0" />
-                <span className="text-sm font-extrabold text-[#1a3461] tracking-tight truncate">Jobs Ready</span>
+              <Link href="/" title="Jobs Ready">
+                <Image src="/logo-full.png" alt="Jobs Ready" width={32} height={32} className="object-contain" />
+              </Link>
+              <button
+                onClick={() => setCollapsed(false)}
+                className="p-1 rounded-lg text-gray-400 hover:text-[#1a3461] hover:bg-[#eef2ff] transition-colors"
+                title="Expand sidebar"
+              >
+                <PanelLeftOpen size={15} />
+              </button>
+            </>
+          ) : (
+            /* Expanded: bigger logo + wordmark + collapse button */
+            <>
+              <Link href="/" className="flex items-center gap-2.5 flex-1 min-w-0">
+                <Image src="/logo-full.png" alt="Jobs Ready" width={38} height={38} className="object-contain shrink-0" />
+                <span className="text-base font-extrabold text-[#1a3461] tracking-tight truncate">Jobs Ready</span>
               </Link>
               <button
                 onClick={() => setCollapsed(true)}
