@@ -83,12 +83,10 @@ export default function Header({ initialAuth }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo — goes to dashboard if logged in, home if not */}
-          <Link href={authUser ? dashboardHref : "/"} className="flex items-center gap-2 shrink-0">
-            <Image src="/job24.png" alt="Jobs24India" width={44} height={44} className="object-contain" />
-            <span className="font-bold text-lg text-[#1a3461] tracking-tight">
-              Jobs<span className="text-orange-500">24</span>India
-            </span>
+          {/* Logo — running guy + job24 badge, no text */}
+          <Link href={authUser ? dashboardHref : "/"} className="flex items-center gap-1.5 shrink-0">
+            <Image src="/logo-full.png" alt="Jobs24India" width={52} height={52} className="object-contain" />
+            <Image src="/job24.png" alt="Jobs24India" width={80} height={32} className="object-contain" />
           </Link>
 
           {/* Desktop nav */}

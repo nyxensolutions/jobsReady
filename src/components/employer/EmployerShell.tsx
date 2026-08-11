@@ -67,10 +67,10 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
         {/* Top: Logo + toggle */}
         <div className={`border-b border-gray-100 flex shrink-0 ${collapsed ? "flex-col items-center justify-center py-3 px-2 gap-2 min-h-[72px]" : "h-16 items-center px-3 gap-2"}`}>
           {collapsed ? (
-            /* Collapsed: logo icon on top, then expand toggle below */
+            /* Collapsed: running guy logo on top, then expand toggle below */
             <>
               <Link href="/" title="Jobs24India">
-                <Image src="/job24.png" alt="Jobs24India" width={32} height={32} className="object-contain" />
+                <Image src="/logo-full.png" alt="Jobs24India" width={36} height={36} className="object-contain" />
               </Link>
               <button
                 onClick={() => setCollapsed(false)}
@@ -81,11 +81,10 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
               </button>
             </>
           ) : (
-            /* Expanded: bigger logo + wordmark + collapse button */
+            /* Expanded: job24 brand logo + collapse button */
             <>
-              <Link href="/" className="flex items-center gap-2.5 flex-1 min-w-0">
-                <Image src="/job24.png" alt="Jobs24India" width={38} height={38} className="object-contain shrink-0" />
-                <span className="text-base font-extrabold text-[#1a3461] tracking-tight truncate">Jobs<span className="text-orange-500">24</span>India</span>
+              <Link href="/" className="flex items-center gap-2 flex-1 min-w-0">
+                <Image src="/job24.png" alt="Jobs24India" width={110} height={36} className="object-contain shrink-0" />
               </Link>
               <button
                 onClick={() => setCollapsed(true)}
