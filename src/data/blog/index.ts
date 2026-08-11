@@ -7,6 +7,13 @@ import securityNightShift from "./posts/security-guard-night-shift-salary-delhi-
 import fakeJobOffer from "./posts/how-to-spot-a-fake-job-offer"
 import warehouseGreaterNoida from "./posts/warehouse-jobs-in-greater-noida"
 import fresherResume from "./posts/resume-for-freshers-without-experience"
+import driverSalary from "./posts/driver-job-salary-in-india"
+import fieldSalesSalary from "./posts/field-sales-executive-salary-incentives"
+import housekeepingSalary from "./posts/housekeeping-job-description-salary"
+import factoryWorkerSalary from "./posts/factory-worker-salary-shifts-benefits"
+import dataEntryFromHome from "./posts/data-entry-jobs-from-home-real-pay"
+import interviewQuestions from "./posts/common-interview-questions-freshers-answers"
+import promotionGuide from "./posts/how-to-get-promoted-from-executive-to-supervisor"
 
 // Register every post here. Newest-first ordering is derived from publishedAt,
 // so the order of this array does not matter.
@@ -18,6 +25,13 @@ export const ALL_POSTS: BlogPost[] = [
   fakeJobOffer,
   warehouseGreaterNoida,
   fresherResume,
+  driverSalary,
+  fieldSalesSalary,
+  housekeepingSalary,
+  factoryWorkerSalary,
+  dataEntryFromHome,
+  interviewQuestions,
+  promotionGuide,
 ]
 
 export type { BlogPost }
