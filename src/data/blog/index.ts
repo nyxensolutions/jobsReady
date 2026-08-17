@@ -14,6 +14,12 @@ import factoryWorkerSalary from "./posts/factory-worker-salary-shifts-benefits"
 import dataEntryFromHome from "./posts/data-entry-jobs-from-home-real-pay"
 import interviewQuestions from "./posts/common-interview-questions-freshers-answers"
 import promotionGuide from "./posts/how-to-get-promoted-from-executive-to-supervisor"
+import ctcVsInHand from "./posts/ctc-vs-in-hand-salary-explained"
+import minimumWageStateWise from "./posts/minimum-wage-in-india-state-wise"
+import govVsPrivateJob from "./posts/government-job-vs-private-job"
+import walkInInterview from "./posts/walk-in-interview-how-to-prepare"
+import deliveryNoida from "./posts/delivery-jobs-in-noida-salary-guide"
+import securityGurugram from "./posts/security-guard-salary-in-gurugram"
 
 // Register every post here. Newest-first ordering is derived from publishedAt,
 // so the order of this array does not matter.
@@ -32,6 +38,12 @@ export const ALL_POSTS: BlogPost[] = [
   dataEntryFromHome,
   interviewQuestions,
   promotionGuide,
+  ctcVsInHand,
+  minimumWageStateWise,
+  govVsPrivateJob,
+  walkInInterview,
+  deliveryNoida,
+  securityGurugram,
 ]
 
 export type { BlogPost }
