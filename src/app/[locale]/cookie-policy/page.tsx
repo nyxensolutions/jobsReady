@@ -214,7 +214,6 @@ export default function CookiePolicyPage() {
               <div className="mt-3 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm space-y-1">
                 <p><strong>NyxenCloud Solution Pvt. Ltd.</strong></p>
                 <p>Email: <a href="mailto:support@jobs24india.com" className="text-[#1a3461] hover:underline">support@jobs24india.com</a></p>
-                <p>Phone: <a href="tel:+919953699143" className="text-[#1a3461] hover:underline">+91 99536 99143</a></p>
                 <p>Website: <a href="https://jobs24india.com" className="text-[#1a3461] hover:underline">jobs24india.com</a></p>
               </div>
               <p className="mt-4">

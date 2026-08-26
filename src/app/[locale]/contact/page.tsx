@@ -1,6 +1,6 @@
 ﻿import type { Metadata } from "next"
 import Link from "next/link"
-import { Mail, MapPin, Clock, AlertCircle, Phone } from "lucide-react"
+import { Mail, MapPin, Clock, AlertCircle } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -47,18 +47,6 @@ export default function ContactPage() {
                     <a href="mailto:employers@jobs24india.com" className="text-sm font-semibold text-[#1a3461] hover:underline">
                       employers@jobs24india.com
                     </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#eef2ff] flex items-center justify-center shrink-0">
-                    <Phone size={16} className="text-[#1a3461]" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-0.5">Phone / WhatsApp</p>
-                    <a href="tel:+919953699143" className="text-sm font-semibold text-[#1a3461] hover:underline">
-                      +91 99536 99143
-                    </a>
-                    <p className="text-xs text-gray-400 mt-0.5">Mon – Sat, 9 AM – 6 PM IST</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

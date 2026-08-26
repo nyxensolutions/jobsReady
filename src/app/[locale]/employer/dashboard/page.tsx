@@ -389,21 +389,6 @@ export default async function EmployerDashboardPage() {
                   </div>
                   <ArrowUpRight size={14} className="text-slate-300 group-hover:text-[#1a3461] transition-colors shrink-0" />
                 </a>
-                <a
-                  href="https://wa.me/919953699143"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition-all group"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-slate-700">WhatsApp Support</p>
-                    <p className="text-xs text-slate-400">+91 99536 99143</p>
-                  </div>
-                  <ArrowUpRight size={14} className="text-slate-300 group-hover:text-emerald-500 transition-colors shrink-0" />
-                </a>
               </div>
             </div>
 
