@@ -50,6 +50,7 @@ export default async function JobsPage({ searchParams }: Props) {
         employer: { select: { companyName: true } },
         category: { select: { slug: true } },
         city: { select: { name: true } },
+        boost: { select: { expiresAt: true } },
       },
       orderBy,
       skip: (page - 1) * PER_PAGE,
@@ -70,6 +71,12 @@ export default async function JobsPage({ searchParams }: Props) {
     experienceMin: j.experienceMin,
     postedAt: j.createdAt,
     isFeatured: j.isFeatured,
+    description: j.description ?? "",
+    requirements: j.requirements ?? [],
+    perks: j.perks ?? [],
+    callToHrEnabled: j.callToHrEnabled,
+    callToHrPhone: j.callToHrPhone ?? null,
+    qualificationRequired: j.qualificationRequired ?? null,
   }))
 
   return (
@@ -87,13 +94,16 @@ export default async function JobsPage({ searchParams }: Props) {
           </aside>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
                 <MobileFilters activeCategory={category || undefined} />
-                <p className="text-sm text-gray-600">
-                  {t("searchResults", { count: total })}
-                  {q && <span className="font-semibold"> for "{q}"</span>}
-                </p>
+                <div>
+                  <h1 className="text-lg font-bold text-gray-900">
+                    {t("searchResults", { count: total })}
+                    {city && <span className="text-[#1a3461]"> in {city}</span>}
+                  </h1>
+                  {q && <p className="text-sm text-gray-500 mt-0.5">for &ldquo;{q}&rdquo;</p>}
+                </div>
               </div>
               <SortSelect sort={sort} />
             </div>

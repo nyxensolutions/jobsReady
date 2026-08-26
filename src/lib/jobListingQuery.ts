@@ -13,6 +13,7 @@ export type JobListingSearchParams = {
   sort?: string
   minSalary?: string
   freshers?: string
+  exp?: string          // max experience in years (from experience filter)
   qualification?: string
   posted?: string
   page?: string
@@ -26,6 +27,7 @@ export function buildJobListingQuery(params: JobListingSearchParams) {
   const sort = params.sort ?? "newest"
   const minSalary = params.minSalary ? parseInt(params.minSalary) : null
   const freshersOnly = params.freshers === "1"
+  const maxExp = params.exp ? parseInt(params.exp) : null
   const qualification = params.qualification ?? ""
   const posted = params.posted ?? ""
   const page = Math.max(1, parseInt(params.page ?? "1"))
@@ -51,7 +53,7 @@ export function buildJobListingQuery(params: JobListingSearchParams) {
     ...(category ? { category: { slug: category } } : {}),
     ...(type ? { jobType: type as JobType } : {}),
     ...(minSalary ? { salaryMin: { gte: minSalary } } : {}),
-    ...(freshersOnly ? { experienceMin: 0 } : {}),
+    ...(freshersOnly ? { experienceMin: 0 } : maxExp ? { experienceMin: { lte: maxExp } } : {}),
     ...(qualification ? { qualificationRequired: qualification } : {}),
     ...(postedAfter ? { createdAt: { gte: postedAfter } } : {}),
   }
