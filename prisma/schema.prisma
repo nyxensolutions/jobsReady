@@ -67,6 +67,7 @@ model User {
   role      UserRole @default(SEEKER)
   locale    String   @default("en")
   isActive  Boolean  @default(true)
+  fcmTokens String[] @default([]) // mobile push notification device tokens
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

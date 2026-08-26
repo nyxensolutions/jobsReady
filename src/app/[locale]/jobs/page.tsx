@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/db"
+import { buildJobListingQuery, JOBS_PER_PAGE, type JobListingSearchParams } from "@/lib/jobListingQuery"
 import JobSearchBar from "@/components/jobs/JobSearchBar"
 import JobFilters from "@/components/jobs/JobFilters"
 import MobileFilters from "@/components/jobs/MobileFilters"
@@ -9,20 +10,9 @@ import JobsPagination from "@/components/jobs/JobsPagination"
 import FilterChips from "@/components/jobs/FilterChips"
 import { Briefcase } from "lucide-react"
 
-const PER_PAGE = 20
+const PER_PAGE = JOBS_PER_PAGE
 
-type SearchParams = {
-  q?: string
-  city?: string
-  category?: string
-  type?: string
-  sort?: string
-  minSalary?: string
-  freshers?: string
-  qualification?: string
-  posted?: string
-  page?: string
-}
+type SearchParams = JobListingSearchParams
 
 type Props = {
   searchParams: Promise<SearchParams>
@@ -47,44 +37,11 @@ export default async function JobsPage({ searchParams }: Props) {
   const category = params.category ?? ""
   const type = params.type ?? ""
   const sort = params.sort ?? "newest"
-  const minSalary = params.minSalary ? parseInt(params.minSalary) : null
   const freshersOnly = params.freshers === "1"
   const qualification = params.qualification ?? ""
   const posted = params.posted ?? ""
-  const page = Math.max(1, parseInt(params.page ?? "1"))
 
-  const postedAfter =
-    posted === "today"
-      ? new Date(Date.now() - 24 * 60 * 60 * 1000)
-      : posted === "week"
-      ? new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-      : null
-
-  const where = {
-    status: "ACTIVE" as const,
-    ...(q
-      ? {
-          OR: [
-            { title: { contains: q, mode: "insensitive" as const } },
-            { employer: { companyName: { contains: q, mode: "insensitive" as const } } },
-          ],
-        }
-      : {}),
-    ...(city ? { city: { name: { contains: city, mode: "insensitive" as const } } } : {}),
-    ...(category ? { category: { slug: category } } : {}),
-    ...(type ? { jobType: type as any } : {}),
-    ...(minSalary ? { salaryMin: { gte: minSalary } } : {}),
-    ...(freshersOnly ? { experienceMin: 0 } : {}),
-    ...(qualification ? { qualificationRequired: qualification } : {}),
-    ...(postedAfter ? { createdAt: { gte: postedAfter } } : {}),
-  }
-
-  const orderBy =
-    sort === "vacancies"
-      ? [{ isFeatured: "desc" as const }, { vacancies: "desc" as const }]
-      : sort === "salary"
-      ? [{ isFeatured: "desc" as const }, { salaryMax: "desc" as const }]
-      : [{ isFeatured: "desc" as const }, { createdAt: "desc" as const }]
+  const { where, orderBy, page } = buildJobListingQuery(params)
 
   const [jobs, total] = await Promise.all([
     prisma.jobListing.findMany({

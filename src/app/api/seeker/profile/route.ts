@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 
+// GET /api/seeker/profile — current seeker's profile (used by the mobile app;
+// the web app renders this server-side instead, via a Server Component).
+export async function GET() {
+  const session = await getServerSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+
+  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
+  if (!dbUser || dbUser.role !== "SEEKER") {
+    return NextResponse.json({ error: "Not a seeker account" }, { status: 403 })
+  }
+
+  const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
+  if (!profile) return NextResponse.json({ error: "Profile not found" }, { status: 404 })
+
+  return NextResponse.json({ ...profile, phone: dbUser.phone, email: dbUser.email })
+}
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession()
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
