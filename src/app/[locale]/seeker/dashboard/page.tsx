@@ -148,14 +148,14 @@ export default async function SeekerDashboardPage() {
           {/* ── Stat cards inside hero ── */}
           <div className="grid grid-cols-3 gap-3 mt-6">
             {[
-              { label: t("statApplied"),     value: stats.applied,     color: "bg-white/10 border-white/20" },
-              { label: t("statShortlisted"), value: stats.shortlisted, color: "bg-white/10 border-white/20" },
-              { label: t("statHired"),       value: stats.hired,       color: "bg-emerald-500/20 border-emerald-400/30" },
-            ].map(({ label, value, color }) => (
-              <div key={label} className={`${color} border rounded-2xl px-4 py-3.5 flex flex-col items-center`}>
+              { label: t("statApplied"),     value: stats.applied,     color: "bg-white/10 border-white/20",            href: "#applications" },
+              { label: t("statShortlisted"), value: stats.shortlisted, color: "bg-white/10 border-white/20",            href: "#applications" },
+              { label: t("statHired"),       value: stats.hired,       color: "bg-emerald-500/20 border-emerald-400/30", href: "#applications" },
+            ].map(({ label, value, color, href }) => (
+              <Link key={label} href={href} className={`${color} border rounded-2xl px-4 py-3.5 flex flex-col items-center cursor-pointer hover:brightness-110 transition-all`}>
                 <span className="text-2xl sm:text-3xl font-extrabold text-white">{value}</span>
                 <span className="text-white/60 text-[11px] font-medium mt-0.5 text-center leading-tight">{label}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -254,6 +254,54 @@ export default async function SeekerDashboardPage() {
           </Link>
         </div>
 
+        {/* Applications list — shown ABOVE recommended jobs */}
+        {applications.length > 0 && (
+          <div id="applications" className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="font-bold text-gray-900">{t("myApplications")}</h2>
+              <span className="text-xs text-gray-400 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full font-semibold">
+                {t("totalCount", { count: applications.length })}
+              </span>
+            </div>
+            <div className="divide-y divide-gray-50">
+              {applications.map((app) => {
+                const colorClass = STATUS_COLOR[app.status] ?? STATUS_COLOR.APPLIED
+                let statusLabel: string
+                try { statusLabel = ts(app.status as any) } catch { statusLabel = app.status }
+                return (
+                  <div key={app.id} className="px-5 py-4 flex items-start justify-between gap-4 hover:bg-gray-50/70 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Link
+                          href={`/jobs/${app.jobId}`}
+                          className="font-bold text-gray-900 hover:text-[#1a3461] transition-colors truncate text-sm"
+                        >
+                          {app.job.title}
+                        </Link>
+                        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${colorClass}`}>
+                          {statusLabel}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-gray-400">
+                        <span>{app.job.employer.companyName}</span>
+                        <span className="text-gray-200">·</span>
+                        <span className="flex items-center gap-0.5"><MapPin size={10} />{app.job.city.name}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <Clock size={11} />
+                        {formatRelativeTime(app.createdAt)}
+                      </span>
+                      {app.status === "APPLIED" && <WithdrawButton applicationId={app.id} />}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Recommended jobs */}
         {recommendedJobs.length > 0 && (
           <div>
@@ -296,54 +344,6 @@ export default async function SeekerDashboardPage() {
                       >
                         {t("browseJobs")}
                       </Link>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Applications list */}
-        {applications.length > 0 && (
-          <div id="applications" className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="font-bold text-gray-900">{t("myApplications")}</h2>
-              <span className="text-xs text-gray-400 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full font-semibold">
-                {t("totalCount", { count: applications.length })}
-              </span>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {applications.map((app) => {
-                const colorClass = STATUS_COLOR[app.status] ?? STATUS_COLOR.APPLIED
-                let statusLabel: string
-                try { statusLabel = ts(app.status as any) } catch { statusLabel = app.status }
-                return (
-                  <div key={app.id} className="px-5 py-4 flex items-start justify-between gap-4 hover:bg-gray-50/70 transition-colors">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <Link
-                          href={`/jobs/${app.jobId}`}
-                          className="font-bold text-gray-900 hover:text-[#1a3461] transition-colors truncate text-sm"
-                        >
-                          {app.job.title}
-                        </Link>
-                        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${colorClass}`}>
-                          {statusLabel}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-gray-400">
-                        <span>{app.job.employer.companyName}</span>
-                        <span className="text-gray-200">·</span>
-                        <span className="flex items-center gap-0.5"><MapPin size={10} />{app.job.city.name}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-xs text-gray-400 flex items-center gap-1">
-                        <Clock size={11} />
-                        {formatRelativeTime(app.createdAt)}
-                      </span>
-                      {app.status === "APPLIED" && <WithdrawButton applicationId={app.id} />}
                     </div>
                   </div>
                 )

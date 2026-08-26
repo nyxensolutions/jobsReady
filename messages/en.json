@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "Job Ready",
-    "tagline": "Find Jobs. Hire People. Get Ready.",
+    "appName": "Jobs24India",
+    "tagline": "Find Jobs. Hire People.",
     "loading": "Loading...",
     "error": "Something went wrong",
     "retry": "Try again",
@@ -116,8 +116,8 @@
       "vacancies": "Vacancies"
     },
     "cities": {
-      "title": "Jobs in Delhi NCR & Nearby Cities",
-      "subtitle": "Find verified local jobs near you — walk-in distance",
+      "title": "Jobs Across India",
+      "subtitle": "Find verified jobs in your city — Delhi, Mumbai, Bangalore and more",
       "nearYou": "Jobs near you",
       "browseAll": "Browse All Cities"
     }
@@ -287,7 +287,8 @@
       "allJobs": "All Jobs →",
       "statApplied": "Applied",
       "statShortlisted": "Shortlisted",
-      "statHired": "Hired"
+      "statHired": "Hired",
+      "salaryNotMentioned": "Salary not mentioned"
     },
     "profile": {
       "title": "My Profile",

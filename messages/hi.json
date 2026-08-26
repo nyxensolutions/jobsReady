@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "Job Ready",
-    "tagline": "नौकरी खोजें। लोग नियुक्त करें। तैयार हो जाएं।",
+    "appName": "Jobs24India",
+    "tagline": "नौकरी खोजें। लोग नियुक्त करें।",
     "loading": "लोड हो रहा है...",
     "error": "कुछ गलत हो गया",
     "retry": "फिर कोशिश करें",
@@ -116,8 +116,8 @@
       "vacancies": "रिक्तियां"
     },
     "cities": {
-      "title": "दिल्ली NCR और आस-पास के शहरों में नौकरियां",
-      "subtitle": "अपने पास verified local नौकरियां खोजें — पैदल दूरी पर",
+      "title": "पूरे भारत में नौकरियां",
+      "subtitle": "अपने शहर में verified नौकरियां खोजें — दिल्ली, मुंबई, बैंगलोर और अन्य",
       "nearYou": "आपके पास नौकरियां",
       "browseAll": "सभी शहर देखें"
     }
@@ -287,7 +287,8 @@
       "allJobs": "सभी नौकरियां →",
       "statApplied": "आवेदन किया",
       "statShortlisted": "शॉर्टलिस्ट",
-      "statHired": "नियुक्त"
+      "statHired": "नियुक्त",
+      "salaryNotMentioned": "वेतन नहीं बताया"
     },
     "profile": {
       "title": "मेरी प्रोफ़ाइल",
