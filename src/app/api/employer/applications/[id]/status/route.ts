@@ -2,6 +2,7 @@
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendSeekerShortlistAlert } from "@/lib/email"
+import { sendPushToUser } from "@/lib/push"
 
 const ALLOWED_STATUSES = ["VIEWED", "SHORTLISTED", "REJECTED", "HIRED"] as const
 type Status = (typeof ALLOWED_STATUSES)[number]
@@ -62,6 +63,13 @@ export async function PUT(
         body,
         data: { applicationId: id, jobTitle: application.job.title },
       },
+    })
+
+    // Mobile push — fire and forget, never blocks the response
+    sendPushToUser(application.seeker.userId, {
+      title,
+      body,
+      data: { applicationId: id, type: status },
     })
 
     // Email + SMS the seeker — fire and forget
