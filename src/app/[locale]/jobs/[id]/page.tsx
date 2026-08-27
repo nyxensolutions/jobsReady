@@ -132,6 +132,9 @@ export default async function JobDetailPage({ params }: Props) {
     { label: t("jobDetail.salary"),     value: salary },
     { label: t("jobDetail.location"),   value: job.city.name },
     { label: t("jobDetail.posted"),     value: formatRelativeTime(job.createdAt) },
+    ...(job.shiftType        ? [{ label: t("jobDetail.shift"),       value: `${job.shiftType} Shift` }] : []),
+    ...(job.workingDaysPerWeek ? [{ label: t("jobDetail.workingDays"), value: `${job.workingDaysPerWeek} days/week` }] : []),
+    ...(job.incentives       ? [{ label: t("jobDetail.incentives"),  value: job.incentives }] : []),
   ]
 
   const faqs = [

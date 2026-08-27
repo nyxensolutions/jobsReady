@@ -26,6 +26,9 @@ export async function POST(req: NextRequest) {
     languagesRequired,
     callToHrEnabled,
     callToHrPhone,
+    incentives,
+    workingDaysPerWeek,
+    shiftType,
   } = body
 
   if (!title || !categorySlug || !citySlug || !jobType || !description) {
@@ -76,6 +79,9 @@ export async function POST(req: NextRequest) {
       languagesRequired: Array.isArray(languagesRequired) ? languagesRequired.filter(Boolean) : [],
       status: "PENDING_REVIEW",
       isHighReach: (await getPlanLimits(employer.id)).isHighReach,
+      incentives: incentives?.trim() || null,
+      workingDaysPerWeek: workingDaysPerWeek ? parseInt(workingDaysPerWeek) : null,
+      shiftType: shiftType?.trim() || null,
       callToHrEnabled: callToHrEnabled === true,
       callToHrPhone: callToHrEnabled === true ? (callToHrPhone?.trim() || null) : null,
     },

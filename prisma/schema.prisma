@@ -200,6 +200,11 @@ model JobListing {
 
   isHighReach      Boolean  @default(false)
 
+  // ── Extra job details ──────────────────────────────────────────────────────
+  incentives          String?   // e.g. "₹2,000/month performance bonus"
+  workingDaysPerWeek  Int?      // 5, 6, or 7
+  shiftType           String?   // "Day" | "Night" | "Rotational" | "Flexible"
+
   // ── Call-to-HR: employer can expose their phone for direct candidate calls ──
   callToHrEnabled  Boolean  @default(false)
   callToHrPhone    String?

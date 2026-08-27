@@ -39,6 +39,9 @@ type WizardData = {
   perks: string[]
   pincode: string
   languagesRequired: string[]
+  // Extra job details
+  incentives: string
+  workingDaysPerWeek: string
   // Call-to-HR
   callToHrEnabled: boolean
   callToHrPhone: string
@@ -50,6 +53,7 @@ const INITIAL: WizardData = {
   gender: "Any", qualification: "Any", experienceMin: "0", experienceMax: "",
   freshersOnly: false, skills: [], description: "",
   requirements: [], perks: [], pincode: "", languagesRequired: [],
+  incentives: "", workingDaysPerWeek: "",
   callToHrEnabled: false, callToHrPhone: "",
 }
 
@@ -174,6 +178,18 @@ function PreviewPanel({
               <div className="flex justify-between text-xs mt-0.5">
                 <span className="text-gray-400">Shift</span>
                 <span className="text-gray-600">{data.shift}</span>
+              </div>
+            )}
+            {data.workingDaysPerWeek && (
+              <div className="flex justify-between text-xs mt-0.5">
+                <span className="text-gray-400">Working Days</span>
+                <span className="text-gray-600">{data.workingDaysPerWeek} days/week</span>
+              </div>
+            )}
+            {data.incentives && (
+              <div className="flex justify-between text-xs mt-0.5">
+                <span className="text-gray-400">Incentives</span>
+                <span className="text-gray-600">{data.incentives}</span>
               </div>
             )}
           </div>
@@ -477,7 +493,7 @@ function Step2({
 
       {/* Shifts */}
       <div>
-        <label className={label}>Shifts</label>
+        <label className={label}>Shift Timing</label>
         <div className="flex flex-wrap gap-2">
           {SHIFT_CHIPS.map((s) => (
             <Chip
@@ -488,6 +504,33 @@ function Step2({
             />
           ))}
         </div>
+      </div>
+
+      {/* Working Days */}
+      <div>
+        <label className={label}>Working Days per Week <span className="text-xs text-gray-400 font-normal">(optional)</span></label>
+        <div className="flex flex-wrap gap-2">
+          {["5", "6", "7"].map((d) => (
+            <Chip
+              key={d}
+              label={`${d} days`}
+              active={data.workingDaysPerWeek === d}
+              onClick={() => update("workingDaysPerWeek", data.workingDaysPerWeek === d ? "" : d)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Incentives */}
+      <div>
+        <label className={label}>Incentives <span className="text-xs text-gray-400 font-normal">(optional)</span></label>
+        <input
+          type="text"
+          value={data.incentives}
+          onChange={(e) => update("incentives", e.target.value)}
+          placeholder="e.g. ₹2,000/month performance bonus, Target-based incentives"
+          className={input}
+        />
       </div>
     </div>
   )
@@ -934,6 +977,9 @@ export default function PostJobWizard({
           perks,
           pincode: data.pincode,
           languagesRequired: data.languagesRequired ?? [],
+          incentives: data.incentives.trim() || null,
+          workingDaysPerWeek: data.workingDaysPerWeek ? parseInt(data.workingDaysPerWeek) : null,
+          shiftType: data.shift || null,
           callToHrEnabled: data.callToHrEnabled,
           callToHrPhone: data.callToHrEnabled ? data.callToHrPhone : null,
         }),
