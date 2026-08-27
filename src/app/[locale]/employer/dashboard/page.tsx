@@ -218,7 +218,7 @@ export default async function EmployerDashboardPage() {
                                 <Users size={12} /> {job._count.applications} Applicants
                               </Link>
                               <Link
-                                href={`/jobs/${job.id}`}
+                                href={`/employer/jobs/${job.id}/preview`}
                                 className="text-xs font-semibold text-slate-500 border border-slate-200 px-3.5 py-1.5 rounded-xl hover:bg-slate-50 transition-colors"
                               >
                                 Preview
