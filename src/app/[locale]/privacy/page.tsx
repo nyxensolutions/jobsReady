@@ -52,10 +52,17 @@ export default function PrivacyPage() {
                 <li>Usage data (pages visited, buttons clicked, search queries, time spent)</li>
                 <li>Cookies and similar tracking technologies (see Section 7)</li>
               </ul>
-              <h3 className="font-semibold text-gray-700 mt-4 mb-2">2.3 Information from Third Parties</h3>
+              <h3 className="font-semibold text-gray-700 mt-4 mb-2">2.3 Payment Information (Employers Only)</h3>
+              <p className="text-sm mb-2">
+                When employers purchase a subscription plan, payments are processed by <strong>Razorpay</strong>.
+                We receive a payment confirmation token and order ID. We do not store card numbers, UPI IDs,
+                or bank account details on our servers — these are handled entirely by Razorpay.
+              </p>
+              <h3 className="font-semibold text-gray-700 mt-4 mb-2">2.4 Information from Third Parties</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>OTP verification data from our SMS service provider (Fast2SMS)</li>
                 <li>Authentication data from Supabase (our authentication provider)</li>
+                <li>Payment status and order details from Razorpay Payments Pvt. Ltd.</li>
               </ul>
             </section>
 
@@ -82,7 +89,7 @@ export default function PrivacyPage() {
               <ul className="list-disc pl-5 space-y-2 mt-3">
                 <li><strong>With Employers (Job Seekers only):</strong> When you apply for a job, your profile information (name, phone, experience, skills) is shared with the employer who posted that job.</li>
                 <li><strong>With Job Seekers (Employers only):</strong> Your company name, job listings, and contact phone number are visible to registered job seekers.</li>
-                <li><strong>Service Providers:</strong> We share data with Supabase (authentication), Fast2SMS (OTP), Resend (email), and our hosting/database provider. These providers are bound by confidentiality agreements.</li>
+                <li><strong>Service Providers:</strong> We share data with Supabase (authentication), Fast2SMS (OTP), Resend (email), Razorpay (payment processing — employer subscription payments), and our hosting/database provider. These providers are bound by confidentiality agreements and their own privacy policies.</li>
                 <li><strong>Legal Requirements:</strong> If required by law, court order, or government authority under Indian law.</li>
                 <li><strong>Business Transfer:</strong> In the event of merger, acquisition, or sale of our business, your data may be transferred to the successor entity.</li>
               </ul>
