@@ -34,6 +34,7 @@ export default async function ApplicantsPage({
         select: {
           id: true, name: true, city: true, experienceYears: true,
           skills: true, bio: true, photoUrl: true, resumeUrl: true,
+          user: { select: { phone: true } },
         },
       },
     },

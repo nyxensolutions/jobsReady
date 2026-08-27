@@ -3,7 +3,7 @@
 import { useState } from "react"
 import {
   Eye, ChevronDown, Briefcase, MapPin, Users,
-  Download, FileText, CheckCircle, Clock,
+  Download, FileText, CheckCircle, Clock, Phone, MessageCircle,
 } from "lucide-react"
 
 type Seeker = {
@@ -15,6 +15,7 @@ type Seeker = {
   bio: string | null
   photoUrl: string | null
   resumeUrl: string | null
+  user: { phone: string | null }
 }
 
 type Job = {
@@ -91,9 +92,10 @@ export default function ResponsesClient({ initialApplications }: Props) {
 
   function exportCSV() {
     const rows = [
-      ["Name", "City", "Experience (yrs)", "Job Applied For", "Skills", "Status", "Applied On", "Cover Note"],
+      ["Name", "Phone", "City", "Experience (yrs)", "Job Applied For", "Skills", "Status", "Applied On", "Cover Note"],
       ...applications.map((a) => [
         a.seeker.name,
+        a.seeker.user?.phone ?? "",
         a.seeker.city ?? "",
         String(a.seeker.experienceYears),
         a.job.title,
@@ -296,30 +298,63 @@ export default function ResponsesClient({ initialApplications }: Props) {
                   {/* Expanded detail panel */}
                   {isExpanded && (
                     <div className="px-4 pb-4 pt-3 border-t border-gray-100 bg-gray-50 space-y-3">
+
+                      {/* ── Contact — always first ── */}
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Contact</p>
+                        {app.seeker.user?.phone ? (
+                          <div className="flex flex-wrap gap-2">
+                            <a
+                              href={`tel:+91${app.seeker.user.phone}`}
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-[#1a3461] text-white text-xs font-bold rounded-xl hover:bg-[#142a52] transition-colors"
+                            >
+                              <Phone size={13} /> Call +91 {app.seeker.user.phone}
+                            </a>
+                            <a
+                              href={`https://wa.me/91${app.seeker.user.phone}?text=${encodeURIComponent(`Hi, I saw your application on Jobs24India. I'd like to connect regarding the position.`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-xl hover:bg-green-700 transition-colors"
+                            >
+                              <MessageCircle size={13} /> WhatsApp
+                            </a>
+                          </div>
+                        ) : (
+                          <p className="text-xs text-gray-400 italic">Phone number not available for this applicant.</p>
+                        )}
+                      </div>
+
+                      {/* Resume */}
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Resume</p>
+                        {app.seeker.resumeUrl ? (
+                          <a
+                            href={app.seeker.resumeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1a3461] border border-[#1a3461]/30 px-3 py-1.5 rounded-lg hover:bg-[#eef2ff] transition-colors"
+                          >
+                            <FileText size={12} /> View Resume
+                          </a>
+                        ) : (
+                          <p className="text-xs text-gray-400 italic">No resume uploaded — contact directly via phone.</p>
+                        )}
+                      </div>
+
+                      {/* About */}
                       {app.seeker.bio && (
                         <div>
                           <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">About</p>
                           <p className="text-sm text-gray-700 leading-relaxed">{app.seeker.bio}</p>
                         </div>
                       )}
+
+                      {/* Cover note */}
                       {app.coverNote && (
                         <div>
                           <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Cover Note</p>
                           <p className="text-sm text-gray-700 italic leading-relaxed">"{app.coverNote}"</p>
                         </div>
-                      )}
-                      {!app.seeker.bio && !app.coverNote && (
-                        <p className="text-sm text-gray-400 italic">No additional information provided.</p>
-                      )}
-                      {app.seeker.resumeUrl && (
-                        <a
-                          href={app.seeker.resumeUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1a3461] border border-[#1a3461]/30 px-3 py-1.5 rounded-lg hover:bg-[#eef2ff] transition-colors"
-                        >
-                          <FileText size={12} /> View Resume
-                        </a>
                       )}
                     </div>
                   )}

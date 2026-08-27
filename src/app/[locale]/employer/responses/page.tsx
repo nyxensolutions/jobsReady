@@ -23,6 +23,7 @@ export default async function ResponsesPage() {
         select: {
           id: true, name: true, city: true, experienceYears: true,
           skills: true, bio: true, photoUrl: true, resumeUrl: true,
+          user: { select: { phone: true } },
         },
       },
       job: {
