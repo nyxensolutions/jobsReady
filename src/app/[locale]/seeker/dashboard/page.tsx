@@ -65,7 +65,8 @@ export default async function SeekerDashboardPage() {
       take: 6,
     }),
   ])
-  if (!dbUser || dbUser.role !== "SEEKER") redirect("/login")
+  // Gate by seeker profile existence — same phone can have both seeker + employer accounts
+  if (!dbUser || !profile) redirect("/login")
 
   const [applications, totalApplied] = profile
     ? await Promise.all([

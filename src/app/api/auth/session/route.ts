@@ -16,7 +16,10 @@ export async function POST(req: NextRequest) {
 
   const assignedRole = (role === "EMPLOYER" ? "EMPLOYER" : "SEEKER") as "SEEKER" | "EMPLOYER"
 
-  // Upsert user in DB
+  // Upsert user in DB.
+  // Update role to match login intent so the same phone number can be used
+  // for both a seeker and an employer account — the role follows whichever
+  // login page the user came through.
   const dbUser = await prisma.user.upsert({
     where: { id: decoded.uid },
     create: {
@@ -25,7 +28,9 @@ export async function POST(req: NextRequest) {
       email: decoded.email ?? null,
       role: assignedRole,
     },
-    update: {},
+    update: {
+      role: assignedRole,
+    },
   })
 
   // Create seeker profile stub if new seeker

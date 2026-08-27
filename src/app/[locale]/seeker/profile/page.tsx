@@ -12,7 +12,7 @@ export default async function SeekerProfilePage() {
     prisma.seekerProfile.findUnique({ where: { userId: session.uid } }),
     prisma.city.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, select: { name: true } }),
   ])
-  if (!dbUser || dbUser.role !== "SEEKER") redirect("/login")
+  if (!dbUser) redirect("/login")
 
   return (
     <SeekerProfileClient

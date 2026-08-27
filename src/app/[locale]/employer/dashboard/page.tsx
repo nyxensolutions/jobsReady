@@ -39,7 +39,8 @@ export default async function EmployerDashboardPage() {
     prisma.user.findUnique({ where: { id: session.uid } }),
     prisma.employerProfile.findUnique({ where: { userId: session.uid } }),
   ])
-  if (!dbUser || dbUser.role !== "EMPLOYER") redirect("/login")
+  // Gate by employer profile existence — same phone can have both seeker + employer accounts
+  if (!dbUser) redirect("/login")
   if (!employer) redirect("/employer/register")
 
   const [jobs, activeSub] = await Promise.all([
