@@ -3,9 +3,13 @@ import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import PostJobWizard from "@/components/employer/PostJobWizard"
 
-export default async function PostJobPage() {
+type Props = { searchParams: Promise<{ draft?: string }> }
+
+export default async function PostJobPage({ searchParams }: Props) {
   const session = await getServerSession()
   if (!session) redirect("/login")
+
+  const { draft: draftId } = await searchParams
 
   const [dbUser, employer] = await Promise.all([
     prisma.user.findUnique({ where: { id: session.uid } }),
@@ -14,7 +18,7 @@ export default async function PostJobPage() {
   if (!dbUser || dbUser.role !== "EMPLOYER") redirect("/login")
   if (!employer) redirect("/employer/register")
 
-  const [categories, cities] = await Promise.all([
+  const [categories, cities, draftJob] = await Promise.all([
     prisma.category.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
@@ -25,6 +29,15 @@ export default async function PostJobPage() {
       orderBy: { name: "asc" },
       select: { id: true, slug: true, name: true, stateName: true },
     }),
+    draftId
+      ? prisma.jobListing.findFirst({
+          where: { id: draftId, employerId: employer.id, status: "DRAFT" },
+          include: {
+            category: { select: { slug: true } },
+            city: { select: { slug: true } },
+          },
+        })
+      : Promise.resolve(null),
   ])
 
   return (
@@ -33,6 +46,7 @@ export default async function PostJobPage() {
       cities={cities}
       companyName={employer.companyName}
       contactPhone={employer.contactPhone ?? ""}
+      draftJob={draftJob ?? null}
     />
   )
 }

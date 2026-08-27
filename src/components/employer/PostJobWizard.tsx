@@ -12,6 +12,30 @@ import UpgradeModal from "@/components/employer/UpgradeModal"
 type Category = { id: string; slug: string; nameEn: string }
 type City = { id: string; slug: string; name: string; stateName: string }
 
+type DraftJob = {
+  id: string
+  title: string
+  jobType: string
+  vacancies: number
+  salaryMin: number | null
+  salaryMax: number | null
+  salaryUnit: string
+  experienceMin: number
+  qualificationRequired: string | null
+  description: string
+  requirements: string[]
+  perks: string[]
+  pincode: string | null
+  languagesRequired: string[]
+  incentives: string | null
+  workingDaysPerWeek: number | null
+  shiftType: string | null
+  callToHrEnabled: boolean
+  callToHrPhone: string | null
+  category: { slug: string }
+  city: { slug: string }
+}
+
 type WizardData = {
   // Step 1
   title: string
@@ -886,15 +910,50 @@ export default function PostJobWizard({
   cities,
   companyName,
   contactPhone,
+  draftJob,
 }: {
   categories: Category[]
   cities: City[]
   companyName: string
   contactPhone: string
+  draftJob?: DraftJob | null
 }) {
   const router = useRouter()
   const [step, setStep] = useState(1)
-  const [data, setData] = useState<WizardData>(INITIAL)
+  const [data, setData] = useState<WizardData>(() => {
+    if (!draftJob) return INITIAL
+    // Pre-fill wizard from existing draft
+    const shiftFromPerks = draftJob.perks.find(p => SHIFT_CHIPS.includes(p)) ?? ""
+    const benefitsFromPerks = draftJob.perks.filter(p => BENEFIT_CHIPS.includes(p))
+    return {
+      ...INITIAL,
+      title: draftJob.title,
+      categorySlug: draftJob.category.slug,
+      citySlug: draftJob.city.slug,
+      vacancies: draftJob.vacancies,
+      jobType: draftJob.jobType,
+      salaryMin: draftJob.salaryMin?.toString() ?? "",
+      salaryMax: draftJob.salaryMax?.toString() ?? "",
+      salaryUnit: draftJob.salaryUnit,
+      experienceMin: draftJob.experienceMin.toString(),
+      freshersOnly: draftJob.experienceMin === 0,
+      qualificationRequired: draftJob.qualificationRequired ?? "",
+      qualification: draftJob.qualificationRequired ?? "Any",
+      description: draftJob.description,
+      requirements: draftJob.requirements,
+      perks: draftJob.perks,
+      benefits: benefitsFromPerks,
+      shift: draftJob.shiftType ?? shiftFromPerks,
+      pincode: draftJob.pincode ?? "",
+      languagesRequired: draftJob.languagesRequired,
+      incentives: draftJob.incentives ?? "",
+      workingDaysPerWeek: draftJob.workingDaysPerWeek?.toString() ?? "",
+      callToHrEnabled: draftJob.callToHrEnabled,
+      callToHrPhone: draftJob.callToHrPhone ?? "",
+    }
+  })
+  const [draftId, setDraftId] = useState<string | null>(draftJob?.id ?? null)
+  const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [submittedJobId, setSubmittedJobId] = useState<string | null>(null)
@@ -924,10 +983,70 @@ export default function PostJobWizard({
     return ""
   }
 
-  function goNext() {
+  function buildPayload(submit = false) {
+    const requirements = [
+      data.gender !== "Any" ? `${data.gender} candidates preferred` : null,
+      data.freshersOnly ? "Freshers only" : null,
+      ...data.skills,
+      ...data.requirements,
+    ].filter(Boolean) as string[]
+
+    const perks = [
+      ...data.benefits,
+      ...data.perks,
+    ].filter(Boolean) as string[]
+
+    return {
+      draftId: draftId ?? undefined,
+      submit,
+      title: data.title.trim(),
+      categorySlug: data.categorySlug,
+      citySlug: data.citySlug,
+      jobType: data.jobType,
+      salaryMin: data.salaryMin || null,
+      salaryMax: data.salaryMax || null,
+      salaryUnit: data.salaryUnit,
+      vacancies: data.vacancies,
+      experienceMin: data.experienceMin || "0",
+      qualificationRequired: data.qualification !== "Any" ? data.qualification : null,
+      description: data.description.trim(),
+      requirements,
+      perks,
+      pincode: data.pincode,
+      languagesRequired: data.languagesRequired ?? [],
+      incentives: data.incentives.trim() || null,
+      workingDaysPerWeek: data.workingDaysPerWeek ? parseInt(data.workingDaysPerWeek) : null,
+      shiftType: data.shift || null,
+      callToHrEnabled: data.callToHrEnabled,
+      callToHrPhone: data.callToHrEnabled ? data.callToHrPhone : null,
+    }
+  }
+
+  async function saveDraft() {
+    // Need at least step 1 complete to save
+    if (!data.title.trim() || !data.categorySlug || !data.citySlug) return
+    setSaving(true)
+    try {
+      const res = await fetch("/api/employer/save-draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildPayload(false)),
+      })
+      const result = await res.json()
+      if (res.ok && result.draftId) setDraftId(result.draftId)
+    } catch {
+      // Non-fatal — don't block navigation on draft save failure
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function goNext() {
     const err = validateStep(step)
     if (err) { setError(err); return }
     setError("")
+    // Auto-save draft on each step (fire-and-forget, non-blocking)
+    saveDraft()
     setStep((s) => Math.min(s + 1, 5))
     window.scrollTo(0, 0)
   }
@@ -944,45 +1063,12 @@ export default function PostJobWizard({
     setError("")
     setLoading(true)
 
-    const requirements = [
-      data.gender !== "Any" ? `${data.gender} candidates preferred` : null,
-      data.freshersOnly ? "Freshers only" : null,
-      ...data.skills,
-      ...data.requirements,
-    ].filter(Boolean) as string[]
-
-    const perks = [
-      ...data.benefits,
-      data.shift ? `${data.shift} Shift` : null,
-      ...data.perks,
-    ].filter(Boolean) as string[]
-
     try {
-      const res = await fetch("/api/employer/post-job", {
+      // Submit via save-draft with submit:true (updates or creates + sets PENDING_REVIEW)
+      const res = await fetch("/api/employer/save-draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: data.title.trim(),
-          categorySlug: data.categorySlug,
-          citySlug: data.citySlug,
-          jobType: data.jobType,
-          salaryMin: data.salaryMin || null,
-          salaryMax: data.salaryMax || null,
-          salaryUnit: data.salaryUnit,
-          vacancies: data.vacancies,
-          experienceMin: data.experienceMin || "0",
-          qualificationRequired: data.qualification !== "Any" ? data.qualification : null,
-          description: data.description.trim(),
-          requirements,
-          perks,
-          pincode: data.pincode,
-          languagesRequired: data.languagesRequired ?? [],
-          incentives: data.incentives.trim() || null,
-          workingDaysPerWeek: data.workingDaysPerWeek ? parseInt(data.workingDaysPerWeek) : null,
-          shiftType: data.shift || null,
-          callToHrEnabled: data.callToHrEnabled,
-          callToHrPhone: data.callToHrEnabled ? data.callToHrPhone : null,
-        }),
+        body: JSON.stringify(buildPayload(true)),
       })
       const result = await res.json()
       if (res.status === 402) {
@@ -990,7 +1076,7 @@ export default function PostJobWizard({
         return
       }
       if (!res.ok) throw new Error(result.message ?? result.error ?? "Failed to post job")
-      setSubmittedJobId(result.jobId)
+      setSubmittedJobId(result.draftId)
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -1109,6 +1195,17 @@ export default function PostJobWizard({
 
       {/* Bottom navigation bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 z-10">
+        {/* Draft save indicator */}
+        {saving && (
+          <span className="absolute left-1/2 -translate-x-1/2 top-1 text-[10px] text-gray-400 flex items-center gap-1">
+            <Loader2 size={10} className="animate-spin" /> Saving draft…
+          </span>
+        )}
+        {draftId && !saving && (
+          <span className="absolute left-1/2 -translate-x-1/2 top-1 text-[10px] text-green-500">
+            ✓ Draft saved
+          </span>
+        )}
         {step > 1 ? (
           <button
             onClick={goBack}

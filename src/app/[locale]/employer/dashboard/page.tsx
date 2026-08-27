@@ -43,9 +43,9 @@ export default async function EmployerDashboardPage() {
   if (!dbUser) redirect("/login")
   if (!employer) redirect("/employer/register")
 
-  const [jobs, activeSub] = await Promise.all([
+  const [allJobs, draftJobs, activeSub] = await Promise.all([
     prisma.jobListing.findMany({
-      where: { employerId: employer.id },
+      where: { employerId: employer.id, status: { not: "DRAFT" } },
       include: {
         category: { select: { nameEn: true, slug: true } },
         city: { select: { name: true } },
@@ -53,8 +53,17 @@ export default async function EmployerDashboardPage() {
       },
       orderBy: { createdAt: "desc" },
     }),
+    prisma.jobListing.findMany({
+      where: { employerId: employer.id, status: "DRAFT" },
+      include: {
+        category: { select: { nameEn: true } },
+        city: { select: { name: true } },
+      },
+      orderBy: { updatedAt: "desc" },
+    }),
     getActiveSub(employer.id),
   ])
+  const jobs = allJobs
 
   const stats = {
     live:         jobs.filter(j => j.status === "ACTIVE").length,
@@ -238,6 +247,41 @@ export default async function EmployerDashboardPage() {
                 </div>
               )}
             </div>
+
+            {/* Drafts panel */}
+            {draftJobs.length > 0 && (
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                  <div>
+                    <h2 className="font-bold text-slate-800 text-base">Saved Drafts</h2>
+                    <p className="text-xs text-slate-400 mt-0.5">{draftJobs.length} draft{draftJobs.length > 1 ? "s" : ""} · continue where you left off</p>
+                  </div>
+                </div>
+                <div className="divide-y divide-slate-50">
+                  {draftJobs.map(draft => (
+                    <div key={draft.id} className="px-6 py-4 hover:bg-slate-50/70 transition-colors group flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                        <AlertCircle size={16} className="text-slate-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-800 text-sm truncate">{draft.title || "Untitled Draft"}</p>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {[draft.category?.nameEn, draft.city?.name].filter(Boolean).join(" · ")}
+                          {" · "}
+                          <span>Saved {new Date(draft.updatedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
+                        </p>
+                      </div>
+                      <Link
+                        href={`/employer/post-job?draft=${draft.id}`}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a3461] bg-[#eef2ff] border border-[#1a3461]/15 px-4 py-2 rounded-xl hover:bg-[#dce6ff] transition-colors shrink-0"
+                      >
+                        Continue <ArrowUpRight size={12} />
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Quick links */}
             <div className="grid sm:grid-cols-3 gap-4">
