@@ -20,6 +20,7 @@
   },
   "nav": {
     "home": "होम",
+    "cancellationPolicy": "रद्दीकरण और वापसी",
     "findJobs": "नौकरी खोजें",
     "postJob": "नौकरी पोस्ट करें",
     "login": "लॉग इन",
@@ -187,6 +188,8 @@
       "shift": "शिफ्ट का समय",
       "workingDays": "काम के दिन",
       "incentives": "प्रोत्साहन",
+      "daysPerWeek": "{count} दिन/सप्ताह",
+      "translatePage": "यह पेज अनुवाद करें",
       "faq": "अक्सर पूछे जाने वाले प्रश्न",
       "faqFreshers": "क्या {category} के लिए नए उम्मीदवार आवेदन कर सकते हैं?",
       "faqFreshersYes": "हाँ, इस पद के लिए नए उम्मीदवारों का स्वागत है।",
@@ -454,6 +457,12 @@
       "noApplicantsHint": "जब उम्मीदवार आवेदन करेंगे तो यहाँ दिखेगा",
       "exportCsv": "CSV निर्यात"
     }
+  },
+  "shifts": {
+    "Day": "दिन की शिफ्ट",
+    "Night": "रात की शिफ्ट",
+    "Rotational": "रोटेशनल शिफ्ट",
+    "Flexible": "फ्लेक्सिबल समय"
   },
   "categories": {
     "delivery": "डिलीवरी",

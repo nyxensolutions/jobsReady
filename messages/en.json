@@ -20,6 +20,7 @@
   },
   "nav": {
     "home": "Home",
+    "cancellationPolicy": "Cancellation & Refunds",
     "findJobs": "Find Jobs",
     "postJob": "Post a Job",
     "login": "Log in",
@@ -187,6 +188,8 @@
       "shift": "Shift Timing",
       "workingDays": "Working Days",
       "incentives": "Incentives",
+      "daysPerWeek": "{count} days/week",
+      "translatePage": "Translate this page",
       "faq": "Frequently Asked Questions",
       "faqFreshers": "Can freshers apply for this {category} role?",
       "faqFreshersYes": "Yes, freshers are welcome to apply for this role.",
@@ -499,6 +502,12 @@
     "website": "Website",
     "description": "Description",
     "gstCin": "GST / CIN"
+  },
+  "shifts": {
+    "Day": "Day Shift",
+    "Night": "Night Shift",
+    "Rotational": "Rotational Shift",
+    "Flexible": "Flexible Hours"
   },
   "categories": {
     "delivery": "Delivery",

@@ -62,7 +62,7 @@ export default function Footer() {
               <li><Link href="/contact" className="hover:text-white transition-colors">{t("contact")}</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">{t("privacyPolicy")}</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">{t("termsOfUse")}</Link></li>
-              <li><Link href="/cancellation-policy" className="hover:text-white transition-colors">Cancellation &amp; Refunds</Link></li>
+              <li><Link href="/cancellation-policy" className="hover:text-white transition-colors">{t("cancellationPolicy")}</Link></li>
               <li><Link href="/cookie-policy" className="hover:text-white transition-colors">Cookie Policy</Link></li>
             </ul>
           </div>
@@ -90,7 +90,7 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
-            <Link href="/cancellation-policy" className="hover:text-gray-400 transition-colors">Refunds</Link>
+            <Link href="/cancellation-policy" className="hover:text-gray-400 transition-colors">{t("cancellationPolicy")}</Link>
             <Link href="/cookie-policy" className="hover:text-gray-400 transition-colors">Cookies</Link>
             <Link href="/contact" className="hover:text-gray-400 transition-colors">Contact</Link>
           </div>

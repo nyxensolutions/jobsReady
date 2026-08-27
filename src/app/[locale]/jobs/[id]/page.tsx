@@ -69,6 +69,7 @@ export default async function JobDetailPage({ params }: Props) {
   const { id, locale } = await params
   const t = await getTranslations("jobs")
   const tt = await getTranslations("jobs.types")
+  const ts = await getTranslations("shifts")
 
   const job = await prisma.jobListing.findUnique({
     where: { id },
@@ -132,8 +133,8 @@ export default async function JobDetailPage({ params }: Props) {
     { label: t("jobDetail.salary"),     value: salary },
     { label: t("jobDetail.location"),   value: job.city.name },
     { label: t("jobDetail.posted"),     value: formatRelativeTime(job.createdAt) },
-    ...(job.shiftType        ? [{ label: t("jobDetail.shift"),       value: `${job.shiftType} Shift` }] : []),
-    ...(job.workingDaysPerWeek ? [{ label: t("jobDetail.workingDays"), value: `${job.workingDaysPerWeek} days/week` }] : []),
+    ...(job.shiftType        ? [{ label: t("jobDetail.shift"),       value: (() => { try { return ts(job.shiftType as any) } catch { return `${job.shiftType} Shift` } })() }] : []),
+    ...(job.workingDaysPerWeek ? [{ label: t("jobDetail.workingDays"), value: t("jobDetail.daysPerWeek", { count: job.workingDaysPerWeek }) }] : []),
     ...(job.incentives       ? [{ label: t("jobDetail.incentives"),  value: job.incentives }] : []),
   ]
 
@@ -324,6 +325,21 @@ export default async function JobDetailPage({ params }: Props) {
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* Translate hint — shown only in Hindi locale since job content is user-posted in English */}
+            {locale === "hi" && (
+              <a
+                href={`https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(`https://jobs24india.com/hi/jobs/${job.id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 text-sm text-blue-700 font-medium hover:bg-blue-100 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0" aria-hidden="true">
+                  <path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor" />
+                </svg>
+                {t("jobDetail.translatePage")} →
+              </a>
             )}
 
             {/* Description */}
