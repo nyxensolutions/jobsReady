@@ -47,7 +47,10 @@
     "registerCompany": "কোম্পানি নিবন্ধন করুন",
     "privacyPolicy": "গোপনীয়তা নীতি",
     "termsOfUse": "ব্যবহারের শর্তাবলী",
-    "contact": "যোগাযোগ"
+    "contact": "যোগাযোগ",
+    "cancellationPolicy": "বাতিল ও ফেরত",
+    "blog": "ব্লগ",
+    "member": "সদস্য"
   },
   "home": {
     "hero": {
@@ -119,7 +122,15 @@
       "title": "Delhi NCR এবং আশেপাশের শহরে চাকরি",
       "subtitle": "কাছাকাছি verified স্থানীয় চাকরি খুঁজুন",
       "nearYou": "আপনার কাছে চাকরি",
-      "browseAll": "সব শহর দেখুন"
+      "browseAll": "সব শহর দেখুন",
+      "Delhi": "দিল্লি",
+      "Noida": "নয়ডা",
+      "Gurugram": "গুরুগ্রাম",
+      "Ghaziabad": "গাজিয়াবাদ",
+      "Faridabad": "ফরিদাবাদ",
+      "Greater Noida": "গ্রেটার নয়ডা",
+      "Meerut": "মিরাট",
+      "Hapur": "হাপুড়"
     }
   },
   "auth": {
@@ -200,7 +211,13 @@
       "monthlySalary": "মাসিক বেতন",
       "dailyWage": "দৈনিক মজুরি",
       "shareWhatsapp": "WhatsApp-এ শেয়ার করুন",
-      "fresherYrsExp": "{years}+ বছর"
+      "fresherYrsExp": "{years}+ বছর",
+      "shift": "শিফট সময়",
+      "workingDays": "কর্মদিবস",
+      "incentives": "প্রণোদনা",
+      "daysPerWeek": "{count} দিন/সপ্তাহ",
+      "translatePage": "এই পাতা অনুবাদ করুন",
+      "seeAll": "সব দেখুন →"
     },
     "filters": {
       "salary": "বেতনের পরিসর",
@@ -215,7 +232,23 @@
       "last7d": "গত ৭ দিন",
       "qualification": "যোগ্যতা",
       "freshersOnly": "শুধু ফ্রেশার",
-      "monthlySalary": "মাসিক বেতন"
+      "monthlySalary": "মাসিক বেতন",
+      "quickFilters": "দ্রুত ফিল্টার",
+      "jobRoles": "কাজের ভূমিকা",
+      "walkIn": "ওয়াক-ইন",
+      "fresher": "ফ্রেশার",
+      "fresherExp": "ফ্রেশার",
+      "postedToday": "আজ পোস্ট করা",
+      "showMore": "আরও দেখুন",
+      "showLess": "কম দেখুন",
+      "allLevels": "সব শিক্ষাগত স্তর",
+      "moreThan": "₹{amount} এর বেশি",
+      "lt1Year": "১ বছরের কম",
+      "lt2Years": "২ বছরের কম",
+      "lt3Years": "৩ বছরের কম",
+      "lt4Years": "৪ বছরের কম",
+      "gt4Years": "৪ বছরের বেশি",
+      "partTime": "খণ্ডকালীন"
     },
     "types": {
       "FULL_TIME": "পূর্ণকালীন",
@@ -287,7 +320,17 @@
       "allJobs": "সব চাকরি →",
       "statApplied": "আবেদন",
       "statShortlisted": "শর্টলিস্ট",
-      "statHired": "নিয়োগ"
+      "statHired": "নিয়োগ",
+      "welcomeGuest": "স্বাগতম! 👋",
+      "helloGuest": "হ্যালো!",
+      "greetingFallback": "বন্ধু",
+      "profileHintAdd": "যোগ করুন",
+      "profileHintName": "নাম",
+      "profileHintCity": "শহর",
+      "profileHintSkills": "দক্ষতা",
+      "profileHintResume": "রিজিউমে",
+      "profileHintSuffix": "আপনার সুযোগ বাড়াতে",
+      "salaryNotMentioned": "বেতন উল্লেখ নেই"
     },
     "profile": {
       "title": "আমার প্রোফাইল",
@@ -378,6 +421,16 @@
       "browseJobs": "চাকরি দেখুন",
       "applyNow": "এখনই আবেদন করুন",
       "savedOn": "সংরক্ষিত"
+    },
+    "applied": {
+      "sentToHr": "HR-এর কাছে আবেদন পাঠানো হয়েছে! 🎉",
+      "youAppliedFor": "আপনি {company} · {city}-এ {title} পদে আবেদন করেছেন",
+      "findMoreJobs": "আরও চাকরি খুঁজুন",
+      "completeProfile": "বেশি কল পেতে আপনার প্রোফাইল সম্পূর্ণ করুন",
+      "update": "আপডেট করুন →",
+      "salaryNotMentioned": "বেতন উল্লেখ নেই",
+      "myApplications": "আমার আবেদনগুলো",
+      "similarJobs": "একই ধরনের চাকরি"
     }
   },
   "employer": {
@@ -515,5 +568,11 @@
     "website": "ওয়েবসাইট",
     "description": "বিবরণ",
     "gstCin": "GST / CIN"
+  },
+  "shifts": {
+    "Day": "দিনের শিফট",
+    "Night": "রাতের শিফট",
+    "Rotational": "ঘূর্ণায়মান শিফট",
+    "Flexible": "নমনীয় সময়"
   }
 }

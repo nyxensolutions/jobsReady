@@ -47,7 +47,10 @@
     "registerCompany": "ਕੰਪਨੀ ਰਜਿਸਟਰ ਕਰੋ",
     "privacyPolicy": "ਗੋਪਨੀਯਤਾ ਨੀਤੀ",
     "termsOfUse": "ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ",
-    "contact": "ਸੰਪਰਕ"
+    "contact": "ਸੰਪਰਕ",
+    "cancellationPolicy": "ਰੱਦ ਕਰਨਾ ਅਤੇ ਰਿਫੰਡ",
+    "blog": "ਬਲੌਗ",
+    "member": "ਮੈਂਬਰ"
   },
   "home": {
     "hero": {
@@ -119,7 +122,15 @@
       "title": "Delhi NCR ਅਤੇ ਨੇੜੇ ਦੇ ਸ਼ਹਿਰਾਂ ਵਿੱਚ ਨੌਕਰੀਆਂ",
       "subtitle": "ਨੇੜੇ verified ਸਥਾਨਕ ਨੌਕਰੀਆਂ ਲੱਭੋ — ਪੈਦਲ ਦੂਰੀ 'ਤੇ",
       "nearYou": "ਤੁਹਾਡੇ ਕੋਲ ਨੌਕਰੀਆਂ",
-      "browseAll": "ਸਾਰੇ ਸ਼ਹਿਰ ਦੇਖੋ"
+      "browseAll": "ਸਾਰੇ ਸ਼ਹਿਰ ਦੇਖੋ",
+      "Delhi": "ਦਿੱਲੀ",
+      "Noida": "ਨੋਇਡਾ",
+      "Gurugram": "ਗੁਰੂਗ੍ਰਾਮ",
+      "Ghaziabad": "ਗਾਜ਼ੀਆਬਾਦ",
+      "Faridabad": "ਫਰੀਦਾਬਾਦ",
+      "Greater Noida": "ਗ੍ਰੇਟਰ ਨੋਇਡਾ",
+      "Meerut": "ਮੇਰਠ",
+      "Hapur": "ਹਾਪੁੜ"
     }
   },
   "auth": {
@@ -200,7 +211,13 @@
       "monthlySalary": "ਮਾਸਿਕ ਤਨਖਾਹ",
       "dailyWage": "ਰੋਜ਼ਾਨਾ ਮਜ਼ਦੂਰੀ",
       "shareWhatsapp": "WhatsApp ਤੇ ਸ਼ੇਅਰ ਕਰੋ",
-      "fresherYrsExp": "{years}+ ਸਾਲ"
+      "fresherYrsExp": "{years}+ ਸਾਲ",
+      "shift": "ਸ਼ਿਫਟ ਦਾ ਸਮਾਂ",
+      "workingDays": "ਕੰਮ ਦੇ ਦਿਨ",
+      "incentives": "ਇਨਸੈਂਟਿਵ",
+      "daysPerWeek": "{count} ਦਿਨ/ਹਫ਼ਤਾ",
+      "translatePage": "ਇਸ ਪੰਨੇ ਦਾ ਅਨੁਵਾਦ ਕਰੋ",
+      "seeAll": "ਸਭ ਦੇਖੋ →"
     },
     "filters": {
       "salary": "ਤਨਖ਼ਾਹ ਰੇਂਜ",
@@ -215,7 +232,23 @@
       "last7d": "ਪਿਛਲੇ 7 ਦਿਨ",
       "qualification": "ਯੋਗਤਾ",
       "freshersOnly": "ਕੇਵਲ ਫਰੈਸ਼ਰ",
-      "monthlySalary": "ਮਾਸਿਕ ਤਨਖਾਹ"
+      "monthlySalary": "ਮਾਸਿਕ ਤਨਖਾਹ",
+      "quickFilters": "ਤੇਜ਼ ਫਿਲਟਰ",
+      "jobRoles": "ਨੌਕਰੀ ਦੀਆਂ ਭੂਮਿਕਾਵਾਂ",
+      "walkIn": "ਵਾਕ-ਇਨ",
+      "fresher": "ਫਰੈਸ਼ਰ",
+      "fresherExp": "ਫਰੈਸ਼ਰ",
+      "postedToday": "ਅੱਜ ਪੋਸਟ ਕੀਤੀ",
+      "showMore": "ਹੋਰ ਦਿਖਾਓ",
+      "showLess": "ਘੱਟ ਦਿਖਾਓ",
+      "allLevels": "ਸਾਰੇ ਵਿਦਿਅਕ ਪੱਧਰ",
+      "moreThan": "₹{amount} ਤੋਂ ਵੱਧ",
+      "lt1Year": "1 ਸਾਲ ਤੋਂ ਘੱਟ",
+      "lt2Years": "2 ਸਾਲ ਤੋਂ ਘੱਟ",
+      "lt3Years": "3 ਸਾਲ ਤੋਂ ਘੱਟ",
+      "lt4Years": "4 ਸਾਲ ਤੋਂ ਘੱਟ",
+      "gt4Years": "4 ਸਾਲ ਤੋਂ ਵੱਧ",
+      "partTime": "ਅੱਧੇ ਸਮੇਂ"
     },
     "types": {
       "FULL_TIME": "ਪੂਰੇ ਸਮੇਂ",
@@ -287,7 +320,17 @@
       "allJobs": "ਸਾਰੀਆਂ ਨੌਕਰੀਆਂ →",
       "statApplied": "ਅਰਜ਼ੀ",
       "statShortlisted": "ਸ਼ਾਰਟਲਿਸਟ",
-      "statHired": "ਨਿਯੁਕਤ"
+      "statHired": "ਨਿਯੁਕਤ",
+      "welcomeGuest": "ਜੀ ਆਇਆਂ ਨੂੰ! 👋",
+      "helloGuest": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ!",
+      "greetingFallback": "ਦੋਸਤ",
+      "profileHintAdd": "ਸ਼ਾਮਲ ਕਰੋ",
+      "profileHintName": "ਨਾਮ",
+      "profileHintCity": "ਸ਼ਹਿਰ",
+      "profileHintSkills": "ਹੁਨਰ",
+      "profileHintResume": "ਰਿਜ਼ਿਊਮੇ",
+      "profileHintSuffix": "ਆਪਣੇ ਮੌਕੇ ਵਧਾਉਣ ਲਈ",
+      "salaryNotMentioned": "ਤਨਖਾਹ ਨਹੀਂ ਦੱਸੀ"
     },
     "profile": {
       "title": "ਮੇਰੀ ਪ੍ਰੋਫਾਈਲ",
@@ -378,6 +421,16 @@
       "browseJobs": "ਨੌਕਰੀਆਂ ਵੇਖੋ",
       "applyNow": "ਹੁਣੇ ਅਰਜ਼ੀ ਦਿਓ",
       "savedOn": "ਸੁਰੱਖਿਅਤ"
+    },
+    "applied": {
+      "sentToHr": "HR ਨੂੰ ਅਰਜ਼ੀ ਭੇਜ ਦਿੱਤੀ! 🎉",
+      "youAppliedFor": "ਤੁਸੀਂ {company} · {city} ਵਿੱਚ {title} ਲਈ ਅਰਜ਼ੀ ਦਿੱਤੀ",
+      "findMoreJobs": "ਹੋਰ ਨੌਕਰੀਆਂ ਲੱਭੋ",
+      "completeProfile": "ਵੱਧ ਕਾਲਾਂ ਲਈ ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਪੂਰੀ ਕਰੋ",
+      "update": "ਅੱਪਡੇਟ ਕਰੋ →",
+      "salaryNotMentioned": "ਤਨਖਾਹ ਨਹੀਂ ਦੱਸੀ",
+      "myApplications": "ਮੇਰੀਆਂ ਅਰਜ਼ੀਆਂ",
+      "similarJobs": "ਮਿਲਦੀਆਂ-ਜੁਲਦੀਆਂ ਨੌਕਰੀਆਂ"
     }
   },
   "employer": {
@@ -515,5 +568,11 @@
     "website": "ਵੈੱਬਸਾਈਟ",
     "description": "ਵੇਰਵਾ",
     "gstCin": "GST / CIN"
+  },
+  "shifts": {
+    "Day": "ਦਿਨ ਦੀ ਸ਼ਿਫਟ",
+    "Night": "ਰਾਤ ਦੀ ਸ਼ਿਫਟ",
+    "Rotational": "ਬਦਲਵੀਂ ਸ਼ਿਫਟ",
+    "Flexible": "ਲਚਕਦਾਰ ਸਮਾਂ"
   }
 }

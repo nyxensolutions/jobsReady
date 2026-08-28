@@ -47,7 +47,10 @@
     "registerCompany": "ಕಂಪನಿ ನೋಂದಾಯಿಸಿ",
     "privacyPolicy": "ಗೌಪ್ಯತಾ ನೀತಿ",
     "termsOfUse": "ಬಳಕೆಯ ನಿಯಮಗಳು",
-    "contact": "ಸಂಪರ್ಕ"
+    "contact": "ಸಂಪರ್ಕ",
+    "cancellationPolicy": "ರದ್ದತಿ ಮತ್ತು ಮರುಪಾವತಿ",
+    "blog": "ಬ್ಲಾಗ್",
+    "member": "ಸದಸ್ಯ"
   },
   "home": {
     "hero": {
@@ -119,7 +122,15 @@
       "title": "Delhi NCR ಮತ್ತು ಸಮೀಪದ ನಗರಗಳಲ್ಲಿ ಉದ್ಯೋಗಗಳು",
       "subtitle": "ಹತ್ತಿರದಲ್ಲಿ verified ಸ್ಥಳೀಯ ಉದ್ಯೋಗಗಳನ್ನು ಕಂಡುಕೊಳ್ಳಿ",
       "nearYou": "ನಿಮ್ಮ ಹತ್ತಿರದ ಉದ್ಯೋಗಗಳು",
-      "browseAll": "ಎಲ್ಲಾ ನಗರಗಳನ್ನು ನೋಡಿ"
+      "browseAll": "ಎಲ್ಲಾ ನಗರಗಳನ್ನು ನೋಡಿ",
+      "Delhi": "ದೆಹಲಿ",
+      "Noida": "ನೋಯ್ಡಾ",
+      "Gurugram": "ಗುರುಗ್ರಾಮ",
+      "Ghaziabad": "ಗಾಜಿಯಾಬಾದ್",
+      "Faridabad": "ಫರಿದಾಬಾದ್",
+      "Greater Noida": "ಗ್ರೇಟರ್ ನೋಯ್ಡಾ",
+      "Meerut": "ಮೀರತ್",
+      "Hapur": "ಹಾಪುರ್"
     }
   },
   "auth": {
@@ -200,7 +211,13 @@
       "monthlySalary": "ಮಾಸಿಕ ವೇತನ",
       "dailyWage": "ದಿನಸರಿ ವೇತನ",
       "shareWhatsapp": "WhatsApp ನಲ್ಲಿ ಶೇರ್ ಮಾಡಿ",
-      "fresherYrsExp": "{years}+ ವರ್ಷ"
+      "fresherYrsExp": "{years}+ ವರ್ಷ",
+      "shift": "ಶಿಫ್ಟ್ ಸಮಯ",
+      "workingDays": "ಕೆಲಸದ ದಿನಗಳು",
+      "incentives": "ಪ್ರೋತ್ಸಾಹಧನ",
+      "daysPerWeek": "{count} ದಿನ/ವಾರ",
+      "translatePage": "ಈ ಪುಟವನ್ನು ಅನುವಾದಿಸಿ",
+      "seeAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ →"
     },
     "filters": {
       "salary": "ವೇತನ ವ್ಯಾಪ್ತಿ",
@@ -215,7 +232,23 @@
       "last7d": "ಕಳೆದ 7 ದಿನ",
       "qualification": "ಅರ್ಹತೆ",
       "freshersOnly": "ಫ್ರೆಶರ್ ಮಾತ್ರ",
-      "monthlySalary": "ಮಾಸಿಕ ವೇತನ"
+      "monthlySalary": "ಮಾಸಿಕ ವೇತನ",
+      "quickFilters": "ತ್ವರಿತ ಫಿಲ್ಟರ್‌ಗಳು",
+      "jobRoles": "ಉದ್ಯೋಗ ಪಾತ್ರಗಳು",
+      "walkIn": "ವಾಕ್-ಇನ್",
+      "fresher": "ಫ್ರೆಶರ್",
+      "fresherExp": "ಫ್ರೆಶರ್",
+      "postedToday": "ಇಂದು ಪೋಸ್ಟ್ ಮಾಡಲಾಗಿದೆ",
+      "showMore": "ಇನ್ನಷ್ಟು ತೋರಿಸಿ",
+      "showLess": "ಕಡಿಮೆ ತೋರಿಸಿ",
+      "allLevels": "ಎಲ್ಲಾ ಶಿಕ್ಷಣ ಹಂತಗಳು",
+      "moreThan": "₹{amount} ಕ್ಕಿಂತ ಹೆಚ್ಚು",
+      "lt1Year": "1 ವರ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ",
+      "lt2Years": "2 ವರ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ",
+      "lt3Years": "3 ವರ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ",
+      "lt4Years": "4 ವರ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ",
+      "gt4Years": "4 ವರ್ಷಕ್ಕಿಂತ ಹೆಚ್ಚು",
+      "partTime": "ಅರೆಕಾಲಿಕ"
     },
     "types": {
       "FULL_TIME": "ಪೂರ್ಣ ಸಮಯ",
@@ -287,7 +320,17 @@
       "allJobs": "ಎಲ್ಲ ಉದ್ಯೋಗಗಳು →",
       "statApplied": "ಅರ್ಜಿ",
       "statShortlisted": "ಶಾರ್ಟ್‌ಲಿಸ್ಟ್",
-      "statHired": "ನೇಮಕ"
+      "statHired": "ನೇಮಕ",
+      "welcomeGuest": "ಸ್ವಾಗತ! 👋",
+      "helloGuest": "ನಮಸ್ಕಾರ!",
+      "greetingFallback": "ಸ್ನೇಹಿತರೇ",
+      "profileHintAdd": "ಸೇರಿಸಿ",
+      "profileHintName": "ಹೆಸರು",
+      "profileHintCity": "ನಗರ",
+      "profileHintSkills": "ಕೌಶಲ್ಯಗಳು",
+      "profileHintResume": "ರೆಸ್ಯೂಮೆ",
+      "profileHintSuffix": "ನಿಮ್ಮ ಅವಕಾಶಗಳನ್ನು ಸುಧಾರಿಸಲು",
+      "salaryNotMentioned": "ವೇತನ ನಮೂದಿಸಿಲ್ಲ"
     },
     "profile": {
       "title": "ನನ್ನ ಪ್ರೊಫೈಲ್",
@@ -378,6 +421,16 @@
       "browseJobs": "ಉದ್ಯೋಗಗಳನ್ನು ನೋಡಿ",
       "applyNow": "ಈಗ ಅರ್ಜಿ ಹಾಕಿ",
       "savedOn": "ಉಳಿಸಿದ ದಿನಾಂಕ"
+    },
+    "applied": {
+      "sentToHr": "HR ಗೆ ಅರ್ಜಿ ಕಳುಹಿಸಲಾಗಿದೆ! 🎉",
+      "youAppliedFor": "ನೀವು {company} · {city} ನಲ್ಲಿ {title} ಹುದ್ದೆಗೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಿದ್ದೀರಿ",
+      "findMoreJobs": "ಇನ್ನಷ್ಟು ಉದ್ಯೋಗ ಹುಡುಕಿ",
+      "completeProfile": "ಹೆಚ್ಚು ಕರೆಗಳಿಗಾಗಿ ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ",
+      "update": "ನವೀಕರಿಸಿ →",
+      "salaryNotMentioned": "ವೇತನ ನಮೂದಿಸಿಲ್ಲ",
+      "myApplications": "ನನ್ನ ಅರ್ಜಿಗಳು",
+      "similarJobs": "ಇದೇ ರೀತಿಯ ಉದ್ಯೋಗಗಳು"
     }
   },
   "employer": {
@@ -515,5 +568,11 @@
     "website": "ವೆಬ್‌ಸೈಟ್",
     "description": "ವಿವರಣೆ",
     "gstCin": "GST / CIN"
+  },
+  "shifts": {
+    "Day": "ಹಗಲು ಪಾಳಿ",
+    "Night": "ರಾತ್ರಿ ಪಾಳಿ",
+    "Rotational": "ಸರದಿ ಪಾಳಿ",
+    "Flexible": "ಹೊಂದಿಕೊಳ್ಳುವ ಸಮಯ"
   }
 }
