@@ -17,6 +17,7 @@ interface EmployerData {
   companyInitial: string
   contactPerson?: string | null
   jobCount: number
+  logoUrl?: string | null
 }
 
 interface Props extends EmployerData {
@@ -34,7 +35,7 @@ const NAV = [
 const W_EXPANDED = 240
 const W_COLLAPSED = 60
 
-export default function EmployerShell({ companyName, companyInitial, contactPerson, jobCount, children }: Props) {
+export default function EmployerShell({ companyName, companyInitial, contactPerson, jobCount, logoUrl, children }: Props) {
   const [collapsed, setCollapsed] = useState(false)
   const pathname = usePathname()
   const locale = useLocale()
@@ -99,8 +100,10 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
         {/* User info */}
         <div className={`border-b border-gray-50 shrink-0 ${collapsed ? "flex justify-center py-3 px-2" : "px-4 py-3"}`}>
           <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a3461] to-[#2a4a7f] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm">
-              {companyInitial}
+            <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-gradient-to-br from-[#1a3461] to-[#2a4a7f] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm">
+              {logoUrl
+                ? <Image src={logoUrl} alt={companyName} fill className="object-cover" sizes="36px" />
+                : companyInitial}
             </div>
             {!collapsed && (
               <div className="min-w-0">
@@ -150,13 +153,17 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
         {/* Bottom */}
         <div className={`border-t border-gray-100 bg-gray-50/50 shrink-0 ${collapsed ? "py-3 flex justify-center px-2" : "px-4 py-3"}`}>
           {collapsed ? (
-            <div className="w-7 h-7 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs shadow-sm">
-              {companyInitial}
+            <div className="relative w-7 h-7 rounded-lg bg-white border border-gray-200 overflow-hidden flex items-center justify-center text-gray-600 font-bold text-xs shadow-sm">
+              {logoUrl
+                ? <Image src={logoUrl} alt={companyName} fill className="object-cover" sizes="28px" />
+                : companyInitial}
             </div>
           ) : (
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs shrink-0 shadow-sm">
-                {companyInitial}
+              <div className="relative w-7 h-7 rounded-lg bg-white border border-gray-200 overflow-hidden flex items-center justify-center text-gray-600 font-bold text-xs shrink-0 shadow-sm">
+                {logoUrl
+                  ? <Image src={logoUrl} alt={companyName} fill className="object-cover" sizes="28px" />
+                  : companyInitial}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-bold text-gray-700 truncate">{companyName}</p>

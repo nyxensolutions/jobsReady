@@ -35,6 +35,7 @@ export default async function EmployerProfilePage() {
             city: employer.city,
             website: employer.website,
             description: employer.description,
+            logoUrl: employer.logoUrl,
           }} />
         </div>
       </div>

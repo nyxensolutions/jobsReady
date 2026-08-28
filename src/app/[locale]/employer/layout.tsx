@@ -30,6 +30,7 @@ export default async function EmployerLayout({ children }: { children: React.Rea
       companyInitial={employer.companyName.charAt(0).toUpperCase()}
       contactPerson={employer.contactPerson}
       jobCount={jobCount}
+      logoUrl={employer.logoUrl}
     >
       {children}
     </EmployerShell>

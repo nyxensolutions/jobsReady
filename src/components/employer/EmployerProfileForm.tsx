@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2, CheckCircle } from "lucide-react"
+import LogoUploader from "./LogoUploader"
 
 type Initial = {
   companyName: string
@@ -12,6 +13,7 @@ type Initial = {
   city: string | null
   website: string | null
   description: string | null
+  logoUrl: string | null
 }
 
 export default function EmployerProfileForm({ initial }: { initial: Initial }) {
@@ -52,8 +54,20 @@ export default function EmployerProfileForm({ initial }: { initial: Initial }) {
     }
   }
 
+  const companyInitial = companyName.trim().charAt(0).toUpperCase() || "?"
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+
+      {/* ── Logo uploader ── */}
+      <div className="flex justify-center pb-2 border-b border-gray-100">
+        <LogoUploader
+          initial={initial.logoUrl}
+          companyInitial={companyInitial}
+          onUploaded={() => router.refresh()}
+        />
+      </div>
+
       <div>
         <label className={labelCls}>Company Name <span className="text-red-500">*</span></label>
         <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className={inputCls} placeholder="e.g. Sharma Logistics Pvt. Ltd." />

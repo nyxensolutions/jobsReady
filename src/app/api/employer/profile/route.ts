@@ -19,20 +19,29 @@ export async function PATCH(req: NextRequest) {
   const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") return NextResponse.json({ error: "Employers only" }, { status: 403 })
 
-  const { companyName, industry, contactPerson, contactPhone, city, website, description } = await req.json()
-  if (!companyName?.trim()) return NextResponse.json({ error: "Company name is required" }, { status: 400 })
+  const body = await req.json()
+  const { companyName, industry, contactPerson, contactPhone, city, website, description, logoUrl } = body
+
+  // companyName is only required if this isn't a logo-only patch
+  const isLogoOnlyPatch = logoUrl !== undefined && companyName === undefined
+  if (!isLogoOnlyPatch && !companyName?.trim()) {
+    return NextResponse.json({ error: "Company name is required" }, { status: 400 })
+  }
+
+  // Build update payload from whichever fields were sent
+  const data: Record<string, unknown> = {}
+  if (companyName !== undefined)   data.companyName = companyName.trim()
+  if (industry !== undefined)      data.industry = industry?.trim() || null
+  if (contactPerson !== undefined) data.contactPerson = contactPerson?.trim() || null
+  if (contactPhone !== undefined)  data.contactPhone = contactPhone?.trim() || null
+  if (city !== undefined)          data.city = city?.trim() || null
+  if (website !== undefined)       data.website = website?.trim() || null
+  if (description !== undefined)   data.description = description?.trim() || null
+  if (logoUrl !== undefined)       data.logoUrl = logoUrl || null   // "" → null (remove logo)
 
   const updated = await prisma.employerProfile.update({
     where: { userId: session.uid },
-    data: {
-      companyName: companyName.trim(),
-      industry: industry?.trim() || null,
-      contactPerson: contactPerson?.trim() || null,
-      contactPhone: contactPhone?.trim() || null,
-      city: city?.trim() || null,
-      website: website?.trim() || null,
-      description: description?.trim() || null,
-    },
+    data,
   })
 
   return NextResponse.json({ success: true, employer: updated })
