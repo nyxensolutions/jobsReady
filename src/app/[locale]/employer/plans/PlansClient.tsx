@@ -19,7 +19,6 @@ interface Props {
   plans: Plan[]
   activeSub: ActiveSubInfo | null
   activeJobCount: number
-  razorpayKeyId: string
 }
 
 // ── Helpers ────────────────────────────────────────────────────
@@ -29,7 +28,7 @@ function daysLeft(iso: string) {
   return Math.max(0, Math.ceil(diff / 86400000))
 }
 
-declare global { interface Window { Razorpay: any } }
+declare global { interface Window { Cashfree: any } }
 
 // ── Plan card feature rows ─────────────────────────────────────
 const featureRow = (icon: React.ReactNode, text: React.ReactNode, highlight = false) => (
@@ -52,7 +51,7 @@ const warnRow = (text: React.ReactNode) => (
   </li>
 )
 
-export default function PlansClient({ plans, activeSub, activeJobCount, razorpayKeyId }: Props) {
+export default function PlansClient({ plans, activeSub, activeJobCount }: Props) {
   const [tab, setTab] = useState<"SINGLE_HIRE" | "MULTI_HIRE">("SINGLE_HIRE")
   const [loading, setLoading] = useState<string | null>(null)
   const router = useRouter()
@@ -61,59 +60,40 @@ export default function PlansClient({ plans, activeSub, activeJobCount, razorpay
   const shown = plans.filter((p) => p.type === tab || p.isTrial)
     .filter((p) => tab === "SINGLE_HIRE" ? true : !p.isTrial)
 
-  // ── Razorpay checkout ────────────────────────────────────────
+  // ── Cashfree checkout ────────────────────────────────────────
   async function handleBuy(planSlug: string) {
     setLoading(planSlug)
     try {
-      const res = await fetch("/api/payment/create-order", {
+      const res = await fetch("/api/payments/cashfree/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ planSlug }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error)
+      if (!res.ok) throw new Error(data.error ?? "Could not create order")
 
-      // Load Razorpay script if not already loaded
-      if (!window.Razorpay) {
+      // Load Cashfree JS SDK v3 if not already loaded
+      if (!window.Cashfree) {
         await new Promise<void>((resolve, reject) => {
           const s = document.createElement("script")
-          s.src = "https://checkout.razorpay.com/v1/checkout.js"
+          s.src = "https://sdk.cashfree.com/js/v3/cashfree.js"
           s.onload = () => resolve()
-          s.onerror = () => reject(new Error("Razorpay script failed"))
+          s.onerror = () => reject(new Error("Cashfree SDK failed to load"))
           document.head.appendChild(s)
         })
       }
 
-      const rzp = new window.Razorpay({
-        key: razorpayKeyId,
-        amount: data.amount,
-        currency: data.currency,
-        order_id: data.orderId,
-        name: "Jobs24India",
-        description: data.planName,
-        theme: { color: "#1a3461" },
-        handler: async (response: any) => {
-          const verifyRes = await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orderId: response.razorpay_order_id,
-              paymentId: response.razorpay_payment_id,
-              signature: response.razorpay_signature,
-              planSlug,
-            }),
-          })
-          if (verifyRes.ok) {
-            router.refresh()
-            router.push(`/${locale}/employer/dashboard`)
-          }
-        },
+      // Initialise Cashfree — redirect flow (most reliable on mobile)
+      const cashfree = await window.Cashfree({ mode: "production" })
+      cashfree.checkout({
+        paymentSessionId: data.paymentSessionId,
+        // returnUrl is already set server-side in order_meta — this is the redirect target
+        redirectTarget: "_self",
       })
-      rzp.open()
-    } catch (err) {
-      console.error(err)
-      alert("Could not initiate payment. Please try again.")
-    } finally {
+      // Page will redirect to Cashfree's hosted checkout; control won't return here
+    } catch (err: any) {
+      console.error("[cashfree checkout]", err)
+      alert(err.message ?? "Could not initiate payment. Please try again.")
       setLoading(null)
     }
   }

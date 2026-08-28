@@ -38,7 +38,6 @@ export default async function PlansPage() {
         boostCredits: activeSub.plan.boostCredits,
       } : null}
       activeJobCount={activeJobCount}
-      razorpayKeyId={process.env.RAZORPAY_KEY_ID ?? ""}
     />
   )
 }
