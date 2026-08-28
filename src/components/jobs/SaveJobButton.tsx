@@ -1,8 +1,8 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
 import { Bookmark, BookmarkCheck, Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 
 type Props = {

@@ -1,9 +1,8 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import Link from "next/link"
+import { Link, usePathname } from "@/i18n/navigation"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
 
 const NO_FOOTER_SEGMENTS = ["/employer/", "/admin"]
 

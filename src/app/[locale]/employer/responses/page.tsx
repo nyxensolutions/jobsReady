@@ -1,7 +1,7 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { ArrowLeft } from "lucide-react"
 import ResponsesClient from "@/components/employer/ResponsesClient"
 

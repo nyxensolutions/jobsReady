@@ -1,7 +1,7 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { Plus, X, Loader2, CheckCircle } from "lucide-react"
 
 type Category = { id: string; slug: string; nameEn: string }

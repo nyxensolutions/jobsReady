@@ -1,8 +1,8 @@
-"use client"
+﻿"use client"
 
 import { useState, useRef } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Link } from "@/i18n/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { CheckCircle, ChevronRight, Loader2, Upload, FileText, Shield } from "lucide-react"
 
 const DOC_TYPES = [

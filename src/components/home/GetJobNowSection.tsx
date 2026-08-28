@@ -1,7 +1,7 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { Phone, ArrowRight, CheckCircle } from "lucide-react"

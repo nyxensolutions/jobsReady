@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { Clock } from "lucide-react"
 import { formatPostDate, postUrl, readingMinutes, getBlogCategory } from "@/lib/blog"
 import type { BlogPost } from "@/data/blog/types"

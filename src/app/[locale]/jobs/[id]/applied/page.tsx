@@ -1,5 +1,5 @@
-import { notFound, redirect } from "next/navigation"
-import Link from "next/link"
+﻿import { notFound, redirect } from "next/navigation"
+import { Link } from "@/i18n/navigation"
 import { CheckCircle, MapPin, ChevronRight } from "lucide-react"
 import { prisma } from "@/lib/db"
 import { getServerSession } from "@/lib/firebase/session"

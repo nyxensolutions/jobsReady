@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation"
-import Link from "next/link"
+﻿import { redirect } from "next/navigation"
+import { Link } from "@/i18n/navigation"
 import { CheckCircle, Clock, XCircle, ArrowRight } from "lucide-react"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"

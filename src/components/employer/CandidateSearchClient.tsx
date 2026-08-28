@@ -1,9 +1,9 @@
-"use client"
+﻿"use client"
 
 import { useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { Search, MapPin, Briefcase, Star, X, ChevronLeft, ChevronRight, Send, Check, Loader2 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 
 type Candidate = {
   id: string

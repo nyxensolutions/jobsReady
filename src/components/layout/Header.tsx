@@ -1,10 +1,9 @@
 ﻿"use client"
 
 import { useTranslations } from "next-intl"
-import Link from "next/link"
+import { Link, usePathname } from "@/i18n/navigation"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
-import { usePathname } from "next/navigation"
 import { Menu, X, User, Briefcase, LogOut, ChevronDown } from "lucide-react"
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher"
 import NotificationBell from "@/components/layout/NotificationBell"

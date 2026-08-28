@@ -1,9 +1,9 @@
-"use client"
+﻿"use client"
 
 import { useState, useRef, Suspense } from "react"
 import { useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import Image from "next/image"
 import { Phone, ArrowRight, Loader2, ShieldCheck, Briefcase, Users } from "lucide-react"
 import {

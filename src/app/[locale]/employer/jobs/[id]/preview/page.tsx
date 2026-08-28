@@ -1,5 +1,5 @@
-import { redirect, notFound } from "next/navigation"
-import Link from "next/link"
+﻿import { redirect, notFound } from "next/navigation"
+import { Link } from "@/i18n/navigation"
 import {
   MapPin, Clock, Users, ArrowLeft, CheckCircle, IndianRupee,
   Briefcase, Calendar, GraduationCap, ChevronRight, Eye, AlertCircle,

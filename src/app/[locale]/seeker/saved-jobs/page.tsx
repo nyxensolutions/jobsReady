@@ -1,7 +1,7 @@
-"use client"
+﻿"use client"
 import { useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { Bookmark, MapPin, ChevronRight } from "lucide-react"
 
 interface SavedJob {

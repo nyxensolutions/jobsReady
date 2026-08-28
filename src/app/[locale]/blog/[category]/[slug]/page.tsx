@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import Link from "next/link"
+﻿import type { Metadata } from "next"
+import { Link } from "@/i18n/navigation"
 import { notFound } from "next/navigation"
 import { ChevronRight, Clock, CalendarDays } from "lucide-react"
 import {

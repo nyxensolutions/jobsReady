@@ -1,7 +1,7 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import {
   CheckCircle, ChevronRight, Plus, X, Minus, Loader2, MapPin, Briefcase, IndianRupee,
   Phone, AlertTriangle,

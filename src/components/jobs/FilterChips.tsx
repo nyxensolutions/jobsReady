@@ -1,6 +1,7 @@
-"use client"
+﻿"use client"
 
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { X } from "lucide-react"
 
 const CATEGORY_LABELS: Record<string, string> = {

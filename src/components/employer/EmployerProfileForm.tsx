@@ -1,7 +1,7 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { Loader2, CheckCircle } from "lucide-react"
 import LogoUploader from "./LogoUploader"
 

@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import Link from "next/link"
+﻿import type { Metadata } from "next"
+import { Link } from "@/i18n/navigation"
 import { ArrowRight } from "lucide-react"
 import { getAllPosts, getPopulatedCategories, countByCategory, postUrl, formatPostDate, readingMinutes } from "@/lib/blog"
 import { alternatesFor, absoluteUrl, SITE_NAME } from "@/lib/seo"

@@ -1,4 +1,4 @@
-import Link from "next/link"
+﻿import { Link } from "@/i18n/navigation"
 import { Lightbulb, TriangleAlert, ArrowRight } from "lucide-react"
 import { anchorId } from "@/lib/blog"
 import type { Block } from "@/data/blog/types"

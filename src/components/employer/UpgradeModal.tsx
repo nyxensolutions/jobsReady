@@ -1,6 +1,6 @@
-"use client"
+﻿"use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { X, Zap, ArrowRight } from "lucide-react"
 import { useLocale } from "next-intl"
 

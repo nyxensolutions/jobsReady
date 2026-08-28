@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { MapPin, Clock, Users, Building2, PhoneCall, ChevronDown, ChevronUp } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"

@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
+﻿import { notFound } from "next/navigation"
+import { Link } from "@/i18n/navigation"
 import { prisma } from "@/lib/db"
 import { MapPin, Globe, Phone, Briefcase, Building2 } from "lucide-react"
 

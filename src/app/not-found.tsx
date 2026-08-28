@@ -1,4 +1,4 @@
-import Link from "next/link"
+﻿import { Link } from "@/i18n/navigation"
 import { Search, Home, Briefcase } from "lucide-react"
 
 export default function NotFound() {
@@ -32,3 +32,4 @@ export default function NotFound() {
     </div>
   )
 }
+

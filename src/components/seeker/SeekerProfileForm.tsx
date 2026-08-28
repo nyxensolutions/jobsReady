@@ -1,7 +1,7 @@
-"use client"
+﻿"use client"
 
 import { useState, useRef } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { Loader2, CheckCircle, Plus, X, Camera, FileText, Trash2 } from "lucide-react"
 import Image from "next/image"
 

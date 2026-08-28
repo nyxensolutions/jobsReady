@@ -1,5 +1,5 @@
 ﻿import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { CheckCircle, Users, Building2, TrendingUp, Zap, Phone, Star } from "lucide-react"
 
 const STATS = [

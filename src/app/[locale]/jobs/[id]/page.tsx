@@ -1,7 +1,7 @@
 ﻿import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { MapPin, Clock, Users, ArrowLeft, CheckCircle, IndianRupee, Briefcase, Calendar, GraduationCap, ChevronRight, Share2, Phone } from "lucide-react"
 import { formatRelativeTime } from "@/lib/utils"
 import { prisma } from "@/lib/db"

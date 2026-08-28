@@ -1,6 +1,7 @@
-"use client"
+﻿"use client"
 
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import { X, Check } from "lucide-react"
 import { useState } from "react"

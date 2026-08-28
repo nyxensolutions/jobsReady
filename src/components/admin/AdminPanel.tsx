@@ -1,6 +1,6 @@
-"use client"
+﻿"use client"
 import { useEffect, useState } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import {
   CheckCircle, XCircle, Star, StarOff, ExternalLink, Phone,
   Building2, MapPin, Tag, Users, ChevronDown, ChevronUp,
