@@ -18,6 +18,7 @@ enum JobStatus {
   DRAFT
   PENDING_REVIEW
   ACTIVE
+  PAUSED     // plan expired; job reactivates automatically on plan renewal
   EXPIRED
   CLOSED
   REJECTED

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createHmac } from "crypto"
 import { prisma } from "@/lib/db"
+import { sendPaymentReceipt } from "@/lib/email"
+import { notifyEmployer, MSG, WA } from "@/lib/sms"
 
 /**
  * Cashfree webhook — authoritative payment notification.
@@ -90,11 +92,42 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  // ── Upgrade existing active jobs to high-reach ────────────────────────────
+  // ── Reactivate PAUSED jobs and upgrade ACTIVE jobs to high-reach ──────────
+  // Jobs paused due to plan expiry are automatically restored on renewal.
+  await prisma.jobListing.updateMany({
+    where: { employerId, status: "PAUSED" },
+    data: { status: "ACTIVE", isHighReach: true },
+  })
   await prisma.jobListing.updateMany({
     where: { employerId, status: "ACTIVE" },
     data: { isHighReach: true },
   })
+
+  // ── Send receipt email + SMS (fire-and-forget, don't block webhook response) ──
+  const employer = await prisma.employerProfile.findUnique({
+    where: { id: employerId },
+    include: { user: true },
+  })
+  if (employer) {
+    const receiptData = {
+      toName: employer.contactPerson || employer.companyName,
+      planName: plan.name,
+      amountRupees: plan.priceRupees,
+      orderId: cfOrderId,
+      paymentId: cfPaymentId,
+      validFrom: now,
+      validUntil: expiresAt,
+      durationDays: plan.durationDays,
+    }
+    const phone = employer.contactPhone ?? employer.user.phone
+    void Promise.allSettled([
+      employer.user.email
+        ? sendPaymentReceipt({ toEmail: employer.user.email, ...receiptData })
+        : Promise.resolve(),
+      notifyEmployer(phone, MSG.employer.planActivated(plan.name, plan.durationDays)),
+      WA.employer.planActivated(phone, plan.name, plan.durationDays),
+    ])
+  }
 
   console.log(`[cashfree/webhook] ✅ Subscription activated: employer=${employerId} plan=${planSlug}`)
   return NextResponse.json({ received: true, success: true })

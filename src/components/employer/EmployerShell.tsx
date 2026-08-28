@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 import { useLocale } from "next-intl"
 import {
   Home, Users, UserSearch, TrendingUp, Settings,
-  PlusCircle, PanelLeftClose, PanelLeftOpen, LogOut,
+  PlusCircle, PanelLeftClose, PanelLeftOpen, LogOut, Receipt,
 } from "lucide-react"
 import { auth } from "@/lib/firebase/client"
 import { signOut as firebaseSignOut } from "firebase/auth"
@@ -29,6 +29,7 @@ const NAV = [
   { href: "/employer/responses",  label: "Responses",    icon: Users,       iconColor: "text-violet-600", iconBg: "bg-violet-50" },
   { href: "/employer/candidates", label: "Talent Search",icon: UserSearch,  iconColor: "text-emerald-600",iconBg: "bg-emerald-50" },
   { href: "/employer/plans",      label: "Plans",        icon: TrendingUp,  iconColor: "text-orange-500", iconBg: "bg-orange-50" },
+  { href: "/employer/billing",    label: "Billing",      icon: Receipt,     iconColor: "text-teal-600",   iconBg: "bg-teal-50"   },
   { href: "/employer/profile",    label: "Settings",     icon: Settings,    iconColor: "text-gray-500",   iconBg: "bg-gray-100"  },
 ]
 

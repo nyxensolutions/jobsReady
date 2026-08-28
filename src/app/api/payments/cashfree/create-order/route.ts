@@ -35,6 +35,19 @@ export async function POST(req: NextRequest) {
     const plan = await prisma.plan.findUnique({ where: { slug: planSlug, isActive: true } })
     if (!plan) return NextResponse.json({ error: "Plan not found" }, { status: 404 })
 
+    // ── Guard: trial is one-time only ─────────────────────────────────────────
+    if (plan.isTrial) {
+      const priorSub = await prisma.subscription.findFirst({
+        where: { employerId: employer.id },
+      })
+      if (priorSub) {
+        return NextResponse.json(
+          { error: "The trial is available only for new accounts. Please choose a paid plan." },
+          { status: 400 }
+        )
+      }
+    }
+
     // Build a clean phone number — Cashfree requires exactly 10 digits, no +91
     const rawPhone = employer.contactPhone ?? dbUser.phone ?? ""
     const phone = rawPhone.replace(/^\+91/, "").replace(/\D/g, "").slice(-10)

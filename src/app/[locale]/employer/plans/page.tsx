@@ -36,6 +36,7 @@ export default async function PlansPage() {
         activeJobLimit: activeSub.plan.activeJobLimit,
         candidateUnlockCredits: activeSub.plan.candidateUnlockCredits,
         boostCredits: activeSub.plan.boostCredits,
+        planPrice: activeSub.plan.priceRupees,
       } : null}
       activeJobCount={activeJobCount}
     />

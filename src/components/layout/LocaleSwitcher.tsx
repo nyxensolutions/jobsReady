@@ -2,12 +2,9 @@
 
 import { useLocale } from "next-intl"
 import { usePathname, useRouter } from "@/i18n/navigation"
-import { localeNames } from "@/i18n/config"
+import { locales, localeNames } from "@/i18n/config"
 import { Globe } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
-
-// Only show locales that have a messages file — "hl" (Hinglish) has none and shows raw keys
-const SUPPORTED_LOCALES = ["en", "hi"] as const
 
 export default function LocaleSwitcher() {
   const locale = useLocale()
@@ -44,7 +41,7 @@ export default function LocaleSwitcher() {
 
       {open && (
         <div className="absolute right-0 mt-1 w-44 bg-white rounded-xl border border-gray-200 shadow-lg py-1 z-50">
-          {SUPPORTED_LOCALES.map((l) => (
+          {locales.map((l) => (
             <button
               key={l}
               onClick={() => switchLocale(l)}
