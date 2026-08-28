@@ -63,11 +63,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
+  // Job routes — include hreflang alternates so Google doesn't treat
+  // /hi/jobs/123 and /jobs/123 as duplicates of each other.
   const jobRoutes: MetadataRoute.Sitemap = jobs.map((job) => ({
     url: `${APP_URL}/jobs/${job.id}`,
     lastModified: job.updatedAt,
     changeFrequency: "weekly",
     priority: 0.8,
+    alternates: withAlternates(`/jobs/${job.id}`),
   }))
 
   return [...staticRoutes, ...blogCategoryRoutes, ...blogPostRoutes, ...jobRoutes]

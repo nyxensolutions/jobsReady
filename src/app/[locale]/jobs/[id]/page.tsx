@@ -8,13 +8,14 @@ import { prisma } from "@/lib/db"
 import { getServerSession } from "@/lib/firebase/session"
 import ApplyButton from "@/components/jobs/ApplyButton"
 import SaveJobButton from "@/components/jobs/SaveJobButton"
+import { alternatesFor, SITE_URL } from "@/lib/seo"
 
 type Props = {
   params: Promise<{ id: string; locale: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
+  const { id, locale } = await params
   const job = await prisma.jobListing.findUnique({
     where: { id },
     select: {
@@ -42,11 +43,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${job.title} in ${metaCompany} — Jobs24India`,
     description,
+    alternates: alternatesFor(locale, `/jobs/${id}`),
     openGraph: {
       title: `${job.title} — ${metaCompany}`,
       description,
       type: "article",
+      url: `${SITE_URL}/jobs/${id}`,
     },
+    keywords: [
+      `${job.title} job`,
+      `${job.category.nameEn} jobs ${job.city.name}`,
+      `${job.city.name} jobs`,
+      "jobs24india",
+    ],
   }
 }
 
@@ -188,11 +197,27 @@ export default async function JobDetailPage({ params }: Props) {
       : undefined,
     experienceRequirements: job.experienceMin === 0 ? "no requirements" : `${job.experienceMin} years`,
     totalJobOpenings: job.vacancies,
+    identifier: { "@type": "PropertyValue", name: "Jobs24India", value: id },
+    directApply: true,
+    jobLocationType: "TELECOMMUTE" as string | undefined,  // overwritten below
+  }
+  // Remove telecommute if it's a physical job (all ours are)
+  delete (jsonLd as Record<string, unknown>).jobLocationType
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Jobs", item: `${SITE_URL}/jobs` },
+      { "@type": "ListItem", position: 2, name: job.category.nameEn, item: `${SITE_URL}/jobs?category=${job.category.slug}` },
+      { "@type": "ListItem", position: 3, name: job.title, item: `${SITE_URL}/jobs/${id}` },
+    ],
   }
 
   return (
     <div className="min-h-screen bg-[#f5f7fa]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Breadcrumb */}

@@ -20,6 +20,17 @@ export const metadata: Metadata = {
   },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
+  // Search engine verification — set these in .env.local and redeploy.
+  // Google: get code from Search Console → Property → HTML tag.
+  // Bing:   get code from Bing Webmaster Tools → Verify ownership → Meta tag.
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION && {
+        other: { "msvalidate.01": [process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION] },
+      }),
+    },
+  }),
   openGraph: {
     type: "website",
     siteName: SITE_NAME,

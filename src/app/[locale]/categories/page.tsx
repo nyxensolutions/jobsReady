@@ -5,10 +5,17 @@ import {
   HardHat, Factory, ShoppingBag, ClipboardList, Monitor, Heart,
   Package, Scissors, Wrench, Paintbrush, ChevronRight,
 } from "lucide-react"
+import { alternatesFor } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Browse Job Categories",
-  description: "Find blue-collar jobs by category in India. Browse delivery, driver, sales, security, cook, construction, factory, retail, IT and more.",
+type Props = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  return {
+    title: "Browse Job Categories — Jobs24India",
+    description: "Find blue-collar jobs by category in India. Browse delivery, driver, sales, security, cook, construction, factory, retail, IT and more.",
+    alternates: alternatesFor(locale, "/categories"),
+  }
 }
 
 const CATEGORIES = [

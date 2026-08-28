@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/db"
 import { buildJobListingQuery, JOBS_PER_PAGE, type JobListingSearchParams } from "@/lib/jobListingQuery"
@@ -9,13 +10,36 @@ import SortSelect from "@/components/jobs/SortSelect"
 import JobsPagination from "@/components/jobs/JobsPagination"
 import FilterChips from "@/components/jobs/FilterChips"
 import { Briefcase } from "lucide-react"
+import { alternatesFor } from "@/lib/seo"
 
 const PER_PAGE = JOBS_PER_PAGE
 
 type SearchParams = JobListingSearchParams
 
 type Props = {
+  params: Promise<{ locale: string }>
   searchParams: Promise<SearchParams>
+}
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const sp = await searchParams
+  const city = sp.city ? ` in ${sp.city.charAt(0).toUpperCase() + sp.city.slice(1)}` : ""
+  const cat = sp.category ? ` — ${sp.category.charAt(0).toUpperCase() + sp.category.slice(1)} jobs` : ""
+  const q = sp.q ? ` for "${sp.q}"` : ""
+  const title = `Jobs${q}${cat}${city} — Jobs24India`
+  const description = city || cat || q
+    ? `Browse verified${cat || " blue-collar"} jobs${q}${city} on Jobs24India. Apply in one click, no CV needed.`
+    : "Browse lakhs of verified blue-collar jobs — delivery, driver, security, sales, factory, housekeeping and more. Apply in one click, no CV needed."
+
+  return {
+    title,
+    description,
+    alternates: alternatesFor(locale, "/jobs"),
+    robots: sp.q || sp.city || sp.category || sp.type
+      ? { index: false }   // filtered views are not indexable — avoid duplicate content
+      : { index: true, follow: true },
+  }
 }
 
 function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {

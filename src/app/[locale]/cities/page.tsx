@@ -1,10 +1,17 @@
 ﻿import type { Metadata } from "next"
 import { Link } from "@/i18n/navigation"
 import Image from "next/image"
+import { alternatesFor } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Browse Jobs by City — Jobs24India",
-  description: "Find blue-collar jobs near you across India — Delhi, Mumbai, Bangalore, Chennai, Hyderabad, Pune, Kolkata, Ahmedabad, Noida, Gurugram and more.",
+type Props = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  return {
+    title: "Browse Jobs by City — Jobs24India",
+    description: "Find blue-collar jobs near you across India — Delhi, Mumbai, Bangalore, Chennai, Hyderabad, Pune, Kolkata, Ahmedabad, Noida, Gurugram and more.",
+    alternates: alternatesFor(locale, "/cities"),
+  }
 }
 
 type CityEntry = { name: string; slug: string; img: string; state: string; tagline?: string }
