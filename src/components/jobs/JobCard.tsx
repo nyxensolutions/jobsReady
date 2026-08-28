@@ -27,25 +27,18 @@ type Job = {
   qualificationRequired: string | null
 }
 
-const QUAL_LABELS: Record<string, string> = {
-  below10: "Below 10th",
-  "10th": "10th Pass",
-  "12th": "12th Pass",
-  diploma: "Diploma",
-  graduate: "Graduate",
-  postgraduate: "Post Graduate",
-}
-
-const EXPERIENCE_LABEL: Record<number, string> = {
-  0: "Fresher OK",
-  1: "1+ yr exp",
-  2: "2+ yrs exp",
-  3: "3+ yrs exp",
-  5: "5+ yrs exp",
+const QUAL_KEYS: Record<string, string> = {
+  below10: "below10",
+  "10th": "10th",
+  "12th": "12th",
+  diploma: "diploma",
+  graduate: "graduate",
+  postgraduate: "postgraduate",
 }
 
 export default function JobCard({ job }: { job: Job }) {
   const t = useTranslations("jobs")
+  const tq = useTranslations("jobs.qualifications")
   const [expanded, setExpanded] = useState(false)
 
   const isFresh = Date.now() - new Date(job.postedAt).getTime() < 24 * 60 * 60 * 1000
@@ -55,8 +48,12 @@ export default function JobCard({ job }: { job: Job }) {
     : ""
   const showExpand = job.description && job.description.replace(/<[^>]+>/g, "").length > 160
 
-  const expLabel = EXPERIENCE_LABEL[job.experienceMin] ?? `${job.experienceMin}+ yrs`
-  const qualLabel = job.qualificationRequired ? QUAL_LABELS[job.qualificationRequired] ?? null : null
+  const expLabel = job.experienceMin === 0
+    ? t("freshersOk")
+    : t("jobDetail.fresherYrsExp", { years: job.experienceMin })
+  const qualKey = job.qualificationRequired ? QUAL_KEYS[job.qualificationRequired] ?? null : null
+  let qualLabel: string | null = null
+  try { qualLabel = qualKey ? tq(qualKey as any) : null } catch { qualLabel = null }
 
   // Show max 4 skills/requirements as tags
   const skillTags = job.requirements.slice(0, 4)
@@ -133,7 +130,7 @@ export default function JobCard({ job }: { job: Job }) {
         <div className="flex flex-wrap gap-1.5 mt-2">
           {job.experienceMin === 0 && (
             <span className="text-xs px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full font-medium">
-              Freshers OK
+              {t("freshersOk")}
             </span>
           )}
           {job.experienceMin > 0 && (
@@ -175,7 +172,7 @@ export default function JobCard({ job }: { job: Job }) {
         <div className="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-gray-100">
           <span className="text-xs text-gray-400 flex items-center gap-1 shrink-0">
             <Clock size={11} />
-            Posted {formatRelativeTime(job.postedAt)}
+            {t("jobDetail.posted")} {formatRelativeTime(job.postedAt)}
           </span>
 
           <div className="flex items-center gap-2">

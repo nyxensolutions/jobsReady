@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -7,11 +7,17 @@ import { usePathname } from "next/navigation"
 
 const NO_FOOTER_SEGMENTS = ["/employer/", "/admin"]
 
-export default function Footer() {
+type Props = {
+  userRole?: "SEEKER" | "EMPLOYER" | "ADMIN" | null
+}
+
+export default function Footer({ userRole }: Props) {
   const t = useTranslations("nav")
   const pathname = usePathname()
   const hide = NO_FOOTER_SEGMENTS.some((s) => pathname.includes(s))
   if (hide) return null
+
+  const isSeeker = userRole === "SEEKER"
 
   return (
     <footer className="bg-gray-900 text-gray-400 text-sm">
@@ -35,23 +41,46 @@ export default function Footer() {
             </p>
           </div>
 
+          {/* Job Seekers section */}
           <div>
             <h4 className="text-white font-semibold mb-3">{t("jobSeekers")}</h4>
             <ul className="space-y-2">
               <li><Link href="/jobs" className="hover:text-white transition-colors">{t("findJobs")}</Link></li>
               <li><Link href="/login" className="hover:text-white transition-colors">{t("createProfile")}</Link></li>
               <li><Link href="/categories" className="hover:text-white transition-colors">{t("browseCategories")}</Link></li>
-              <li><Link href="/blog" className="hover:text-white transition-colors">Career Guide</Link></li>
+              <li><Link href="/blog" className="hover:text-white transition-colors">{t("blog")}</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">{t("aboutUs")}</Link></li>
             </ul>
           </div>
 
+          {/* Employers section — hide internal links when user is a seeker to avoid confusion */}
           <div>
             <h4 className="text-white font-semibold mb-3">{t("employers")}</h4>
             <ul className="space-y-2">
-              <li><Link href="/employer/post-job" className="hover:text-white transition-colors">{t("postJob")}</Link></li>
-              <li><Link href="/employer/register" className="hover:text-white transition-colors">{t("registerCompany")}</Link></li>
-              <li><Link href="/employer/dashboard" className="hover:text-white transition-colors">{t("dashboard")}</Link></li>
+              <li>
+                <Link
+                  href={isSeeker ? "/login?role=employer&next=/employer/post-job" : "/employer/post-job"}
+                  className="hover:text-white transition-colors"
+                >
+                  {t("postJob")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={isSeeker ? "/login?role=employer" : "/employer/register"}
+                  className="hover:text-white transition-colors"
+                >
+                  {t("registerCompany")}
+                </Link>
+              </li>
+              {/* Only show employer dashboard link to actual employers */}
+              {!isSeeker && (
+                <li>
+                  <Link href="/employer/dashboard" className="hover:text-white transition-colors">
+                    {t("dashboard")}
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -68,19 +97,20 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Popular guides — hardcoded rather than imported so the blog content
-            does not get bundled into this client component. */}
-        <div className="border-t border-gray-800 mt-10 pt-6">
-          <h4 className="text-white font-semibold mb-3 text-xs uppercase tracking-wide">Popular career guides</h4>
-          <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
-            <Link href="/blog/delivery/delivery-boy-salary-in-india" className="hover:text-white transition-colors">Delivery boy salary in India</Link>
-            <Link href="/blog/security/security-guard-night-shift-salary-delhi-ncr" className="hover:text-white transition-colors">Security guard night shift salary</Link>
-            <Link href="/blog/telecaller/telecaller-job-description-salary-skills" className="hover:text-white transition-colors">Telecaller job & salary</Link>
-            <Link href="/blog/warehouse/warehouse-jobs-in-greater-noida" className="hover:text-white transition-colors">Warehouse jobs in Greater Noida</Link>
-            <Link href="/blog/job-safety/how-to-spot-a-fake-job-offer" className="hover:text-white transition-colors">How to spot a fake job offer</Link>
-            <Link href="/blog/resume/resume-for-freshers-without-experience" className="hover:text-white transition-colors">Resume for freshers</Link>
+        {/* Popular blog articles — only shown on public pages, not when seeker is logged in */}
+        {!isSeeker && (
+          <div className="border-t border-gray-800 mt-10 pt-6">
+            <h4 className="text-white font-semibold mb-3 text-xs uppercase tracking-wide">Popular blog articles</h4>
+            <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
+              <Link href="/blog/delivery/delivery-boy-salary-in-india" className="hover:text-white transition-colors">Delivery boy salary in India</Link>
+              <Link href="/blog/security/security-guard-night-shift-salary-delhi-ncr" className="hover:text-white transition-colors">Security guard night shift salary</Link>
+              <Link href="/blog/telecaller/telecaller-job-description-salary-skills" className="hover:text-white transition-colors">Telecaller job &amp; salary</Link>
+              <Link href="/blog/warehouse/warehouse-jobs-in-greater-noida" className="hover:text-white transition-colors">Warehouse jobs in Greater Noida</Link>
+              <Link href="/blog/job-safety/how-to-spot-a-fake-job-offer" className="hover:text-white transition-colors">How to spot a fake job offer</Link>
+              <Link href="/blog/resume/resume-for-freshers-without-experience" className="hover:text-white transition-colors">Resume for freshers</Link>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-600">
           <a href="https://www.nyxensolutions.net" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-400 transition-colors">

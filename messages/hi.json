@@ -48,7 +48,9 @@
     "registerCompany": "कंपनी रजिस्टर करें",
     "privacyPolicy": "गोपनीयता नीति",
     "termsOfUse": "उपयोग की शर्तें",
-    "contact": "संपर्क"
+    "contact": "संपर्क",
+    "blog": "ब्लॉग",
+    "member": "सदस्य"
   },
   "home": {
     "hero": {
@@ -221,7 +223,23 @@
       "last7d": "पिछले 7 दिन",
       "qualification": "योग्यता",
       "freshersOnly": "केवल फ्रेशर",
-      "monthlySalary": "मासिक वेतन"
+      "monthlySalary": "मासिक वेतन",
+      "quickFilters": "त्वरित फ़िल्टर",
+      "jobRoles": "नौकरी की भूमिका",
+      "partTime": "अंशकालिक",
+      "walkIn": "वॉक-इन",
+      "fresher": "फ्रेशर",
+      "postedToday": "आज पोस्ट",
+      "showMore": "और देखें",
+      "showLess": "कम दिखाएं",
+      "allLevels": "सभी स्तर",
+      "moreThan": "₹{amount} से अधिक",
+      "fresherExp": "फ्रेशर",
+      "lt1Year": "1 साल से कम",
+      "lt2Years": "2 साल से कम",
+      "lt3Years": "3 साल से कम",
+      "lt4Years": "4 साल से कम",
+      "gt4Years": "4 साल से अधिक"
     },
     "types": {
       "FULL_TIME": "पूर्णकालिक",
@@ -273,6 +291,9 @@
       "viewJob": "नौकरी देखें",
       "welcome": "स्वागत है, {name}! 👋",
       "hello": "नमस्ते, {name}!",
+      "welcomeGuest": "स्वागत है! 👋",
+      "helloGuest": "नमस्ते!",
+      "greetingFallback": "दोस्त",
       "startBrowsing": "नौकरियां खोजें — बिल्कुल मुफ्त",
       "youHave": "आपका {count} आवेदन है",
       "youHavePlural": "आपके {count} आवेदन हैं",

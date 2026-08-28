@@ -48,7 +48,9 @@
     "registerCompany": "Register Company",
     "privacyPolicy": "Privacy Policy",
     "termsOfUse": "Terms of Use",
-    "contact": "Contact"
+    "contact": "Contact",
+    "blog": "Blog",
+    "member": "Member"
   },
   "home": {
     "hero": {
@@ -221,7 +223,23 @@
       "last7d": "Last 7 days",
       "qualification": "Qualification",
       "freshersOnly": "Freshers Only",
-      "monthlySalary": "Monthly Salary"
+      "monthlySalary": "Monthly Salary",
+      "quickFilters": "Quick Filters",
+      "jobRoles": "Job Roles",
+      "partTime": "Part Time",
+      "walkIn": "Walk-in",
+      "fresher": "Fresher",
+      "postedToday": "Posted Today",
+      "showMore": "Show more",
+      "showLess": "Show less",
+      "allLevels": "All Education Levels",
+      "moreThan": "More than ₹{amount}",
+      "fresherExp": "Fresher",
+      "lt1Year": "Less than 1 year",
+      "lt2Years": "Less than 2 years",
+      "lt3Years": "Less than 3 years",
+      "lt4Years": "Less than 4 years",
+      "gt4Years": "More than 4 years"
     },
     "types": {
       "FULL_TIME": "Full Time",
@@ -273,6 +291,9 @@
       "viewJob": "View Job",
       "welcome": "Welcome, {name}! 👋",
       "hello": "Hello, {name}!",
+      "welcomeGuest": "Welcome! 👋",
+      "helloGuest": "Hello!",
+      "greetingFallback": "there",
       "startBrowsing": "Start browsing jobs — it's 100% free",
       "youHave": "You have {count} application",
       "youHavePlural": "You have {count} applications",

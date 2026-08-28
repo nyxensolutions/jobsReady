@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function BlogIndexPage() {
+export default async function BlogIndexPage({ params }: Props) {
+  const { locale } = await params
   const posts = getAllPosts()
   const categories = getPopulatedCategories()
   const [featured, ...rest] = posts
@@ -36,13 +37,32 @@ export default async function BlogIndexPage() {
       {/* Hero */}
       <div className="bg-[#1a3461] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-2xl sm:text-4xl font-black mb-3">Jobs24India Career Guide</h1>
+          <h1 className="text-2xl sm:text-4xl font-black mb-3">Jobs24India Blog</h1>
           <p className="text-blue-100 max-w-2xl leading-relaxed">
             Honest salary breakdowns, job descriptions and hiring advice for frontline and blue-collar work in
             India — written for people looking for a job today, not for a career ten years away.
           </p>
         </div>
       </div>
+
+      {/* Hindi language notice */}
+      {locale === "hi" && (
+        <div className="bg-amber-50 border-b border-amber-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4 flex-wrap">
+            <p className="text-sm text-amber-800">
+              📖 ये लेख अंग्रेज़ी में हैं। हिंदी में पढ़ने के लिए Google Translate का उपयोग करें।
+            </p>
+            <a
+              href={`https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent("https://jobs24india.com/hi/blog")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-bold text-amber-800 border border-amber-400 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors shrink-0"
+            >
+              हिंदी में अनुवाद करें →
+            </a>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Category strip */}

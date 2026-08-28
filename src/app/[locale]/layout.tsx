@@ -26,7 +26,7 @@ async function getInitialAuth(uid: string): Promise<InitialAuth | null> {
   if (dbUser.role === "SEEKER") {
     const profile = await prisma.seekerProfile.findUnique({ where: { userId: uid }, select: { name: true } })
     const raw = profile?.name
-    const name = (!raw || /^\+?\d+$/.test(raw)) ? "User" : raw
+    const name = (!raw || /^\+?\d+$/.test(raw)) ? "Member" : raw
     return { name, role: "SEEKER", initial: name[0].toUpperCase() }
   }
   if (dbUser.role === "EMPLOYER") {
@@ -51,7 +51,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <NextIntlClientProvider messages={messages}>
       <Header initialAuth={initialAuth} />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer userRole={initialAuth?.role ?? null} />
       <SeekerBottomNav />
     </NextIntlClientProvider>
   )

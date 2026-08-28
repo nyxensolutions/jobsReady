@@ -94,7 +94,7 @@ export default async function SeekerDashboardPage() {
   }
 
   const isPhonePlaceholder = !profile?.name || /^\+?\d+$/.test(profile.name)
-  const firstName = isPhonePlaceholder ? "there" : profile!.name.split(" ")[0]
+  const firstName = isPhonePlaceholder ? t("greetingFallback") : profile!.name.split(" ")[0]
   const profileScore = [
     !isPhonePlaceholder && !!profile?.name,
     !!profile?.city,
@@ -105,8 +105,8 @@ export default async function SeekerDashboardPage() {
 
   const salaryNotMentioned = t("salaryNotMentioned")
 
-  // Avatar initial — show first name letter; if name is a phone placeholder, fall back to "U"
-  const avatarLetter = isPhonePlaceholder ? "U" : profile!.name[0].toUpperCase()
+  // Avatar initial — show first name letter; if name is a phone placeholder, fall back to "M" (Member)
+  const avatarLetter = isPhonePlaceholder ? "M" : profile!.name[0].toUpperCase()
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">

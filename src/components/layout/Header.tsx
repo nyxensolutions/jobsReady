@@ -42,9 +42,9 @@ export default function Header({ initialAuth }: Props) {
         if (!res.ok) { setAuthUser(null); return }
         const data = await res.json()
         setAuthUser({
-          name: data.name ?? "User",
+          name: data.name ?? "Member",
           role: data.role ?? "SEEKER",
-          initial: (data.name ?? "U")[0].toUpperCase(),
+          initial: (data.name ?? "M")[0].toUpperCase(),
         })
       } catch {
         setAuthUser(null)
@@ -107,12 +107,12 @@ export default function Header({ initialAuth }: Props) {
                 🏢 {t("forEmployers")}
               </Link>
             )}
-            {authUser?.role !== "EMPLOYER" && (
+            {!authUser && (
               <Link
                 href="/blog"
                 className="text-sm font-semibold text-gray-600 hover:text-[#1a3461] px-3 py-2 transition-colors"
               >
-                Career Guide
+                {t("blog")}
               </Link>
             )}
             {authUser?.role === "SEEKER" && (
@@ -246,9 +246,9 @@ export default function Header({ initialAuth }: Props) {
               🏢 {t("forEmployers")}
             </Link>
           )}
-          {authUser?.role !== "EMPLOYER" && (
+          {!authUser && (
             <Link href="/blog" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
-              📖 Career Guide
+              📖 {t("blog")}
             </Link>
           )}
           {authUser?.role === "SEEKER" && (

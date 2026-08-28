@@ -41,9 +41,8 @@ export default function MobileFilters({ activeCategory }: Props) {
                 <X size={18} />
               </button>
             </div>
-            <div className="p-4">
-              <JobFilters activeCategory={activeCategory} onFilterApply={() => setOpen(false)} />
-            </div>
+            <JobFilters activeCategory={activeCategory} onFilterApply={() => setOpen(false)} inDrawer />
+
           </div>
         </>
       )}
