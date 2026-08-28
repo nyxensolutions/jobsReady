@@ -24,7 +24,7 @@ const CATEGORY_LABEL_OVERRIDES: Record<string, string> = {
 const SALARY_AMOUNTS = ["5000", "10000", "15000", "20000", "30000", "50000"]
 
 type Props = {
-  activeCategory?: string
+  activeCategory?: string   // comma-separated slugs OR single slug
   onFilterApply?: () => void
   inDrawer?: boolean
 }
@@ -60,15 +60,32 @@ export default function JobFilters({ activeCategory, onFilterApply, inDrawer }: 
     onFilterApply?.()
   }
 
-  const currentType    = searchParams.get("type")
-  const currentSalary  = searchParams.get("minSalary")
+  const currentType     = searchParams.get("type")
+  const currentSalary   = searchParams.get("minSalary")
   const currentFreshers = searchParams.get("freshers")
-  const currentExp     = searchParams.get("exp")
-  const currentQual    = searchParams.get("qualification")
-  const currentPosted  = searchParams.get("posted")
-  const hasFilters = activeCategory || currentType || currentSalary || currentFreshers || currentExp || currentQual || currentPosted
+  const currentExp      = searchParams.get("exp")
+  const currentQual     = searchParams.get("qualification")
+  const currentPosted   = searchParams.get("posted")
+  const currentCatRaw   = searchParams.get("category") ?? (activeCategory ?? "")
+  const activeCats      = currentCatRaw ? currentCatRaw.split(",").map(s => s.trim()).filter(Boolean) : []
+  const hasFilters      = activeCats.length > 0 || currentType || currentSalary || currentFreshers || currentExp || currentQual || currentPosted
 
-  const activeFilterCount = [activeCategory, currentType, currentSalary, currentFreshers || currentExp, currentQual, currentPosted].filter(Boolean).length
+  const activeFilterCount = [
+    activeCats.length > 0 ? activeCats.join(",") : null,
+    currentType, currentSalary, currentFreshers || currentExp, currentQual, currentPosted
+  ].filter(Boolean).length
+
+  function toggleCategory(key: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    const current = new Set(activeCats)
+    if (current.has(key)) current.delete(key)
+    else current.add(key)
+    if (current.size === 0) params.delete("category")
+    else params.set("category", Array.from(current).join(","))
+    params.delete("page")
+    router.push(`/jobs?${params.toString()}`)
+    onFilterApply?.()
+  }
 
   // Experience — encode as pair (freshers / exp)
   type ExpKey = "fresher" | "lt1" | "lt2" | "lt3" | "lt4" | "gt4"
@@ -127,7 +144,7 @@ export default function JobFilters({ activeCategory, onFilterApply, inDrawer }: 
         </h3>
         {hasFilters && (
           <button
-            onClick={() => router.push("/jobs")}
+            onClick={() => { router.push("/jobs"); onFilterApply?.() }}
             className="text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1"
           >
             <X size={11} /> {tf("clearAll")}
@@ -171,11 +188,11 @@ export default function JobFilters({ activeCategory, onFilterApply, inDrawer }: 
               let label: string
               try { label = CATEGORY_LABEL_OVERRIDES[key] ?? tc(key as any) }
               catch { label = CATEGORY_LABEL_OVERRIDES[key] ?? key }
-              const isActive = activeCategory === key
+              const isActive = activeCats.includes(key)
               return (
                 <button
                   key={key}
-                  onClick={() => setFilter("category", key)}
+                  onClick={() => toggleCategory(key)}
                   className={`inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border font-medium transition-all ${
                     isActive
                       ? "bg-[#1a3461] text-white border-[#1a3461]"

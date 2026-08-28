@@ -3,17 +3,17 @@ import Image from "next/image"
 import { getTranslations } from "next-intl/server"
 
 const CITIES = [
-  { name: "Delhi",         slug: "delhi",         img: "/images/cities/delhi.jpg" },
-  { name: "Noida",         slug: "noida",         img: "/images/cities/noida.jpg" },
-  { name: "Gurugram",      slug: "gurugram",      img: "/images/cities/gurugram.jpg" },
-  { name: "Ghaziabad",     slug: "ghaziabad",     img: "/images/cities/ghaziabad.jpg" },
-  { name: "Faridabad",     slug: "faridabad",     img: "/images/cities/faridabad.jpg" },
-  { name: "Greater Noida", slug: "greater-noida", img: "/images/cities/greater-noida.jpg" },
-  { name: "Meerut",        slug: "meerut",        img: "/images/cities/meerut.jpg" },
-  { name: "Hapur",         slug: "hapur",         img: "/images/cities/hapur.jpg" },
+  { name: "Delhi",         tKey: "Delhi",        slug: "delhi",         img: "/images/cities/delhi.jpg" },
+  { name: "Noida",         tKey: "Noida",        slug: "noida",         img: "/images/cities/noida.jpg" },
+  { name: "Gurugram",      tKey: "Gurugram",     slug: "gurugram",      img: "/images/cities/gurugram.jpg" },
+  { name: "Ghaziabad",     tKey: "Ghaziabad",    slug: "ghaziabad",     img: "/images/cities/ghaziabad.jpg" },
+  { name: "Faridabad",     tKey: "Faridabad",    slug: "faridabad",     img: "/images/cities/faridabad.jpg" },
+  { name: "Greater Noida", tKey: "Greater Noida", slug: "greater-noida", img: "/images/cities/greater-noida.jpg" },
+  { name: "Meerut",        tKey: "Meerut",       slug: "meerut",        img: "/images/cities/meerut.jpg" },
+  { name: "Hapur",         tKey: "Hapur",        slug: "hapur",         img: "/images/cities/hapur.jpg" },
 ]
 
-function CityTile({ city, nearYouLabel }: { city: typeof CITIES[0]; nearYouLabel: string }) {
+function CityTile({ city, translatedName, nearYouLabel }: { city: typeof CITIES[0]; translatedName: string; nearYouLabel: string }) {
   return (
     <Link
       href={`/jobs?city=${city.slug}`}
@@ -28,7 +28,7 @@ function CityTile({ city, nearYouLabel }: { city: typeof CITIES[0]; nearYouLabel
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
       <div className="relative z-10 p-3 w-full">
-        <p className="text-white font-bold text-base leading-tight drop-shadow">{city.name}</p>
+        <p className="text-white font-bold text-base leading-tight drop-shadow">{translatedName}</p>
         <p className="text-white/75 text-xs">{nearYouLabel}</p>
       </div>
     </Link>
@@ -44,7 +44,9 @@ export default async function CitiesSection() {
         <h2 className="text-2xl font-bold text-gray-800 mb-1">{t("title")}</h2>
         <p className="text-gray-500 text-sm mb-6">{t("subtitle")}</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {CITIES.map(c => <CityTile key={c.slug} city={c} nearYouLabel={t("nearYou")} />)}
+          {CITIES.map(c => (
+            <CityTile key={c.slug} city={c} translatedName={t(c.tKey as any)} nearYouLabel={t("nearYou")} />
+          ))}
         </div>
         <div className="text-center mt-6">
           <Link href="/cities" className="inline-block border border-[#1a3461] text-[#1a3461] font-semibold px-6 py-2 rounded-full text-sm hover:bg-[#1a3461] hover:text-white transition-colors">

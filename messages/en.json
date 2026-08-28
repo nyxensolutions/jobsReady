@@ -122,7 +122,15 @@
       "title": "Jobs Across India",
       "subtitle": "Find verified jobs in your city — Delhi, Mumbai, Bangalore and more",
       "nearYou": "Jobs near you",
-      "browseAll": "Browse All Cities"
+      "browseAll": "Browse All Cities",
+      "Delhi": "Delhi",
+      "Noida": "Noida",
+      "Gurugram": "Gurugram",
+      "Ghaziabad": "Ghaziabad",
+      "Faridabad": "Faridabad",
+      "Greater Noida": "Greater Noida",
+      "Meerut": "Meerut",
+      "Hapur": "Hapur"
     }
   },
   "auth": {
@@ -208,7 +216,8 @@
       "monthlySalary": "Monthly Salary",
       "dailyWage": "Daily Wage",
       "shareWhatsapp": "Share on WhatsApp",
-      "fresherYrsExp": "{years}+ yrs"
+      "fresherYrsExp": "{years}+ yrs",
+      "seeAll": "See all →"
     },
     "filters": {
       "salary": "Salary range",
@@ -315,7 +324,13 @@
       "statApplied": "Applied",
       "statShortlisted": "Shortlisted",
       "statHired": "Hired",
-      "salaryNotMentioned": "Salary not mentioned"
+      "salaryNotMentioned": "Salary not mentioned",
+      "profileHintAdd": "Add",
+      "profileHintName": "name",
+      "profileHintCity": "city",
+      "profileHintSkills": "skills",
+      "profileHintResume": "resume",
+      "profileHintSuffix": "to improve your chances"
     },
     "profile": {
       "title": "My Profile",
@@ -388,6 +403,16 @@
       "completenessCity": "City",
       "completenessSkills": "Skills",
       "completenessResume": "Resume"
+    },
+    "applied": {
+      "sentToHr": "Application sent to HR! 🎉",
+      "youAppliedFor": "You applied for {title} at {company} · {city}",
+      "myApplications": "My Applications",
+      "findMoreJobs": "Find More Jobs",
+      "completeProfile": "Complete your profile to get more calls",
+      "similarJobs": "Similar Jobs",
+      "update": "Update →",
+      "salaryNotMentioned": "Salary not mentioned"
     },
     "apply": {
       "title": "Apply for this job",

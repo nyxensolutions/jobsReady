@@ -184,14 +184,14 @@ export default async function SeekerDashboardPage() {
                 <span className="text-xs font-bold text-amber-600 shrink-0">{profileScore * 25}%</span>
               </div>
               <p className="text-xs text-amber-600/80 mt-1">
-                Add{" "}
+                {t("profileHintAdd")}{" "}
                 {[
-                  !isPhonePlaceholder && !!profile?.name ? null : "name",
-                  profile?.city ? null : "city",
-                  (profile?.skills?.length ?? 0) > 0 ? null : "skills",
-                  profile?.resumeUrl ? null : "resume",
+                  !isPhonePlaceholder && !!profile?.name ? null : t("profileHintName"),
+                  profile?.city ? null : t("profileHintCity"),
+                  (profile?.skills?.length ?? 0) > 0 ? null : t("profileHintSkills"),
+                  profile?.resumeUrl ? null : t("profileHintResume"),
                 ].filter(Boolean).join(", ")}
-                {" "}to improve your chances
+                {" "}{t("profileHintSuffix")}
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">

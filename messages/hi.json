@@ -122,7 +122,15 @@
       "title": "पूरे भारत में नौकरियां",
       "subtitle": "अपने शहर में verified नौकरियां खोजें — दिल्ली, मुंबई, बैंगलोर और अन्य",
       "nearYou": "आपके पास नौकरियां",
-      "browseAll": "सभी शहर देखें"
+      "browseAll": "सभी शहर देखें",
+      "Delhi": "दिल्ली",
+      "Noida": "नोएडा",
+      "Gurugram": "गुरुग्राम",
+      "Ghaziabad": "गाज़ियाबाद",
+      "Faridabad": "फ़रीदाबाद",
+      "Greater Noida": "ग्रेटर नोएडा",
+      "Meerut": "मेरठ",
+      "Hapur": "हापुड़"
     }
   },
   "auth": {
@@ -208,7 +216,8 @@
       "monthlySalary": "मासिक वेतन",
       "dailyWage": "दैनिक मजदूरी",
       "shareWhatsapp": "WhatsApp पर शेयर करें",
-      "fresherYrsExp": "{years}+ साल"
+      "fresherYrsExp": "{years}+ साल",
+      "seeAll": "सभी देखें →"
     },
     "filters": {
       "salary": "वेतन सीमा",
@@ -315,7 +324,13 @@
       "statApplied": "आवेदन किया",
       "statShortlisted": "शॉर्टलिस्ट",
       "statHired": "नियुक्त",
-      "salaryNotMentioned": "वेतन नहीं बताया"
+      "salaryNotMentioned": "वेतन नहीं बताया",
+      "profileHintAdd": "जोड़ें",
+      "profileHintName": "नाम",
+      "profileHintCity": "शहर",
+      "profileHintSkills": "कौशल",
+      "profileHintResume": "रेज़्यूमे",
+      "profileHintSuffix": "अपनी संभावना बेहतर करने के लिए"
     },
     "profile": {
       "title": "मेरी प्रोफ़ाइल",
@@ -388,6 +403,16 @@
       "completenessCity": "शहर",
       "completenessSkills": "स्किल्स",
       "completenessResume": "रिज्यूमे"
+    },
+    "applied": {
+      "sentToHr": "आवेदन HR को भेजा गया! 🎉",
+      "youAppliedFor": "आपने {title} के लिए {company} · {city} में आवेदन किया",
+      "myApplications": "मेरे आवेदन",
+      "findMoreJobs": "और नौकरियां खोजें",
+      "completeProfile": "अधिक कॉल पाने के लिए प्रोफ़ाइल पूरी करें",
+      "similarJobs": "समान नौकरियां",
+      "update": "अपडेट करें →",
+      "salaryNotMentioned": "वेतन नहीं बताया"
     },
     "apply": {
       "title": "इस नौकरी के लिए आवेदन",

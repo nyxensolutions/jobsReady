@@ -6,7 +6,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useLocale } from "next-intl"
 import {
-  Home, Briefcase, Users, UserSearch, TrendingUp, Settings,
+  Home, Users, UserSearch, TrendingUp, Settings,
   PlusCircle, PanelLeftClose, PanelLeftOpen, LogOut,
 } from "lucide-react"
 import { auth } from "@/lib/firebase/client"
@@ -24,8 +24,7 @@ interface Props extends EmployerData {
 }
 
 const NAV = [
-  { href: "/employer/dashboard",  label: "Home",         icon: Home,        iconColor: "text-[#1a3461]",  iconBg: "bg-[#eef2ff]" },
-  { href: "/employer/dashboard",  label: "Jobs",         icon: Briefcase,   iconColor: "text-blue-600",   iconBg: "bg-blue-50",  hasPostJob: true },
+  { href: "/employer/dashboard",  label: "Dashboard",    icon: Home,        iconColor: "text-[#1a3461]",  iconBg: "bg-[#eef2ff]", hasPostJob: true },
   { href: "/employer/responses",  label: "Responses",    icon: Users,       iconColor: "text-violet-600", iconBg: "bg-violet-50" },
   { href: "/employer/candidates", label: "Talent Search",icon: UserSearch,  iconColor: "text-emerald-600",iconBg: "bg-emerald-50" },
   { href: "/employer/plans",      label: "Plans",        icon: TrendingUp,  iconColor: "text-orange-500", iconBg: "bg-orange-50" },

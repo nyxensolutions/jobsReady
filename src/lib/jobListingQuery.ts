@@ -8,7 +8,7 @@ export const JOBS_PER_PAGE = 20
 export type JobListingSearchParams = {
   q?: string
   city?: string
-  category?: string
+  category?: string   // comma-separated slugs for multi-select, e.g. "delivery,driver"
   type?: string
   sort?: string
   minSalary?: string
@@ -22,7 +22,10 @@ export type JobListingSearchParams = {
 export function buildJobListingQuery(params: JobListingSearchParams) {
   const q = params.q?.trim() ?? ""
   const city = params.city?.trim() ?? ""
-  const category = params.category ?? ""
+  // category can be a single slug OR comma-separated slugs for multi-select
+  const categoryRaw = params.category ?? ""
+  const categories = categoryRaw ? categoryRaw.split(",").map(s => s.trim()).filter(Boolean) : []
+  const category = categoryRaw  // keep for backward compat usage below
   const type = params.type ?? ""
   const sort = params.sort ?? "newest"
   const minSalary = params.minSalary ? parseInt(params.minSalary) : null
@@ -50,7 +53,11 @@ export function buildJobListingQuery(params: JobListingSearchParams) {
         }
       : {}),
     ...(city ? { city: { name: { contains: city, mode: "insensitive" } } } : {}),
-    ...(category ? { category: { slug: category } } : {}),
+    ...(categories.length === 1
+      ? { category: { slug: categories[0] } }
+      : categories.length > 1
+      ? { category: { slug: { in: categories } } }
+      : {}),
     ...(type ? { jobType: type as JobType } : {}),
     ...(minSalary ? { salaryMin: { gte: minSalary } } : {}),
     ...(freshersOnly ? { experienceMin: 0 } : maxExp ? { experienceMin: { lte: maxExp } } : {}),
