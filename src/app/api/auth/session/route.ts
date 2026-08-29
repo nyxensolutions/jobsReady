@@ -16,45 +16,41 @@ export async function POST(req: NextRequest) {
 
   const assignedRole = (role === "EMPLOYER" ? "EMPLOYER" : "SEEKER") as "SEEKER" | "EMPLOYER"
 
-  // Upsert user in DB.
-  // Update role to match login intent so the same phone number can be used
-  // for both a seeker and an employer account — the role follows whichever
-  // login page the user came through.
-  const dbUser = await prisma.user.upsert({
-    where: { id: decoded.uid },
-    create: {
-      id: decoded.uid,
-      phone: decoded.phone_number ?? null,
-      email: decoded.email ?? null,
-      role: assignedRole,
-    },
-    update: {
-      role: assignedRole,
-    },
-  })
+  // Run DB upsert and session-cookie creation in parallel — they're independent.
+  let dbUser: Awaited<ReturnType<typeof prisma.user.upsert>>
+  let sessionCookie: string
+  try {
+    ;[dbUser, sessionCookie] = await Promise.all([
+      // Upsert user in DB — role follows whichever login page the user came through
+      // so the same phone number can serve both a seeker and employer account.
+      prisma.user.upsert({
+        where: { id: decoded.uid },
+        create: {
+          id: decoded.uid,
+          phone: decoded.phone_number ?? null,
+          email: decoded.email ?? null,
+          role: assignedRole,
+        },
+        update: { role: assignedRole },
+      }),
+      // Create Firebase session cookie — only needs the idToken, not the DB result
+      createSessionCookie(idToken),
+    ])
+  } catch {
+    return NextResponse.json({ error: "Failed to create session" }, { status: 500 })
+  }
 
-  // Create seeker profile stub if new seeker
+  // Profile checks — seeker stub creation and employer requiresProfile are independent
+  let requiresProfile = false
   if (dbUser.role === "SEEKER") {
     const exists = await prisma.seekerProfile.findUnique({ where: { userId: dbUser.id } })
     if (!exists) {
       const name = decoded.name ?? decoded.phone_number ?? "New User"
       await prisma.seekerProfile.create({ data: { userId: dbUser.id, name } })
     }
-  }
-
-  // Check if employer needs to set up their profile
-  let requiresProfile = false
-  if (dbUser.role === "EMPLOYER") {
+  } else if (dbUser.role === "EMPLOYER") {
     const employer = await prisma.employerProfile.findUnique({ where: { userId: dbUser.id } })
     requiresProfile = !employer
-  }
-
-  // Create Firebase session cookie
-  let sessionCookie: string
-  try {
-    sessionCookie = await createSessionCookie(idToken)
-  } catch {
-    return NextResponse.json({ error: "Failed to create session" }, { status: 500 })
   }
 
   const response = NextResponse.json({ success: true, role: dbUser.role, requiresProfile })
