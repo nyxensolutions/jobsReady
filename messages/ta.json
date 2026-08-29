@@ -47,7 +47,10 @@
     "registerCompany": "நிறுவனத்தை பதிவு செய்யுங்கள்",
     "privacyPolicy": "தனியுரிமை கொள்கை",
     "termsOfUse": "பயன்பாட்டு விதிமுறைகள்",
-    "contact": "தொடர்பு"
+    "contact": "தொடர்பு",
+    "cancellationPolicy": "ரத்து & பணத்திருப்பம்",
+    "blog": "வலைப்பதிவு",
+    "member": "உறுப்பினர்"
   },
   "home": {
     "hero": {
@@ -119,7 +122,15 @@
       "title": "Delhi NCR மற்றும் அருகில் உள்ள நகரங்களில் வேலைகள்",
       "subtitle": "உங்கள் அருகில் verified உள்ளூர் வேலைகளை கண்டறியுங்கள்",
       "nearYou": "உங்கள் அருகில் வேலைகள்",
-      "browseAll": "அனைத்து நகரங்களையும் உலாவுங்கள்"
+      "browseAll": "அனைத்து நகரங்களையும் உலாவுங்கள்",
+      "Delhi": "டெல்லி",
+      "Noida": "நொய்டா",
+      "Gurugram": "குருகிராம்",
+      "Ghaziabad": "காசியாபாத்",
+      "Faridabad": "பரிதாபாத்",
+      "Greater Noida": "கிரேட்டர் நொய்டா",
+      "Meerut": "மீரட்",
+      "Hapur": "ஹாபூர்"
     }
   },
   "auth": {
@@ -200,7 +211,13 @@
       "monthlySalary": "மாத சம்பளம்",
       "dailyWage": "தினசரி கூலி",
       "shareWhatsapp": "WhatsApp-ல் பகிர்",
-      "fresherYrsExp": "{years}+ ஆண்டு"
+      "fresherYrsExp": "{years}+ ஆண்டு",
+      "shift": "ஷிப்ட் நேரம்",
+      "workingDays": "வேலை நாட்கள்",
+      "incentives": "ஊக்கத்தொகை",
+      "daysPerWeek": "{count} நாட்கள்/வாரம்",
+      "translatePage": "இந்தப் பக்கத்தை மொழிபெயர்",
+      "seeAll": "அனைத்தையும் காண →"
     },
     "filters": {
       "salary": "சம்பள வரம்பு",
@@ -215,7 +232,23 @@
       "last7d": "கடந்த 7 நாட்கள்",
       "qualification": "தகுதி",
       "freshersOnly": "புதியவர்கள் மட்டும்",
-      "monthlySalary": "மாத சம்பளம்"
+      "monthlySalary": "மாத சம்பளம்",
+      "quickFilters": "விரைவு வடிகட்டிகள்",
+      "jobRoles": "வேலைப் பணிகள்",
+      "walkIn": "நேரடி நேர்காணல்",
+      "fresher": "புதியவர்",
+      "fresherExp": "புதியவர்",
+      "postedToday": "இன்று வெளியிடப்பட்டது",
+      "showMore": "மேலும் காட்டு",
+      "showLess": "குறைவாகக் காட்டு",
+      "allLevels": "அனைத்துக் கல்வி நிலைகள்",
+      "moreThan": "₹{amount} க்கு மேல்",
+      "lt1Year": "1 ஆண்டுக்கும் குறைவு",
+      "lt2Years": "2 ஆண்டுகளுக்கும் குறைவு",
+      "lt3Years": "3 ஆண்டுகளுக்கும் குறைவு",
+      "lt4Years": "4 ஆண்டுகளுக்கும் குறைவு",
+      "gt4Years": "4 ஆண்டுகளுக்கு மேல்",
+      "partTime": "பகுதி நேரம்"
     },
     "types": {
       "FULL_TIME": "முழு நேரம்",
@@ -287,7 +320,17 @@
       "allJobs": "அனைத்து வேலைகள் →",
       "statApplied": "விண்ணப்பித்தது",
       "statShortlisted": "தேர்ந்தெடுக்கப்பட்டது",
-      "statHired": "நியமிக்கப்பட்டது"
+      "statHired": "நியமிக்கப்பட்டது",
+      "welcomeGuest": "வரவேற்கிறோம்! 👋",
+      "helloGuest": "வணக்கம்!",
+      "greetingFallback": "நண்பரே",
+      "profileHintAdd": "சேர்க்கவும்",
+      "profileHintName": "பெயர்",
+      "profileHintCity": "நகரம்",
+      "profileHintSkills": "திறன்கள்",
+      "profileHintResume": "விண்ணப்பப் படிவம்",
+      "profileHintSuffix": "உங்கள் வாய்ப்புகளை மேம்படுத்த",
+      "salaryNotMentioned": "சம்பளம் குறிப்பிடவில்லை"
     },
     "profile": {
       "title": "என் சுயவிவரம்",
@@ -378,6 +421,16 @@
       "browseJobs": "வேலைகளை உலாவுக",
       "applyNow": "இப்போது விண்ணப்பிக்கவும்",
       "savedOn": "சேமித்த தேதி"
+    },
+    "applied": {
+      "sentToHr": "HR-க்கு விண்ணப்பம் அனுப்பப்பட்டது! 🎉",
+      "youAppliedFor": "{company} · {city} இல் {title} பணிக்கு விண்ணப்பித்துள்ளீர்கள்",
+      "findMoreJobs": "மேலும் வேலைகளைத் தேடு",
+      "completeProfile": "அதிக அழைப்புகளுக்கு உங்கள் சுயவிவரத்தை நிறைவு செய்யுங்கள்",
+      "update": "புதுப்பி →",
+      "salaryNotMentioned": "சம்பளம் குறிப்பிடவில்லை",
+      "myApplications": "என் விண்ணப்பங்கள்",
+      "similarJobs": "இதே போன்ற வேலைகள்"
     }
   },
   "employer": {
@@ -515,5 +568,11 @@
     "website": "இணையதளம்",
     "description": "விளக்கம்",
     "gstCin": "GST / CIN"
+  },
+  "shifts": {
+    "Day": "பகல் ஷிப்ட்",
+    "Night": "இரவு ஷிப்ட்",
+    "Rotational": "சுழற்சி ஷிப்ட்",
+    "Flexible": "நெகிழ்வான நேரம்"
   }
 }

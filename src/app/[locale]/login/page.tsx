@@ -1,9 +1,9 @@
 ﻿"use client"
 
-import { useState, useRef, Suspense } from "react"
+import { useState, useRef, useEffect, Suspense } from "react"
 import { useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
-import { Link } from "@/i18n/navigation"
+import { Link, useRouter } from "@/i18n/navigation"
 import Image from "next/image"
 import { Phone, ArrowRight, Loader2, ShieldCheck, Briefcase, Users } from "lucide-react"
 import {
@@ -36,6 +36,7 @@ function LoginPageContent() {
   const prefilledRole: Role | null = rawRole === "seeker" || rawRole === "employer" ? rawRole : null
   const nextUrl = searchParams.get("next") ?? ""
 
+  const router = useRouter()
   const [role, setRole] = useState<Role | null>(prefilledRole)
   const [step, setStep] = useState<Step>(
     prefilledRole ? (prefilledRole === "seeker" ? "phone" : "employer") : "role"
@@ -46,6 +47,15 @@ function LoginPageContent() {
   const [error, setError] = useState("")
   const confirmRef = useRef<ConfirmationResult | null>(null)
   const recaptchaRef = useRef<RecaptchaVerifier | null>(null)
+
+  // Pre-warm reCAPTCHA as soon as the phone step is visible so it's ready
+  // by the time the user taps "Send OTP" — avoids cold-start delay on that tap.
+  useEffect(() => {
+    if (step === "phone") {
+      ensureRecaptcha()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step])
 
   function selectRole(r: Role) {
     setRole(r)
@@ -114,7 +124,7 @@ function LoginPageContent() {
       // Create session with the right role (employer or seeker)
       const sessionRole = role === "employer" ? "EMPLOYER" : "SEEKER"
       const data = await createSession(idToken, sessionRole)
-      window.location.href = getRedirect(data.role, data.requiresProfile)
+      router.push(getRedirect(data.role, data.requiresProfile))
     } catch (err: any) {
       setError(
         err.message?.includes("invalid-verification-code")
@@ -134,7 +144,7 @@ function LoginPageContent() {
       const result = await signInWithPopup(auth, provider)
       const idToken = await result.user.getIdToken()
       const data = await createSession(idToken, "EMPLOYER")
-      window.location.href = getRedirect(data.role, data.requiresProfile)
+      router.push(getRedirect(data.role, data.requiresProfile))
     } catch (err: any) {
       if (err.code === "auth/popup-closed-by-user") { setLoading(false); return }
       setError("Google sign-in failed. Try again.")

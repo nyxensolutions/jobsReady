@@ -47,7 +47,10 @@
     "registerCompany": "Company Register Karein",
     "privacyPolicy": "Privacy Policy",
     "termsOfUse": "Terms of Use",
-    "contact": "Contact"
+    "contact": "Contact",
+    "cancellationPolicy": "Cancellation aur Refunds",
+    "blog": "Blog",
+    "member": "Member"
   },
   "home": {
     "hero": {
@@ -119,7 +122,15 @@
       "title": "दिल्ली NCR और आस-पास के शहरों में नौकरियाँ",
       "subtitle": "अपने पास verified स्थानीय नौकरियाँ खोजें",
       "nearYou": "आपके पास नौकरियाँ",
-      "browseAll": "सभी शहर देखें"
+      "browseAll": "सभी शहर देखें",
+      "Delhi": "Delhi",
+      "Noida": "Noida",
+      "Gurugram": "Gurugram",
+      "Ghaziabad": "Ghaziabad",
+      "Faridabad": "Faridabad",
+      "Greater Noida": "Greater Noida",
+      "Meerut": "Meerut",
+      "Hapur": "Hapur"
     }
   },
   "auth": {
@@ -200,7 +211,13 @@
       "monthlySalary": "Maasik Salary",
       "dailyWage": "Rozana Majdoori",
       "shareWhatsapp": "WhatsApp par share karein",
-      "fresherYrsExp": "{years}+ saal"
+      "fresherYrsExp": "{years}+ saal",
+      "shift": "Shift ka time",
+      "workingDays": "Kaam ke din",
+      "incentives": "Incentives",
+      "daysPerWeek": "{count} din/hafta",
+      "translatePage": "Is page ko translate karein",
+      "seeAll": "Sab dekhein →"
     },
     "filters": {
       "salary": "Salary range",
@@ -215,7 +232,23 @@
       "last7d": "Pichhle 7 din",
       "qualification": "Qualification",
       "freshersOnly": "Sirf Freshers",
-      "monthlySalary": "Maasik Salary"
+      "monthlySalary": "Maasik Salary",
+      "quickFilters": "Quick Filters",
+      "jobRoles": "Job Roles",
+      "walkIn": "Walk-in",
+      "fresher": "Fresher",
+      "fresherExp": "Fresher",
+      "postedToday": "Aaj post hui",
+      "showMore": "Aur dekhein",
+      "showLess": "Kam dekhein",
+      "allLevels": "Sabhi education levels",
+      "moreThan": "₹{amount} se zyada",
+      "lt1Year": "1 saal se kam",
+      "lt2Years": "2 saal se kam",
+      "lt3Years": "3 saal se kam",
+      "lt4Years": "4 saal se kam",
+      "gt4Years": "4 saal se zyada",
+      "partTime": "Part Time"
     },
     "types": {
       "FULL_TIME": "Full Time",
@@ -287,7 +320,17 @@
       "allJobs": "Sabhi Jobs →",
       "statApplied": "Apply kiya",
       "statShortlisted": "Shortlist",
-      "statHired": "Hire hua"
+      "statHired": "Hire hua",
+      "welcomeGuest": "Swagat hai! 👋",
+      "helloGuest": "Namaste!",
+      "greetingFallback": "ji",
+      "profileHintAdd": "Add karein",
+      "profileHintName": "naam",
+      "profileHintCity": "sheher",
+      "profileHintSkills": "skills",
+      "profileHintResume": "resume",
+      "profileHintSuffix": "taaki aapke chances behtar hon",
+      "salaryNotMentioned": "Salary nahi bataya"
     },
     "profile": {
       "title": "Mera Profile",
@@ -378,6 +421,16 @@
       "browseJobs": "नौकरियां देखें",
       "applyNow": "अभी आवेदन करें",
       "savedOn": "सेव किया"
+    },
+    "applied": {
+      "sentToHr": "Application HR ko bhej di gayi! 🎉",
+      "youAppliedFor": "Aapne {company} · {city} mein {title} ke liye apply kiya",
+      "findMoreJobs": "Aur naukri dhundein",
+      "completeProfile": "Zyada calls ke liye apni profile poori karein",
+      "update": "Update karein →",
+      "salaryNotMentioned": "Salary nahi bataya",
+      "myApplications": "Meri Applications",
+      "similarJobs": "Milti Julti Jobs"
     }
   },
   "employer": {
@@ -515,5 +568,11 @@
     "website": "Website",
     "description": "Description",
     "gstCin": "GST / CIN"
+  },
+  "shifts": {
+    "Day": "Din ki shift",
+    "Night": "Raat ki shift",
+    "Rotational": "Rotational shift",
+    "Flexible": "Flexible hours"
   }
 }

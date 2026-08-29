@@ -32,10 +32,16 @@ export default function Header({ initialAuth }: Props) {
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Only listen for client-side auth changes (sign-out / new sign-in)
+    // Listen for client-side auth changes (sign-in / sign-out).
+    // If the server already provided initialAuth we skip the /api/auth/me
+    // fetch on the first onAuthStateChanged fire — that fire just confirms
+    // the same session the server already resolved, so we'd be doing the
+    // same two DB queries for nothing.
+    let firstFire = true
     const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) { setAuthUser(null); return }
-      // Only fetch if auth state changed from the server-provided initial
+      if (!user) { setAuthUser(null); firstFire = false; return }
+      if (firstFire && initialAuth) { firstFire = false; return }
+      firstFire = false
       try {
         const res = await fetch("/api/auth/me")
         if (!res.ok) { setAuthUser(null); return }
@@ -50,6 +56,7 @@ export default function Header({ initialAuth }: Props) {
       }
     })
     return () => unsub()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

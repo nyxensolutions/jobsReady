@@ -6,19 +6,25 @@ export async function GET() {
   const session = await getServerSession()
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
+  // Fetch user row and both profile rows in parallel — we don't know the
+  // role until we have dbUser, but the profile queries are cheap and running
+  // all three together saves one network round-trip to Supabase.
+  const [dbUser, seekerProfile, employerProfile] = await Promise.all([
+    prisma.user.findUnique({ where: { id: session.uid } }),
+    prisma.seekerProfile.findUnique({ where: { userId: session.uid }, select: { name: true } }),
+    prisma.employerProfile.findUnique({ where: { userId: session.uid }, select: { companyName: true, contactPerson: true } }),
+  ])
+
   if (!dbUser) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   if (dbUser.role === "SEEKER") {
-    const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid }, select: { name: true } })
-    const name = profile?.name
+    const name = seekerProfile?.name
     const isPhonePlaceholder = !name || /^\+?\d+$/.test(name)
     return NextResponse.json({ name: isPhonePlaceholder ? null : name, role: dbUser.role })
   }
 
   if (dbUser.role === "EMPLOYER") {
-    const profile = await prisma.employerProfile.findUnique({ where: { userId: session.uid }, select: { companyName: true, contactPerson: true } })
-    return NextResponse.json({ name: profile?.contactPerson ?? profile?.companyName ?? null, role: dbUser.role })
+    return NextResponse.json({ name: employerProfile?.contactPerson ?? employerProfile?.companyName ?? null, role: dbUser.role })
   }
 
   return NextResponse.json({ name: "Admin", role: dbUser.role })
