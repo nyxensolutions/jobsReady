@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
@@ -113,9 +113,9 @@ export default function Footer({ userRole }: Props) {
 
         <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-600">
           <a href="https://www.nyxensolutions.net" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-400 transition-colors">
-            NyxenCloud Solution Pvt. Ltd.
+            NyxenCloud Solutions Private Limited
           </a>
-          <span>© {new Date().getFullYear()} NyxenCloud Solution Pvt. Ltd. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} NyxenCloud Solutions Private Limited All rights reserved.</span>
           <div className="flex items-center gap-3">
             <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>

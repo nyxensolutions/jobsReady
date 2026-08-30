@@ -4,7 +4,7 @@ import { Target, Users, Zap, Heart } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "Jobs24India is India's dedicated blue-collar job portal connecting workers with employers across 200+ cities. Built by NyxenCloud Solution Pvt. Ltd.",
+  description: "Jobs24India is India's dedicated blue-collar job portal connecting workers with employers across 200+ cities. Built by NyxenCloud Solutions Private Limited",
 }
 
 const VALUES = [
@@ -22,7 +22,7 @@ export default function AboutPage() {
       <section className="bg-gradient-to-br from-[#1a3461] to-[#1e4080] text-white py-16 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="inline-block bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
-            A product of NyxenCloud Solution Pvt. Ltd.
+            A product of NyxenCloud Solutions Private Limited
           </span>
           <h1 className="text-3xl sm:text-4xl font-black mb-4">About Jobs24India</h1>
           <p className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
@@ -49,7 +49,7 @@ export default function AboutPage() {
                 listed by salary and city, and a direct "Call HR" button on every listing.
               </p>
               <p className="text-gray-600 leading-relaxed">
-                Developed by <strong>NyxenCloud Solution Pvt. Ltd.</strong>, a technology company focused
+                Developed by <strong>NyxenCloud Solutions Private Limited</strong>, a technology company focused
                 on building accessible digital products for India's working population.
               </p>
             </div>
@@ -93,7 +93,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-[#1a3461] mb-6">Company Information</h2>
           <div className="bg-gray-50 rounded-2xl border border-gray-100 p-6 text-sm text-gray-600 space-y-2">
-            <p><strong className="text-gray-800">Company Name:</strong> NyxenCloud Solution Pvt. Ltd.</p>
+            <p><strong className="text-gray-800">Company Name:</strong> NyxenCloud Solutions Private Limited</p>
             <p><strong className="text-gray-800">Website:</strong>{" "}
               <a href="https://www.nyxensolutions.net" className="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">
                 www.nyxensolutions.net

@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation"
+﻿import { notFound, redirect } from "next/navigation"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 
@@ -134,7 +134,7 @@ export default async function ReceiptPage({
 
             <hr style={{ border: "none", borderTop: "1px solid #e5e7eb", margin: "24px 0" }} />
             <p style={{ fontSize: 12, color: "#9ca3af", margin: 0 }}>
-              NyxenCloud Solution Pvt. Ltd. · GSTIN: [Your GSTIN] · billing@jobs24india.com
+              NyxenCloud Solutions Private Limited · GSTIN: [Your GSTIN] · billing@jobs24india.com
             </p>
           </div>
 

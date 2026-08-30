@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation"
 export const metadata: Metadata = {
   title: "Cookie Policy — Jobs24India",
   description:
-    "Cookie Policy for Jobs24India by NyxenCloud Solution Pvt. Ltd. Learn what cookies we use, why we use them, and how to manage your preferences.",
+    "Cookie Policy for Jobs24India by NyxenCloud Solutions Private Limited Learn what cookies we use, why we use them, and how to manage your preferences.",
 }
 
 const LAST_UPDATED = "10 August 2026"
@@ -28,7 +28,7 @@ export default function CookiePolicyPage() {
                 to the website operators.
               </p>
               <p className="mt-3">
-                This Cookie Policy explains how <strong>NyxenCloud Solution Pvt. Ltd.</strong> ("<strong>we</strong>",
+                This Cookie Policy explains how <strong>NyxenCloud Solutions Private Limited</strong> ("<strong>we</strong>",
                 "<strong>us</strong>", "<strong>our</strong>") uses cookies and similar tracking technologies on the
                 <strong> Jobs24India</strong> platform at <strong>jobs24india.com</strong> and related mobile applications
                 (collectively, the "<strong>Platform</strong>").
@@ -212,7 +212,7 @@ export default function CookiePolicyPage() {
                 If you have questions about this Cookie Policy or our use of cookies, please contact us at:
               </p>
               <div className="mt-3 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm space-y-1">
-                <p><strong>NyxenCloud Solution Pvt. Ltd.</strong></p>
+                <p><strong>NyxenCloud Solutions Private Limited</strong></p>
                 <p>Email: <a href="mailto:support@jobs24india.com" className="text-[#1a3461] hover:underline">support@jobs24india.com</a></p>
                 <p>Website: <a href="https://jobs24india.com" className="text-[#1a3461] hover:underline">jobs24india.com</a></p>
               </div>

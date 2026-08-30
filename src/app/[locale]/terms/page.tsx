@@ -2,7 +2,7 @@
 
 export const metadata: Metadata = {
   title: "Terms of Use",
-  description: "Terms of Use for Jobs24India by NyxenCloud Solution Pvt. Ltd. Read the rules governing your use of our job platform.",
+  description: "Terms of Use for Jobs24India by NyxenCloud Solutions Private Limited Read the rules governing your use of our job platform.",
 }
 
 const LAST_UPDATED = "1 July 2026"
@@ -26,7 +26,7 @@ export default function TermsPage() {
                 ("<strong>Terms</strong>") and our <a href="/privacy" className="text-blue-700 hover:underline">Privacy Policy</a>.
               </p>
               <p className="mt-3">
-                The Platform is owned and operated by <strong>NyxenCloud Solution Pvt. Ltd.</strong>
+                The Platform is owned and operated by <strong>NyxenCloud Solutions Private Limited</strong>
                 ("<strong>Company</strong>", "<strong>we</strong>", or "<strong>us</strong>").
                 If you do not agree to these Terms, you must not use the Platform.
               </p>
@@ -97,7 +97,7 @@ export default function TermsPage() {
               <h2 className="text-lg font-bold text-gray-800 mb-3">7. Platform Content and Intellectual Property</h2>
               <p>
                 All content on the Platform — including logos, design, text, graphics, and software — is the property
-                of NyxenCloud Solution Pvt. Ltd. and is protected under Indian copyright law.
+                of NyxenCloud Solutions Private Limited and is protected under Indian copyright law.
                 You may not copy, reproduce, or distribute any part of the Platform without our written consent.
               </p>
               <p className="mt-3">
@@ -120,7 +120,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-lg font-bold text-gray-800 mb-3">9. Limitation of Liability</h2>
               <p>
-                To the fullest extent permitted by Indian law, NyxenCloud Solution Pvt. Ltd. and its directors,
+                To the fullest extent permitted by Indian law, NyxenCloud Solutions Private Limited and its directors,
                 employees, and agents shall not be liable for any indirect, incidental, special, or consequential
                 damages arising from your use of the Platform, including but not limited to loss of earnings,
                 data loss, or fraud perpetrated by other users.
@@ -159,7 +159,7 @@ export default function TermsPage() {
               <div className="mt-3 bg-gray-50 rounded-xl border border-gray-100 p-4 text-sm space-y-1">
                 <p><strong>Name:</strong> S Verma</p>
                 <p><strong>Email:</strong> <a href="mailto:grievance@jobs24india.com" className="text-blue-700 hover:underline">grievance@jobs24india.com</a></p>
-                <p><strong>Address:</strong> NyxenCloud Solution Pvt. Ltd., B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, UP — 201012, India</p>
+                <p><strong>Address:</strong> NyxenCloud Solutions Private Limited, B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, UP — 201012, India</p>
                 <p className="text-gray-500 mt-2">Complaints acknowledged within 24 hours, resolved within 15 days.</p>
               </div>
             </section>

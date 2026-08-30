@@ -25,7 +25,7 @@ export default function CancellationPolicyPage() {
               <p>
                 This Cancellation &amp; Refund Policy applies to all paid subscription plans and services purchased through
                 the <strong>Jobs24India</strong> platform (<strong>jobs24india.com</strong>), operated by{" "}
-                <strong>NyxenCloud Solution Pvt. Ltd.</strong> ("<strong>Company</strong>", "<strong>we</strong>", "<strong>us</strong>").
+                <strong>NyxenCloud Solutions Private Limited</strong> ("<strong>Company</strong>", "<strong>we</strong>", "<strong>us</strong>").
               </p>
               <p className="mt-3">
                 By purchasing a subscription plan on Jobs24India, you acknowledge that you have read, understood, and
@@ -159,7 +159,7 @@ export default function CancellationPolicyPage() {
             <section>
               <h2 className="text-lg font-bold text-gray-800 mb-3">7. Contact Us</h2>
               <div className="bg-gray-50 rounded-xl border border-gray-100 p-4 text-sm space-y-1">
-                <p><strong>NyxenCloud Solution Pvt. Ltd.</strong></p>
+                <p><strong>NyxenCloud Solutions Private Limited</strong></p>
                 <p>Email: <a href="mailto:support@jobs24india.com" className="text-[#1a3461] hover:underline">support@jobs24india.com</a></p>
                 <p>Address: B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, Uttar Pradesh — 201012, India</p>
                 <p className="text-gray-500 mt-2">Support hours: Monday – Saturday, 10 AM – 6 PM IST</p>

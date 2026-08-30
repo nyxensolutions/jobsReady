@@ -19,7 +19,7 @@ function emailShell(body: string) {
   </td></tr>
   <tr><td style="padding:32px">${body}</td></tr>
   <tr><td style="background:#f9fafb;padding:16px 32px;border-top:1px solid #e5e7eb">
-    <p style="margin:0;font-size:11px;color:#9ca3af">Jobs24India · NyxenCloud Solution Pvt. Ltd. · <a href="${APP_URL}" style="color:#1a3461;text-decoration:none">jobs24india.com</a></p>
+    <p style="margin:0;font-size:11px;color:#9ca3af">Jobs24India · NyxenCloud Solutions Private Limited · <a href="${APP_URL}" style="color:#1a3461;text-decoration:none">jobs24india.com</a></p>
     <p style="margin:4px 0 0;font-size:10px;color:#d1d5db">To unsubscribe, visit your profile settings.</p>
   </td></tr>
 </table>
@@ -387,7 +387,7 @@ export async function sendEmployerMagicLink({
           <p style="margin:16px 0 0;color:#9ca3af;font-size:12px">If you didn't request this, you can safely ignore this email.</p>
         </div>
         <div style="background:#f9fafb;padding:16px 32px;border-top:1px solid #e5e7eb">
-          <p style="margin:0;color:#9ca3af;font-size:11px">Jobs24India · NyxenCloud Solution Pvt. Ltd.</p>
+          <p style="margin:0;color:#9ca3af;font-size:11px">Jobs24India · NyxenCloud Solutions Private Limited</p>
         </div>
       </div>
     `,

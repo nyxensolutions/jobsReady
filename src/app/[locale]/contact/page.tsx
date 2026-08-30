@@ -64,7 +64,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-400 mb-0.5">Company</p>
-                    <p className="text-sm font-semibold text-gray-700">NyxenCloud Solution Pvt. Ltd.</p>
+                    <p className="text-sm font-semibold text-gray-700">NyxenCloud Solutions Private Limited</p>
                     <a href="https://www.nyxensolutions.net" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
                       www.nyxensolutions.net
                     </a>
@@ -89,7 +89,7 @@ export default function ContactPage() {
                 <p><strong>Email:</strong>{" "}
                   <a href="mailto:grievance@jobs24india.com" className="underline">grievance@jobs24india.com</a>
                 </p>
-                <p><strong>Address:</strong> NyxenCloud Solution Pvt. Ltd., B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, UP — 201012</p>
+                <p><strong>Address:</strong> NyxenCloud Solutions Private Limited, B-402, Rail Vihar, Sector 3, Vasundhara, Ghaziabad, UP — 201012</p>
                 <p className="text-amber-600 mt-2">Response time: Within 24 hours of receipt, resolved within 15 days.</p>
               </div>
             </div>
