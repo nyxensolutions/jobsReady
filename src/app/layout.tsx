@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next"
 import { Geist } from "next/font/google"
+import Script from "next/script"
 import "./globals.css"
 import { SITE_URL, SITE_NAME, absoluteUrl } from "@/lib/seo"
 
@@ -111,6 +112,12 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }} />
         {children}
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="aafe1944-a7ac-4365-96c0-3b7d7f037c64"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
