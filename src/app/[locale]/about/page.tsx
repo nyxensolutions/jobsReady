@@ -4,11 +4,11 @@ import { Target, Users, Zap, Heart } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "Jobs24India is India's dedicated blue-collar job portal connecting workers with employers across 200+ cities. Built by NyxenCloud Solutions Private Limited",
+  description: "Jobs24India is India's dedicated job portal connecting frontline workers with employers across 200+ cities. Built by NyxenCloud Solutions Private Limited",
 }
 
 const VALUES = [
-  { icon: Target, title: "Our Mission", desc: "To bridge the gap between India's 500 million blue-collar workforce and the employers who need them — fast, free, and in their own language." },
+  { icon: Target, title: "Our Mission", desc: "To bridge the gap between India's 500 million frontline workers and the employers who need them — fast, free, and in their own language." },
   { icon: Users, title: "Who We Serve", desc: "Delivery workers, drivers, security guards, cooks, construction workers, factory hands, sales executives, and every frontline professional who keeps India running." },
   { icon: Zap, title: "How We're Different", desc: "No lengthy forms, no paid subscriptions for seekers, no irrelevant results. Just the right job, in the right city, reachable in two taps." },
   { icon: Heart, title: "Our Commitment", desc: "We are committed to building a platform that respects workers' dignity, protects their data, and gives them a fair shot at every opportunity." },
@@ -26,7 +26,7 @@ export default function AboutPage() {
           </span>
           <h1 className="text-3xl sm:text-4xl font-black mb-4">About Jobs24India</h1>
           <p className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            We're building India's most trusted job platform for blue-collar and frontline workers —
+            We're building India's most trusted job platform for frontline workers —
             connecting millions of job seekers with employers across every city and town.
           </p>
         </div>

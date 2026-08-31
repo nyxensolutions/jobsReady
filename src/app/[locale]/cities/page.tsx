@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   return {
     title: "Browse Jobs by City — Jobs24India",
-    description: "Find blue-collar jobs near you across India — Delhi, Mumbai, Bangalore, Chennai, Hyderabad, Pune, Kolkata, Ahmedabad, Noida, Gurugram and more.",
+    description: "Find verified jobs near you across India — Delhi, Mumbai, Bangalore, Chennai, Hyderabad, Pune, Kolkata, Ahmedabad, Noida, Gurugram and more.",
     alternates: alternatesFor(locale, "/cities"),
   }
 }
@@ -87,7 +87,7 @@ export default function CitiesPage() {
           <h1 className="text-2xl sm:text-3xl font-black text-[#1a3461] mb-2">Browse Jobs by City</h1>
           <p className="text-gray-500 text-sm max-w-xl">
             Jobs24India covers all major Indian cities — from Delhi and Mumbai to Bangalore, Chennai and beyond.
-            Find verified frontline and blue-collar jobs near you, apply in one click.
+            Find verified frontline jobs near you, apply in one click.
           </p>
         </div>
 
@@ -121,7 +121,7 @@ export default function CitiesPage() {
         <div className="mt-12 bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
           <h2 className="font-bold text-gray-800 mb-3">Find Jobs Near You — Anywhere in India</h2>
           <p className="text-sm text-gray-500 leading-relaxed">
-            Jobs24India is India's fastest-growing blue-collar job platform, connecting frontline workers with employers
+            Jobs24India is India's fastest-growing job platform, connecting frontline workers with employers
             across Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Kolkata, Pune, Ahmedabad, Noida, Gurugram and hundreds
             of other cities. Whether you're looking for a delivery job, driver job, security guard job, factory worker job,
             BPO role, or any other frontline opportunity — find verified openings near you and apply in one click.

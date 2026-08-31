@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "Job Ready",
-    "tagline": "Naukri dhundein. Log hire karein. Taiyaar rahein.",
+    "appName": "Jobs24India",
+    "tagline": "Naukri dhundein. Log hire karein.",
     "loading": "Load ho raha hai...",
     "error": "Kuch galat ho gaya",
     "retry": "Dobara try karein",
@@ -119,7 +119,7 @@
       "vacancies": "रिक्तियाँ"
     },
     "cities": {
-      "title": "दिल्ली NCR और आस-पास के शहरों में नौकरियाँ",
+      "title": "पूरे भारत में नौकरियाँ",
       "subtitle": "अपने पास verified स्थानीय नौकरियाँ खोजें",
       "nearYou": "आपके पास नौकरियाँ",
       "browseAll": "सभी शहर देखें",

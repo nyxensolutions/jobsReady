@@ -29,8 +29,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const q = sp.q ? ` for "${sp.q}"` : ""
   const title = `Jobs${q}${cat}${city} — Jobs24India`
   const description = city || cat || q
-    ? `Browse verified${cat || " blue-collar"} jobs${q}${city} on Jobs24India. Apply in one click, no CV needed.`
-    : "Browse lakhs of verified blue-collar jobs — delivery, driver, security, sales, factory, housekeeping and more. Apply in one click, no CV needed."
+    ? `Browse verified${cat || ""} jobs${q}${city} on Jobs24India. Apply in one click, no CV needed.`
+    : "Browse lakhs of verified jobs — delivery, driver, security, sales, factory, housekeeping and more. Apply in one click, no CV needed."
 
   return {
     title,

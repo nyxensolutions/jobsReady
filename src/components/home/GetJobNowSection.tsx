@@ -84,7 +84,7 @@ export default function GetJobNowSection() {
               <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                 <Image
                   src="/images/hero-seeker.jpg"
-                  alt="Blue-collar workers finding jobs in India"
+                  alt="Workers finding jobs in India"
                   width={560}
                   height={420}
                   className="object-cover w-full h-full"

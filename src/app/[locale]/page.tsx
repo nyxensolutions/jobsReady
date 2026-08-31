@@ -16,12 +16,12 @@ type Props = { params: Promise<{ locale: string }> }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   return {
-    title: "Jobs24India — Find Blue-Collar Jobs in India",
+    title: "Jobs24India — Find Jobs Across India",
     description:
       "India's fastest-growing job portal for delivery, driver, security, sales, factory, housekeeping and frontline workers. Apply to lakhs of verified jobs near you — no CV needed.",
     alternates: alternatesFor(locale, "/"),
     openGraph: {
-      title: "Jobs24India — Find Blue-Collar Jobs in India",
+      title: "Jobs24India — Find Jobs Across India",
       description: "Lakhs of verified jobs for delivery, driver, security, sales and frontline workers across India.",
       url: "/",
       images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Jobs24India — Find Jobs. Hire People." }],

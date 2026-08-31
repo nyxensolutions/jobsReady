@@ -87,7 +87,7 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
     slug: "interview-tips",
     label: "Interview Tips",
     description:
-      "How to prepare for and clear interviews for frontline and blue-collar jobs, with sample answers.",
+      "How to prepare for and clear interviews for frontline jobs, with sample answers.",
   },
   {
     slug: "resume",

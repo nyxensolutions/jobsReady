@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   return {
     title: "Browse Job Categories — Jobs24India",
-    description: "Find blue-collar jobs by category in India. Browse delivery, driver, sales, security, cook, construction, factory, retail, IT and more.",
+    description: "Find jobs by category in India. Browse delivery, driver, sales, security, cook, construction, factory, retail, IT and more.",
     alternates: alternatesFor(locale, "/categories"),
   }
 }
@@ -46,7 +46,7 @@ export default function CategoriesPage() {
         <div className="text-center mb-10">
           <h1 className="text-2xl sm:text-3xl font-black text-[#1a3461] mb-3">Browse Jobs by Category</h1>
           <p className="text-gray-500 max-w-xl mx-auto">
-            Explore thousands of blue-collar and frontline job opportunities across India, organised by role type.
+            Explore thousands of frontline job opportunities across India, organised by role type.
           </p>
         </div>
 
@@ -75,10 +75,10 @@ export default function CategoriesPage() {
 
         {/* SEO text */}
         <div className="mt-12 bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-[#1a3461] mb-4">Find Blue-Collar Jobs Across India</h2>
+          <h2 className="text-lg font-bold text-[#1a3461] mb-4">Find Jobs Across India</h2>
           <div className="text-sm text-gray-500 leading-relaxed space-y-3">
             <p>
-              Jobs24India is India's leading platform for blue-collar and frontline employment. Whether you're
+              Jobs24India is India's leading platform for frontline employment. Whether you're
               looking for a <Link href="/jobs?category=delivery" className="text-blue-700 hover:underline">delivery job</Link>,{" "}
               <Link href="/jobs?category=driver" className="text-blue-700 hover:underline">driving job</Link>,{" "}
               <Link href="/jobs?category=security" className="text-blue-700 hover:underline">security guard job</Link>, or{" "}

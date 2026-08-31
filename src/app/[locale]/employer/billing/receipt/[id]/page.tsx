@@ -66,7 +66,7 @@ export default async function ReceiptPage({
             <div style={{ fontSize: 24, fontWeight: 800 }}>
               Jobs<span style={{ color: "#f97316" }}>24</span>India
             </div>
-            <div style={{ fontSize: 11, color: "#93c5fd", marginTop: 4 }}>India's job portal for blue-collar workers</div>
+            <div style={{ fontSize: 11, color: "#93c5fd", marginTop: 4 }}>India's job portal for frontline workers</div>
             <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
                 <div style={{ fontSize: 13, color: "#bfdbfe", fontWeight: 600 }}>PAYMENT RECEIPT</div>

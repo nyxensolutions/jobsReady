@@ -14,7 +14,7 @@ function emailShell(body: string) {
   <tr><td style="background:#1a3461;padding:24px 32px">
     <table width="100%" cellpadding="0" cellspacing="0"><tr>
       <td><span style="font-size:22px;font-weight:800;color:#ffffff">Jobs<span style="color:#f97316">24</span>India</span><br>
-      <span style="font-size:11px;color:#93c5fd">India's job portal for blue-collar workers</span></td>
+      <span style="font-size:11px;color:#93c5fd">India's job portal for frontline workers</span></td>
     </tr></table>
   </td></tr>
   <tr><td style="padding:32px">${body}</td></tr>
@@ -249,7 +249,7 @@ export async function sendEmployerApplicationAlert({
            style="display:inline-block;background:#1d4ed8;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
           View in Dashboard →
         </a>
-        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for blue-collar workers</p>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
   })
@@ -281,7 +281,7 @@ export async function sendEmployerJobApprovedAlert({
            style="display:inline-block;background:#15803d;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
           View Job Listing →
         </a>
-        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for blue-collar workers</p>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
   })
@@ -314,7 +314,7 @@ export async function sendEmployerJobRejectedAlert({
            style="display:inline-block;background:#1d4ed8;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
           Edit and Resubmit →
         </a>
-        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for blue-collar workers</p>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
   })
@@ -349,7 +349,7 @@ export async function sendCandidateInviteEmail({
            style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
           View &amp; Apply Now →
         </a>
-        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for blue-collar workers</p>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
   })
@@ -370,7 +370,7 @@ export async function sendEmployerMagicLink({
       <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
         <div style="background:#1a3461;padding:24px 32px">
           <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700">Jobs<span style="color:#f97316">24</span>India</h1>
-          <p style="margin:4px 0 0;color:#93c5fd;font-size:12px">India's job portal for blue-collar workers</p>
+          <p style="margin:4px 0 0;color:#93c5fd;font-size:12px">India's job portal for frontline workers</p>
         </div>
         <div style="padding:32px">
           <h2 style="margin:0 0 8px;color:#1a3461;font-size:18px">Sign in to your account</h2>
@@ -421,7 +421,7 @@ export async function sendSeekerShortlistAlert({
            style="display:inline-block;background:#ea580c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
           View in Dashboard →
         </a>
-        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for blue-collar workers</p>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
   })

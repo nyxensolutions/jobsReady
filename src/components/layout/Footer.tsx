@@ -36,7 +36,7 @@ export default function Footer({ userRole }: Props) {
               </a>
             </p>
             <p className="text-gray-500 text-xs leading-relaxed">
-              India's trusted job portal for blue-collar and frontline workers.
+              India's trusted job portal for frontline workers.
             </p>
           </div>
 

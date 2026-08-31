@@ -9,7 +9,7 @@ const geistSans = Geist({
 })
 
 const DESCRIPTION =
-  "India's blue-collar job portal. Search lakhs of jobs in delivery, sales, security, driving and more."
+  "India's fastest-growing job portal. Search lakhs of verified jobs in delivery, sales, security, driving and more."
 
 export const metadata: Metadata = {
   // Required for relative OG/Twitter image URLs to resolve to absolute ones.

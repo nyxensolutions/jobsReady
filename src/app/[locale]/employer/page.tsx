@@ -30,7 +30,7 @@ const BENEFITS = [
   },
   {
     icon: TrendingUp,
-    title: "Blue-Collar Focused",
+    title: "Frontline Focused",
     desc: "Built for delivery, security, sales, construction, healthcare and 20+ other industries.",
     color: "bg-purple-50 text-purple-600",
   },
@@ -61,7 +61,7 @@ const TESTIMONIALS = [
   {
     name: "Ramesh Gupta",
     role: "Owner, Speedy Logistics",
-    quote: "We hired 12 delivery boys in one week. Jobs24India is the fastest way to find blue-collar workers.",
+    quote: "We hired 12 delivery boys in one week. Jobs24India is the fastest way to find frontline workers.",
     rating: 5,
   },
   {
@@ -92,7 +92,7 @@ export default function EmployerLandingPage() {
                 Trusted by 5,000+ employers across India
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-5">
-                Hire Blue-Collar Workers<br />
+                Hire Frontline Workers<br />
                 <span className="text-orange-400">Fast & Free</span>
               </h1>
               <p className="text-white/75 text-base sm:text-lg leading-relaxed mb-8 max-w-lg">
@@ -120,7 +120,7 @@ export default function EmployerLandingPage() {
               <div className="relative w-full max-w-md aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
                 <Image
                   src="/images/hero-employer.jpg"
-                  alt="Hire great blue-collar candidates"
+                  alt="Hire great frontline candidates"
                   fill
                   className="object-cover"
                   priority

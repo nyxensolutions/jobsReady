@@ -60,7 +60,7 @@ export default function PrivacyPage() {
               </p>
               <h3 className="font-semibold text-gray-700 mt-4 mb-2">2.4 Information from Third Parties</h3>
               <ul className="list-disc pl-5 space-y-1">
-                <li>OTP verification data from our SMS service provider (Fast2SMS)</li>
+                <li>OTP verification data from our SMS service provider (2Factor.in)</li>
                 <li>Authentication data from Supabase (our authentication provider)</li>
                 <li>Payment status and order details from Razorpay Payments Pvt. Ltd.</li>
               </ul>
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
               <ul className="list-disc pl-5 space-y-2 mt-3">
                 <li><strong>With Employers (Job Seekers only):</strong> When you apply for a job, your profile information (name, phone, experience, skills) is shared with the employer who posted that job.</li>
                 <li><strong>With Job Seekers (Employers only):</strong> Your company name, job listings, and contact phone number are visible to registered job seekers.</li>
-                <li><strong>Service Providers:</strong> We share data with Supabase (authentication), Fast2SMS (OTP), Resend (email), Razorpay (payment processing — employer subscription payments), and our hosting/database provider. These providers are bound by confidentiality agreements and their own privacy policies.</li>
+                <li><strong>Service Providers:</strong> We share data with Supabase (authentication), 2Factor.in (OTP), Resend (email), Cashfree (payment processing — employer subscription payments), and our hosting/database provider. These providers are bound by confidentiality agreements and their own privacy policies.</li>
                 <li><strong>Legal Requirements:</strong> If required by law, court order, or government authority under Indian law.</li>
                 <li><strong>Business Transfer:</strong> In the event of merger, acquisition, or sale of our business, your data may be transferred to the successor entity.</li>
               </ul>

@@ -422,7 +422,7 @@ export default async function EmployerDashboardPage() {
               <p className="text-xs text-slate-400 mb-4">Talk to our team — we're here to help you get started.</p>
               <div className="flex flex-col gap-2.5">
                 <a
-                  href="mailto:support@jobsready.in"
+                  href="mailto:support@jobs24india.com"
                   className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-[#eef2ff] border border-transparent hover:border-[#1a3461]/10 transition-all group"
                 >
                   <div className="w-8 h-8 rounded-lg bg-[#eef2ff] flex items-center justify-center shrink-0">
@@ -430,7 +430,7 @@ export default async function EmployerDashboardPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold text-slate-700">Email Support</p>
-                    <p className="text-xs text-slate-400 truncate">support@jobsready.in</p>
+                    <p className="text-xs text-slate-400 truncate">support@jobs24india.com</p>
                   </div>
                   <ArrowUpRight size={14} className="text-slate-300 group-hover:text-[#1a3461] transition-colors shrink-0" />
                 </a>
