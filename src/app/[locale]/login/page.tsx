@@ -124,6 +124,7 @@ function LoginPageContent() {
       // Create session with the right role (employer or seeker)
       const sessionRole = role === "employer" ? "EMPLOYER" : "SEEKER"
       const data = await createSession(idToken, sessionRole)
+      router.refresh()
       router.push(getRedirect(data.role, data.requiresProfile))
     } catch (err: any) {
       setError(
@@ -144,6 +145,7 @@ function LoginPageContent() {
       const result = await signInWithPopup(auth, provider)
       const idToken = await result.user.getIdToken()
       const data = await createSession(idToken, "EMPLOYER")
+      router.refresh()
       router.push(getRedirect(data.role, data.requiresProfile))
     } catch (err: any) {
       if (err.code === "auth/popup-closed-by-user") { setLoading(false); return }

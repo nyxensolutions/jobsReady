@@ -25,7 +25,11 @@ export default function VerifyDocsClient({ uploadedDocs }: { uploadedDocs: strin
   const [showMore, setShowMore] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
-  const hasUploaded = uploadedDocs.length > 0 || uploaded.length > 0
+  const allUploaded = [...uploadedDocs, ...uploaded]
+  const hasGst = allUploaded.includes("gst")
+  const hasPan = allUploaded.includes("pan")
+  // If GST is uploaded, PAN is mandatory before we consider this step done
+  const hasUploaded = (uploadedDocs.length > 0 || uploaded.length > 0) && (!hasGst || hasPan)
   const visibleDocs = showMore ? DOC_TYPES : DOC_TYPES.slice(0, 6)
 
   function handleSelectDoc(key: string) {
@@ -125,6 +129,14 @@ export default function VerifyDocsClient({ uploadedDocs }: { uploadedDocs: strin
           className="hidden"
           onChange={handleFileChange}
         />
+
+        {/* GST → PAN required notice */}
+        {hasGst && !hasPan && (
+          <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 flex items-start gap-2">
+            <Shield size={16} className="shrink-0 mt-0.5 text-amber-600" />
+            <span>You've uploaded a GST Certificate — please also upload your <strong>Company PAN Card</strong> to complete verification.</span>
+          </div>
+        )}
 
         {/* Error */}
         {error && (

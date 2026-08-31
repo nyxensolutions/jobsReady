@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "@/i18n/navigation"
 import {
   CheckCircle, ChevronRight, Plus, X, Minus, Loader2, MapPin, Briefcase, IndianRupee,
-  Phone, AlertTriangle,
+  Phone, Info,
 } from "lucide-react"
 import JobTitleInput from "@/components/employer/JobTitleInput"
 import UpgradeModal from "@/components/employer/UpgradeModal"
@@ -677,13 +677,11 @@ function Step4({
   update: <K extends keyof WizardData>(k: K, v: WizardData[K]) => void
 }) {
   const [showTemplate, setShowTemplate] = useState(true)
-  const [showCallConsent, setShowCallConsent] = useState(false)
   const template = TEMPLATE(data.title, data.salaryMin, data.salaryMax)
 
   function handleCallToggle() {
     if (!data.callToHrEnabled) {
-      // About to enable — show consent warning first
-      setShowCallConsent(true)
+      update("callToHrEnabled", true)
     } else {
       // Disabling — clear phone
       update("callToHrEnabled", false)
@@ -691,47 +689,8 @@ function Step4({
     }
   }
 
-  function confirmCallConsent() {
-    update("callToHrEnabled", true)
-    setShowCallConsent(false)
-  }
-
   return (
     <div className="flex flex-col gap-6 p-6 max-w-2xl mx-auto w-full">
-      {/* Consent warning modal */}
-      {showCallConsent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 max-w-sm w-full">
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
-                <AlertTriangle size={20} className="text-orange-600" />
-              </div>
-              <div>
-                <p className="font-bold text-gray-900 text-sm">Enable Call-to-HR?</p>
-                <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                  When you enable this, your provided phone number will be <strong>publicly visible</strong> on the job listing.
-                  Candidates will be able to <strong>directly call you or reveal your number</strong>.
-                  Only enable this if you are comfortable with candidates contacting you directly.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowCallConsent(false)}
-                className="flex-1 py-2 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmCallConsent}
-                className="flex-1 py-2 bg-orange-500 text-white rounded-xl text-sm font-semibold hover:bg-orange-600 transition-colors"
-              >
-                I Understand, Enable
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Suggested template */}
       {showTemplate && (
@@ -795,6 +754,12 @@ function Step4({
 
         {data.callToHrEnabled && (
           <div className="mt-4">
+            <div className="flex items-start gap-2 mb-3 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2.5">
+              <Info size={14} className="text-orange-500 shrink-0 mt-0.5" />
+              <p className="text-xs text-orange-700 leading-relaxed">
+                This number will be <strong>publicly visible</strong> on your job listing. Candidates can call or see your number directly.
+              </p>
+            </div>
             <label className="block text-xs font-semibold text-gray-700 mb-1.5">
               HR Contact Number <span className="text-red-500">*</span>
               <span className="ml-1.5 font-normal text-orange-600">(will be publicly visible)</span>

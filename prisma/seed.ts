@@ -39,6 +39,9 @@ async function main() {
     { slug: "banking", nameEn: "Banking / Insurance", nameHi: "बैंकिंग / बीमा", nameTe: "బ్యాంకింగ్ / ఇన్సూరెన్స్", nameTa: "வங்கியியல் / காப்பீடு", nameKn: "ಬ್ಯಾಂಕಿಂಗ್ / ವಿಮೆ", nameBn: "ব্যাংকিং / বীমা", namePa: "ਬੈਂਕਿੰਗ / ਬੀਮਾ", icon: "Landmark", sortOrder: 26 },
     { slug: "hr-admin", nameEn: "HR / Admin", nameHi: "HR / एडमिन", nameTe: "HR / అడ్మిన్", nameTa: "HR / நிர்வாகம்", nameKn: "HR / ಆಡಳಿತ", nameBn: "HR / অ্যাডমিন", namePa: "HR / ਪ੍ਰਸ਼ਾਸਨ", icon: "Users", sortOrder: 27 },
     { slug: "marketing", nameEn: "Marketing / Digital", nameHi: "मार्केटिंग / डिजिटल", nameTe: "మార్కెటింగ్ / డిజిటల్", nameTa: "சந்தைப்படுத்தல் / டிஜிட்டல்", nameKn: "ಮಾರ್ಕೆಟಿಂಗ್ / ಡಿಜಿಟಲ್", nameBn: "মার্কেটিং / ডিজিটাল", namePa: "ਮਾਰਕੀਟਿੰਗ / ਡਿਜੀਟਲ", icon: "Megaphone", sortOrder: 28 },
+    { slug: "tour-travel", nameEn: "Tour & Travel", nameHi: "टूर एंड ट्रैवल", nameTe: "టూర్ & ట్రావెల్", nameTa: "சுற்றுலா & பயண", nameKn: "ಪ್ರವಾಸ & ಪ್ರಯಾಣ", nameBn: "ট্যুর ও ট্র্যাভেল", namePa: "ਟੂਰ ਅਤੇ ਟ੍ਰੈਵਲ", icon: "Plane", sortOrder: 29 },
+    { slug: "travel-advisor", nameEn: "Travel Advisor", nameHi: "ट्रैवल एडवाइजर", nameTe: "ట్రావెల్ అడ్వైజర్", nameTa: "பயண ஆலோசகர்", nameKn: "ಪ್ರಯಾಣ ಸಲಹೆಗಾರ", nameBn: "ট্র্যাভেল অ্যাডভাইজার", namePa: "ਟ੍ਰੈਵਲ ਅਡਵਾਈਜ਼ਰ", icon: "MapPin", sortOrder: 30 },
+    { slug: "tuition-teacher", nameEn: "Tuition / Home Tutor", nameHi: "ट्यूशन / होम ट्यूटर", nameTe: "ట్యూషన్ / హోమ్ ట్యూటర్", nameTa: "ட்யூஷன் / இல்ல ஆசிரியர்", nameKn: "ಟ್ಯೂಷನ್ / ಹೋಮ್ ಟ್ಯೂಟರ್", nameBn: "টিউশন / হোম টিউটর", namePa: "ਟਿਊਸ਼ਨ / ਹੋਮ ਟਿਊਟਰ", icon: "GraduationCap", sortOrder: 31 },
   ]
 
   for (const cat of categories) {
