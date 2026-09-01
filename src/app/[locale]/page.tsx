@@ -9,7 +9,7 @@ import StatsBar from "@/components/home/StatsBar"
 import GetJobNowSection from "@/components/home/GetJobNowSection"
 import QualificationSection from "@/components/home/QualificationSection"
 import CitiesSection from "@/components/home/CitiesSection"
-import { alternatesFor } from "@/lib/seo"
+import { alternatesFor, SITE_URL } from "@/lib/seo"
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -34,6 +34,80 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+// WebPage JSON-LD: identifies the home page as the authoritative root of the site.
+const homeWebPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${SITE_URL}/#webpage`,
+  url: SITE_URL,
+  name: "Jobs24India — Find Jobs. Hire People.",
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  about: { "@id": `${SITE_URL}/#organization` },
+  description:
+    "India's fastest-growing job portal for delivery, driver, security, sales, factory, housekeeping and frontline workers. Apply to lakhs of verified jobs near you — no CV needed.",
+  inLanguage: "en-IN",
+  potentialAction: [
+    {
+      "@type": "ReadAction",
+      target: [SITE_URL],
+    },
+  ],
+}
+
+// ItemList JSON-LD: hints Google about the top destination pages on the site.
+// Combined with the site-wide WebSite + SearchAction schema in layout.tsx,
+// this gives Google the signals it needs to generate sitelinks in search results.
+const homeItemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Jobs24India — Top Sections",
+  description: "Key pages and job categories on Jobs24India",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Browse All Jobs",
+      url: `${SITE_URL}/jobs`,
+      description: "Search lakhs of verified jobs near you — delivery, driver, security, sales and more",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Delivery Jobs",
+      url: `${SITE_URL}/jobs?category=delivery`,
+      description: "Find delivery partner and courier jobs across India",
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: "Driver Jobs",
+      url: `${SITE_URL}/jobs?category=driving`,
+      description: "Car driver, cab driver and logistics driving jobs",
+    },
+    {
+      "@type": "ListItem",
+      position: 4,
+      name: "Security Guard Jobs",
+      url: `${SITE_URL}/jobs?category=security-guard`,
+      description: "Security guard and watchman jobs across India",
+    },
+    {
+      "@type": "ListItem",
+      position: 5,
+      name: "Sales Jobs",
+      url: `${SITE_URL}/jobs?category=sales`,
+      description: "Field sales, telesales and retail sales jobs",
+    },
+    {
+      "@type": "ListItem",
+      position: 6,
+      name: "Post a Job — Hire Talent",
+      url: `${SITE_URL}/login`,
+      description: "Employers: post jobs and hire verified frontline workers for free",
+    },
+  ],
+}
+
 export default async function HomePage() {
   const session = await getServerSession()
   if (session) {
@@ -45,6 +119,14 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeWebPageJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeItemListJsonLd) }}
+      />
       <GetJobNowSection />
       <HeroSection />
       <StatsBar />
