@@ -72,6 +72,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Email verification
+  emailVerified      Boolean   @default(false)
+  emailVerifyToken   String?   @unique
+  emailVerifyExpires DateTime?
+
   seekerProfile   SeekerProfile?
   employerProfile EmployerProfile?
   notifications   Notification[]

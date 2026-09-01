@@ -394,6 +394,31 @@ export async function sendEmployerMagicLink({
   })
 }
 
+// ─── Employer: email address verification ────────────────────────────────────
+
+export async function sendEmailVerification({
+  toEmail,
+  toName,
+  verifyUrl,
+}: { toEmail: string; toName: string; verifyUrl: string }) {
+  const body = `
+    <h2 style="margin:0 0 4px;color:#1a3461;font-size:20px">Verify your email address ✉️</h2>
+    <p style="margin:0 0 24px;color:#6b7280;font-size:14px">Hi ${toName}, click the button below to confirm your email address and complete your account setup.</p>
+    <div style="text-align:center;margin-bottom:28px">
+      ${btn(verifyUrl, "Verify Email Address")}
+    </div>
+    <p style="margin:0 0 8px;color:#6b7280;font-size:13px">Or copy and paste this link into your browser:</p>
+    <p style="margin:0 0 24px;font-size:12px;color:#9ca3af;word-break:break-all"><a href="${verifyUrl}" style="color:#1a3461">${verifyUrl}</a></p>
+    <p style="margin:0;font-size:12px;color:#9ca3af">This link expires in 24 hours. If you didn't request this, you can safely ignore this email.</p>
+  `
+  await resend.emails.send({
+    from: `Jobs24India <${FROM}>`,
+    to: toEmail,
+    subject: "Verify your email address — Jobs24India",
+    html: emailShell(body),
+  })
+}
+
 export async function sendSeekerShortlistAlert({
   seekerEmail,
   seekerName,

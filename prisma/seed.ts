@@ -3,6 +3,7 @@ config({ path: ".env.local" })
 
 import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
+import { FREE_PLAN_SLUG, FREE_PLAN_DURATION_DAYS, UNLIMITED } from "../src/lib/subscription"
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL ?? process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
@@ -95,6 +96,20 @@ async function main() {
   console.log("Seeding plans…")
 
   const plans = [
+    // ── Free launch offer ────────────────────────────────────────
+    // Every employer is auto-enrolled in this (see ensureFreeSubscription), so
+    // subscription-scoped records — candidate unlocks, job boosts — always have
+    // a real subscription to hang off, and metering works through one code path.
+    //
+    // The plans page advertises this as unlimited, so the limits here are what
+    // actually honour that. When paid plans launch, lower these values and
+    // update the plans page in the same change.
+    {
+      slug: FREE_PLAN_SLUG, name: "Free Plan", type: "MULTI_HIRE" as const,
+      durationDays: FREE_PLAN_DURATION_DAYS, priceRupees: 0,
+      activeJobLimit: UNLIMITED, candidateUnlockCredits: UNLIMITED, boostCredits: UNLIMITED,
+      isTrial: false, isPopular: false, isActive: true, sortOrder: 0,
+    },
     // ── Single Hire ──────────────────────────────────────────────
     {
       slug: "trial", name: "3-Day Trial", type: "SINGLE_HIRE" as const,
