@@ -62,8 +62,28 @@ export interface PlanLimits {
  * fall back to FREE_LIMITS.
  */
 export async function ensureFreeSubscription(employerId: string): Promise<ActiveSub | null> {
-  const plan = await prisma.plan.findUnique({ where: { slug: FREE_PLAN_SLUG } })
-  if (!plan) return null
+  // Upserted rather than looked up so deployment needs no seed step or data
+  // migration — the plan creates itself on first use, and re-running is a no-op.
+  // `update: {}` leaves the row alone once it exists, so limits can be edited in
+  // the database when paid plans launch without this overwriting them.
+  const plan = await prisma.plan.upsert({
+    where: { slug: FREE_PLAN_SLUG },
+    create: {
+      slug: FREE_PLAN_SLUG,
+      name: "Free Plan",
+      type: "MULTI_HIRE",
+      durationDays: FREE_PLAN_DURATION_DAYS,
+      priceRupees: 0,
+      activeJobLimit: UNLIMITED,
+      candidateUnlockCredits: UNLIMITED,
+      boostCredits: UNLIMITED,
+      isTrial: false,
+      isPopular: false,
+      isActive: true,
+      sortOrder: 0,
+    },
+    update: {},
+  })
 
   const expiresAt = new Date()
   expiresAt.setDate(expiresAt.getDate() + plan.durationDays)
