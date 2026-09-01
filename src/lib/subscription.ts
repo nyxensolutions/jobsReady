@@ -16,12 +16,29 @@ export async function getActiveSub(employerId: string): Promise<ActiveSub | null
   })
 }
 
-/** Free-tier limits used when no active subscription. */
+/**
+ * Effectively uncapped. Used rather than a sentinel like -1 so every existing
+ * `>=` / `<=` comparison keeps working untouched.
+ */
+export const UNLIMITED = Number.MAX_SAFE_INTEGER
+
+/**
+ * Free-tier limits — currently the launch offer.
+ *
+ * The plans page advertises ten capabilities as included for free, headlined
+ * "Hire for free. No limits." These values are what actually enforce that, so
+ * anything capped here silently breaks an advertised feature: the previous
+ * activeJobLimit of 1 blocked a second job posting outright, and zero unlock
+ * and boost credits made two more advertised features unusable.
+ *
+ * When paid plans launch, tighten these back up *and* update the plans page in
+ * the same change.
+ */
 export const FREE_LIMITS = {
-  activeJobLimit: 1,
-  candidateUnlockCredits: 0,
-  boostCredits: 0,
-  isHighReach: false,
+  activeJobLimit: UNLIMITED,
+  candidateUnlockCredits: UNLIMITED,
+  boostCredits: UNLIMITED,
+  isHighReach: true,
 }
 
 export interface PlanLimits {
@@ -38,7 +55,7 @@ export interface PlanLimits {
 export async function getPlanLimits(employerId: string): Promise<PlanLimits> {
   const sub = await getActiveSub(employerId)
   if (!sub) {
-    return { ...FREE_LIMITS, unlocksLeft: 0, boostsLeft: 0, sub: null }
+    return { ...FREE_LIMITS, unlocksLeft: UNLIMITED, boostsLeft: UNLIMITED, sub: null }
   }
   return {
     activeJobLimit: sub.plan.activeJobLimit,

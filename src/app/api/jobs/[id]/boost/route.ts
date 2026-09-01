@@ -19,9 +19,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (!job) return NextResponse.json({ error: "Job not found or not active" }, { status: 404 })
 
     const limits = await getPlanLimits(employer.id)
-    if (!limits.sub) {
-      return NextResponse.json({ error: "UPGRADE_REQUIRED", message: "Boost requires a paid plan." }, { status: 402 })
-    }
+    // Free launch: no subscription, but the plans page lists "Featured Job
+    // Boosts" as included. Only metered plans are capped.
     if (limits.boostsLeft <= 0) {
       return NextResponse.json({ error: "UPGRADE_REQUIRED", message: "You have used all your boost credits. Upgrade to get more." }, { status: 402 })
     }
@@ -35,21 +34,29 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7)
 
-    await prisma.$transaction([
-      prisma.jobBoost.upsert({
-        where: { jobId },
-        create: { jobId, employerId: employer.id, subscriptionId: limits.sub.id, expiresAt },
-        update: { boostedAt: new Date(), subscriptionId: limits.sub.id, expiresAt },
-      }),
-      prisma.jobListing.update({
-        where: { id: jobId },
-        data: { isFeatured: true },
-      }),
-      prisma.subscription.update({
-        where: { id: limits.sub.id },
-        data: { boostsUsed: { increment: 1 } },
-      }),
-    ])
+    // JobBoost.subscriptionId is a required FK, so a free-tier boost cannot be
+    // recorded without first making that column nullable. Nothing expires
+    // isFeatured today, so skipping the record leaves the visible behaviour
+    // identical — only the re-boost guard is lost, which is moot while boosts
+    // are unmetered.
+    const sub = limits.sub
+    if (sub) {
+      const subscriptionId = sub.id
+      await prisma.$transaction([
+        prisma.jobBoost.upsert({
+          where: { jobId },
+          create: { jobId, employerId: employer.id, subscriptionId, expiresAt },
+          update: { boostedAt: new Date(), subscriptionId, expiresAt },
+        }),
+        prisma.jobListing.update({ where: { id: jobId }, data: { isFeatured: true } }),
+        prisma.subscription.update({
+          where: { id: subscriptionId },
+          data: { boostsUsed: { increment: 1 } },
+        }),
+      ])
+    } else {
+      await prisma.jobListing.update({ where: { id: jobId }, data: { isFeatured: true } })
+    }
 
     return NextResponse.json({ success: true, boostedUntil: expiresAt })
   } catch (err) {

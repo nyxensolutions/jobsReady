@@ -27,11 +27,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     }
 
     const limits = await getPlanLimits(employer.id)
-    if (!limits.sub) {
-      return NextResponse.json({ error: "UPGRADE_REQUIRED", message: "A paid plan is needed to view candidate contact details." }, { status: 402 })
-    }
-    if (limits.unlocksLeft <= 0) {
-      return NextResponse.json({ error: "UPGRADE_REQUIRED", message: "You have used all your candidate unlock credits. Upgrade to unlock more." }, { status: 402 })
+
+    // Free launch: employers have no subscription, and the plans page promises
+    // "Instant Candidate Unlocks — view contact details of any candidate for
+    // free". Rejecting them here made that advertised feature unusable for
+    // every current employer. Only metered plans are capped.
+    if (limits.sub && limits.unlocksLeft <= 0) {
+      return NextResponse.json(
+        {
+          error: "UPGRADE_REQUIRED",
+          message: "You have used all your candidate unlock credits. Upgrade to unlock more.",
+        },
+        { status: 402 }
+      )
     }
 
     const seeker = await prisma.seekerProfile.findUnique({
@@ -40,15 +48,22 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     })
     if (!seeker) return NextResponse.json({ error: "Seeker not found" }, { status: 404 })
 
-    await prisma.$transaction([
-      prisma.candidateUnlock.create({
-        data: { employerId: employer.id, seekerId, subscriptionId: limits.sub.id },
-      }),
-      prisma.subscription.update({
-        where: { id: limits.sub.id },
-        data: { candidateUnlocksUsed: { increment: 1 } },
-      }),
-    ])
+    // Only record and meter the unlock when a subscription is paying for it.
+    // CandidateUnlock.subscriptionId is a required FK, so a free-tier unlock
+    // cannot be written without first making that column nullable — and free
+    // unlocks are unmetered, so there is no credit to draw down either way.
+    if (limits.sub) {
+      const subscriptionId = limits.sub.id
+      await prisma.$transaction([
+        prisma.candidateUnlock.create({
+          data: { employerId: employer.id, seekerId, subscriptionId },
+        }),
+        prisma.subscription.update({
+          where: { id: subscriptionId },
+          data: { candidateUnlocksUsed: { increment: 1 } },
+        }),
+      ])
+    }
 
     return NextResponse.json({ success: true, contact: seeker.user })
   } catch (err) {
