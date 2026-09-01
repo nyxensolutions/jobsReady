@@ -16,13 +16,21 @@ export async function POST(req: NextRequest) {
 
   const assignedRole = (role === "EMPLOYER" ? "EMPLOYER" : "SEEKER") as "SEEKER" | "EMPLOYER"
 
+  // Block cross-role sign-in: same phone/Google account cannot be both seeker and employer.
+  const existingUser = await prisma.user.findUnique({ where: { id: decoded.uid }, select: { role: true } })
+  if (existingUser && existingUser.role !== assignedRole) {
+    const existingRoleName = existingUser.role === "SEEKER" ? "job seeker" : "employer"
+    return NextResponse.json(
+      { error: `This number is already registered as a ${existingRoleName}. Please sign in with the correct account type.` },
+      { status: 409 }
+    )
+  }
+
   // Run DB upsert and session-cookie creation in parallel — they're independent.
   let dbUser: Awaited<ReturnType<typeof prisma.user.upsert>>
   let sessionCookie: string
   try {
     ;[dbUser, sessionCookie] = await Promise.all([
-      // Upsert user in DB — role follows whichever login page the user came through
-      // so the same phone number can serve both a seeker and employer account.
       prisma.user.upsert({
         where: { id: decoded.uid },
         create: {
@@ -31,7 +39,7 @@ export async function POST(req: NextRequest) {
           email: decoded.email ?? null,
           role: assignedRole,
         },
-        update: { role: assignedRole },
+        update: {},  // never overwrite role of an existing user
       }),
       // Create Firebase session cookie — only needs the idToken, not the DB result
       createSessionCookie(idToken),
