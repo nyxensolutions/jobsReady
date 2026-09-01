@@ -30,6 +30,9 @@ export async function POST(req: NextRequest) {
   let dbUser: Awaited<ReturnType<typeof prisma.user.upsert>>
   let sessionCookie: string
   try {
+    // If Firebase confirmed the email (Google sign-in), mark it verified immediately
+    const googleVerifiedEmail = decoded.email && decoded.email_verified ? decoded.email : null
+
     ;[dbUser, sessionCookie] = await Promise.all([
       prisma.user.upsert({
         where: { id: decoded.uid },
@@ -38,8 +41,12 @@ export async function POST(req: NextRequest) {
           phone: decoded.phone_number ?? null,
           email: decoded.email ?? null,
           role: assignedRole,
+          // Google sign-in tokens arrive pre-verified — no separate email link needed
+          emailVerified: !!googleVerifiedEmail,
         },
-        update: {},  // never overwrite role of an existing user
+        update: googleVerifiedEmail
+          ? { emailVerified: true, email: googleVerifiedEmail }
+          : {},  // phone sign-in: never overwrite anything
       }),
       // Create Firebase session cookie — only needs the idToken, not the DB result
       createSessionCookie(idToken),

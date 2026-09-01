@@ -28,11 +28,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     const limits = await getPlanLimits(employer.id)
 
-    // Free launch: employers have no subscription, and the plans page promises
-    // "Instant Candidate Unlocks — view contact details of any candidate for
-    // free". Rejecting them here made that advertised feature unusable for
-    // every current employer. Only metered plans are capped.
-    if (limits.sub && limits.unlocksLeft <= 0) {
+    // Every employer has a subscription — the free launch plan if nothing
+    // else — so this is purely a credit check. The free plan's credits are
+    // effectively unlimited, which is what makes "Instant Candidate Unlocks"
+    // on the plans page true.
+    if (limits.unlocksLeft <= 0) {
       return NextResponse.json(
         {
           error: "UPGRADE_REQUIRED",
@@ -48,10 +48,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     })
     if (!seeker) return NextResponse.json({ error: "Seeker not found" }, { status: 404 })
 
-    // Only record and meter the unlock when a subscription is paying for it.
-    // CandidateUnlock.subscriptionId is a required FK, so a free-tier unlock
-    // cannot be written without first making that column nullable — and free
-    // unlocks are unmetered, so there is no credit to draw down either way.
     if (limits.sub) {
       const subscriptionId = limits.sub.id
       await prisma.$transaction([

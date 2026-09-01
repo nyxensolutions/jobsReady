@@ -19,8 +19,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (!job) return NextResponse.json({ error: "Job not found or not active" }, { status: 404 })
 
     const limits = await getPlanLimits(employer.id)
-    // Free launch: no subscription, but the plans page lists "Featured Job
-    // Boosts" as included. Only metered plans are capped.
+    // Every employer has a subscription — the free launch plan if nothing else
+    // — so this is purely a credit check.
     if (limits.boostsLeft <= 0) {
       return NextResponse.json({ error: "UPGRADE_REQUIRED", message: "You have used all your boost credits. Upgrade to get more." }, { status: 402 })
     }
@@ -34,11 +34,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7)
 
-    // JobBoost.subscriptionId is a required FK, so a free-tier boost cannot be
-    // recorded without first making that column nullable. Nothing expires
-    // isFeatured today, so skipping the record leaves the visible behaviour
-    // identical — only the re-boost guard is lost, which is moot while boosts
-    // are unmetered.
     const sub = limits.sub
     if (sub) {
       const subscriptionId = sub.id

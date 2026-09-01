@@ -17,22 +17,22 @@ export async function getActiveSub(employerId: string): Promise<ActiveSub | null
 }
 
 /**
- * Effectively uncapped. Used rather than a sentinel like -1 so every existing
- * `>=` / `<=` comparison keeps working untouched.
+ * Effectively uncapped, as an Int the database can hold. Used rather than a
+ * sentinel like -1 so every existing `>=` / `<=` comparison keeps working.
  */
-export const UNLIMITED = Number.MAX_SAFE_INTEGER
+export const UNLIMITED = 2_147_483_647
+
+export const FREE_PLAN_SLUG = "free-launch"
+
+/** Ten years — long enough that the free subscription never lapses on its own. */
+export const FREE_PLAN_DURATION_DAYS = 3650
 
 /**
- * Free-tier limits — currently the launch offer.
+ * Fallback for an employer with no subscription at all.
  *
- * The plans page advertises ten capabilities as included for free, headlined
- * "Hire for free. No limits." These values are what actually enforce that, so
- * anything capped here silently breaks an advertised feature: the previous
- * activeJobLimit of 1 blocked a second job posting outright, and zero unlock
- * and boost credits made two more advertised features unusable.
- *
- * When paid plans launch, tighten these back up *and* update the plans page in
- * the same change.
+ * This should not happen in practice: every employer is auto-enrolled in the
+ * free plan on first access. It exists only so a failed enrolment degrades to
+ * something usable rather than blocking the employer entirely.
  */
 export const FREE_LIMITS = {
   activeJobLimit: UNLIMITED,
@@ -51,9 +51,45 @@ export interface PlanLimits {
   sub: ActiveSub | null
 }
 
-/** Returns resolved limits for an employer (sub or free). */
+/**
+ * Enrols an employer in the free launch plan.
+ *
+ * Called lazily rather than only at registration so employers created before
+ * the free plan existed are picked up too — no backfill migration needed, and
+ * it self-heals if an enrolment is ever missed.
+ *
+ * Returns null if the free plan hasn't been seeded yet, in which case callers
+ * fall back to FREE_LIMITS.
+ */
+export async function ensureFreeSubscription(employerId: string): Promise<ActiveSub | null> {
+  const plan = await prisma.plan.findUnique({ where: { slug: FREE_PLAN_SLUG } })
+  if (!plan) return null
+
+  const expiresAt = new Date()
+  expiresAt.setDate(expiresAt.getDate() + plan.durationDays)
+
+  try {
+    return await prisma.subscription.create({
+      data: { employerId, planId: plan.id, status: "ACTIVE", expiresAt },
+      include: { plan: true },
+    })
+  } catch {
+    // Two concurrent requests can both find no subscription and both try to
+    // create one. There's no unique constraint to lean on, so re-read instead
+    // of failing — whichever won is fine.
+    return getActiveSub(employerId)
+  }
+}
+
+/**
+ * Resolved limits for an employer.
+ *
+ * Every employer has a subscription — the free launch plan if nothing else —
+ * so callers can rely on `sub` being present and don't need a separate
+ * free-tier branch.
+ */
 export async function getPlanLimits(employerId: string): Promise<PlanLimits> {
-  const sub = await getActiveSub(employerId)
+  const sub = (await getActiveSub(employerId)) ?? (await ensureFreeSubscription(employerId))
   if (!sub) {
     return { ...FREE_LIMITS, unlocksLeft: UNLIMITED, boostsLeft: UNLIMITED, sub: null }
   }

@@ -31,7 +31,12 @@ function daysLeft(iso: string) {
   return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000))
 }
 
-export default async function EmployerDashboardPage() {
+type Props = {
+  searchParams: Promise<{ verified?: string }>
+}
+
+export default async function EmployerDashboardPage({ searchParams }: Props) {
+  const { verified } = await searchParams
   const session = await getServerSession()
   if (!session) redirect("/login")
 
@@ -75,7 +80,7 @@ export default async function EmployerDashboardPage() {
   const steps = [
     { label: "Create account",      done: true },
     { label: "Post first job",      done: jobs.length > 0 },
-    { label: "Email verified",      done: !!dbUser.email },
+    { label: "Email verified",      done: dbUser.emailVerified, action: "/employer/setup/verify-email", actionIcon: "mail" },
     { label: "Upload documents",    done: (employer.docUrls ?? []).length > 0, action: "/employer/setup/verify-docs", actionIcon: "upload" },
     { label: "Account verified",    done: employer.status === "VERIFIED" },
   ]
@@ -84,6 +89,14 @@ export default async function EmployerDashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+
+      {/* ── Email verified success banner ─────────────────────── */}
+      {verified === "1" && (
+        <div className="bg-emerald-50 border-b border-emerald-200 px-6 sm:px-8 py-3 flex items-center gap-2 text-sm text-emerald-700 font-medium">
+          <CheckCircle size={15} className="text-emerald-600 shrink-0" />
+          Email verified successfully! Your account setup is one step closer to complete.
+        </div>
+      )}
 
       {/* ── Hero header ──────────────────────────────────────────── */}
       <div className="bg-gradient-to-br from-[#1a3461] via-[#1e3d73] to-[#243f7a] px-6 sm:px-8 pt-8 pb-0">
@@ -405,7 +418,7 @@ export default async function EmployerDashboardPage() {
                     </span>
                     {s.action && !s.done ? (
                       <Link href={s.action} className="text-xs text-[#1a3461] font-bold flex items-center gap-1 hover:underline shrink-0">
-                        {s.actionIcon === "upload" ? <Upload size={11} /> : <Info size={11} />}
+                        {s.actionIcon === "upload" ? <Upload size={11} /> : s.actionIcon === "mail" ? <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> : <Info size={11} />}
                         Do it
                       </Link>
                     ) : s.done ? (
