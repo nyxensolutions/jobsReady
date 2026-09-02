@@ -3,6 +3,7 @@ import { createHmac } from "crypto"
 import { prisma } from "@/lib/db"
 import { sendPaymentReceipt } from "@/lib/email"
 import { notifyEmployer, MSG, WA } from "@/lib/sms"
+import { sendPushToUser } from "@/lib/push"
 
 /**
  * Cashfree webhook — authoritative payment notification.
@@ -126,6 +127,22 @@ export async function POST(req: NextRequest) {
         : Promise.resolve(),
       notifyEmployer(phone, MSG.employer.planActivated(plan.name, plan.durationDays)),
       WA.employer.planActivated(phone, plan.name, plan.durationDays),
+      prisma.notification.create({
+        data: {
+          userId: employer.userId,
+          type: "PLAN_ACTIVATED",
+          title: "Payment successful ✅",
+          body: `Your ${plan.name} is now active for the next ${plan.durationDays} days.`,
+          data: { planSlug },
+        },
+      }),
+      Promise.resolve(
+        sendPushToUser(employer.userId, {
+          title: "Payment successful ✅",
+          body: `Your ${plan.name} is now active for the next ${plan.durationDays} days.`,
+          data: { type: "PLAN_ACTIVATED" }
+        })
+      )
     ])
   }
 

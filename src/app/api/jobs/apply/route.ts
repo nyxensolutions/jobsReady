@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendEmployerApplicationAlert } from "@/lib/email"
+import { sendPushToUser } from "@/lib/push"
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession()
@@ -59,6 +60,12 @@ export async function POST(req: NextRequest) {
         body: `${profile.name} has applied for your job posting.`,
         data: { applicationId: application.id, jobId: job.id, jobTitle: job.title },
       },
+    })
+
+    sendPushToUser(employerUser.id, {
+      title: `New application for "${job.title}"`,
+      body: `${profile.name} has applied for your job posting.`,
+      data: { applicationId: application.id, type: "NEW_APPLICATION" }
     })
   }
 

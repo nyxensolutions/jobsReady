@@ -1,4 +1,4 @@
-﻿import { Resend } from "resend"
+import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = process.env.RESEND_FROM_EMAIL ?? "noreply@jobs24india.com"
@@ -248,6 +248,56 @@ export async function sendEmployerApplicationAlert({
         <a href="${APP_URL}/employer/dashboard"
            style="display:inline-block;background:#1d4ed8;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
           View in Dashboard →
+        </a>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
+      </div>
+    `,
+  })
+}
+
+export async function sendEmployerVerifiedAlert({
+  employerEmail,
+  employerName,
+}: {
+  employerEmail: string
+  employerName: string
+}) {
+  await resend.emails.send({
+    from: `Jobs24India <${FROM}>`,
+    to: employerEmail,
+    subject: `Your company profile is now verified! ✅`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
+        <h2 style="color:#15803d;margin:0 0 8px">Company verified successfully</h2>
+        <p style="color:#6b7280;margin:0 0 24px">Hi ${employerName}, we have reviewed and verified your company profile. You can now post jobs and connect with candidates.</p>
+        <a href="${APP_URL}/employer/post-job"
+           style="display:inline-block;background:#15803d;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
+          Post a Job →
+        </a>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
+      </div>
+    `,
+  })
+}
+
+export async function sendEmployerVerificationRejectedAlert({
+  employerEmail,
+  employerName,
+}: {
+  employerEmail: string
+  employerName: string
+}) {
+  await resend.emails.send({
+    from: `Jobs24India <${FROM}>`,
+    to: employerEmail,
+    subject: `Update on your company verification`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
+        <h2 style="color:#b91c1c;margin:0 0 8px">Verification needs attention</h2>
+        <p style="color:#6b7280;margin:0 0 24px">Hi ${employerName}, we were unable to verify your company profile. Please ensure your documents are correct and re-submit.</p>
+        <a href="${APP_URL}/employer/profile"
+           style="display:inline-block;background:#1d4ed8;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
+          Update Profile →
         </a>
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>

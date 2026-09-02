@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendEmployerJobApprovedAlert, sendEmployerJobRejectedAlert } from "@/lib/email"
+import { sendPushToUser } from "@/lib/push"
 
 async function assertAdmin() {
   const session = await getServerSession()
@@ -60,6 +61,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         body: notifBody,
         data: { jobId: id, jobTitle: job.title },
       },
+    })
+
+    sendPushToUser(employerUserId, {
+      title: notifTitle,
+      body: notifBody,
+      data: { jobId: id, type: action === "approve" ? "JOB_APPROVED" : "JOB_REJECTED" }
     })
 
     // Email — fire and forget, use email stored in DB

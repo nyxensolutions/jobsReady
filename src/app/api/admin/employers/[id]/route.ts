@@ -9,6 +9,9 @@ async function assertAdmin() {
   return dbUser?.role === "ADMIN"
 }
 
+import { sendEmployerVerifiedAlert, sendEmployerVerificationRejectedAlert } from "@/lib/email"
+import { sendPushToUser } from "@/lib/push"
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -54,6 +57,31 @@ export async function PATCH(
         data: { employerId: id },
       },
     })
+
+    // Send push notification
+    sendPushToUser(employer.userId, {
+      title: msg.title,
+      body: msg.body,
+      data: { employerId: id, type: "EMPLOYER_STATUS" }
+    })
+  }
+
+  // Send email
+  if (action === "verify" || action === "reject") {
+    void (async () => {
+      try {
+        const empUser = await prisma.user.findUnique({ where: { id: employer.userId }, select: { email: true } })
+        if (empUser?.email) {
+          if (action === "verify") {
+            await sendEmployerVerifiedAlert({ employerEmail: empUser.email, employerName: employer.companyName })
+          } else {
+            await sendEmployerVerificationRejectedAlert({ employerEmail: empUser.email, employerName: employer.companyName })
+          }
+        }
+      } catch (err) {
+        console.error("[admin/employers/notify] Email notification failed:", err)
+      }
+    })()
   }
 
   return NextResponse.json({ success: true, status: employer.status })

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendCandidateInviteEmail } from "@/lib/email"
+import { sendPushToUser } from "@/lib/push"
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession()
@@ -39,6 +40,12 @@ export async function POST(req: NextRequest) {
       body: `You've been invited to apply for "${job.title}" in ${job.city.name}. Tap to view the job.`,
       data: { jobId: job.id, jobTitle: job.title, companyName: employer.companyName },
     },
+  })
+
+  sendPushToUser(seekerProfile.userId, {
+    title: `${employer.companyName} wants you to apply!`,
+    body: `You've been invited to apply for "${job.title}" in ${job.city.name}. Tap to view the job.`,
+    data: { jobId: job.id, type: "JOB_INVITE" }
   })
 
   // Send email invite if seeker has an email address — fire and forget
