@@ -65,7 +65,9 @@ function LoginPageContent() {
           const res = await fetch("/api/auth/me")
           if (res.ok) {
             const data = await res.json()
-            if (data.role === "EMPLOYER") {
+            if (data.role === "ADMIN") {
+              window.location.href = "/admin"
+            } else if (data.role === "EMPLOYER") {
               window.location.href = "/employer/dashboard"
             } else if (data.role === "SEEKER") {
               window.location.href = "/seeker/dashboard"
@@ -94,6 +96,7 @@ function LoginPageContent() {
   function getRedirect(roleStr: string, requiresProfile: boolean) {
     if (requiresProfile) return "/employer/register"
     if (nextUrl) return nextUrl
+    if (roleStr === "ADMIN") return "/admin"
     return roleStr === "EMPLOYER" ? "/employer/dashboard" : "/seeker/dashboard"
   }
 

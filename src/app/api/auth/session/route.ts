@@ -17,8 +17,9 @@ export async function POST(req: NextRequest) {
   const assignedRole = (role === "EMPLOYER" ? "EMPLOYER" : "SEEKER") as "SEEKER" | "EMPLOYER"
 
   // Block cross-role sign-in: same phone/Google account cannot be both seeker and employer.
+  // Exception: ADMINs can log in regardless of the role they clicked on the login page.
   const existingUser = await prisma.user.findUnique({ where: { id: decoded.uid }, select: { role: true } })
-  if (existingUser && existingUser.role !== assignedRole) {
+  if (existingUser && existingUser.role !== "ADMIN" && existingUser.role !== assignedRole) {
     const existingRoleName = existingUser.role === "SEEKER" ? "job seeker" : "employer"
     return NextResponse.json(
       { error: `This number is already registered as a ${existingRoleName}. Please sign in with the correct account type.` },
