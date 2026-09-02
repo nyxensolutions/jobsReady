@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, type ReactNode } from "react"
+import { useEffect, useRef, type ReactNode, type ElementType } from "react"
 
 type Animation = "fadeUp" | "fadeIn" | "slideLeft" | "slideRight" | "zoomIn" | "popIn"
 
@@ -10,7 +10,7 @@ interface Props {
   delay?: number        // ms
   stagger?: number      // if set, applies stagger-N class based on index
   className?: string
-  as?: keyof JSX.IntrinsicElements
+  as?: ElementType
   threshold?: number    // 0-1, default 0.1
 }
 
