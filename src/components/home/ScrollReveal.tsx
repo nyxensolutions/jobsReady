@@ -54,7 +54,6 @@ export default function ScrollReveal({
   const style = delay ? { animationDelay: `${delay}ms` } : undefined
 
   return (
-    // @ts-expect-error dynamic tag
     <Tag
       ref={ref}
       className={`scroll-hidden ${staggerClass} ${className}`}
