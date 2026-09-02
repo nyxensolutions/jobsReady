@@ -1,11 +1,13 @@
-﻿"use client"
+"use client"
 import { useEffect, useState } from "react"
 import { Link } from "@/i18n/navigation"
 import {
   CheckCircle, XCircle, Star, StarOff, ExternalLink, Phone,
   Building2, MapPin, Tag, Users, ChevronDown, ChevronUp,
-  FileText, Globe, Loader2, AlertTriangle, LogOut, Eye,
+  FileText, Globe, Loader2, AlertTriangle, LogOut, Eye, PlusCircle,
 } from "lucide-react"
+import AddEmployerForm from "./AddEmployerForm"
+import AddSeekerForm from "./AddSeekerForm"
 
 type Job = {
   id: string
@@ -94,7 +96,7 @@ function ConfirmDialog({
 }
 
 export default function AdminPanel() {
-  const [section, setSection] = useState<"jobs" | "employers">("jobs")
+  const [section, setSection] = useState<"jobs" | "employers" | "add-employer" | "add-seeker">("jobs")
 
   // Jobs state
   const [jobs, setJobs] = useState<Job[]>([])
@@ -242,18 +244,30 @@ export default function AdminPanel() {
         </div>
 
         {/* Section switcher */}
-        <div className="flex gap-1 bg-gray-200 rounded-xl p-1 w-fit mb-6">
+        <div className="flex gap-1 bg-gray-200 rounded-xl p-1 w-fit mb-6 overflow-x-auto max-w-full">
           <button
             onClick={() => setSection("jobs")}
-            className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${section === "jobs" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+            className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 whitespace-nowrap ${section === "jobs" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
           >
             <Tag size={14} /> Jobs
           </button>
           <button
             onClick={() => setSection("employers")}
-            className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${section === "employers" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+            className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 whitespace-nowrap ${section === "employers" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
           >
-            <Users size={14} /> Employers
+            <Building2 size={14} /> Employers
+          </button>
+          <button
+            onClick={() => setSection("add-employer")}
+            className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 whitespace-nowrap ${section === "add-employer" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+          >
+            <PlusCircle size={14} /> Add Employer
+          </button>
+          <button
+            onClick={() => setSection("add-seeker")}
+            className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 whitespace-nowrap ${section === "add-seeker" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+          >
+            <Users size={14} /> Add Seeker
           </button>
         </div>
 
@@ -646,6 +660,8 @@ export default function AdminPanel() {
             )}
           </>
         )}
+        {section === "add-employer" && <AddEmployerForm />}
+        {section === "add-seeker" && <AddSeekerForm />}
       </div>
     </div>
   )
