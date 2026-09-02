@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { sendSeekerWelcomeEmail } from "@/lib/email"
 
 // GET /api/seeker/profile — current seeker's profile (used by the mobile app;
 // the web app renders this server-side instead, via a Server Component).
@@ -50,11 +51,17 @@ export async function POST(req: NextRequest) {
     languages: Array.isArray(languages) ? languages.filter(Boolean) : [],
   }
 
+  const existingProfile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
+
   const profile = await prisma.seekerProfile.upsert({
     where: { userId: session.uid },
     create: { userId: session.uid, ...patch },
     update: patch,
   })
+
+  if (!existingProfile && dbUser.email) {
+    void sendSeekerWelcomeEmail({ email: dbUser.email, name: profile.name })
+  }
 
   return NextResponse.json({ success: true, profile })
 }

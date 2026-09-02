@@ -13,14 +13,17 @@ function emailShell(body: string) {
 <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb">
   <tr><td style="background:#1a3461;padding:24px 32px">
     <table width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td><span style="font-size:22px;font-weight:800;color:#ffffff">Jobs<span style="color:#f97316">24</span>India</span><br>
-      <span style="font-size:11px;color:#93c5fd">India's job portal for frontline workers</span></td>
+      <td>
+        <img src="${APP_URL}/job24.png" alt="Jobs24India" height="32" style="display:block;margin-bottom:8px;border:none;" />
+        <span style="font-size:11px;color:#93c5fd">India's job portal for frontline workers</span>
+      </td>
     </tr></table>
   </td></tr>
   <tr><td style="padding:32px">${body}</td></tr>
   <tr><td style="background:#f9fafb;padding:16px 32px;border-top:1px solid #e5e7eb">
     <p style="margin:0;font-size:11px;color:#9ca3af">Jobs24India · NyxenCloud Solutions Private Limited · <a href="${APP_URL}" style="color:#1a3461;text-decoration:none">jobs24india.com</a></p>
-    <p style="margin:4px 0 0;font-size:10px;color:#d1d5db">To unsubscribe, visit your profile settings.</p>
+    <p style="margin:8px 0 0;font-size:11px;color:#6b7280">Need help? Contact us at <a href="mailto:support@jobs24india.com" style="color:#1a3461;text-decoration:none;font-weight:600">support@jobs24india.com</a></p>
+    <p style="margin:8px 0 0;font-size:10px;color:#d1d5db">To unsubscribe, visit your profile settings.</p>
   </td></tr>
 </table>
 </td></tr></table>
@@ -29,6 +32,62 @@ function emailShell(body: string) {
 
 function btn(url: string, label: string, color = "#1a3461") {
   return `<a href="${url}" style="display:inline-block;background:${color};color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700">${label} →</a>`
+}
+
+// ─── Welcome Emails ─────────────────────────────────────────────────────────────
+
+export async function sendSeekerWelcomeEmail({ email, name }: { email: string; name: string }) {
+  if (!email) return
+  const body = `
+    <h2 style="margin:0 0 4px;color:#1a3461;font-size:20px">Welcome to Jobs24India! 👋</h2>
+    <p style="margin:0 0 16px;color:#6b7280;font-size:14px">Hi ${name},</p>
+    <p style="margin:0 0 24px;color:#4b5563;font-size:14px;line-height:1.6">
+      We're thrilled to have you onboard. Jobs24India is India's leading platform connecting talented frontline workers like you with top companies. 
+    </p>
+    <div style="background:#eef2ff;border:1px solid #c7d2fe;border-radius:12px;padding:20px;margin-bottom:24px">
+      <h3 style="margin:0 0 12px;color:#374151;font-size:14px">To get the best jobs quickly:</h3>
+      <ul style="margin:0;padding-left:20px;color:#4b5563;font-size:14px;line-height:1.5">
+        <li style="margin-bottom:8px"><strong>Complete your profile:</strong> Add your skills, experience, and photo.</li>
+        <li style="margin-bottom:8px"><strong>Apply actively:</strong> Employers respond faster to recent applications.</li>
+        <li><strong>Stay alert:</strong> We'll notify you when an employer shortlists you.</li>
+      </ul>
+    </div>
+    ${btn(`${APP_URL}/seeker/profile`, "Complete Your Profile")}
+    <p style="margin:24px 0 0;color:#6b7280;font-size:14px">Good luck with your job search!</p>
+  `
+  await resend.emails.send({
+    from: `Jobs24India <${FROM}>`,
+    to: email,
+    subject: "Welcome to Jobs24India! 🚀",
+    html: emailShell(body),
+  })
+}
+
+export async function sendEmployerWelcomeEmail({ email, companyName }: { email: string; companyName: string }) {
+  if (!email) return
+  const body = `
+    <h2 style="margin:0 0 4px;color:#1a3461;font-size:20px">Welcome to Jobs24India! 👋</h2>
+    <p style="margin:0 0 16px;color:#6b7280;font-size:14px">Hi ${companyName},</p>
+    <p style="margin:0 0 24px;color:#4b5563;font-size:14px;line-height:1.6">
+      Welcome to India's fastest growing network of frontline workers. We are excited to help you find the perfect candidates for your team.
+    </p>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:20px;margin-bottom:24px">
+      <h3 style="margin:0 0 12px;color:#374151;font-size:14px">Next steps to start hiring:</h3>
+      <ul style="margin:0;padding-left:20px;color:#4b5563;font-size:14px;line-height:1.5">
+        <li style="margin-bottom:8px"><strong>Verify your company:</strong> Upload your documents to get verified.</li>
+        <li style="margin-bottom:8px"><strong>Post a job:</strong> Your first few hires might be covered under our free plan!</li>
+        <li><strong>Review candidates:</strong> You'll get notified immediately when someone applies.</li>
+      </ul>
+    </div>
+    ${btn(`${APP_URL}/employer/post-job`, "Post Your First Job")}
+    <p style="margin:24px 0 0;color:#6b7280;font-size:14px">Happy hiring!</p>
+  `
+  await resend.emails.send({
+    from: `Jobs24India <${FROM}>`,
+    to: email,
+    subject: "Welcome to Jobs24India! 🚀",
+    html: emailShell(body),
+  })
 }
 
 // ─── Payment receipt ──────────────────────────────────────────────────────────
