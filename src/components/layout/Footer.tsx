@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
@@ -23,11 +23,8 @@ export default function Footer({ userRole }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="bg-white rounded-xl p-1 shrink-0">
-                <Image src="/logo-full.png" alt="Jobs24India" width={40} height={40} className="object-contain" />
-              </div>
-              <Image src="/job24.png" alt="Jobs24India" width={110} height={38} className="object-contain brightness-110" />
+            <div className="flex items-center mb-1">
+              <Image src="/Logo_Light.png" alt="Jobs24India" width={180} height={50} className="object-contain" />
             </div>
             <p className="text-gray-600 text-xs mb-3">
               A product of{" "}

@@ -14,7 +14,7 @@ function emailShell(body: string) {
   <tr><td style="background:#1a3461;padding:24px 32px">
     <table width="100%" cellpadding="0" cellspacing="0"><tr>
       <td>
-        <img src="${APP_URL}/job24.png" alt="Jobs24India" height="32" style="display:block;margin-bottom:8px;border:none;" />
+        <img src="${APP_URL}/Logo_Light.png" alt="Jobs24India" height="32" style="display:block;margin-bottom:8px;border:none;" />
         <span style="font-size:11px;color:#93c5fd">India's job portal for frontline workers</span>
       </td>
     </tr></table>
