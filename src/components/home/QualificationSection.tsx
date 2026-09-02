@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation"
 import { getTranslations } from "next-intl/server"
 import { PenLine, BookOpen, BookMarked, Award, GraduationCap, ScrollText, ChevronRight } from "lucide-react"
+import ScrollReveal from "@/components/home/ScrollReveal"
 
 const QUALIFICATIONS = [
   { key: "below10",  labelKey: "below10",  icon: PenLine,       vacancies: "63,00,000+", color: "bg-red-50 text-red-500 border-red-100"      },
@@ -18,30 +19,31 @@ export default async function QualificationSection() {
   return (
     <section className="py-12 bg-[#f0f4ff]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
+        <ScrollReveal className="text-center mb-8">
           <h2 className="text-xl sm:text-2xl font-bold text-[#1a3461]">{t("title")}</h2>
           <p className="text-slate-500 mt-1 text-sm">{t("subtitle")}</p>
-        </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-          {QUALIFICATIONS.map(({ key, labelKey, icon: Icon, vacancies, color }) => {
+          {QUALIFICATIONS.map(({ key, labelKey, icon: Icon, vacancies, color }, index) => {
             let label = labelKey
             try { label = tq(labelKey as any) } catch { /* fallback */ }
             return (
-              <Link
-                key={key}
-                href={`/jobs?qualification=${key}`}
-                className="group bg-white rounded-xl border border-gray-100 p-4 sm:p-5 hover:shadow-md hover:border-[#1a3461]/20 transition-all flex flex-col items-start gap-3"
-              >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${color}`}>
-                  <Icon size={22} />
-                </div>
-                <div className="flex-1">
-                  <p className="font-bold text-gray-800 text-sm leading-snug">{label}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{vacancies} {t("vacancies")}</p>
-                </div>
-                <ChevronRight size={15} className="text-gray-300 group-hover:text-[#1a3461] transition-colors self-end" />
-              </Link>
+              <ScrollReveal key={key} animation="fadeUp" stagger={index}>
+                <Link
+                  href={`/jobs?qualification=${key}`}
+                  className="group bg-white rounded-xl border border-gray-100 p-4 sm:p-5 hover:shadow-md hover:border-[#1a3461]/20 transition-all flex flex-col items-start gap-3 h-full"
+                >
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${color}`}>
+                    <Icon size={22} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-gray-800 text-sm leading-snug">{label}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{vacancies} {t("vacancies")}</p>
+                  </div>
+                  <ChevronRight size={15} className="text-gray-300 group-hover:text-[#1a3461] transition-colors self-end" />
+                </Link>
+              </ScrollReveal>
             )
           })}
         </div>

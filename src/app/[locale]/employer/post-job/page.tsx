@@ -15,7 +15,8 @@ export default async function PostJobPage({ searchParams }: Props) {
     prisma.user.findUnique({ where: { id: session.uid } }),
     prisma.employerProfile.findUnique({ where: { userId: session.uid } }),
   ])
-  if (!dbUser || dbUser.role !== "EMPLOYER") redirect("/login")
+  if (!dbUser) redirect("/login")
+  if (dbUser.role === "SEEKER") redirect("/seeker/dashboard")
   if (!employer) redirect("/employer/register")
 
   const [categories, cities, draftJob] = await Promise.all([

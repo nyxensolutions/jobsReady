@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 import { Link } from "@/i18n/navigation"
 import {
   PlusCircle, Users, Clock, CheckCircle, XCircle, AlertCircle,
@@ -44,8 +44,8 @@ export default async function EmployerDashboardPage({ searchParams }: Props) {
     prisma.user.findUnique({ where: { id: session.uid } }),
     prisma.employerProfile.findUnique({ where: { userId: session.uid } }),
   ])
-  // Gate by employer profile existence — same phone can have both seeker + employer accounts
   if (!dbUser) redirect("/login")
+  if (dbUser.role === "SEEKER") redirect("/seeker/dashboard")
   if (!employer) redirect("/employer/register")
 
   const [allJobs, draftJobs, activeSub] = await Promise.all([
@@ -365,14 +365,35 @@ export default async function EmployerDashboardPage({ searchParams }: Props) {
                   </div>
                   <div>
                     <p className="font-bold text-sm">Free Plan</p>
-                    <p className="text-xs text-white/50">1 job · no contact unlocks</p>
+                    <p className="text-xs text-white/50">10 active jobs · all features included</p>
                   </div>
                 </div>
-                <p className="text-xs text-white/70 leading-relaxed mb-4">
-                  Upgrade to unlock candidate phone numbers, boost jobs to the top, and post multiple openings simultaneously.
-                </p>
+
+                {/* Job usage progress bar */}
+                <div className="mb-4">
+                  <div className="flex justify-between text-xs mb-1.5">
+                    <span className="text-white/70">Active Jobs</span>
+                    <span className="font-bold text-white">{stats.live} / 10</span>
+                  </div>
+                  <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        stats.live >= 10 ? "bg-red-400" : stats.live >= 7 ? "bg-orange-400" : "bg-emerald-400"
+                      }`}
+                      style={{ width: `${Math.min((stats.live / 10) * 100, 100)}%` }}
+                    />
+                  </div>
+                  {stats.live >= 8 && (
+                    <p className="text-[10px] text-orange-300 mt-1">
+                      {stats.live >= 10
+                        ? "Limit reached — contact support@jobs24india.com to post more"
+                        : `${10 - stats.live} job slot${10 - stats.live > 1 ? "s" : ""} remaining`}
+                    </p>
+                  )}
+                </div>
+
                 <div className="flex flex-col gap-2 mb-4">
-                  {["Unlock candidate contacts", "Post unlimited jobs", "Boost to top of search", "High-reach push notifications"].map(f => (
+                  {["Post up to 10 jobs", "Unlock candidate contacts", "Boost to top of search", "High-reach push notifications"].map(f => (
                     <div key={f} className="flex items-center gap-2 text-xs text-white/80">
                       <CheckCircle size={12} className="text-emerald-400 shrink-0" />
                       {f}

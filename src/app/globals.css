@@ -35,3 +35,98 @@ input[type="radio"],
 button[disabled] {
   cursor: not-allowed;
 }
+
+/* ── Scroll-reveal animations ──────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.5); }
+  70%  { transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes kenBurns {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(-1%, -1%); }
+}
+
+/* Elements waiting to be revealed */
+.scroll-hidden {
+  opacity: 0;
+}
+
+/* Revealed state — animation applied via JS */
+.scroll-reveal-fadeUp    { animation: fadeUp 0.6s ease-out forwards; }
+.scroll-reveal-fadeIn    { animation: fadeIn 0.6s ease-out forwards; }
+.scroll-reveal-slideLeft { animation: slideLeft 0.6s ease-out forwards; }
+.scroll-reveal-slideRight{ animation: slideRight 0.6s ease-out forwards; }
+.scroll-reveal-zoomIn    { animation: zoomIn 0.5s ease-out forwards; }
+.scroll-reveal-popIn     { animation: popIn 0.4s ease-out forwards; }
+
+/* Stagger delays for grid items */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 180ms; }
+.stagger-5 { animation-delay: 240ms; }
+.stagger-6 { animation-delay: 300ms; }
+.stagger-7 { animation-delay: 360ms; }
+.stagger-8 { animation-delay: 420ms; }
+.stagger-9 { animation-delay: 480ms; }
+.stagger-10 { animation-delay: 540ms; }
+.stagger-11 { animation-delay: 600ms; }
+.stagger-12 { animation-delay: 660ms; }
+
+/* Floating animation (continuous) */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 3s ease-in-out 1.5s infinite;
+}
+
+/* Ken Burns for city images on hover */
+.ken-burns {
+  animation: kenBurns 12s ease-in-out alternate infinite;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hidden { opacity: 1; }
+  .scroll-reveal-fadeUp,
+  .scroll-reveal-fadeIn,
+  .scroll-reveal-slideLeft,
+  .scroll-reveal-slideRight,
+  .scroll-reveal-zoomIn,
+  .scroll-reveal-popIn {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .animate-float,
+  .animate-float-delayed,
+  .ken-burns {
+    animation: none;
+  }
+}

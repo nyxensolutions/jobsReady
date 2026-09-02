@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation"
 import Image from "next/image"
 import { getTranslations } from "next-intl/server"
+import ScrollReveal from "@/components/home/ScrollReveal"
 
 export default async function HowItWorks() {
   const t = await getTranslations("home.howItWorks")
@@ -14,15 +15,15 @@ export default async function HowItWorks() {
   return (
     <section className="py-14 bg-white border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <ScrollReveal className="text-center mb-10">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{t("title")}</h2>
           <p className="text-sm text-gray-400 mt-1">{t("subtitle")}</p>
-        </div>
+        </ScrollReveal>
 
         {/* Step cards with photos */}
         <div className="grid sm:grid-cols-3 gap-5 mb-10">
-          {SEEKER_STEPS.map(({ num, img, label, desc }) => (
-            <div key={num} className="flex flex-col rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+          {SEEKER_STEPS.map(({ num, img, label, desc }, index) => (
+            <ScrollReveal key={num} animation="fadeUp" stagger={index} className="flex flex-col rounded-2xl overflow-hidden border border-gray-100 shadow-sm h-full">
               <div className="relative aspect-video w-full">
                 <Image src={img} alt={label} fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -34,11 +35,11 @@ export default async function HowItWorks() {
                 <p className="font-bold text-gray-800 text-sm">{label}</p>
                 <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <ScrollReveal animation="fadeUp" delay={400} className="grid md:grid-cols-2 gap-4">
           <Link
             href="/login"
             className="flex items-center justify-center py-3.5 rounded-2xl bg-[#b45309] text-white font-bold text-sm hover:bg-[#92400e] transition-colors shadow-sm"
@@ -51,7 +52,7 @@ export default async function HowItWorks() {
           >
             {t("ctaEmployer")}
           </Link>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )

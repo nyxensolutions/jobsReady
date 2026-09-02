@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState, useRef, useEffect, Suspense } from "react"
 import { useTranslations } from "next-intl"
@@ -56,6 +56,28 @@ function LoginPageContent() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step])
+
+  // Redirect if already logged in
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const res = await fetch("/api/auth/me")
+          if (res.ok) {
+            const data = await res.json()
+            if (data.role === "EMPLOYER") {
+              window.location.href = "/employer/dashboard"
+            } else if (data.role === "SEEKER") {
+              window.location.href = "/seeker/dashboard"
+            }
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    })
+    return () => unsub()
+  }, [router])
 
   function selectRole(r: Role) {
     setRole(r)
@@ -125,8 +147,7 @@ function LoginPageContent() {
       // Create session with the right role (employer or seeker)
       const sessionRole = role === "employer" ? "EMPLOYER" : "SEEKER"
       const data = await createSession(idToken, sessionRole)
-      router.refresh()
-      router.push(getRedirect(data.role, data.requiresProfile))
+      window.location.href = getRedirect(data.role, data.requiresProfile)
     } catch (err: any) {
       const msg = err.message ?? ""
       setError(
@@ -151,8 +172,7 @@ function LoginPageContent() {
       const result = await signInWithPopup(auth, provider)
       const idToken = await result.user.getIdToken()
       const data = await createSession(idToken, googleRole)
-      router.refresh()
-      router.push(getRedirect(data.role, data.requiresProfile))
+      window.location.href = getRedirect(data.role, data.requiresProfile)
     } catch (err: any) {
       if (err.code === "auth/popup-closed-by-user") { setLoading(false); return }
       const msg = err.message ?? ""

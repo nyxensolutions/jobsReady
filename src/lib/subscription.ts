@@ -22,6 +22,9 @@ export async function getActiveSub(employerId: string): Promise<ActiveSub | null
  */
 export const UNLIMITED = 2_147_483_647
 
+/** Maximum active jobs allowed on the free plan. */
+export const FREE_JOB_LIMIT = 10
+
 export const FREE_PLAN_SLUG = "free-launch"
 
 /** Ten years — long enough that the free subscription never lapses on its own. */
@@ -35,7 +38,7 @@ export const FREE_PLAN_DURATION_DAYS = 3650
  * something usable rather than blocking the employer entirely.
  */
 export const FREE_LIMITS = {
-  activeJobLimit: UNLIMITED,
+  activeJobLimit: FREE_JOB_LIMIT,
   candidateUnlockCredits: UNLIMITED,
   boostCredits: UNLIMITED,
   isHighReach: true,
@@ -64,8 +67,7 @@ export interface PlanLimits {
 export async function ensureFreeSubscription(employerId: string): Promise<ActiveSub | null> {
   // Upserted rather than looked up so deployment needs no seed step or data
   // migration — the plan creates itself on first use, and re-running is a no-op.
-  // `update: {}` leaves the row alone once it exists, so limits can be edited in
-  // the database when paid plans launch without this overwriting them.
+  // `update` now syncs activeJobLimit so the DB matches the code constant.
   const plan = await prisma.plan.upsert({
     where: { slug: FREE_PLAN_SLUG },
     create: {
@@ -74,7 +76,7 @@ export async function ensureFreeSubscription(employerId: string): Promise<Active
       type: "MULTI_HIRE",
       durationDays: FREE_PLAN_DURATION_DAYS,
       priceRupees: 0,
-      activeJobLimit: UNLIMITED,
+      activeJobLimit: FREE_JOB_LIMIT,
       candidateUnlockCredits: UNLIMITED,
       boostCredits: UNLIMITED,
       isTrial: false,
@@ -82,7 +84,7 @@ export async function ensureFreeSubscription(employerId: string): Promise<Active
       isActive: true,
       sortOrder: 0,
     },
-    update: {},
+    update: { activeJobLimit: FREE_JOB_LIMIT },
   })
 
   const expiresAt = new Date()
@@ -138,7 +140,7 @@ export async function checkPostJobLimit(employerId: string): Promise<string | nu
     countActiveJobs(employerId),
   ])
   if (activeCount >= limits.activeJobLimit) {
-    return `Your plan allows ${limits.activeJobLimit} active job${limits.activeJobLimit > 1 ? "s" : ""}. Close an existing job or upgrade to post more.`
+    return `You've reached the maximum of ${limits.activeJobLimit} active job postings on your current plan. To post more jobs, please contact us at support@jobs24india.com.`
   }
   return null
 }

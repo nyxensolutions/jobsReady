@@ -1,16 +1,22 @@
-﻿"use client"
+"use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { Phone, ArrowRight, CheckCircle } from "lucide-react"
+import ScrollReveal from "@/components/home/ScrollReveal"
 
 export default function GetJobNowSection() {
   const t = useTranslations("home.getJob")
   const router = useRouter()
   const [phone, setPhone] = useState("")
   const [error, setError] = useState("")
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   function handleGetJob(e: React.FormEvent) {
     e.preventDefault()
@@ -30,12 +36,12 @@ export default function GetJobNowSection() {
   ]
 
   return (
-    <section className="bg-[#EBF3FF] py-10 sm:py-14 border-y border-[#d0e6ff]">
+    <section className="bg-[#EBF3FF] py-10 sm:py-14 border-y border-[#d0e6ff] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
 
           {/* Left: CTA — now uses the bigger heading style */}
-          <div>
+          <ScrollReveal animation="slideLeft" className="flex-1">
             <div className="inline-flex items-center gap-1.5 bg-white border border-[#c8dff7] text-[#1a3461] text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
               {t("freeBadge")}
@@ -76,29 +82,28 @@ export default function GetJobNowSection() {
                 </span>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right: hero image (stays on top where it originally was) */}
-          <div className="hidden lg:flex justify-center items-center relative">
+          <ScrollReveal animation="slideRight" className="hidden lg:flex justify-center items-center relative">
             <div className="relative w-full max-w-md aspect-[4/3]">
-              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white h-full relative">
                 <Image
                   src="/images/hero-seeker.jpg"
                   alt="Workers finding jobs in India"
-                  width={560}
-                  height={420}
-                  className="object-cover w-full h-full"
+                  fill
+                  className="object-cover"
                   priority
                 />
               </div>
-              <div className="absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3 flex items-center gap-3">
+              <div className={`absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3 flex items-center gap-3 animate-float`}>
                 <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-lg">💼</div>
                 <div>
                   <p className="text-sm font-extrabold text-gray-900">50,000+</p>
                   <p className="text-[10px] text-gray-400 font-medium">Active Jobs</p>
                 </div>
               </div>
-              <div className="absolute -top-4 -right-8 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3 flex items-center gap-3">
+              <div className={`absolute -top-4 -right-8 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3 flex items-center gap-3 animate-float-delayed`}>
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-lg">🏢</div>
                 <div>
                   <p className="text-sm font-extrabold text-gray-900">5,000+</p>
@@ -106,7 +111,7 @@ export default function GetJobNowSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
         </div>
       </div>

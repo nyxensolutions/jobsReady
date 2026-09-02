@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation"
 import { getTranslations } from "next-intl/server"
+import ScrollReveal from "@/components/home/ScrollReveal"
 
 const CATEGORIES = [
   { slug: "delivery",     tKey: "delivery",     emoji: "🛵", vacancies: "23L+",  bg: "bg-amber-50",   ring: "hover:ring-amber-300",  text: "text-amber-700"   },
@@ -29,7 +30,7 @@ export default async function CategoryGrid() {
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-7">
+        <ScrollReveal className="flex items-center justify-between mb-7">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{t("title")}</h2>
             <p className="text-gray-500 mt-1 text-sm">{t("subtitle")}</p>
@@ -37,26 +38,27 @@ export default async function CategoryGrid() {
           <Link href="/jobs" className="text-sm text-[#1a3461] font-medium hover:underline hidden sm:block">
             {t("viewAll")} →
           </Link>
-        </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-          {CATEGORIES.map(({ slug, tKey, emoji, vacancies, bg, ring, text }) => {
+          {CATEGORIES.map(({ slug, tKey, emoji, vacancies, bg, ring, text }, index) => {
             let label = tKey
             try { label = tc(tKey as any) } catch { /* fallback to key */ }
             return (
-              <Link
-                key={slug}
-                href={`/jobs?category=${slug}`}
-                className={`group flex flex-col items-center gap-2.5 p-4 rounded-2xl ${bg} hover:shadow-md transition-all ring-1 ring-transparent ${ring} border border-transparent hover:border-white`}
-              >
-                <div className="text-4xl leading-none select-none group-hover:scale-110 transition-transform duration-200">
-                  {emoji}
-                </div>
-                <div className="text-center">
-                  <div className={`text-xs font-bold leading-tight ${text}`}>{label}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{vacancies} {t("jobs")}</div>
-                </div>
-              </Link>
+              <ScrollReveal key={slug} animation="fadeUp" stagger={index}>
+                <Link
+                  href={`/jobs?category=${slug}`}
+                  className={`group flex flex-col items-center gap-2.5 p-4 rounded-2xl ${bg} hover:shadow-md transition-all ring-1 ring-transparent ${ring} border border-transparent hover:border-white h-full`}
+                >
+                  <div className="text-4xl leading-none select-none group-hover:scale-110 transition-transform duration-200">
+                    {emoji}
+                  </div>
+                  <div className="text-center">
+                    <div className={`text-xs font-bold leading-tight ${text}`}>{label}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{vacancies} {t("jobs")}</div>
+                  </div>
+                </Link>
+              </ScrollReveal>
             )
           })}
         </div>

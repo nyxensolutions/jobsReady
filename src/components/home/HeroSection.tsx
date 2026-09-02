@@ -1,8 +1,8 @@
-﻿"use client"
+"use client"
 
 import { useTranslations } from "next-intl"
 import { useRouter } from "@/i18n/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search, MapPin } from "lucide-react"
 
 const POPULAR_SEARCHES = [
@@ -19,6 +19,11 @@ export default function HeroSection() {
   const router = useRouter()
   const [query, setQuery] = useState("")
   const [location, setLocation] = useState("")
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -31,8 +36,8 @@ export default function HeroSection() {
   return (
     <section className="relative bg-gradient-to-br from-[#eef3ff] via-[#f5f7ff] to-white border-b border-slate-100 overflow-hidden">
       {/* Subtle background blobs */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#1a3461]/5 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-400/5 rounded-full translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#1a3461]/5 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none animate-float" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-400/5 rounded-full translate-y-1/2 -translate-x-1/4 pointer-events-none animate-float-delayed" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -40,21 +45,21 @@ export default function HeroSection() {
           {/* Left: text + search */}
           <div>
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white border border-orange-200 text-orange-600 text-xs font-bold px-4 py-1.5 rounded-full mb-6 shadow-sm">
+            <div className={`inline-flex items-center gap-2 bg-white border border-orange-200 text-orange-600 text-xs font-bold px-4 py-1.5 rounded-full mb-6 shadow-sm transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
               {t("badge")}
             </div>
 
             {/* Heading — smaller style (swapped with GetJobNowSection) */}
-            <h1 className="text-2xl sm:text-3xl font-black text-[#1a3461] leading-tight mb-2">
+            <h1 className={`text-2xl sm:text-3xl font-black text-[#1a3461] leading-tight mb-2 transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               {t("title")}
             </h1>
-            <p className="text-slate-500 text-sm sm:text-base mb-6 max-w-lg leading-relaxed">
+            <p className={`text-slate-500 text-sm sm:text-base mb-6 max-w-lg leading-relaxed transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               {t("subtitle")}
             </p>
 
             {/* Search form */}
-            <form onSubmit={handleSearch}>
+            <form onSubmit={handleSearch} className={`transition-all duration-700 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <div className="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-2 flex flex-col sm:flex-row gap-1.5 max-w-xl">
                 {/* Job input */}
                 <div className="flex items-center flex-1 gap-2.5 px-3.5 py-1">
@@ -95,7 +100,7 @@ export default function HeroSection() {
             </form>
 
             {/* Popular searches */}
-            <div className="mt-5 flex flex-wrap items-center gap-2">
+            <div className={`mt-5 flex flex-wrap items-center gap-2 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <span className="text-slate-400 text-xs font-medium">{t("popularSearches")}:</span>
               {POPULAR_SEARCHES.map((s) => (
                 <button

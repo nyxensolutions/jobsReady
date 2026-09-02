@@ -3,7 +3,7 @@ config({ path: ".env.local" })
 
 import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
-import { FREE_PLAN_SLUG, FREE_PLAN_DURATION_DAYS, UNLIMITED } from "../src/lib/subscription"
+import { FREE_PLAN_SLUG, FREE_PLAN_DURATION_DAYS, FREE_JOB_LIMIT, UNLIMITED } from "../src/lib/subscription"
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL ?? process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
@@ -43,6 +43,9 @@ async function main() {
     { slug: "tour-travel", nameEn: "Tour & Travel", nameHi: "टूर एंड ट्रैवल", nameTe: "టూర్ & ట్రావెల్", nameTa: "சுற்றுலா & பயண", nameKn: "ಪ್ರವಾಸ & ಪ್ರಯಾಣ", nameBn: "ট্যুর ও ট্র্যাভেল", namePa: "ਟੂਰ ਅਤੇ ਟ੍ਰੈਵਲ", icon: "Plane", sortOrder: 29 },
     { slug: "travel-advisor", nameEn: "Travel Advisor", nameHi: "ट्रैवल एडवाइजर", nameTe: "ట్రావెల్ అడ్వైజర్", nameTa: "பயண ஆலோசகர்", nameKn: "ಪ್ರಯಾಣ ಸಲಹೆಗಾರ", nameBn: "ট্র্যাভেল অ্যাডভাইজার", namePa: "ਟ੍ਰੈਵਲ ਅਡਵਾਈਜ਼ਰ", icon: "MapPin", sortOrder: 30 },
     { slug: "tuition-teacher", nameEn: "Tuition / Home Tutor", nameHi: "ट्यूशन / होम ट्यूटर", nameTe: "ట్యూషన్ / హోమ్ ట్యూటర్", nameTa: "ட்யூஷன் / இல்ல ஆசிரியர்", nameKn: "ಟ್ಯೂಷನ್ / ಹೋಮ್ ಟ್ಯೂಟರ್", nameBn: "টিউশন / হোম টিউটর", namePa: "ਟਿਊਸ਼ਨ / ਹੋਮ ਟਿਊਟਰ", icon: "GraduationCap", sortOrder: 31 },
+    { slug: "waiter", nameEn: "Waiter / Steward", nameHi: "वेटर / स्टीवर्ड", nameTe: "వెయిటర్ / స్టీవర్డ్", nameTa: "பணியாளர் / ஸ்டீவர்ட்", nameKn: "ವೇಟರ್ / ಸ್ಟೀವರ್ಡ್", nameBn: "ওয়েটার / স্টুয়ার্ড", namePa: "ਵੇਟਰ / ਸਟੀਵਰਡ", icon: "Coffee", sortOrder: 32 },
+    { slug: "cashier", nameEn: "Cashier / Billing", nameHi: "कैशियर / बिलिंग", nameTe: "క్యాషియర్ / బిల్లింగ్", nameTa: "காசாளர் / பில்லிங்", nameKn: "ಕ್ಯಾಷಿಯರ್ / ಬಿಲ್ಲಿಂಗ್", nameBn: "ক্যাশিয়ার / বিলিং", namePa: "ਕੈਸ਼ੀਅਰ / ਬਿਲਿੰਗ", icon: "Receipt", sortOrder: 33 },
+    { slug: "shop-assistant", nameEn: "Shop Assistant", nameHi: "शॉप असिस्टेंट", nameTe: "షాప్ అసిస్టెంట్", nameTa: "கடை உதவியாளர்", nameKn: "ಅಂಗಡಿ ಸಹಾಯಕ", nameBn: "দোকান সহকারী", namePa: "ਦੁਕਾਨ ਸਹਾਇਕ", icon: "Store", sortOrder: 34 },
   ]
 
   for (const cat of categories) {
@@ -107,7 +110,7 @@ async function main() {
     {
       slug: FREE_PLAN_SLUG, name: "Free Plan", type: "MULTI_HIRE" as const,
       durationDays: FREE_PLAN_DURATION_DAYS, priceRupees: 0,
-      activeJobLimit: UNLIMITED, candidateUnlockCredits: UNLIMITED, boostCredits: UNLIMITED,
+      activeJobLimit: FREE_JOB_LIMIT, candidateUnlockCredits: UNLIMITED, boostCredits: UNLIMITED,
       isTrial: false, isPopular: false, isActive: true, sortOrder: 0,
     },
     // ── Single Hire ──────────────────────────────────────────────

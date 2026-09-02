@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "@/i18n/navigation"
@@ -45,10 +45,10 @@ export default function JobsPagination({ page, total, perPage }: Props) {
 
       {pages.map((p, i) =>
         p === "…" ? (
-          <span key={i} className="px-2 text-gray-400 text-sm select-none">…</span>
+          <span key={`ellipsis-${i}`} className="px-2 text-gray-400 text-sm select-none">…</span>
         ) : (
           <button
-            key={p}
+            key={`page-${p}`}
             onClick={() => goTo(p as number)}
             className={`min-w-[36px] h-9 rounded-lg text-sm font-semibold transition-colors ${
               p === page

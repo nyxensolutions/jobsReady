@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { useRouter } from "@/i18n/navigation"
@@ -1085,7 +1085,7 @@ export default function PostJobWizard({
       {/* Upgrade paywall modal */}
       {showUpgrade && (
         <UpgradeModal
-          message="You have 1 active job on the free plan. Upgrade to post more jobs and reach more candidates."
+          message="You've reached the maximum of 10 job postings on your free plan. To post more jobs, please contact our team."
           onClose={() => setShowUpgrade(false)}
         />
       )}

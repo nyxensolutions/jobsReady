@@ -25,7 +25,7 @@ function fmt(n: number) { return n.toLocaleString("en-IN") }
 
 // All features included in the current free plan
 const FREE_FEATURES = [
-  { icon: <Briefcase size={16} />, title: "Post Unlimited Jobs", desc: "No limits on how many roles you can post" },
+  { icon: <Briefcase size={16} />, title: "Post up to 10 Jobs", desc: "Keep up to 10 roles active at any time" },
   { icon: <Users size={16} />, title: "Unlimited Applications", desc: "Receive as many candidate applications as they send" },
   { icon: <Search size={16} />, title: "Search All Candidates", desc: "Browse and filter from our full candidate database" },
   { icon: <TrendingUp size={16} />, title: "High Reach Distribution", desc: "Jobs pushed via notifications to matching candidates" },

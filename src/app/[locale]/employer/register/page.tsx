@@ -12,6 +12,7 @@ export default async function EmployerRegisterPage() {
     prisma.employerProfile.findUnique({ where: { userId: session.uid } }),
   ])
   if (!dbUser) redirect("/login?role=employer")
+  if (dbUser.role === "SEEKER") redirect("/seeker/dashboard")
   // Already registered → go to dashboard
   if (employer) redirect("/employer/dashboard")
 

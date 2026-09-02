@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 import { Link } from "@/i18n/navigation"
 import { getTranslations } from "next-intl/server"
 import { getServerSession } from "@/lib/firebase/session"
@@ -65,8 +65,9 @@ export default async function SeekerDashboardPage() {
       take: 6,
     }),
   ])
-  // Gate by seeker profile existence — same phone can have both seeker + employer accounts
-  if (!dbUser || !profile) redirect("/login")
+  if (!dbUser) redirect("/login")
+  if (dbUser.role === "EMPLOYER") redirect("/employer/dashboard")
+  if (!profile) redirect("/login")
 
   const [applications, totalApplied] = profile
     ? await Promise.all([

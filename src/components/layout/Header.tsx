@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
@@ -14,6 +14,7 @@ type AuthUser = {
   name: string
   role: "SEEKER" | "EMPLOYER" | "ADMIN"
   initial: string
+  photoUrl?: string | null
 }
 
 type Props = {
@@ -30,6 +31,13 @@ export default function Header({ initialAuth }: Props) {
   const [authUser, setAuthUser] = useState<AuthUser | null>(initialAuth ?? null)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  // Sync state if server prop changes (e.g. after login redirect when layout re-renders)
+  useEffect(() => {
+    if (initialAuth) {
+      setAuthUser(initialAuth)
+    }
+  }, [initialAuth])
 
   useEffect(() => {
     // Listen for client-side auth changes (sign-in / sign-out).
@@ -50,6 +58,7 @@ export default function Header({ initialAuth }: Props) {
           name: data.name ?? "Member",
           role: data.role ?? "SEEKER",
           initial: (data.name ?? "M")[0].toUpperCase(),
+          photoUrl: data.photoUrl,
         })
       } catch {
         setAuthUser(null)
@@ -162,8 +171,12 @@ export default function Header({ initialAuth }: Props) {
                     onClick={() => setMenuOpen(v => !v)}
                     className="hidden sm:flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-gray-100 transition-colors"
                   >
-                    <div className="w-8 h-8 rounded-full bg-[#1a3461] text-white text-sm font-bold flex items-center justify-center shrink-0">
-                      {authUser.initial}
+                    <div className="w-8 h-8 rounded-full bg-[#1a3461] text-white text-sm font-bold flex items-center justify-center shrink-0 overflow-hidden relative">
+                      {authUser.photoUrl ? (
+                        <Image src={authUser.photoUrl} alt={authUser.name} fill className="object-cover" sizes="32px" />
+                      ) : (
+                        authUser.initial
+                      )}
                     </div>
                     <span className="text-sm font-semibold text-gray-700 max-w-[100px] truncate">{authUser.name}</span>
                     <ChevronDown size={14} className={`text-gray-400 transition-transform ${menuOpen ? "rotate-180" : ""}`} />
