@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState, useRef } from "react"
 import { useRouter } from "@/i18n/navigation"
@@ -190,8 +190,13 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
       const fd = new FormData()
       fd.append("photo", file)
       const res = await fetch("/api/seeker/photo", { method: "POST", body: fd })
+      if (!res.ok) {
+        if (res.status === 413) throw new Error("File is too large (max 2MB)")
+        let errStr = "Upload failed"
+        try { const json = await res.json(); errStr = json.error ?? errStr } catch(e) {}
+        throw new Error(errStr)
+      }
       const json = await res.json()
-      if (!res.ok) throw new Error(json.error ?? "Upload failed")
       setPhotoPreview(json.photoUrl)
     } catch (err: any) {
       setPhotoError(err.message)
@@ -213,8 +218,13 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
       const fd = new FormData()
       fd.append("resume", file)
       const res = await fetch("/api/seeker/resume", { method: "POST", body: fd })
+      if (!res.ok) {
+        if (res.status === 413) throw new Error("File is too large (max 5MB)")
+        let errStr = "Upload failed"
+        try { const json = await res.json(); errStr = json.error ?? errStr } catch(e) {}
+        throw new Error(errStr)
+      }
       const json = await res.json()
-      if (!res.ok) throw new Error(json.error ?? "Upload failed")
       setResumeUrl(json.resumeUrl)
     } catch (err: any) {
       setResumeError(err.message)
@@ -312,7 +322,8 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
               <Pencil size={14} className="text-white" />
             </button>
           </div>
-          {photoError && <p className="text-red-300 text-xs mt-2">{photoError}</p>}
+          <p className="text-white/50 text-[10px] mt-2">Max 2MB, JPG/PNG</p>
+          {photoError && <p className="text-red-300 text-xs mt-1">{photoError}</p>}
         </div>
       </div>
 
@@ -353,7 +364,20 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
             <div className="p-4 flex flex-col gap-3">
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{t("fullNameRequired")}</label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Ravi Kumar" className={inputCls} />
+                <input 
+                  type="text" 
+                  value={name} 
+                  onChange={e => {
+                    // Only allow letters and spaces
+                    const val = e.target.value
+                    if (val === "" || /^[a-zA-Z\s]+$/.test(val)) {
+                      setName(val)
+                    }
+                  }} 
+                  maxLength={50}
+                  placeholder="e.g. Ravi Kumar" 
+                  className={inputCls} 
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -389,7 +413,13 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   {basicLoading && <Loader2 size={13} className="animate-spin" />}
                   {tc("save")}
                 </button>
-                <button onClick={() => setEditBasic(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                <button onClick={() => {
+                  setEditBasic(false)
+                  setName(displayName)
+                  setCity(initial?.city ?? "")
+                  setBio(initial?.bio ?? "")
+                  setExperienceYears(String(initial?.experienceYears ?? 0))
+                }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                   {tc("cancel")}
                 </button>
               </div>
@@ -424,7 +454,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   <a href={resumeUrl} target="_blank" rel="noreferrer" className="text-sm font-semibold text-green-700 hover:underline">
                     {t("viewUploadedResume")}
                   </a>
-                  <p className="text-xs text-gray-400 mt-0.5">{t("pdfOrWord")}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{t("pdfOrWord")} (Max 5MB)</p>
                 </div>
                 <button onClick={() => resumeInputRef.current?.click()}
                   className="text-xs font-semibold text-[#1a3461] border border-[#1a3461]/30 px-3 py-1.5 rounded-lg hover:bg-[#1a3461]/5 transition-colors">
@@ -432,11 +462,14 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                 </button>
               </div>
             ) : (
-              <button onClick={() => resumeInputRef.current?.click()}
-                className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-[#1a3461] hover:text-[#1a3461] transition-colors">
-                {resumeUploading ? <Loader2 size={16} className="animate-spin" /> : <FileText size={16} />}
-                {resumeUploading ? t("uploading") : t("uploadResumePlaceholder")}
-              </button>
+              <div className="flex flex-col gap-2">
+                <button onClick={() => resumeInputRef.current?.click()}
+                  className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-[#1a3461] hover:text-[#1a3461] transition-colors">
+                  {resumeUploading ? <Loader2 size={16} className="animate-spin" /> : <FileText size={16} />}
+                  {resumeUploading ? t("uploading") : t("uploadResumePlaceholder")}
+                </button>
+                <p className="text-center text-xs text-gray-400">PDF or Word document (Max 5MB)</p>
+              </div>
             )}
             <input ref={resumeInputRef} type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={handleResumeChange} />
             {resumeError && <p className="text-xs text-red-500 mt-2">{resumeError}</p>}
@@ -485,7 +518,11 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                     {skillsLoading && <Loader2 size={13} className="animate-spin" />}
                     {tc("save")}
                   </button>
-                  <button onClick={() => setEditSkills(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                  <button onClick={() => {
+                    setEditSkills(false)
+                    setSkills(initial?.skills ?? [])
+                    setSkillInput("")
+                  }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                     {tc("cancel")}
                   </button>
                 </div>
@@ -553,7 +590,11 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                     {prefsLoading && <Loader2 size={13} className="animate-spin" />}
                     {tc("save")}
                   </button>
-                  <button onClick={() => setEditPrefs(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                  <button onClick={() => {
+                    setEditPrefs(false)
+                    setPreferredJobTypes(initial?.preferredJobTypes ?? [])
+                    setIsOpenToWork(initial?.isOpenToWork ?? true)
+                  }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                     {tc("cancel")}
                   </button>
                 </div>
@@ -635,7 +676,11 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                     {locationLoading && <Loader2 size={13} className="animate-spin" />}
                     {tc("save")}
                   </button>
-                  <button onClick={() => setEditLocation(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                  <button onClick={() => {
+                    setEditLocation(false)
+                    setOpenToRelocate(initial?.openToRelocate ?? true)
+                    setPreferredCities(initial?.preferredCities ?? [])
+                  }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                     {tc("cancel")}
                   </button>
                 </div>
@@ -708,7 +753,11 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                     {languagesLoading && <Loader2 size={13} className="animate-spin" />}
                     {tc("save")}
                   </button>
-                  <button onClick={() => setEditLanguages(false)} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                  <button onClick={() => {
+                    setEditLanguages(false)
+                    setLanguages(initial?.languages ?? [])
+                    setLangInput("")
+                  }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                     {tc("cancel")}
                   </button>
                 </div>

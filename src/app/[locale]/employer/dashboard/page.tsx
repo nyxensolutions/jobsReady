@@ -340,15 +340,15 @@ export default async function EmployerDashboardPage({ searchParams }: Props) {
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center mb-4">
                   <div className="bg-white/10 rounded-xl p-2.5">
-                    <p className="text-base font-extrabold">{activeSub.plan.activeJobLimit}</p>
+                    <p className="text-base font-extrabold">{activeSub.plan.activeJobLimit > 1000000 ? "∞" : activeSub.plan.activeJobLimit}</p>
                     <p className="text-[10px] text-white/60 mt-0.5">Job slots</p>
                   </div>
                   <div className="bg-white/10 rounded-xl p-2.5">
-                    <p className="text-base font-extrabold">{activeSub.plan.candidateUnlockCredits - activeSub.candidateUnlocksUsed}</p>
+                    <p className="text-base font-extrabold">{activeSub.plan.candidateUnlockCredits > 1000000 ? "∞" : activeSub.plan.candidateUnlockCredits - activeSub.candidateUnlocksUsed}</p>
                     <p className="text-[10px] text-white/60 mt-0.5">Unlocks left</p>
                   </div>
                   <div className="bg-white/10 rounded-xl p-2.5">
-                    <p className="text-base font-extrabold">{activeSub.plan.boostCredits - activeSub.boostsUsed}</p>
+                    <p className="text-base font-extrabold">{activeSub.plan.boostCredits > 1000000 ? "∞" : activeSub.plan.boostCredits - activeSub.boostsUsed}</p>
                     <p className="text-[10px] text-white/60 mt-0.5">Boosts left</p>
                   </div>
                 </div>

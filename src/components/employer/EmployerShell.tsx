@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { Link } from "@/i18n/navigation"
@@ -71,7 +71,7 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
           {collapsed ? (
             /* Collapsed: running guy centered, then expand toggle */
             <>
-              <Link href="/" title="Jobs24India" className="flex items-center justify-center" onClick={() => window.scrollTo(0, 0)}>
+              <Link href="/employer/dashboard" title="Jobs24India Dashboard" className="flex items-center justify-center" onClick={() => window.scrollTo(0, 0)}>
                 <Image src="/logo-full.png" alt="Jobs24India" width={44} height={44} className="object-contain" />
               </Link>
               <button
@@ -85,7 +85,7 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
           ) : (
             /* Expanded: job24 brand logo fills header + collapse toggle */
             <>
-              <Link href="/" className="flex items-center flex-1 min-w-0" onClick={() => window.scrollTo(0, 0)}>
+              <Link href="/employer/dashboard" className="flex items-center flex-1 min-w-0" onClick={() => window.scrollTo(0, 0)}>
                 <Image src="/job24.png" alt="Jobs24India" width={130} height={40} className="object-contain shrink-0" />
               </Link>
               <button
@@ -195,7 +195,7 @@ export default function EmployerShell({ companyName, companyInitial, contactPers
       <div className="md:hidden flex flex-col flex-1 min-h-screen w-full">
         {/* Mobile top bar */}
         <div className="sticky top-0 z-20 bg-white border-b border-gray-100 shadow-sm flex items-center justify-between px-4 h-14">
-          <Link href="/" className="flex items-center gap-2" onClick={() => window.scrollTo(0, 0)}>
+          <Link href="/employer/dashboard" className="flex items-center gap-2" onClick={() => window.scrollTo(0, 0)}>
             <Image src="/logo-full.png" alt="Jobs24India" width={36} height={36} className="object-contain" />
             <span className="font-bold text-[#1a3461] text-sm truncate max-w-[130px]">{companyName}</span>
           </Link>
