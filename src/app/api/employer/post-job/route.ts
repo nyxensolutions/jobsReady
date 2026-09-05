@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     incentives,
     workingDaysPerWeek,
     shiftType,
+    expiresAt,
   } = body
 
   if (!title || !categorySlug || !citySlug || !jobType || !description) {
@@ -89,6 +90,9 @@ export async function POST(req: NextRequest) {
       shiftType: shiftType?.trim() || null,
       callToHrEnabled: callToHrEnabled === true,
       callToHrPhone: callToHrEnabled === true ? (callToHrPhone?.trim() || null) : null,
+      // Optional; null means the listing runs until the employer closes it.
+      // save-draft already accepted this, and the mobile app posts here.
+      expiresAt: expiresAt ? new Date(expiresAt) : null,
     },
   })
 
