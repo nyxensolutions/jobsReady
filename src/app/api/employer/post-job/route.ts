@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { salaryRangeError } from "@/lib/salary"
 import { checkPostJobLimit, getPlanLimits } from "@/lib/subscription"
 
 export async function POST(req: NextRequest) {
@@ -34,6 +35,10 @@ export async function POST(req: NextRequest) {
   if (!title || !categorySlug || !citySlug || !jobType || !description) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
+
+  const salaryError = salaryRangeError(salaryMin, salaryMax)
+  if (salaryError) return NextResponse.json({ error: salaryError }, { status: 400 })
+
 
   const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
   if (!dbUser || dbUser.role !== "EMPLOYER") {

@@ -46,6 +46,9 @@ async function main() {
     { slug: "waiter", nameEn: "Waiter / Steward", nameHi: "वेटर / स्टीवर्ड", nameTe: "వెయిటర్ / స్టీవర్డ్", nameTa: "பணியாளர் / ஸ்டீவர்ட்", nameKn: "ವೇಟರ್ / ಸ್ಟೀವರ್ಡ್", nameBn: "ওয়েটার / স্টুয়ার্ড", namePa: "ਵੇਟਰ / ਸਟੀਵਰਡ", icon: "Coffee", sortOrder: 32 },
     { slug: "cashier", nameEn: "Cashier / Billing", nameHi: "कैशियर / बिलिंग", nameTe: "క్యాషియర్ / బిల్లింగ్", nameTa: "காசாளர் / பில்லிங்", nameKn: "ಕ್ಯಾಷಿಯರ್ / ಬಿಲ್ಲಿಂಗ್", nameBn: "ক্যাশিয়ার / বিলিং", namePa: "ਕੈਸ਼ੀਅਰ / ਬਿਲਿੰਗ", icon: "Receipt", sortOrder: 33 },
     { slug: "shop-assistant", nameEn: "Shop Assistant", nameHi: "शॉप असिस्टेंट", nameTe: "షాప్ అసిస్టెంట్", nameTa: "கடை உதவியாளர்", nameKn: "ಅಂಗಡಿ ಸಹಾಯಕ", nameBn: "দোকান সহকারী", namePa: "ਦੁਕਾਨ ਸਹਾਇਕ", icon: "Store", sortOrder: 34 },
+    { slug: "insurance-agent", nameEn: "Insurance Agent", nameHi: "बीमा एजेंट", nameTe: "ఇన్సూరెన్స్ ఏజెంట్", nameTa: "காப்பீட்டு முகவர்", nameKn: "ವಿಮೆ ಏಜೆಂಟ್", nameBn: "বীমা এজেন্ট", namePa: "ਬੀਮਾ ਏਜੰਟ", icon: "ShieldCheck", sortOrder: 35 },
+    { slug: "runner", nameEn: "Runner / Office Runner", nameHi: "रनर / ऑफिस रनर", nameTe: "రన్నర్ / ఆఫీస్ రన్నర్", nameTa: "ரன்னர் / அலுவலக ரன்னர்", nameKn: "ರನ್ನರ್ / ಆಫೀಸ್ ರನ್ನರ್", nameBn: "রানার / অফিস রানার", namePa: "ਰਨਰ / ਦਫ਼ਤਰ ਰਨਰ", icon: "Footprints", sortOrder: 36 },
+    { slug: "broker", nameEn: "Real Estate Broker", nameHi: "रियल एस्टेट ब्रोकर", nameTe: "రియల్ ఎస్టేట్ బ్రోకర్", nameTa: "ரியல் எஸ்டேட் தரகர்", nameKn: "ರಿಯಲ್ ಎಸ್ಟೇಟ್ ದಲ್ಲಾಳಿ", nameBn: "রিয়েল এস্টেট ব্রোকার", namePa: "ਰੀਅਲ ਅਸਟੇਟ ਬ੍ਰੋਕਰ", icon: "Building2", sortOrder: 37 },
   ]
 
   for (const cat of categories) {

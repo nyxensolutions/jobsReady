@@ -30,7 +30,7 @@ const NAV = [
   { href: "/employer/candidates", label: "Talent Search",icon: UserSearch,  iconColor: "text-emerald-600",iconBg: "bg-emerald-50" },
   { href: "/employer/plans",      label: "Plans",        icon: TrendingUp,  iconColor: "text-orange-500", iconBg: "bg-orange-50" },
   { href: "/employer/billing",    label: "Billing",      icon: Receipt,     iconColor: "text-teal-600",   iconBg: "bg-teal-50"   },
-  { href: "/employer/profile",    label: "Settings",     icon: Settings,    iconColor: "text-gray-500",   iconBg: "bg-gray-100"  },
+  { href: "/employer/profile",    label: "Profile",      icon: Settings,    iconColor: "text-gray-500",   iconBg: "bg-gray-100"  },
 ]
 
 const W_EXPANDED = 240

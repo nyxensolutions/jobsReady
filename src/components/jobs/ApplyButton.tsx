@@ -9,12 +9,15 @@ type Props = {
   jobId: string
   contactPhone?: string | null
   locale: string
+  initialAlreadyApplied?: boolean
 }
 
-export default function ApplyButton({ jobId, contactPhone, locale }: Props) {
+export default function ApplyButton({ jobId, contactPhone, locale, initialAlreadyApplied }: Props) {
   const router = useRouter()
   const t = useTranslations("jobs")
-  const [status, setStatus] = useState<"idle" | "loading" | "done" | "duplicate" | "error">("idle")
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "duplicate" | "error">(
+    initialAlreadyApplied ? "duplicate" : "idle"
+  )
   const [errorMsg, setErrorMsg] = useState("")
 
   async function handleApply() {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { salaryRangeError } from "@/lib/salary"
 import { checkPostJobLimit, getPlanLimits } from "@/lib/subscription"
 import { JobType } from "@prisma/client"
 
@@ -35,7 +36,11 @@ export async function POST(req: NextRequest) {
     shiftType,
     callToHrEnabled,
     callToHrPhone,
+    expiresAt,
   } = body
+
+  const salaryError = salaryRangeError(salaryMin, salaryMax)
+  if (salaryError) return NextResponse.json({ error: salaryError }, { status: 400 })
 
   if (!title?.trim() || !categorySlug || !citySlug) {
     return NextResponse.json({ error: "Title, category and city are required to save a draft" }, { status: 400 })
@@ -79,6 +84,7 @@ export async function POST(req: NextRequest) {
     shiftType: shiftType?.trim() || null,
     callToHrEnabled: callToHrEnabled === true,
     callToHrPhone: callToHrEnabled === true ? (callToHrPhone?.trim() || null) : null,
+    expiresAt: expiresAt ? new Date(expiresAt) : null,
     status: submit ? ("PENDING_REVIEW" as const) : ("DRAFT" as const),
     ...(submit ? { publishedAt: null, isHighReach: isHighReach ?? false } : {}),
   }

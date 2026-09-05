@@ -113,15 +113,20 @@ export default async function JobDetailPage({ params }: Props) {
     take: 4,
   })
 
-  // Check if logged-in seeker has saved this job
+  // Check if logged-in seeker has saved this job + already applied
   let isSaved = false
+  let alreadyApplied = false
   try {
     const session = await getServerSession()
     if (session) {
       const seeker = await prisma.seekerProfile.findFirst({ where: { userId: session.uid }, select: { id: true } })
       if (seeker) {
-        const saved = await prisma.savedJob.findUnique({ where: { seekerId_jobId: { seekerId: seeker.id, jobId: id } } })
+        const [saved, application] = await Promise.all([
+          prisma.savedJob.findUnique({ where: { seekerId_jobId: { seekerId: seeker.id, jobId: id } } }),
+          prisma.application.findUnique({ where: { jobId_seekerId: { jobId: id, seekerId: seeker.id } } }),
+        ])
         isSaved = !!saved
+        alreadyApplied = !!application
       }
     }
   } catch {
@@ -282,7 +287,7 @@ export default async function JobDetailPage({ params }: Props) {
 
               {/* Mobile CTA */}
               <div className="lg:hidden mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2">
-                <ApplyButton jobId={job.id} locale={locale} />
+                <ApplyButton jobId={job.id} locale={locale} initialAlreadyApplied={alreadyApplied} />
                 {callToHrPhone && (
                   <a
                     href={`tel:+91${callToHrPhone}`}
@@ -480,6 +485,7 @@ export default async function JobDetailPage({ params }: Props) {
                 jobId={job.id}
                 contactPhone={job.employer.contactPhone}
                 locale={locale}
+                initialAlreadyApplied={alreadyApplied}
               />
               {callToHrPhone && (
                 <a

@@ -32,11 +32,12 @@ function daysLeft(iso: string) {
 }
 
 type Props = {
-  searchParams: Promise<{ verified?: string }>
+  searchParams: Promise<{ verified?: string; tab?: string }>
 }
 
 export default async function EmployerDashboardPage({ searchParams }: Props) {
-  const { verified } = await searchParams
+  const { verified, tab } = await searchParams
+  const jobTab = tab === "inactive" ? "inactive" : "active"
   const session = await getServerSession()
   if (!session) redirect("/login")
 
@@ -69,6 +70,9 @@ export default async function EmployerDashboardPage({ searchParams }: Props) {
     getActiveSub(employer.id),
   ])
   const jobs = allJobs
+  const activeJobs   = jobs.filter(j => ["ACTIVE", "PENDING_REVIEW"].includes(j.status))
+  const inactiveJobs = jobs.filter(j => ["CLOSED", "EXPIRED", "REJECTED"].includes(j.status))
+  const displayJobs  = jobTab === "inactive" ? inactiveJobs : activeJobs
 
   const stats = {
     live:         jobs.filter(j => j.status === "ACTIVE").length,
@@ -148,10 +152,24 @@ export default async function EmployerDashboardPage({ searchParams }: Props) {
 
             {/* Jobs panel */}
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-              <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-                <div>
-                  <h2 className="font-bold text-slate-800 text-base">Your Job Listings</h2>
-                  <p className="text-xs text-slate-400 mt-0.5">{jobs.length} total · {stats.live} active</p>
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+                  <Link
+                    href="/employer/dashboard?tab=active"
+                    className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${
+                      jobTab === "active" ? "bg-white text-[#1a3461] shadow-sm" : "text-slate-500 hover:text-slate-700"
+                    }`}
+                  >
+                    Active <span className="ml-1 text-xs font-bold text-emerald-600">{activeJobs.length}</span>
+                  </Link>
+                  <Link
+                    href="/employer/dashboard?tab=inactive"
+                    className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${
+                      jobTab === "inactive" ? "bg-white text-[#1a3461] shadow-sm" : "text-slate-500 hover:text-slate-700"
+                    }`}
+                  >
+                    Inactive <span className="ml-1 text-xs font-bold text-slate-400">{inactiveJobs.length}</span>
+                  </Link>
                 </div>
                 <Link
                   href="/employer/post-job"
@@ -161,25 +179,34 @@ export default async function EmployerDashboardPage({ searchParams }: Props) {
                 </Link>
               </div>
 
-              {jobs.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center px-6">
-                  <div className="w-20 h-20 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center mb-5">
-                    <Briefcase size={32} className="text-slate-300" />
+              {displayJobs.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center px-6">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center mb-4">
+                    <Briefcase size={28} className="text-slate-300" />
                   </div>
-                  <p className="font-bold text-slate-700 text-lg">No jobs posted yet</p>
-                  <p className="text-sm text-slate-400 mt-2 mb-8 max-w-xs">
-                    Post your first opening to start receiving applications from verified candidates.
-                  </p>
-                  <Link
-                    href="/employer/post-job"
-                    className="inline-flex items-center gap-2 px-7 py-3 bg-[#1a3461] text-white text-sm font-bold rounded-xl hover:bg-[#142a52] transition-colors shadow-sm"
-                  >
-                    <PlusCircle size={16} /> Post Your First Job
-                  </Link>
+                  {jobTab === "inactive" ? (
+                    <>
+                      <p className="font-bold text-slate-700">No inactive jobs</p>
+                      <p className="text-sm text-slate-400 mt-1">Closed, expired, or rejected jobs will appear here.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-bold text-slate-700 text-lg">No active jobs</p>
+                      <p className="text-sm text-slate-400 mt-2 mb-7 max-w-xs">
+                        Post your first opening to start receiving applications from verified candidates.
+                      </p>
+                      <Link
+                        href="/employer/post-job"
+                        className="inline-flex items-center gap-2 px-7 py-3 bg-[#1a3461] text-white text-sm font-bold rounded-xl hover:bg-[#142a52] transition-colors shadow-sm"
+                      >
+                        <PlusCircle size={16} /> Post Your First Job
+                      </Link>
+                    </>
+                  )}
                 </div>
               ) : (
                 <div className="divide-y divide-slate-50">
-                  {jobs.map(job => {
+                  {displayJobs.map(job => {
                     const cfg = STATUS_CONFIG[job.status] ?? STATUS_CONFIG.DRAFT
                     const StatusIcon = cfg.icon
                     const canEdit   = !["CLOSED","EXPIRED"].includes(job.status)
@@ -434,7 +461,7 @@ export default async function EmployerDashboardPage({ searchParams }: Props) {
                         : <div className="w-2 h-2 rounded-full bg-slate-300" />
                       }
                     </div>
-                    <span className={`flex-1 text-sm ${s.done ? "text-slate-400 line-through decoration-slate-300" : "text-slate-700 font-medium"}`}>
+                    <span className={`flex-1 text-sm ${s.done ? "text-slate-400" : "text-slate-700 font-medium"}`}>
                       {s.label}
                     </span>
                     {s.action && !s.done ? (

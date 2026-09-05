@@ -505,6 +505,41 @@ export async function sendEmployerMagicLink({
 
 // ─── Employer: email address verification ────────────────────────────────────
 
+// ─── Employer: onboarding complete ───────────────────────────────────────────
+
+export async function sendEmployerOnboardingCompleteEmail({
+  email,
+  companyName,
+  contactPerson,
+}: { email: string; companyName: string; contactPerson?: string | null }) {
+  if (!email) return
+  const name = contactPerson || companyName
+  const body = `
+    <h2 style="margin:0 0 4px;color:#15803d;font-size:20px">🎉 You're fully onboarded!</h2>
+    <p style="margin:0 0 16px;color:#6b7280;font-size:14px">Hi ${name},</p>
+    <p style="margin:0 0 24px;color:#4b5563;font-size:14px;line-height:1.6">
+      Congratulations! Your company <strong>${companyName}</strong> has been verified and your profile is 100% complete.
+      You can now post unlimited jobs (within your plan) and start receiving applications from top candidates.
+    </p>
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px;margin-bottom:24px">
+      <h3 style="margin:0 0 12px;color:#15803d;font-size:14px">✅ What you can do now:</h3>
+      <ul style="margin:0;padding-left:20px;color:#4b5563;font-size:14px;line-height:1.5">
+        <li style="margin-bottom:8px">Post jobs and get applicants within hours</li>
+        <li style="margin-bottom:8px">Unlock candidate contacts to call them directly</li>
+        <li>Boost your jobs to the top for maximum visibility</li>
+      </ul>
+    </div>
+    ${btn(`${APP_URL}/employer/post-job`, "Post a Job Now", "#15803d")}
+    <p style="margin:24px 0 0;color:#6b7280;font-size:14px">Welcome aboard, ${name}! Our team is here if you need anything.</p>
+  `
+  await resend.emails.send({
+    from: `Jobs24India <${FROM}>`,
+    to: email,
+    subject: `🎉 ${companyName} is now verified on Jobs24India!`,
+    html: emailShell(body),
+  })
+}
+
 export async function sendEmailVerification({
   toEmail,
   toName,

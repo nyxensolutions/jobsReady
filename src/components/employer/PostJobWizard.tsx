@@ -69,6 +69,8 @@ type WizardData = {
   // Call-to-HR
   callToHrEnabled: boolean
   callToHrPhone: string
+  // Duration
+  expiresInDays: string
 }
 
 const INITIAL: WizardData = {
@@ -79,6 +81,7 @@ const INITIAL: WizardData = {
   requirements: [], perks: [], pincode: "", languagesRequired: [],
   incentives: "", workingDaysPerWeek: "",
   callToHrEnabled: false, callToHrPhone: "",
+  expiresInDays: "",
 }
 
 const JOB_TITLE_CHIPS = ["Delivery Boy", "Driver", "Security Guard", "Picker / Packer", "Telecaller", "Data Entry"]
@@ -545,6 +548,28 @@ function Step2({
         </div>
       </div>
 
+      {/* Job Validity / Duration */}
+      <div>
+        <label className={label}>Job Active For <span className="text-xs text-gray-400 font-normal">(optional — auto-expires after selected days)</span></label>
+        <select
+          value={data.expiresInDays}
+          onChange={(e) => update("expiresInDays", e.target.value)}
+          className={input + " bg-white text-gray-700"}
+        >
+          <option value="">No expiry (stays active until you close it)</option>
+          <option value="7">7 days</option>
+          <option value="14">14 days</option>
+          <option value="30">30 days</option>
+          <option value="60">60 days</option>
+          <option value="90">90 days</option>
+        </select>
+        {data.expiresInDays && (
+          <p className="text-xs text-blue-600 mt-1.5">
+            This job will automatically close after {data.expiresInDays} days from posting.
+          </p>
+        )}
+      </div>
+
       {/* Incentives */}
       <div>
         <label className={label}>Incentives <span className="text-xs text-gray-400 font-normal">(optional)</span></label>
@@ -984,6 +1009,9 @@ export default function PostJobWizard({
       shiftType: data.shift || null,
       callToHrEnabled: data.callToHrEnabled,
       callToHrPhone: data.callToHrEnabled ? data.callToHrPhone : null,
+      expiresAt: data.expiresInDays
+        ? new Date(Date.now() + parseInt(data.expiresInDays) * 86400000).toISOString()
+        : null,
     }
   }
 

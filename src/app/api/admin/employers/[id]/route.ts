@@ -9,7 +9,7 @@ async function assertAdmin() {
   return dbUser?.role === "ADMIN"
 }
 
-import { sendEmployerVerifiedAlert, sendEmployerVerificationRejectedAlert } from "@/lib/email"
+import { sendEmployerOnboardingCompleteEmail, sendEmployerVerificationRejectedAlert } from "@/lib/email"
 import { sendPushToUser } from "@/lib/push"
 
 export async function PATCH(
@@ -36,7 +36,7 @@ export async function PATCH(
       status: newStatus as any,
       ...(action === "verify" ? { verifiedAt: new Date() } : {}),
     },
-    select: { id: true, companyName: true, status: true, userId: true },
+    select: { id: true, companyName: true, contactPerson: true, status: true, userId: true },
   })
 
   // In-app notification for employer
@@ -73,7 +73,11 @@ export async function PATCH(
         const empUser = await prisma.user.findUnique({ where: { id: employer.userId }, select: { email: true } })
         if (empUser?.email) {
           if (action === "verify") {
-            await sendEmployerVerifiedAlert({ employerEmail: empUser.email, employerName: employer.companyName })
+            await sendEmployerOnboardingCompleteEmail({
+              email: empUser.email,
+              companyName: employer.companyName,
+              contactPerson: employer.contactPerson,
+            })
           } else {
             await sendEmployerVerificationRejectedAlert({ employerEmail: empUser.email, employerName: employer.companyName })
           }
