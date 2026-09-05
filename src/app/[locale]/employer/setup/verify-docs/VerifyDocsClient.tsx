@@ -16,6 +16,18 @@ const DOC_TYPES = [
   { key: "udyam", label: "Udyam Registration" },
 ]
 
+/**
+ * `uploadedDocs` arrives as public URLs, not type keys. upload-doc encodes the
+ * type into the filename (`.../docs/<docType>_<timestamp>.<ext>`), so recover
+ * it from there — comparing keys against raw URLs never matched, which quietly
+ * dropped the GST-needs-PAN rule and the tick marks whenever the page reloaded.
+ */
+function docKeyFromUrl(url: string): string | null {
+  const filename = url.split("/").pop() ?? ""
+  const match = filename.match(/^([a-z]+)_\d+\./i)
+  return match ? match[1].toLowerCase() : null
+}
+
 export default function VerifyDocsClient({ uploadedDocs }: { uploadedDocs: string[] }) {
   const router = useRouter()
   const [selectedDoc, setSelectedDoc] = useState<string | null>(null)
@@ -25,7 +37,10 @@ export default function VerifyDocsClient({ uploadedDocs }: { uploadedDocs: strin
   const [showMore, setShowMore] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
-  const allUploaded = [...uploadedDocs, ...uploaded]
+  const allUploaded = [
+    ...uploadedDocs.map(docKeyFromUrl).filter((k): k is string => k !== null),
+    ...uploaded,
+  ]
   const hasGst = allUploaded.includes("gst")
   const hasPan = allUploaded.includes("pan")
   // If GST is uploaded, PAN is mandatory before we consider this step done
@@ -148,7 +163,7 @@ export default function VerifyDocsClient({ uploadedDocs }: { uploadedDocs: strin
         {/* Doc list */}
         <div className="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100 overflow-hidden mb-4">
           {visibleDocs.map((doc) => {
-            const isUploaded = uploaded.includes(doc.key)
+            const isUploaded = allUploaded.includes(doc.key)
             return (
               <button
                 key={doc.key}
