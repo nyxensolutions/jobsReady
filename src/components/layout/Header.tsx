@@ -58,6 +58,7 @@ export default function Header({ initialAuth }: Props) {
         setAuthUser({
           name: data.name ?? "Member",
           role: data.role ?? "SEEKER",
+          isAdmin: data.isAdmin ?? false,
           initial: (data.name ?? "M")[0].toUpperCase(),
           photoUrl: data.photoUrl,
         })
