@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/lib/db"
 import { sendPushBroadcast, type BroadcastAudience } from "@/lib/push"
 import { assertAdmin } from "@/lib/admin"
 
