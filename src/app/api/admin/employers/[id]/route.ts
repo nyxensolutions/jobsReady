@@ -1,16 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-
-async function assertAdmin() {
-  const session = await getServerSession()
-  if (!session) return false
-  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
-  return dbUser?.role === "ADMIN"
-}
-
 import { sendEmployerOnboardingCompleteEmail, sendEmployerVerificationRejectedAlert } from "@/lib/email"
 import { sendPushToUser } from "@/lib/push"
+import { assertAdmin } from "@/lib/admin"
 
 export async function PATCH(
   req: NextRequest,

@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-
-async function assertAdmin() {
-  const session = await getServerSession()
-  if (!session) return false
-  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
-  return dbUser?.role === "ADMIN"
-}
+import { assertAdmin } from "@/lib/admin"
 
 export async function GET(req: NextRequest) {
   if (!await assertAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 })

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendSeekerWelcomeEmail } from "@/lib/email"
+import { sendSeekerWelcomeWhatsApp } from "@/lib/whatsapp"
 
 // GET /api/seeker/profile — current seeker's profile (used by the mobile app;
 // the web app renders this server-side instead, via a Server Component).
@@ -59,8 +60,9 @@ export async function POST(req: NextRequest) {
     update: patch,
   })
 
-  if (!existingProfile && dbUser.email) {
-    void sendSeekerWelcomeEmail({ email: dbUser.email, name: profile.name })
+  if (!existingProfile) {
+    if (dbUser.email) void sendSeekerWelcomeEmail({ email: dbUser.email, name: profile.name })
+    if (dbUser.phone) void sendSeekerWelcomeWhatsApp(dbUser.phone, profile.name)
   }
 
   return NextResponse.json({ success: true, profile })

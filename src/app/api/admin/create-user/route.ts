@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { adminAuth } from "@/lib/firebase/admin"
+import { assertAdmin } from "@/lib/admin"
 
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession()
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-    const adminUser = await prisma.user.findUnique({ where: { id: session.uid } })
-    if (!adminUser || adminUser.role !== "ADMIN") {
+    if (!await assertAdmin()) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 

@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TODO_TEAM_ID.com.nyxencloud.jobs24india",
+        "paths": [
+          "/jobs/*",
+          "/seeker/*",
+          "/employer/*"
+        ]
+      }
+    ]
+  }
+}

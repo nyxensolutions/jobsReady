@@ -503,7 +503,33 @@ export async function sendEmployerMagicLink({
   })
 }
 
-// ─── Employer: email address verification ────────────────────────────────────
+// ─── Employer: email OTP verification ────────────────────────────────────────
+
+export async function sendEmailOtp({
+  toEmail,
+  toName,
+  otp,
+}: { toEmail: string; toName: string; otp: string }) {
+  const body = `
+    <h2 style="margin:0 0 4px;color:#1a3461;font-size:20px">Verify your email address ✉️</h2>
+    <p style="margin:0 0 24px;color:#6b7280;font-size:14px">Hi ${toName}, use the code below to verify your email address.</p>
+    <div style="text-align:center;margin:28px 0">
+      <div style="display:inline-block;background:#f0f4ff;border:2px dashed #1a3461;border-radius:16px;padding:20px 40px">
+        <span style="font-size:40px;font-weight:900;letter-spacing:12px;color:#1a3461;font-family:monospace">${otp}</span>
+      </div>
+    </div>
+    <p style="margin:0 0 8px;text-align:center;color:#6b7280;font-size:13px">Enter this code in the Jobs24India form to verify your email.</p>
+    <p style="margin:0;text-align:center;font-size:12px;color:#9ca3af">This code expires in <strong>10 minutes</strong>. If you didn't request this, you can safely ignore this email.</p>
+  `
+  await resend.emails.send({
+    from: `Jobs24India <${FROM}>`,
+    to: toEmail,
+    subject: `${otp} is your Jobs24India verification code`,
+    html: emailShell(body),
+  })
+}
+
+// ─── Employer: email address verification (link-based, legacy) ───────────────
 
 // ─── Employer: onboarding complete ───────────────────────────────────────────
 

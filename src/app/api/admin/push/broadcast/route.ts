@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "@/lib/firebase/session"
-import { prisma } from "@/lib/db"
 import { sendPushBroadcast, type BroadcastAudience } from "@/lib/push"
+import { assertAdmin } from "@/lib/admin"
 
 const AUDIENCES: BroadcastAudience[] = ["SEEKER", "EMPLOYER"]
 
@@ -10,13 +9,6 @@ const NOTIFICATION_CHUNK = 1000
 
 const MAX_TITLE = 80
 const MAX_BODY = 240
-
-async function assertAdmin() {
-  const session = await getServerSession()
-  if (!session) return false
-  const dbUser = await prisma.user.findUnique({ where: { id: session.uid } })
-  return dbUser?.role === "ADMIN"
-}
 
 function isAudience(value: unknown): value is BroadcastAudience {
   return typeof value === "string" && AUDIENCES.includes(value as BroadcastAudience)

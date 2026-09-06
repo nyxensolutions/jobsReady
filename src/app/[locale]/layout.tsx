@@ -17,24 +17,24 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-type InitialAuth = { name: string; role: "SEEKER" | "EMPLOYER" | "ADMIN"; initial: string; photoUrl?: string | null }
+type InitialAuth = { name: string; role: "SEEKER" | "EMPLOYER" | "ADMIN"; isAdmin: boolean; initial: string; photoUrl?: string | null }
 
 async function getInitialAuth(uid: string): Promise<InitialAuth | null> {
-  const dbUser = await prisma.user.findUnique({ where: { id: uid }, select: { role: true } })
+  const dbUser = await prisma.user.findUnique({ where: { id: uid }, select: { role: true, isAdmin: true } })
   if (!dbUser) return null
 
   if (dbUser.role === "SEEKER") {
     const profile = await prisma.seekerProfile.findUnique({ where: { userId: uid }, select: { name: true, photoUrl: true } })
     const raw = profile?.name
     const name = (!raw || /^\+?\d+$/.test(raw)) ? "Member" : raw
-    return { name, role: "SEEKER", initial: name[0].toUpperCase(), photoUrl: profile?.photoUrl }
+    return { name, role: "SEEKER", isAdmin: dbUser.isAdmin, initial: name[0].toUpperCase(), photoUrl: profile?.photoUrl }
   }
   if (dbUser.role === "EMPLOYER") {
     const profile = await prisma.employerProfile.findUnique({ where: { userId: uid }, select: { companyName: true, contactPerson: true, logoUrl: true } })
     const name = profile?.contactPerson ?? profile?.companyName ?? "Employer"
-    return { name, role: "EMPLOYER", initial: name[0].toUpperCase(), photoUrl: profile?.logoUrl }
+    return { name, role: "EMPLOYER", isAdmin: dbUser.isAdmin, initial: name[0].toUpperCase(), photoUrl: profile?.logoUrl }
   }
-  return { name: "Admin", role: "ADMIN", initial: "A", photoUrl: null }
+  return { name: "Admin", role: "ADMIN", isAdmin: true, initial: "A", photoUrl: null }
 }
 
 export default async function LocaleLayout({ children, params }: Props) {

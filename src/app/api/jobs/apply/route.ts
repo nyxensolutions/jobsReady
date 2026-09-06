@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendEmployerApplicationAlert } from "@/lib/email"
+import { sendSeekerApplicationWhatsApp, sendEmployerApplicationWhatsApp } from "@/lib/whatsapp"
 import { sendPushToUser } from "@/lib/push"
 
 export async function POST(req: NextRequest) {
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
     where: { id: jobId },
     include: {
       employer: {
-        select: { userId: true, companyName: true, contactPerson: true },
+        select: { userId: true, companyName: true, contactPerson: true, contactPhone: true },
       },
     },
   })
@@ -69,21 +70,41 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  // Fire-and-forget employer email notification — use email stored in DB
+  // Fire-and-forget notifications — email + WhatsApp for both seeker and employer
   ;(async () => {
     try {
-      const employerDbUser = await prisma.user.findUnique({ where: { id: job.employer.userId }, select: { email: true } })
-      if (employerDbUser?.email) {
-        await sendEmployerApplicationAlert({
-          employerEmail: employerDbUser.email,
-          employerName: job.employer.contactPerson ?? job.employer.companyName,
-          jobTitle: job.title,
-          seekerName: profile.name,
-          applicationId: application.id,
-        })
-      }
+      const [seekerUser, employerDbUser] = await Promise.all([
+        prisma.user.findUnique({ where: { id: session.uid }, select: { phone: true } }),
+        prisma.user.findUnique({ where: { id: job.employer.userId }, select: { email: true } }),
+      ])
+
+      await Promise.allSettled([
+        // Employer email
+        employerDbUser?.email
+          ? sendEmployerApplicationAlert({
+              employerEmail: employerDbUser.email,
+              employerName: job.employer.contactPerson ?? job.employer.companyName,
+              jobTitle: job.title,
+              seekerName: profile.name,
+              applicationId: application.id,
+            })
+          : Promise.resolve(),
+        // Seeker WhatsApp — application confirmation
+        seekerUser?.phone
+          ? sendSeekerApplicationWhatsApp(seekerUser.phone, profile.name, job.title, job.employer.companyName)
+          : Promise.resolve(),
+        // Employer WhatsApp — new application alert
+        job.employer.contactPhone
+          ? sendEmployerApplicationWhatsApp(
+              job.employer.contactPhone,
+              job.employer.contactPerson ?? job.employer.companyName,
+              profile.name,
+              job.title,
+            )
+          : Promise.resolve(),
+      ])
     } catch (err) {
-      console.error("Employer notification failed:", err)
+      console.error("Application notifications failed:", err)
     }
   })()
 

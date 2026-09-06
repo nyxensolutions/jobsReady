@@ -20,12 +20,12 @@ export async function GET() {
   if (dbUser.role === "SEEKER") {
     const name = seekerProfile?.name
     const isPhonePlaceholder = !name || /^\+?\d+$/.test(name)
-    return NextResponse.json({ name: isPhonePlaceholder ? null : name, role: dbUser.role, photoUrl: seekerProfile?.photoUrl || null })
+    return NextResponse.json({ name: isPhonePlaceholder ? null : name, role: dbUser.role, isAdmin: dbUser.isAdmin, photoUrl: seekerProfile?.photoUrl || null })
   }
 
   if (dbUser.role === "EMPLOYER") {
-    return NextResponse.json({ name: employerProfile?.contactPerson ?? employerProfile?.companyName ?? null, role: dbUser.role, photoUrl: employerProfile?.logoUrl || null })
+    return NextResponse.json({ name: employerProfile?.contactPerson ?? employerProfile?.companyName ?? null, role: dbUser.role, isAdmin: dbUser.isAdmin, photoUrl: employerProfile?.logoUrl || null })
   }
 
-  return NextResponse.json({ name: "Admin", role: dbUser.role })
+  return NextResponse.json({ name: "Admin", role: dbUser.role, isAdmin: dbUser.isAdmin })
 }

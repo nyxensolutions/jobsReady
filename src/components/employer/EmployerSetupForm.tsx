@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Loader2, Building2, CheckCircle } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { Loader2, Building2, CheckCircle, Mail, ShieldCheck } from "lucide-react"
 
 const HIRING_FOR = [
   { value: "own", label: "Your own company" },
@@ -17,14 +17,84 @@ const INDUSTRIES = [
 
 export default function EmployerSetupForm({ cities }: { cities: string[] }) {
   const [contactPerson, setContactPerson] = useState("")
-  const [hiringFor, setHiringFor] = useState("")
-  const [companyName, setCompanyName] = useState("")
-  const [city, setCity] = useState("")
-  const [contactPhone, setContactPhone] = useState("")
-  const [industry, setIndustry] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [done, setDone] = useState(false)
+  const [hiringFor, setHiringFor]         = useState("")
+  const [companyName, setCompanyName]     = useState("")
+  const [city, setCity]                   = useState("")
+  const [contactPhone, setContactPhone]   = useState("")
+  const [industry, setIndustry]           = useState("")
+  const [email, setEmail]                 = useState("")
+  const [loading, setLoading]             = useState(false)
+  const [error, setError]                 = useState("")
+  const [done, setDone]                   = useState(false)
+
+  // ── Email OTP state ──────────────────────────────────────────────────────
+  const [otpSent, setOtpSent]             = useState(false)
+  const [otpCode, setOtpCode]             = useState("")
+  const [emailVerified, setEmailVerified] = useState(false)
+  const [otpLoading, setOtpLoading]       = useState(false)
+  const [otpError, setOtpError]           = useState("")
+  const [countdown, setCountdown]         = useState(0)
+  const timerRef                          = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [])
+
+  function startCountdown(secs = 120) {
+    setCountdown(secs)
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) { clearInterval(timerRef.current!); return 0 }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+  async function handleSendOtp() {
+    if (!isValidEmail) { setOtpError("Enter a valid email address first."); return }
+    setOtpLoading(true)
+    setOtpError("")
+    try {
+      const res = await fetch("/api/employer/verify-email/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setOtpError(data.error ?? "Failed to send code."); return }
+      setOtpSent(true)
+      startCountdown(120)
+    } catch {
+      setOtpError("Network error. Please try again.")
+    } finally {
+      setOtpLoading(false)
+    }
+  }
+
+  async function handleVerifyOtp() {
+    if (otpCode.length !== 6) { setOtpError("Enter the 6-digit code."); return }
+    setOtpLoading(true)
+    setOtpError("")
+    try {
+      const res = await fetch("/api/employer/verify-email/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otp: otpCode }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setOtpError(data.error ?? "Verification failed."); return }
+      setEmailVerified(true)
+      setOtpSent(false)
+      if (timerRef.current) clearInterval(timerRef.current)
+    } catch {
+      setOtpError("Network error. Please try again.")
+    } finally {
+      setOtpLoading(false)
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -48,6 +118,7 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
           city,
           industry: industry || "Other",
           hiringFor,
+          email: email || undefined,
         }),
       })
       if (!res.ok) throw new Error((await res.json()).error ?? "Registration failed")
@@ -87,6 +158,7 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col gap-5">
+
           {/* Full Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -183,6 +255,103 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
             </div>
           </div>
 
+          {/* Email + OTP Verification */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1.5">
+              <Mail size={14} />
+              Email address
+              {emailVerified && (
+                <span className="inline-flex items-center gap-1 text-green-600 font-semibold text-xs ml-1">
+                  <ShieldCheck size={13} /> Verified
+                </span>
+              )}
+            </label>
+
+            {/* Email input row */}
+            {!emailVerified && (
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setOtpSent(false); setOtpCode(""); setOtpError("") }}
+                  placeholder="your@email.com (optional)"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1a3461] focus:border-transparent"
+                />
+                {isValidEmail && !otpSent && (
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={otpLoading}
+                    className="px-4 py-3 rounded-xl bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] transition-colors disabled:opacity-60 shrink-0 flex items-center gap-1.5"
+                  >
+                    {otpLoading ? <Loader2 size={14} className="animate-spin" /> : null}
+                    Verify
+                  </button>
+                )}
+                {otpSent && countdown > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled
+                    className="px-3 py-3 rounded-xl border border-gray-300 text-gray-400 text-xs font-medium shrink-0"
+                  >
+                    {Math.floor(countdown / 60)}:{String(countdown % 60).padStart(2, "0")}
+                  </button>
+                )}
+                {otpSent && countdown === 0 && (
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={otpLoading}
+                    className="px-4 py-3 rounded-xl border border-[#1a3461] text-[#1a3461] text-sm font-semibold hover:bg-[#1a3461]/5 transition-colors disabled:opacity-60 shrink-0"
+                  >
+                    Resend
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Verified state */}
+            {emailVerified && (
+              <div className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-xl">
+                <ShieldCheck size={16} className="text-green-600 shrink-0" />
+                <span className="text-sm text-green-700 font-medium">{email}</span>
+              </div>
+            )}
+
+            {/* OTP input */}
+            {otpSent && !emailVerified && (
+              <div className="mt-2 flex gap-2">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={otpCode}
+                  onChange={(e) => { setOtpCode(e.target.value.replace(/\D/g, "")); setOtpError("") }}
+                  placeholder="Enter 6-digit code"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1a3461] focus:border-transparent tracking-widest font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={handleVerifyOtp}
+                  disabled={otpLoading || otpCode.length !== 6}
+                  className="px-4 py-3 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-60 shrink-0 flex items-center gap-1.5"
+                >
+                  {otpLoading ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle size={14} />}
+                  Confirm
+                </button>
+              </div>
+            )}
+
+            {otpSent && !emailVerified && (
+              <p className="mt-1.5 text-xs text-gray-500">Code sent to <strong>{email}</strong>. Check your inbox.</p>
+            )}
+
+            {otpError && (
+              <p className="mt-1.5 text-xs text-red-500">{otpError}</p>
+            )}
+          </div>
+
           {error && (
             <p className="text-red-500 text-sm bg-red-50 rounded-xl px-4 py-3">{error}</p>
           )}
@@ -195,6 +364,10 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
             {loading && <Loader2 size={16} className="animate-spin" />}
             Next →
           </button>
+
+          {!emailVerified && isValidEmail && (
+            <p className="text-center text-xs text-gray-400">Verify your email to receive job alerts and important updates.</p>
+          )}
         </form>
       </div>
     </div>

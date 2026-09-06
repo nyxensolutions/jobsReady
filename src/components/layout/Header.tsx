@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
-import { Menu, X, User, Briefcase, LogOut, ChevronDown } from "lucide-react"
+import { Menu, X, User, Briefcase, LogOut, ChevronDown, ShieldCheck } from "lucide-react"
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher"
 import NotificationBell from "@/components/layout/NotificationBell"
 import { auth } from "@/lib/firebase/client"
@@ -87,7 +87,6 @@ export default function Header({ initialAuth }: Props) {
   }
 
   const dashboardHref = authUser?.role === "EMPLOYER" ? "/employer/dashboard"
-    : authUser?.role === "ADMIN" ? "/admin"
     : "/seeker/dashboard"
 
   // Hide on portal pages — they have their own sidebar nav
@@ -190,8 +189,18 @@ export default function Header({ initialAuth }: Props) {
                         className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
                         <Briefcase size={15} className="text-gray-400" />
-                        {authUser.role === "EMPLOYER" ? t("employerDashboard") : authUser.role === "ADMIN" ? t("adminPanel") : t("myDashboard")}
+                        {authUser.role === "EMPLOYER" ? t("employerDashboard") : t("myDashboard")}
                       </Link>
+                      {authUser.isAdmin && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors font-medium"
+                        >
+                          <ShieldCheck size={15} className="text-purple-500" />
+                          Admin Panel
+                        </Link>
+                      )}
                       {authUser.role === "SEEKER" && (
                         <>
                           <Link
