@@ -13,6 +13,7 @@ import { onAuthStateChanged, signOut as firebaseSignOut } from "firebase/auth"
 type AuthUser = {
   name: string
   role: "SEEKER" | "EMPLOYER" | "ADMIN"
+  isAdmin: boolean
   initial: string
   photoUrl?: string | null
 }
