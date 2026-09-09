@@ -3,7 +3,7 @@
     "apps": [],
     "details": [
       {
-        "appID": "TODO_TEAM_ID.com.nyxencloud.jobs24india",
+        "appID": "TODO_TEAM_ID.com.nyxensolutions.jobs24india",
         "paths": [
           "/jobs/*",
           "/seeker/*",
