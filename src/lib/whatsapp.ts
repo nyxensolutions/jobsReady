@@ -142,6 +142,50 @@ export async function sendSeekerShortlistedWhatsApp(
   ])
 }
 
+/** Seeker: application viewed by employer */
+export async function sendSeekerViewedWhatsApp(
+  phone: string,
+  name: string,
+  jobTitle: string,
+  companyName: string
+) {
+  // Template body:
+  // "Hi {{1}}, {{3}} viewed your application for *{{2}}*.
+  //  Stay ready — they may reach out soon! jobs24india.com"
+  return sendWhatsAppTemplate(phone, "seeker_viewed_v1", [
+    name, jobTitle, companyName,
+  ])
+}
+
+/** Seeker: hired */
+export async function sendSeekerHiredWhatsApp(
+  phone: string,
+  name: string,
+  jobTitle: string,
+  companyName: string
+) {
+  // Template body:
+  // "🏆 Congratulations {{1}}! {{3}} has selected you for *{{2}}*.
+  //  Login to Jobs24India for next steps. jobs24india.com"
+  return sendWhatsAppTemplate(phone, "seeker_hired_v1", [
+    name, jobTitle, companyName,
+  ])
+}
+
+/** Seeker: application rejected */
+export async function sendSeekerRejectedWhatsApp(
+  phone: string,
+  name: string,
+  jobTitle: string
+) {
+  // Template body:
+  // "Hi {{1}}, your application for *{{2}}* was not selected this time.
+  //  Don't give up — keep applying! jobs24india.com"
+  return sendWhatsAppTemplate(phone, "seeker_rejected_v1", [
+    name, jobTitle,
+  ])
+}
+
 /** Employer: welcome message on registration (phone-only) */
 export async function sendEmployerWelcomeWhatsApp(
   phone: string,

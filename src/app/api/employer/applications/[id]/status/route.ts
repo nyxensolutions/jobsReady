@@ -2,7 +2,13 @@
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendSeekerStatusUpdate } from "@/lib/email"
-import { notifySeeker, MSG, WA } from "@/lib/sms"
+import { notifySeeker, MSG } from "@/lib/sms"
+import {
+  sendSeekerViewedWhatsApp,
+  sendSeekerShortlistedWhatsApp,
+  sendSeekerHiredWhatsApp,
+  sendSeekerRejectedWhatsApp,
+} from "@/lib/whatsapp"
 import { sendPushToUser } from "@/lib/push"
 
 const ALLOWED_STATUSES = ["VIEWED", "SHORTLISTED", "REJECTED", "HIRED"] as const
@@ -106,18 +112,20 @@ export async function PUT(
           REJECTED:    MSG.seeker.rejected(title),
         }
 
+        const seekerName = application.seeker.name ?? "Job Seeker"
+
         const WA_SENDERS: Record<Status, () => Promise<void>> = {
-          VIEWED:      () => WA.seeker.viewed(phone, title, company),
-          SHORTLISTED: () => WA.seeker.shortlisted(phone, title, company),
-          HIRED:       () => WA.seeker.hired(phone, title, company),
-          REJECTED:    () => WA.seeker.rejected(phone, title),
+          VIEWED:      () => phone ? sendSeekerViewedWhatsApp(phone, seekerName, title, company) : Promise.resolve(),
+          SHORTLISTED: () => phone ? sendSeekerShortlistedWhatsApp(phone, seekerName, title, company) : Promise.resolve(),
+          HIRED:       () => phone ? sendSeekerHiredWhatsApp(phone, seekerName, title, company) : Promise.resolve(),
+          REJECTED:    () => phone ? sendSeekerRejectedWhatsApp(phone, seekerName, title) : Promise.resolve(),
         }
 
         await Promise.allSettled([
           seekerUser?.email
             ? sendSeekerStatusUpdate({
                 seekerEmail: seekerUser.email,
-                seekerName: application.seeker.name ?? "Job Seeker",
+                seekerName,
                 jobTitle: title,
                 companyName: company,
                 status: typedStatus,

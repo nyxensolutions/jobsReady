@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-import { sendEmployerApplicationAlert } from "@/lib/email"
+import { sendEmployerApplicationAlert, sendSeekerApplicationConfirmation } from "@/lib/email"
 import { sendSeekerApplicationWhatsApp, sendEmployerApplicationWhatsApp } from "@/lib/whatsapp"
+import { notifySeeker, MSG } from "@/lib/sms"
 import { sendPushToUser } from "@/lib/push"
 
 export async function POST(req: NextRequest) {
@@ -74,12 +75,28 @@ export async function POST(req: NextRequest) {
   ;(async () => {
     try {
       const [seekerUser, employerDbUser] = await Promise.all([
-        prisma.user.findUnique({ where: { id: session.uid }, select: { phone: true } }),
+        prisma.user.findUnique({ where: { id: session.uid }, select: { phone: true, email: true } }),
         prisma.user.findUnique({ where: { id: job.employer.userId }, select: { email: true } }),
       ])
 
       await Promise.allSettled([
-        // Employer email
+        // Seeker email — application confirmation
+        seekerUser?.email
+          ? sendSeekerApplicationConfirmation({
+              seekerEmail: seekerUser.email,
+              seekerName: profile.name,
+              jobTitle: job.title,
+              companyName: job.employer.companyName,
+              jobId: job.id,
+            })
+          : Promise.resolve(),
+        // Seeker SMS — application confirmation
+        notifySeeker(seekerUser?.phone, MSG.seeker.applied(job.title, job.employer.companyName)),
+        // Seeker WhatsApp — application confirmation
+        seekerUser?.phone
+          ? sendSeekerApplicationWhatsApp(seekerUser.phone, profile.name, job.title, job.employer.companyName)
+          : Promise.resolve(),
+        // Employer email — new application alert
         employerDbUser?.email
           ? sendEmployerApplicationAlert({
               employerEmail: employerDbUser.email,
@@ -88,10 +105,6 @@ export async function POST(req: NextRequest) {
               seekerName: profile.name,
               applicationId: application.id,
             })
-          : Promise.resolve(),
-        // Seeker WhatsApp — application confirmation
-        seekerUser?.phone
-          ? sendSeekerApplicationWhatsApp(seekerUser.phone, profile.name, job.title, job.employer.companyName)
           : Promise.resolve(),
         // Employer WhatsApp — new application alert
         job.employer.contactPhone
