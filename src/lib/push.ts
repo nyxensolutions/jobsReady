@@ -35,6 +35,18 @@ export async function sendPushToUser(userId: string, payload: PushPayload) {
         data: { fcmTokens: tokens.filter((t) => !deadTokens.includes(t)) },
       })
     }
+
+    // Anything that failed for a reason other than a stale token is a real
+    // problem - bad credentials, a malformed payload, FCM refusing the
+    // project. Pruning handled the expected case above; reporting the rest
+    // is what stops a dead channel looking identical to a quiet one.
+    const unexpected = res.responses
+      .map((r, i) => (!r.success && !isUnregisteredError(r.error?.code) ? `${tokens[i].slice(0, 12)}…: ${r.error?.code}` : null))
+      .filter((x): x is string => x !== null)
+
+    if (unexpected.length > 0) {
+      console.error(`[push] ${unexpected.length}/${tokens.length} failed for user ${userId}: ${unexpected.join("; ")}`)
+    }
   } catch (err) {
     console.error("sendPushToUser failed:", err)
   }

@@ -71,6 +71,29 @@ export async function POST(req: NextRequest) {
     })
   }
 
+  // In-app notification for the seeker.
+  //
+  // Their external channels are unreliable by nature: most seekers have no
+  // email at all, and WhatsApp depends on a provider that has failed silently
+  // before. The in-app row is the only confirmation that cannot go missing,
+  // and without it someone who applies sees nothing in their notification
+  // list at all.
+  await prisma.notification.create({
+    data: {
+      userId: session.uid,
+      type: "APPLICATION_SUBMITTED",
+      title: `Applied to "${job.title}"`,
+      body: `Your application to ${job.employer.companyName} has been submitted.`,
+      data: { applicationId: application.id, jobId: job.id, jobTitle: job.title },
+    },
+  })
+
+  sendPushToUser(session.uid, {
+    title: `Applied to "${job.title}"`,
+    body: `Your application to ${job.employer.companyName} has been submitted.`,
+    data: { applicationId: application.id, type: "APPLICATION_SUBMITTED" },
+  })
+
   // Fire-and-forget notifications — email + WhatsApp for both seeker and employer
   ;(async () => {
     try {
