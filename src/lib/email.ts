@@ -40,6 +40,18 @@ async function send(payload: Parameters<typeof resend.emails.send>[0]) {
 const FROM = process.env.RESEND_FROM_EMAIL ?? "noreply@jobs24india.com"
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
 
+/**
+ * Always absolute and always public.
+ *
+ * The header image used to hang off APP_URL, so any send from an environment
+ * where NEXT_PUBLIC_APP_URL is unset embedded http://localhost:3000/... and
+ * the logo was simply broken in the recipient's inbox. Logo_Email.png is a
+ * 9 KB, 192x64 copy of the 431 KB original, which was being downloaded in
+ * full to be drawn 32 pixels tall - and several clients block images that
+ * large by default.
+ */
+const LOGO_URL = "https://www.jobs24india.com/Logo_Email.png"
+
 // ─── Shared email shell ───────────────────────────────────────────────────────
 function emailShell(body: string) {
   return `<!DOCTYPE html>
@@ -50,7 +62,7 @@ function emailShell(body: string) {
   <tr><td style="background:#1a3461;padding:24px 32px">
     <table width="100%" cellpadding="0" cellspacing="0"><tr>
       <td>
-        <img src="${APP_URL}/Logo_Light.png" alt="Jobs24India" height="32" style="display:block;margin-bottom:8px;border:none;" />
+        <img src="${LOGO_URL}" alt="Jobs24India" width="96" height="32" style="display:block;margin-bottom:8px;border:none;" />
         <span style="font-size:11px;color:#93c5fd">India's job portal for frontline workers</span>
       </td>
     </tr></table>
