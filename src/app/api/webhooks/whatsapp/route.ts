@@ -83,26 +83,68 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const entries = (body.entry ?? []) as { changes?: { value?: Record<string, unknown> }[] }[]
+    const entries = (body.entry ?? []) as {
+      changes?: { field?: string; value?: Record<string, unknown> }[]
+    }[]
+
     for (const entry of entries) {
       for (const change of entry.changes ?? []) {
         const value = change.value ?? {}
 
-        for (const s of (value.statuses ?? []) as Status[]) {
-          if (s.status === "failed") {
-            // The one case worth shouting about: accepted by the API, then
-            // dropped. Meta's reason is the only way to tell why.
-            const reason = s.errors?.map((e) => `${e.code} ${e.title ?? e.message ?? ""}`).join("; ")
-            console.error(`[wa-webhook] FAILED to ${s.recipient_id} (${s.id}): ${reason ?? "no reason given"}`)
-          } else {
-            console.log(`[wa-webhook] ${s.status} -> ${s.recipient_id} (${s.id})`)
+        switch (change.field) {
+          // Approved / rejected / disabled. Worth shouting about: a template
+          // disabled by Meta fails every send that uses it, and nothing in the
+          // app would otherwise say why.
+          case "message_template_status_update": {
+            const event = String(value.event ?? "")
+            const name = String(value.message_template_name ?? "")
+            const reason = value.reason && value.reason !== "NONE" ? ` reason=${value.reason}` : ""
+            const line = `[wa-webhook] template ${name} -> ${event}${reason}`
+            if (event === "APPROVED") console.log(line)
+            else console.error(line)
+            break
           }
-        }
 
-        for (const m of (value.messages ?? []) as { from?: string; type?: string }[]) {
-          // Inbound opens a 24h service window, during which free-form replies
-          // are allowed and free. Nothing acts on this yet.
-          console.log(`[wa-webhook] inbound ${m.type} from ${m.from}`)
+          // Quality dropping is the warning before a template is paused.
+          case "message_template_quality_update":
+            console.error(
+              `[wa-webhook] template quality ${value.message_template_name}: ${value.previous_quality_score} -> ${value.new_quality_score}`
+            )
+            break
+
+          // The number's own rating. RED precedes messaging limits.
+          case "phone_number_quality_update":
+            console.error(
+              `[wa-webhook] number quality ${value.display_phone_number}: ${value.event} (limit ${value.current_limit})`
+            )
+            break
+
+          // Bans, restrictions and policy violations on the WABA itself.
+          case "account_update":
+            console.error(`[wa-webhook] account ${value.event}: ${JSON.stringify(value).slice(0, 300)}`)
+            break
+
+          default: {
+            for (const st of (value.statuses ?? []) as Status[]) {
+              if (st.status === "failed") {
+                // Accepted by the send API, then dropped. Meta's reason is the
+                // only way to tell why.
+                const reason = st.errors
+                  ?.map((e) => `${e.code} ${e.title ?? e.message ?? ""}`)
+                  .join("; ")
+                console.error(
+                  `[wa-webhook] FAILED to ${st.recipient_id} (${st.id}): ${reason ?? "no reason given"}`
+                )
+              } else {
+                console.log(`[wa-webhook] ${st.status} -> ${st.recipient_id} (${st.id})`)
+              }
+            }
+
+            for (const m of (value.messages ?? []) as { from?: string; type?: string }[]) {
+              // Inbound opens a free 24h service window. Nothing acts on it yet.
+              console.log(`[wa-webhook] inbound ${m.type} from ${m.from}`)
+            }
+          }
         }
       }
     }
