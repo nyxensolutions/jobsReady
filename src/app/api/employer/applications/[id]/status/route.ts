@@ -114,7 +114,7 @@ export async function PUT(
 
         const seekerName = application.seeker.name ?? "Job Seeker"
 
-        const WA_SENDERS: Record<Status, () => Promise<void>> = {
+        const WA_SENDERS: Record<Status, () => Promise<unknown>> = {
           VIEWED:      () => phone ? sendSeekerViewedWhatsApp(phone, seekerName, title, company) : Promise.resolve(),
           SHORTLISTED: () => phone ? sendSeekerShortlistedWhatsApp(phone, seekerName, title, company) : Promise.resolve(),
           HIRED:       () => phone ? sendSeekerHiredWhatsApp(phone, seekerName, title, company) : Promise.resolve(),

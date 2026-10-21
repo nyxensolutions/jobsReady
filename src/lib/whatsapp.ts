@@ -1,18 +1,44 @@
 /**
- * Gupshup WhatsApp Business API integration
+ * WhatsApp Business Platform — Meta Cloud API
  * Phone: +91 88009 29721 | WABA ID: 1603050564877428
+ *
+ * Replaces the earlier Gupshup BSP transport, whose API key stopped being
+ * recognised ("Portal User Not Found With APIKey"). The exported helpers keep
+ * their old signatures, so call sites did not change.
  *
  * Two message types:
  *  - Template messages: pre-approved by Meta, used for business-initiated alerts
  *  - Text messages: only within 24h session after user replies (free-form)
  *
- * All outbound notification functions use templates.
- * Template IDs must match what you create + get approved in Gupshup dashboard.
+ * Template names below must match what is approved on the WABA, and the
+ * parameter count must match the template body exactly or Meta rejects the
+ * send with error 132000.
  */
 
-const GUPSHUP_API = "https://api.gupshup.io/sm/api/v1/msg"
-const API_KEY     = process.env.GUPSHUP_API_KEY
-const SOURCE      = process.env.GUPSHUP_PHONE ?? "918800929721" // no + prefix
+const API_VERSION = process.env.WHATSAPP_API_VERSION ?? "v25.0"
+const TOKEN = process.env.WHATSAPP_TOKEN
+const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID
+/** Fallback language for templates not listed in TEMPLATE_LANG below. */
+const LANG = process.env.WHATSAPP_TEMPLATE_LANG ?? "en"
+
+/**
+ * Per-template language overrides.
+ *
+ * Templates are approved per-language, and the send must name the exact
+ * locale it was approved under or Meta returns 132001 — the same error as a
+ * missing template, which makes it easy to misdiagnose. Most of this WABA is
+ * "en"; seeker_application_confirm_v3 was approved as "en_GB".
+ *
+ * Verify against the live list with:
+ *   npx tsx scripts/test-whatsapp.ts <phone> --list-remote
+ */
+const TEMPLATE_LANG: Record<string, string> = {
+  seeker_application_confirm_v3: "en_GB",
+}
+
+export type WhatsAppResult =
+  | { ok: true; messageId: string }
+  | { ok: false; error: string }
 
 // ── Core sender ───────────────────────────────────────────────────────────────
 
@@ -24,35 +50,54 @@ function normalizePhone(phone: string): string {
   return digits
 }
 
-async function sendMessage(to: string, message: object): Promise<void> {
-  if (!API_KEY) {
-    console.warn("[WhatsApp] GUPSHUP_API_KEY not set — skipping")
-    return
+/**
+ * Posts to the Cloud API and reports what happened.
+ *
+ * Never throws: a notification must not fail the request that triggered it.
+ * But unlike the previous implementation it does not swallow failures either —
+ * every failure is logged with the reason and returned to the caller. A dead
+ * credential went unnoticed for weeks precisely because the old version
+ * reported nothing.
+ */
+async function send(to: string, payload: object): Promise<WhatsAppResult> {
+  if (!TOKEN || !PHONE_NUMBER_ID) {
+    const error = "WHATSAPP_TOKEN or WHATSAPP_PHONE_NUMBER_ID not set"
+    console.error("[WhatsApp] not configured —", error)
+    return { ok: false, error }
   }
 
-  const params = new URLSearchParams({
-    channel:    "whatsapp",
-    source:     SOURCE,
-    destination: normalizePhone(to),
-    message:    JSON.stringify(message),
-    "src.name": "Jobs24India",
-  })
+  const url = `https://graph.facebook.com/${API_VERSION}/${PHONE_NUMBER_ID}/messages`
 
   try {
-    const res = await fetch(GUPSHUP_API, {
-      method:  "POST",
+    const res = await fetch(url, {
+      method: "POST",
       headers: {
-        apikey:         API_KEY,
-        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${TOKEN}`,
+        "Content-Type": "application/json",
       },
-      body: params.toString(),
+      body: JSON.stringify({
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: normalizePhone(to),
+        ...payload,
+      }),
     })
+
+    const data = await res.json().catch(() => ({}))
+
     if (!res.ok) {
-      const text = await res.text()
-      console.error("[WhatsApp] Gupshup error:", res.status, text)
+      // Meta nests the useful part under error.message / error.code.
+      const err = data?.error
+      const error = err ? `${err.code} ${err.message}` : `HTTP ${res.status}`
+      console.error(`[WhatsApp] send failed to ${normalizePhone(to)}:`, error)
+      return { ok: false, error }
     }
+
+    return { ok: true, messageId: data?.messages?.[0]?.id ?? "unknown" }
   } catch (err) {
-    console.error("[WhatsApp] Network error:", err)
+    const error = err instanceof Error ? err.message : String(err)
+    console.error("[WhatsApp] network error:", error)
+    return { ok: false, error }
   }
 }
 
@@ -60,36 +105,44 @@ async function sendMessage(to: string, message: object): Promise<void> {
 
 /** Send a free-form text (only valid within 24h after user messages you) */
 export async function sendWhatsAppText(phone: string, text: string) {
-  return sendMessage(phone, { type: "text", text })
+  return send(phone, { type: "text", text: { body: text } })
 }
 
 /**
  * Send an approved template message.
- * templateId = the template name as approved in Gupshup / Meta.
- * params = ordered list of {{1}}, {{2}} … values.
+ * templateId = the template name as approved on the WABA.
+ * params = ordered list of {{1}}, {{2}} … body values.
  */
 export async function sendWhatsAppTemplate(
   phone: string,
   templateId: string,
   params: string[]
 ) {
-  return sendMessage(phone, {
+  return send(phone, {
     type: "template",
-    template: { id: templateId, params },
+    template: {
+      name: templateId,
+      language: { code: TEMPLATE_LANG[templateId] ?? LANG },
+      // Omit components entirely for a template with no variables; Meta
+      // rejects an empty parameters array.
+      ...(params.length
+        ? {
+            components: [
+              {
+                type: "body",
+                parameters: params.map((text) => ({ type: "text", text })),
+              },
+            ],
+          }
+        : {}),
+    },
   })
 }
 
 // ── Notification helpers ──────────────────────────────────────────────────────
-// Template names below must be created in Gupshup dashboard → Templates
-// and approved by Meta before they work in production.
-// Use exact same variable count as the template body.
 
 /** Seeker: welcome message on signup (phone-only users) */
 export async function sendSeekerWelcomeWhatsApp(phone: string, name: string) {
-  // Template body example:
-  // "Hi {{1}}! Welcome to Jobs24India 🎉
-  //  Browse thousands of jobs near you and apply in one tap.
-  //  Visit: https://jobs24india.com"
   return sendWhatsAppTemplate(phone, "seeker_welcome_v1", [name])
 }
 
@@ -102,11 +155,6 @@ export async function sendSeekerJobAlertWhatsApp(
   salary: string,
   jobId: string
 ) {
-  // Template body:
-  // "Hi {{1}}, new job for you!
-  //  🏢 {{2}} in {{3}}
-  //  💰 {{4}}
-  //  Apply now: https://jobs24india.com/jobs/{{5}}"
   return sendWhatsAppTemplate(phone, "seeker_job_alert_v1", [
     name, jobTitle, city, salary, jobId,
   ])
@@ -119,10 +167,7 @@ export async function sendSeekerApplicationWhatsApp(
   jobTitle: string,
   companyName: string
 ) {
-  // Template body:
-  // "Hi {{1}}, your application for *{{2}}* at {{3}} has been submitted ✅
-  //  We'll notify you when the employer responds."
-  return sendWhatsAppTemplate(phone, "seeker_application_confirm_v1", [
+  return sendWhatsAppTemplate(phone, "seeker_application_confirm_v3", [
     name, jobTitle, companyName,
   ])
 }
@@ -134,9 +179,6 @@ export async function sendSeekerShortlistedWhatsApp(
   jobTitle: string,
   companyName: string
 ) {
-  // Template body:
-  // "🎉 Hi {{1}}, great news! You've been shortlisted for *{{2}}* at {{3}}.
-  //  Keep your phone handy — the employer may call soon."
   return sendWhatsAppTemplate(phone, "seeker_shortlisted_v1", [
     name, jobTitle, companyName,
   ])
@@ -149,9 +191,6 @@ export async function sendSeekerViewedWhatsApp(
   jobTitle: string,
   companyName: string
 ) {
-  // Template body:
-  // "Hi {{1}}, {{3}} viewed your application for *{{2}}*.
-  //  Stay ready — they may reach out soon! jobs24india.com"
   return sendWhatsAppTemplate(phone, "seeker_viewed_v1", [
     name, jobTitle, companyName,
   ])
@@ -164,9 +203,6 @@ export async function sendSeekerHiredWhatsApp(
   jobTitle: string,
   companyName: string
 ) {
-  // Template body:
-  // "🏆 Congratulations {{1}}! {{3}} has selected you for *{{2}}*.
-  //  Login to Jobs24India for next steps. jobs24india.com"
   return sendWhatsAppTemplate(phone, "seeker_hired_v1", [
     name, jobTitle, companyName,
   ])
@@ -178,12 +214,7 @@ export async function sendSeekerRejectedWhatsApp(
   name: string,
   jobTitle: string
 ) {
-  // Template body:
-  // "Hi {{1}}, your application for *{{2}}* was not selected this time.
-  //  Don't give up — keep applying! jobs24india.com"
-  return sendWhatsAppTemplate(phone, "seeker_rejected_v1", [
-    name, jobTitle,
-  ])
+  return sendWhatsAppTemplate(phone, "seeker_rejected_v1", [name, jobTitle])
 }
 
 /** Employer: welcome message on registration (phone-only) */
@@ -191,10 +222,6 @@ export async function sendEmployerWelcomeWhatsApp(
   phone: string,
   companyName: string
 ) {
-  // Template body:
-  // "Welcome to Jobs24India! 👋
-  //  Hi {{1}}, your employer account is ready.
-  //  Post your first job at: https://jobs24india.com/employer/post-job"
   return sendWhatsAppTemplate(phone, "employer_welcome_v1", [companyName])
 }
 
@@ -205,24 +232,24 @@ export async function sendEmployerApplicationWhatsApp(
   seekerName: string,
   jobTitle: string
 ) {
-  // Template body:
-  // "Hi {{1}}, *{{2}}* applied for your job *{{3}}*.
-  //  View application: https://jobs24india.com/employer/dashboard"
   return sendWhatsAppTemplate(phone, "employer_new_application_v1", [
     employerName, seekerName, jobTitle,
   ])
 }
 
-/** Employer: account verified / onboarding complete */
+/**
+ * Employer: account verified / onboarding complete.
+ *
+ * Body is "Hi {{1}}, your employer profile for {{2}} … has been approved",
+ * so the contact person comes first and the company second. Passing only the
+ * company (as this did) is a 132000 parameter-count rejection.
+ */
 export async function sendEmployerOnboardingWhatsApp(
   phone: string,
+  contactPerson: string,
   companyName: string
 ) {
-  // Template body:
-  // "🎉 {{1}} is now verified on Jobs24India!
-  //  You can now post jobs and start receiving applications.
-  //  Dashboard: https://jobs24india.com/employer/dashboard"
   return sendWhatsAppTemplate(phone, "employer_onboarding_complete_v1", [
-    companyName,
+    contactPerson, companyName,
   ])
 }
