@@ -1,6 +1,42 @@
 import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
+
+/**
+ * Addresses that exist to satisfy a NOT NULL, not to receive mail.
+ *
+ * The scraper owns 254 of the 259 active listings under
+ * scraper-bot@jobsready.internal, so almost every application tries to email
+ * a domain that cannot resolve. Those bounces count against the sending
+ * domain's reputation and put the mail that does matter — OTPs, verification,
+ * real employer alerts — at risk of being filtered.
+ */
+function isDeliverable(to: string | string[]): boolean {
+  const addrs = Array.isArray(to) ? to : [to]
+  return addrs.every((a) => {
+    const domain = a.split("@")[1]?.toLowerCase() ?? ""
+    return domain.length > 0 && !domain.endsWith(".internal") && !domain.endsWith(".local")
+  })
+}
+
+/**
+ * Single send path, so the deliverability check cannot be forgotten by a
+ * future caller. Never throws: email is a side-effect of the request that
+ * triggered it, not the point of it.
+ */
+async function send(payload: Parameters<typeof resend.emails.send>[0]) {
+  if (!isDeliverable(payload.to as string | string[])) {
+    console.warn(`[email] skipped undeliverable recipient: ${JSON.stringify(payload.to)}`)
+    return
+  }
+  try {
+    const { error } = await resend.emails.send(payload)
+    if (error) console.error(`[email] send failed to ${JSON.stringify(payload.to)}: ${error.message ?? error}`)
+  } catch (err) {
+    console.error("[email] send threw:", err)
+  }
+}
+
 const FROM = process.env.RESEND_FROM_EMAIL ?? "noreply@jobs24india.com"
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
 
@@ -55,7 +91,7 @@ export async function sendSeekerWelcomeEmail({ email, name }: { email: string; n
     ${btn(`${APP_URL}/seeker/profile`, "Complete Your Profile")}
     <p style="margin:24px 0 0;color:#6b7280;font-size:14px">Good luck with your job search!</p>
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: email,
     subject: "Welcome to Jobs24India! 🚀",
@@ -82,7 +118,7 @@ export async function sendEmployerWelcomeEmail({ email, companyName }: { email: 
     ${btn(`${APP_URL}/employer/post-job`, "Post Your First Job")}
     <p style="margin:24px 0 0;color:#6b7280;font-size:14px">Happy hiring!</p>
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: email,
     subject: "Welcome to Jobs24India! 🚀",
@@ -118,7 +154,7 @@ export async function sendPaymentReceipt({
     ${btn(`${APP_URL}/employer/billing`, "View Billing History")}
     <p style="margin:24px 0 0;font-size:13px;color:#6b7280">Keep this email for your records. For any billing queries, reply to this email.</p>
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: toEmail,
     subject: `Payment receipt — ₹${amountRupees.toLocaleString("en-IN")} · ${planName} · Jobs24India`,
@@ -143,7 +179,7 @@ export async function sendSeekerApplicationConfirmation({
     ${btn(`${APP_URL}/jobs/${jobId}`, "View Job", "#f97316")}
     &nbsp;&nbsp;${btn(`${APP_URL}/seeker/dashboard`, "My Applications")}
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: seekerEmail,
     subject: `Application sent to ${companyName} for "${jobTitle}"`,
@@ -175,7 +211,7 @@ export async function sendSeekerStatusUpdate({
     </div>
     ${btn(`${APP_URL}/seeker/dashboard`, "View My Applications")}
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: seekerEmail,
     subject: `${cfg.emoji} ${cfg.headline} — ${jobTitle} at ${companyName}`,
@@ -209,7 +245,7 @@ export async function sendSeekerJobDigest({
     <br>${btn(`${APP_URL}/jobs`, "See All Jobs", "#f97316")}
     <p style="margin:24px 0 0;font-size:12px;color:#9ca3af">Update your skills and city in your profile to get better matches.</p>
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: seekerEmail,
     subject: `${jobs.length} new job${jobs.length > 1 ? "s" : ""} match your profile today — Jobs24India`,
@@ -249,7 +285,7 @@ export async function sendEmployerWeeklySummary({
     ${btn(`${APP_URL}/employer/dashboard`, "View Dashboard")}
     &nbsp;&nbsp;${btn(`${APP_URL}/employer/responses`, "Review Applications", "#f97316")}
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: employerEmail,
     subject: `Weekly hiring summary — ${stats.newApplications} new application${stats.newApplications !== 1 ? "s" : ""} this week`,
@@ -271,7 +307,7 @@ export async function sendEmployerPlanExpiring({
     </div>
     ${btn(`${APP_URL}/employer/plans`, "Renew Plan", "#d97706")}
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: employerEmail,
     subject: `⚠️ Your ${planName} expires in ${daysLeft} day${daysLeft > 1 ? "s" : ""} — Renew now`,
@@ -292,7 +328,7 @@ export async function sendEmployerApplicationAlert({
   seekerName: string
   applicationId: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: employerEmail,
     subject: `New application for "${jobTitle}"`,
@@ -321,7 +357,7 @@ export async function sendEmployerVerifiedAlert({
   employerEmail: string
   employerName: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: employerEmail,
     subject: `Your company profile is now verified! ✅`,
@@ -346,7 +382,7 @@ export async function sendEmployerVerificationRejectedAlert({
   employerEmail: string
   employerName: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: employerEmail,
     subject: `Update on your company verification`,
@@ -375,7 +411,7 @@ export async function sendEmployerJobApprovedAlert({
   jobTitle: string
   jobId: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: employerEmail,
     subject: `Your job "${jobTitle}" is now live!`,
@@ -407,7 +443,7 @@ export async function sendEmployerJobRejectedAlert({
   jobTitle: string
   reason?: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: employerEmail,
     subject: `Update on your job posting: "${jobTitle}"`,
@@ -442,7 +478,7 @@ export async function sendCandidateInviteEmail({
   companyName: string
   jobId: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: seekerEmail,
     subject: `${companyName} wants you to apply for "${jobTitle}"`,
@@ -471,7 +507,7 @@ export async function sendEmployerMagicLink({
   email: string
   magicLink: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: email,
     subject: "Sign in to Jobs24India",
@@ -521,7 +557,7 @@ export async function sendEmailOtp({
     <p style="margin:0 0 8px;text-align:center;color:#6b7280;font-size:13px">Enter this code in the Jobs24India form to verify your email.</p>
     <p style="margin:0;text-align:center;font-size:12px;color:#9ca3af">This code expires in <strong>10 minutes</strong>. If you didn't request this, you can safely ignore this email.</p>
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: toEmail,
     subject: `${otp} is your Jobs24India verification code`,
@@ -558,7 +594,7 @@ export async function sendEmployerOnboardingCompleteEmail({
     ${btn(`${APP_URL}/employer/post-job`, "Post a Job Now", "#15803d")}
     <p style="margin:24px 0 0;color:#6b7280;font-size:14px">Welcome aboard, ${name}! Our team is here if you need anything.</p>
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: email,
     subject: `🎉 ${companyName} is now verified on Jobs24India!`,
@@ -581,7 +617,7 @@ export async function sendEmailVerification({
     <p style="margin:0 0 24px;font-size:12px;color:#9ca3af;word-break:break-all"><a href="${verifyUrl}" style="color:#1a3461">${verifyUrl}</a></p>
     <p style="margin:0;font-size:12px;color:#9ca3af">This link expires in 24 hours. If you didn't request this, you can safely ignore this email.</p>
   `
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: toEmail,
     subject: "Verify your email address — Jobs24India",
@@ -600,7 +636,7 @@ export async function sendSeekerShortlistAlert({
   jobTitle: string
   companyName: string
 }) {
-  await resend.emails.send({
+  await send({
     from: `Jobs24India <${FROM}>`,
     to: seekerEmail,
     subject: `You've been shortlisted for "${jobTitle}"`,
