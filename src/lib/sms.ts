@@ -6,19 +6,15 @@
  *   TWOFACTOR_SENDER_ID=JBSRDY         (DLT-registered sender ID)
  *
  * ── WhatsApp via Interakt ────────────────────────────────────────────────────
- *   Sign up at https://app.interakt.ai
  *   Add your WhatsApp Business number, complete Meta verification (~1-2 days)
  *   Register the templates listed in docs/whatsapp-templates.md
  *   Then add to .env.local:
- *   INTERAKT_API_KEY=your_base64_api_key   (Account → Developer → API Key)
  *
- * Until INTERAKT_API_KEY is set, WhatsApp calls are silently skipped.
  * SMS continues to work independently.
  */
 
 const TF_API_KEY   = process.env.TWOFACTOR_API_KEY  ?? ""
 const TF_SENDER_ID = process.env.TWOFACTOR_SENDER_ID ?? "JBSRDY"
-const IA_API_KEY   = process.env.INTERAKT_API_KEY   ?? ""
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -64,50 +60,7 @@ export async function sendSms(phone: string | null | undefined, message: string)
 // Use the "Utility" category for all of these (faster Meta approval).
 // All templates use {{1}}, {{2}} … placeholders in body.
 
-const INTERAKT_URL = "https://api.interakt.ai/v1/public/message/"
 
-async function sendWATemplate(
-  phone: string | null | undefined,
-  templateName: string,
-  bodyValues: string[]
-): Promise<void> {
-  if (!IA_API_KEY) {
-    console.warn("[whatsapp] INTERAKT_API_KEY not set — skipping WhatsApp")
-    return
-  }
-  if (!phone) return
-
-  const clean = cleanPhone(phone)
-  if (clean.length !== 10) return
-
-  try {
-    const res = await fetch(INTERAKT_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Basic ${IA_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        countryCode: "+91",
-        phoneNumber: clean,
-        callbackData: templateName,
-        type: "Template",
-        template: {
-          name: templateName,
-          languageCode: "en",
-          bodyValues,
-        },
-      }),
-    })
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => null)
-      console.error(`[whatsapp] Interakt error for ${templateName}:`, err)
-    }
-  } catch (err) {
-    console.error(`[whatsapp] sendWATemplate failed (${templateName}):`, err)
-  }
-}
 
 // ─── Convenience helpers ──────────────────────────────────────────────────────
 
@@ -127,41 +80,12 @@ export async function notifyEmployer(phone: string | null | undefined, message: 
 
 // ─── Typed WhatsApp senders (use template params, not free-form text) ─────────
 
-export const WA = {
-  seeker: {
-    applied: (phone: string | null | undefined, title: string, company: string) =>
-      sendWATemplate(phone, "j24_seeker_applied", [title, company]),
+// WhatsApp for the plan lifecycle (activated / expiring / expired) was wired
+// to Interakt with j24_* templates. That provider is gone and those templates
+// never existed on the Meta WABA, so the calls were silent no-ops and have been
+// removed; the SMS alongside each one still fires. When billing goes live,
+// create the templates on the WABA and send them via src/lib/whatsapp.ts.
 
-    viewed: (phone: string | null | undefined, title: string, company: string) =>
-      sendWATemplate(phone, "j24_seeker_viewed", [title, company]),
-
-    shortlisted: (phone: string | null | undefined, title: string, company: string) =>
-      sendWATemplate(phone, "j24_seeker_shortlisted", [title, company]),
-
-    hired: (phone: string | null | undefined, title: string, company: string) =>
-      sendWATemplate(phone, "j24_seeker_hired", [title, company]),
-
-    rejected: (phone: string | null | undefined, title: string) =>
-      sendWATemplate(phone, "j24_seeker_rejected", [title]),
-
-    newJobs: (phone: string | null | undefined, count: number) =>
-      sendWATemplate(phone, "j24_seeker_new_jobs", [String(count)]),
-  },
-
-  employer: {
-    planActivated: (phone: string | null | undefined, plan: string, days: number) =>
-      sendWATemplate(phone, "j24_employer_plan_activated", [plan, String(days)]),
-
-    planExpiringSoon: (phone: string | null | undefined, days: number) =>
-      sendWATemplate(phone, "j24_employer_plan_expiring", [String(days)]),
-
-    planExpired: (phone: string | null | undefined) =>
-      sendWATemplate(phone, "j24_employer_plan_expired", []),
-
-    weeklySummary: (phone: string | null | undefined, jobs: number, applications: number) =>
-      sendWATemplate(phone, "j24_employer_weekly_summary", [String(jobs), String(applications)]),
-  },
-}
 
 // ─── SMS message templates (DLT-registered, ≤160 chars) ──────────────────────
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { sendEmployerOnboardingCompleteEmail, sendEmployerVerificationRejectedAlert } from "@/lib/email"
+import { sendEmployerOnboardingWhatsApp } from "@/lib/whatsapp"
 import { sendPushToUser } from "@/lib/push"
 import { assertAdmin } from "@/lib/admin"
 
@@ -58,11 +59,26 @@ export async function PATCH(
     })
   }
 
-  // Send email
+  // Send email and, on approval, the WhatsApp equivalent
   if (action === "verify" || action === "reject") {
     void (async () => {
       try {
-        const empUser = await prisma.user.findUnique({ where: { id: employer.userId }, select: { email: true } })
+        const empUser = await prisma.user.findUnique({ where: { id: employer.userId }, select: { email: true, phone: true } })
+
+        // The template reads "Hi {{1}}, your employer profile for {{2}} … has
+        // been approved", so contact person first, company second. Phone-only
+        // employers have no email, which is why this is not nested under it.
+        if (action === "verify" && empUser?.phone) {
+          const result = await sendEmployerOnboardingWhatsApp(
+            empUser.phone,
+            employer.contactPerson ?? employer.companyName,
+            employer.companyName
+          )
+          if (!result.ok) {
+            console.error("[admin/employers/notify] WhatsApp failed:", result.error)
+          }
+        }
+
         if (empUser?.email) {
           if (action === "verify") {
             await sendEmployerOnboardingCompleteEmail({

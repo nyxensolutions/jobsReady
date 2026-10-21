@@ -22,13 +22,11 @@ const TEMPLATE_LANG: Record<string, string> = { seeker_application_confirm_v3: "
 /** Mirrors the template ids and parameter order in src/lib/whatsapp.ts. */
 const TEMPLATES: Record<string, string[]> = {
   seeker_welcome_v1:             ["Akhil"],
-  seeker_job_alert_v1:           ["Akhil", "Delivery Boy", "Gurugram", "₹15K–₹20K/month", "test-job-id"],
   seeker_application_confirm_v3: ["Akhil", "Delivery Boy", "ABC Pvt Ltd"],
   seeker_shortlisted_v1:         ["Akhil", "Delivery Boy", "ABC Pvt Ltd"],
   seeker_viewed_v1:              ["Akhil", "Delivery Boy", "ABC Pvt Ltd"],
   seeker_hired_v1:               ["Akhil", "Delivery Boy", "ABC Pvt Ltd"],
   seeker_rejected_v1:            ["Akhil", "Delivery Boy"],
-  employer_welcome_v1:           ["ABC Pvt Ltd"],
   employer_new_application_v1:   ["ABC Pvt Ltd", "Akhil", "Delivery Boy"],
   employer_onboarding_complete_v1: ["Sachin Verma", "ABC Pvt Ltd"],
 }

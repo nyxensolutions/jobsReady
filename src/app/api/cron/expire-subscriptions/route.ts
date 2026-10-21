@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { sendEmployerPlanExpiring } from "@/lib/email"
-import { notifyEmployer, MSG, WA } from "@/lib/sms"
+import { notifyEmployer, MSG } from "@/lib/sms"
 
 /**
  * Subscription lifecycle cron — runs daily at 2:30 AM IST.
@@ -63,7 +63,6 @@ export async function GET(req: NextRequest) {
           })
         : Promise.resolve(),
       notifyEmployer(phone, MSG.employer.planExpired()),
-      WA.employer.planExpired(phone),
     ])
 
     expired++
@@ -101,7 +100,6 @@ export async function GET(req: NextRequest) {
             })
           : Promise.resolve(),
         notifyEmployer(phone, MSG.employer.planExpiringSoon(days)),
-        WA.employer.planExpiringSoon(phone, days),
       ])
       warned++
     }

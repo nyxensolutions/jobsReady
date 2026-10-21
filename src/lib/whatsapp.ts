@@ -146,19 +146,6 @@ export async function sendSeekerWelcomeWhatsApp(phone: string, name: string) {
   return sendWhatsAppTemplate(phone, "seeker_welcome_v1", [name])
 }
 
-/** Seeker: job alert matching their profile */
-export async function sendSeekerJobAlertWhatsApp(
-  phone: string,
-  name: string,
-  jobTitle: string,
-  city: string,
-  salary: string,
-  jobId: string
-) {
-  return sendWhatsAppTemplate(phone, "seeker_job_alert_v1", [
-    name, jobTitle, city, salary, jobId,
-  ])
-}
 
 /** Seeker: application submitted confirmation */
 export async function sendSeekerApplicationWhatsApp(
@@ -217,13 +204,6 @@ export async function sendSeekerRejectedWhatsApp(
   return sendWhatsAppTemplate(phone, "seeker_rejected_v1", [name, jobTitle])
 }
 
-/** Employer: welcome message on registration (phone-only) */
-export async function sendEmployerWelcomeWhatsApp(
-  phone: string,
-  companyName: string
-) {
-  return sendWhatsAppTemplate(phone, "employer_welcome_v1", [companyName])
-}
 
 /** Employer: new application received */
 export async function sendEmployerApplicationWhatsApp(

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createHmac } from "crypto"
 import { prisma } from "@/lib/db"
 import { sendPaymentReceipt } from "@/lib/email"
-import { notifyEmployer, MSG, WA } from "@/lib/sms"
+import { notifyEmployer, MSG } from "@/lib/sms"
 import { sendPushToUser } from "@/lib/push"
 
 /**
@@ -126,7 +126,6 @@ export async function POST(req: NextRequest) {
         ? sendPaymentReceipt({ toEmail: employer.user.email, ...receiptData })
         : Promise.resolve(),
       notifyEmployer(phone, MSG.employer.planActivated(plan.name, plan.durationDays)),
-      WA.employer.planActivated(phone, plan.name, plan.durationDays),
       prisma.notification.create({
         data: {
           userId: employer.userId,
