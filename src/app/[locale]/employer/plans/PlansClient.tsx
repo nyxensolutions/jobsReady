@@ -37,15 +37,21 @@ const FREE_FEATURES = [
   { icon: <Clock size={16} />, title: "Priority Support", desc: "Reach our team via email or phone — we respond fast" },
 ]
 
-// Coming-soon premium plan preview cards
-const COMING_PLANS = [
-  { name: "Starter", price: "₹999", period: "/mo", tag: null, desc: "For small businesses making their first hire" },
-  { name: "Growth", price: "₹2,499", period: "/3 mo", tag: "Popular", desc: "For teams hiring regularly across multiple roles" },
-  { name: "Scale", price: "₹7,999", period: "/yr", tag: "Best Value", desc: "For high-volume hiring with unlimited everything" },
-]
+/** "30d" reads oddly on a price card; months and years do not. */
+function periodLabel(days: number) {
+  if (days >= 365) { const n = Math.round(days / 365); return n === 1 ? "/yr" : `/${n} yr` }
+  if (days >= 28)  { const n = Math.round(days / 30);  return n === 1 ? "/mo" : `/${n} mo` }
+  return `/${days} days`
+}
 
-export default function PlansClient({ activeSub, activeJobCount }: Props) {
+export default function PlansClient({ plans, activeSub, activeJobCount }: Props) {
   const locale = useLocale()
+
+  // The real catalogue. page.tsx has always queried and passed this; the
+  // component rendered a hardcoded list of invented plans instead, so the
+  // prices on screen were not the prices anyone would be charged. Trial and
+  // free tiers are not "coming soon", so they are filtered out.
+  const comingPlans = plans.filter((p) => !p.isTrial && p.priceRupees > 0)
 
   return (
     <div className="min-h-screen bg-[#eef2ff]">
@@ -134,14 +140,14 @@ export default function PlansClient({ activeSub, activeJobCount }: Props) {
         </div>
 
         <div className="grid sm:grid-cols-3 gap-4 opacity-50 pointer-events-none select-none">
-          {COMING_PLANS.map((plan) => (
+          {comingPlans.map((plan) => (
             <div
-              key={plan.name}
+              key={plan.slug}
               className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3 relative"
             >
-              {plan.tag && (
+              {plan.isPopular && (
                 <span className="absolute top-4 right-4 bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-200">
-                  {plan.tag}
+                  Popular
                 </span>
               )}
               <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400">
@@ -149,11 +155,13 @@ export default function PlansClient({ activeSub, activeJobCount }: Props) {
               </div>
               <div>
                 <p className="font-bold text-slate-700">{plan.name}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{plan.desc}</p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Up to {plan.activeJobLimit} active job{plan.activeJobLimit === 1 ? "" : "s"}
+                </p>
               </div>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-3xl font-extrabold text-slate-700 font-mono">{plan.price}</span>
-                <span className="text-slate-400 text-xs">{plan.period}</span>
+                <span className="text-3xl font-extrabold text-slate-700 font-mono">₹{fmt(plan.priceRupees)}</span>
+                <span className="text-slate-400 text-xs">{periodLabel(plan.durationDays)}</span>
               </div>
               <div className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-slate-100 text-slate-400 font-semibold text-sm mt-auto">
                 <Lock size={12} /> Coming Soon
