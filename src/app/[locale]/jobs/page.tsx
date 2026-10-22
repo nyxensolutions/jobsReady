@@ -71,7 +71,7 @@ export default async function JobsPage({ searchParams }: Props) {
     prisma.jobListing.findMany({
       where,
       include: {
-        employer: { select: { companyName: true } },
+        employer: { select: { companyName: true, status: true } },
         category: { select: { slug: true } },
         city: { select: { name: true } },
         boost: { select: { expiresAt: true } },
@@ -87,6 +87,7 @@ export default async function JobsPage({ searchParams }: Props) {
     id: j.id,
     title: j.title,
     company: j.source === "SCRAPED" ? "" : j.employer.companyName,
+    isVerifiedEmployer: j.source !== "SCRAPED" && j.employer.status === "VERIFIED",
     city: j.city.name,
     salary: formatSalary(j.salaryMin, j.salaryMax, j.salaryUnit),
     type: j.jobType,

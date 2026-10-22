@@ -1,7 +1,7 @@
 "use client"
 
 import { Link } from "@/i18n/navigation"
-import { MapPin, Clock, Users, Building2, PhoneCall, ChevronDown, ChevronUp } from "lucide-react"
+import { MapPin, Clock, Users, Building2, PhoneCall, ChevronDown, ChevronUp, ShieldCheck } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { formatRelativeTime } from "@/lib/utils"
@@ -11,6 +11,7 @@ type Job = {
   id: string
   title: string
   company: string
+  isVerifiedEmployer?: boolean
   city: string
   salary: string
   type: string
@@ -102,6 +103,13 @@ export default function JobCard({ job }: { job: Job }) {
             <span className="flex items-center gap-1.5">
               <Building2 size={13} className="text-gray-400 shrink-0" />
               <span className="font-medium text-gray-700">{job.company}</span>
+              {/* The promise the product is built on, shown where the seeker
+                  decides whether a listing is real. */}
+              {job.isVerifiedEmployer && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                  <ShieldCheck size={10} /> Verified
+                </span>
+              )}
             </span>
           )}
           <span className="flex items-center gap-1.5">

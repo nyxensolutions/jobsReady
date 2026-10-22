@@ -7,6 +7,7 @@ import { formatRelativeTime } from "@/lib/utils"
 import { prisma } from "@/lib/db"
 import { getServerSession } from "@/lib/firebase/session"
 import ApplyButton from "@/components/jobs/ApplyButton"
+import { ExternalLink, ShieldCheck } from "lucide-react"
 import SaveJobButton from "@/components/jobs/SaveJobButton"
 import { alternatesFor, SITE_URL } from "@/lib/seo"
 
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       salaryMax: true,
       salaryUnit: true,
       source: true,
+      sourceUrl: true,
       employer: { select: { companyName: true } },
       city: { select: { name: true } },
       category: { select: { nameEn: true } },
@@ -74,6 +76,44 @@ function formatSalary(
   return asPerInterview
 }
 
+
+/**
+ * Aggregated listings have no employer on this platform, so an in-app
+ * application would reach nobody — the API refuses them outright. Send the
+ * seeker to the original posting instead.
+ */
+function ApplyAction({
+  isScraped, sourceUrl, jobId, locale, alreadyApplied, contactPhone,
+}: {
+  isScraped: boolean
+  sourceUrl: string | null
+  jobId: string
+  locale: string
+  alreadyApplied: boolean
+  contactPhone?: string | null
+}) {
+  if (isScraped && sourceUrl) {
+    return (
+      <a
+        href={sourceUrl}
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#1a3461] text-white font-bold text-sm hover:bg-[#15294d] transition-colors"
+      >
+        Apply on partner site <ExternalLink size={14} />
+      </a>
+    )
+  }
+  return (
+    <ApplyButton
+      jobId={jobId}
+      contactPhone={contactPhone}
+      locale={locale}
+      initialAlreadyApplied={alreadyApplied}
+    />
+  )
+}
+
 export default async function JobDetailPage({ params }: Props) {
   const { id, locale } = await params
   const t = await getTranslations("jobs")
@@ -84,7 +124,7 @@ export default async function JobDetailPage({ params }: Props) {
     where: { id },
     include: {
       employer: {
-        select: { companyName: true, description: true, contactPhone: true, city: true },
+        select: { companyName: true, description: true, contactPhone: true, city: true, status: true },
       },
       category: { select: { slug: true, nameEn: true } },
       city: { select: { name: true } },
@@ -257,7 +297,16 @@ export default async function JobDetailPage({ params }: Props) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h1 className="text-xl sm:text-2xl font-bold text-[#1a3461] leading-tight">{job.title}</h1>
-                  {displayCompany && <p className="text-gray-500 mt-1 text-sm">{displayCompany}</p>}
+                  {displayCompany && (
+                    <p className="text-gray-500 mt-1 text-sm flex items-center gap-2">
+                      {displayCompany}
+                      {job.employer.status === "VERIFIED" && (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                          <ShieldCheck size={10} /> Verified
+                        </span>
+                      )}
+                    </p>
+                  )}
 
                   <p className="text-2xl font-black text-green-600 mt-2">{salary}</p>
 
@@ -287,7 +336,13 @@ export default async function JobDetailPage({ params }: Props) {
 
               {/* Mobile CTA */}
               <div className="lg:hidden mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2">
-                <ApplyButton jobId={job.id} locale={locale} initialAlreadyApplied={alreadyApplied} />
+                <ApplyAction
+                  isScraped={isScraped}
+                  sourceUrl={job.sourceUrl}
+                  jobId={job.id}
+                  locale={locale}
+                  alreadyApplied={alreadyApplied}
+                />
                 {callToHrPhone && (
                   <a
                     href={`tel:+91${callToHrPhone}`}
@@ -481,11 +536,13 @@ export default async function JobDetailPage({ params }: Props) {
                 <p className="text-2xl font-black text-green-600">{salary}</p>
               </div>
 
-              <ApplyButton
+              <ApplyAction
+                isScraped={isScraped}
+                sourceUrl={job.sourceUrl}
                 jobId={job.id}
                 contactPhone={job.employer.contactPhone}
                 locale={locale}
-                initialAlreadyApplied={alreadyApplied}
+                alreadyApplied={alreadyApplied}
               />
               {callToHrPhone && (
                 <a

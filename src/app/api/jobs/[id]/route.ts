@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     where: { id },
     include: {
       employer: {
-        select: { companyName: true, description: true, contactPhone: true, city: true, logoUrl: true },
+        select: { companyName: true, description: true, contactPhone: true, city: true, logoUrl: true, status: true },
       },
       category: { select: { slug: true, nameEn: true, nameHi: true, icon: true } },
       city: { select: { name: true, nameHi: true, stateName: true } },
@@ -85,6 +85,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     // an in-app application would reach nobody. The client sends the seeker
     // to the original posting instead.
     isExternal: isScraped,
+    isVerifiedEmployer: !isScraped && job.employer.status === "VERIFIED",
     applyUrl: isScraped ? job.sourceUrl : null,
     createdAt: job.createdAt,
     expiresAt: job.expiresAt,

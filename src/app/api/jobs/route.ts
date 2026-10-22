@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     prisma.jobListing.findMany({
       where,
       include: {
-        employer: { select: { companyName: true } },
+        employer: { select: { companyName: true, status: true } },
         category: { select: { slug: true, nameEn: true, nameHi: true } },
         city: { select: { name: true, nameHi: true } },
       },
@@ -52,6 +52,10 @@ export async function GET(req: NextRequest) {
     isFeatured: j.isFeatured,
     isHighReach: j.isHighReach,
     isExternal: j.source === "SCRAPED",
+    // The product's central promise is "verified employers", and a seeker
+    // could not tell a verified one from any other. Aggregated listings have
+    // no employer here, so they are never verified.
+    isVerifiedEmployer: j.source !== "SCRAPED" && j.employer.status === "VERIFIED",
     createdAt: j.createdAt,
   }))
 
