@@ -37,6 +37,16 @@ const FREE_FEATURES = [
   { icon: <Clock size={16} />, title: "Priority Support", desc: "Reach our team via email or phone — we respond fast" },
 ]
 
+/**
+ * The published end of the free period. Everyone who joins before this keeps
+ * Founding Employer pricing, so the date is a commitment, not a placeholder.
+ */
+const FREE_UNTIL = new Date("2027-03-31T23:59:59+05:30")
+
+function daysUntilFreeEnds() {
+  return Math.max(0, Math.ceil((FREE_UNTIL.getTime() - Date.now()) / 86_400_000))
+}
+
 /** "30d" reads oddly on a price card; months and years do not. */
 function periodLabel(days: number) {
   if (days >= 365) { const n = Math.round(days / 365); return n === 1 ? "/yr" : `/${n} yr` }
@@ -170,18 +180,33 @@ export default function PlansClient({ plans, activeSub, activeJobCount }: Props)
           ))}
         </div>
 
-        {/* ── Early bird CTA ─────────────────────────────── */}
-        <div className="mt-8 bg-[#1a3461] rounded-2xl px-8 py-6 text-center">
-          <p className="text-white font-bold text-lg mb-1">Enjoying the free plan?</p>
-          <p className="text-blue-200 text-sm mb-4">
-            Keep hiring for free. When premium plans launch, existing users get early-bird pricing — automatically.
+        {/* ── Founding Employer offer ─────────────────────── */}
+        <div className="mt-8 bg-[#1a3461] rounded-2xl px-8 py-7 text-center">
+          <span className="inline-flex items-center gap-1.5 bg-orange-500/15 text-orange-300 text-[11px] font-bold px-3 py-1 rounded-full border border-orange-400/30 mb-3">
+            <Star size={11} /> FOUNDING EMPLOYER
+          </span>
+          <p className="text-white font-extrabold text-2xl mb-2">
+            Hire free until 31 March 2027
+          </p>
+          <p className="text-blue-100 text-sm mb-1 max-w-xl mx-auto leading-relaxed">
+            Post unlimited jobs, receive unlimited applications and unlock every candidate —
+            at no cost, for {daysUntilFreeEnds()} more days.
+          </p>
+          <p className="text-blue-200 text-sm mb-5 max-w-xl mx-auto leading-relaxed">
+            Join before then and you stay a <strong className="text-white">Founding Employer</strong> for
+            good: <strong className="text-white">50% off every plan for your first 12 months</strong> once
+            paid plans begin, plus a Founding Employer badge on all your jobs. No card, no commitment,
+            nothing to cancel.
           </p>
           <a
-            href={`/${locale}/employer/dashboard`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded-xl text-sm transition-colors"
+            href={`/${locale}/employer/post-job`}
+            className="inline-flex items-center gap-2 px-7 py-3 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded-xl text-sm transition-colors"
           >
-            Back to Dashboard
+            Post a job free <ChevronRight size={15} />
           </a>
+          <p className="text-blue-300/70 text-[11px] mt-3">
+            Placement agency? Ask us about Agency Launch — ₹999 for 3 months.
+          </p>
         </div>
 
       </div>
