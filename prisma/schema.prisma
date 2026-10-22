@@ -50,6 +50,7 @@ enum JobType {
 enum PlanType {
   SINGLE_HIRE
   MULTI_HIRE
+  AGENCY // placement agencies and contractors; higher job limits
 }
 
 enum SubscriptionStatus {
@@ -279,7 +280,8 @@ model Plan {
   slug                   String   @unique
   name                   String
   type                   PlanType
-  durationDays           Int
+  durationDays           Int      // how long the subscription runs
+  listingDays            Int      @default(30) // how long each job stays live
   priceRupees            Int      // full upfront price in ₹
   activeJobLimit         Int
   candidateUnlockCredits Int
