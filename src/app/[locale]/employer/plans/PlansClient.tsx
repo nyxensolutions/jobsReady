@@ -195,7 +195,7 @@ export default function PlansClient({ plans, activeSub, activeJobCount }: Props)
           <p className="text-blue-200 text-sm mb-5 max-w-xl mx-auto leading-relaxed">
             Join before then and you stay a <strong className="text-white">Founding Employer</strong> for
             good: <strong className="text-white">50% off every plan for your first 12 months</strong> once
-            paid plans begin, plus a Founding Employer badge on all your jobs. No card, no commitment,
+            paid plans begin, plus Founding Employer status on your account. No card, no commitment,
             nothing to cancel.
           </p>
           <a
