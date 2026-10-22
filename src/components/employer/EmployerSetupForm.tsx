@@ -1,7 +1,9 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Loader2, Building2, CheckCircle, Mail, ShieldCheck } from "lucide-react"
+import { Loader2, Building2, CheckCircle, Mail, ShieldCheck, LogOut } from "lucide-react"
+import { signOut as firebaseSignOut } from "firebase/auth"
+import { auth } from "@/lib/firebase/client"
 
 const HIRING_FOR = [
   { value: "own", label: "Your own company" },
@@ -369,6 +371,27 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
             <p className="text-center text-xs text-gray-400">Verify your email to receive job alerts and important updates.</p>
           )}
         </form>
+
+        <div className="flex items-center justify-center gap-5 mt-5 text-sm">
+          <a href="/jobs" className="text-gray-500 hover:text-[#1a3461] font-medium">
+            Browse jobs instead
+          </a>
+          <span className="text-gray-300">|</span>
+          <button
+            type="button"
+            onClick={async () => {
+              await Promise.all([
+                firebaseSignOut(auth),
+                fetch("/api/auth/session", { method: "DELETE" }),
+              ])
+              window.location.href = "/"
+            }}
+            className="inline-flex items-center gap-1.5 text-gray-500 hover:text-[#1a3461] font-medium"
+          >
+            <LogOut size={14} /> Sign out
+          </button>
+        </div>
+
       </div>
     </div>
   )
