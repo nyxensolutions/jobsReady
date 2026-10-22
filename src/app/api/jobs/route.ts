@@ -51,6 +51,7 @@ export async function GET(req: NextRequest) {
     experienceMin: j.experienceMin,
     isFeatured: j.isFeatured,
     isHighReach: j.isHighReach,
+    isExternal: j.source === "SCRAPED",
     createdAt: j.createdAt,
   }))
 

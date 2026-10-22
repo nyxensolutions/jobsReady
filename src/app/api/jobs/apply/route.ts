@@ -39,6 +39,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Job not available" }, { status: 404 })
   }
 
+  // An aggregated listing has no employer on this platform to receive it.
+  // Five of the first nine applications ever made went to one of these and
+  // reached nobody, which is precisely the "no replies" complaint the product
+  // exists to fix.
+  if (job.source === "SCRAPED") {
+    return NextResponse.json(
+      { error: "EXTERNAL_JOB", message: "This job is listed from a partner site. Please apply there." },
+      { status: 409 }
+    )
+  }
+
   let application
   try {
     application = await prisma.application.create({

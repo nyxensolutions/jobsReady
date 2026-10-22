@@ -81,6 +81,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     isFeatured: job.isFeatured,
     isHighReach: job.isHighReach,
     callToHrPhone,
+    // Aggregated listings have no employer behind them on this platform, so
+    // an in-app application would reach nobody. The client sends the seeker
+    // to the original posting instead.
+    isExternal: isScraped,
+    applyUrl: isScraped ? job.sourceUrl : null,
     createdAt: job.createdAt,
     expiresAt: job.expiresAt,
     isSaved,
