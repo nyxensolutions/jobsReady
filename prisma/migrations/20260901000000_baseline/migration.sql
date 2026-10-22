@@ -1,3 +1,4 @@
+
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "public";
 
@@ -17,7 +18,7 @@ CREATE TYPE "EmployerStatus" AS ENUM ('PENDING', 'VERIFIED', 'REJECTED', 'SUSPEN
 CREATE TYPE "JobType" AS ENUM ('FULL_TIME', 'PART_TIME', 'CONTRACT', 'GIG', 'WALK_IN');
 
 -- CreateEnum
-CREATE TYPE "PlanType" AS ENUM ('SINGLE_HIRE', 'MULTI_HIRE');
+CREATE TYPE "PlanType" AS ENUM ('SINGLE_HIRE', 'MULTI_HIRE', 'AGENCY');
 
 -- CreateEnum
 CREATE TYPE "SubscriptionStatus" AS ENUM ('TRIAL', 'ACTIVE', 'EXPIRED', 'CANCELLED');
@@ -30,6 +31,7 @@ CREATE TABLE "users" (
     "role" "UserRole" NOT NULL DEFAULT 'SEEKER',
     "locale" TEXT NOT NULL DEFAULT 'en',
     "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "fcmTokens" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -58,6 +60,7 @@ CREATE TABLE "seeker_profiles" (
     "isProfileComplete" BOOLEAN NOT NULL DEFAULT false,
     "isOpenToWork" BOOLEAN NOT NULL DEFAULT true,
     "openToRelocate" BOOLEAN NOT NULL DEFAULT true,
+    "language" TEXT NOT NULL DEFAULT 'en',
     "preferredCities" TEXT[],
     "languages" TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -81,6 +84,7 @@ CREATE TABLE "employer_profiles" (
     "website" TEXT,
     "logoUrl" TEXT,
     "description" TEXT,
+    "language" TEXT NOT NULL DEFAULT 'en',
     "status" "EmployerStatus" NOT NULL DEFAULT 'PENDING',
     "verifiedAt" TIMESTAMP(3),
     "docUrls" TEXT[],
@@ -199,6 +203,7 @@ CREATE TABLE "plans" (
     "name" TEXT NOT NULL,
     "type" "PlanType" NOT NULL,
     "durationDays" INTEGER NOT NULL,
+    "listingDays" INTEGER NOT NULL DEFAULT 30,
     "priceRupees" INTEGER NOT NULL,
     "activeJobLimit" INTEGER NOT NULL,
     "candidateUnlockCredits" INTEGER NOT NULL,
@@ -373,3 +378,4 @@ ALTER TABLE "job_boosts" ADD CONSTRAINT "job_boosts_jobId_fkey" FOREIGN KEY ("jo
 
 -- AddForeignKey
 ALTER TABLE "notifications" ADD CONSTRAINT "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
