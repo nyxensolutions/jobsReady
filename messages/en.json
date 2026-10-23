@@ -217,7 +217,8 @@
       "dailyWage": "Daily Wage",
       "shareWhatsapp": "Share on WhatsApp",
       "fresherYrsExp": "{years}+ yrs",
-      "seeAll": "See all →"
+      "seeAll": "See all →",
+      "applicantsLabel": "Applicants"
     },
     "filters": {
       "salary": "Salary range",

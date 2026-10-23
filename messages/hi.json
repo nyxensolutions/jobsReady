@@ -217,7 +217,8 @@
       "dailyWage": "दैनिक मजदूरी",
       "shareWhatsapp": "WhatsApp पर शेयर करें",
       "fresherYrsExp": "{years}+ साल",
-      "seeAll": "सभी देखें →"
+      "seeAll": "सभी देखें →",
+      "applicantsLabel": "आवेदक"
     },
     "filters": {
       "salary": "वेतन सीमा",

@@ -217,7 +217,8 @@
       "incentives": "প্রণোদনা",
       "daysPerWeek": "{count} দিন/সপ্তাহ",
       "translatePage": "এই পাতা অনুবাদ করুন",
-      "seeAll": "সব দেখুন →"
+      "seeAll": "সব দেখুন →",
+      "applicantsLabel": "আবেদনকারী"
     },
     "filters": {
       "salary": "বেতনের পরিসর",

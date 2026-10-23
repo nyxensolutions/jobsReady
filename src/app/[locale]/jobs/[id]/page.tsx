@@ -128,6 +128,7 @@ export default async function JobDetailPage({ params }: Props) {
       },
       category: { select: { slug: true, nameEn: true } },
       city: { select: { name: true } },
+      _count: { select: { applications: true } },
     },
   })
 
@@ -190,6 +191,10 @@ export default async function JobDetailPage({ params }: Props) {
     ...(job.shiftType        ? [{ label: t("jobDetail.shift"),       value: (() => { try { return ts(job.shiftType as any) } catch { return `${job.shiftType} Shift` } })() }] : []),
     ...(job.workingDaysPerWeek ? [{ label: t("jobDetail.workingDays"), value: t("jobDetail.daysPerWeek", { count: job.workingDaysPerWeek }) }] : []),
     ...(job.incentives       ? [{ label: t("jobDetail.incentives"),  value: job.incentives }] : []),
+    ...(job.qualificationRequired ? [{ label: t("jobDetail.qualification"), value: job.qualificationRequired }] : []),
+    ...(job.languagesRequired?.length ? [{ label: t("jobDetail.languages"), value: job.languagesRequired.join(", ") }] : []),
+    // Social proof, the thing competitors lead with; the count already exists.
+    ...(job._count.applications ? [{ label: t("jobDetail.applicantsLabel"), value: `${job._count.applications}` }] : []),
   ]
 
   const faqs = [

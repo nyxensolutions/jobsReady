@@ -217,7 +217,8 @@
       "incentives": "Incentives",
       "daysPerWeek": "{count} din/hafta",
       "translatePage": "Is page ko translate karein",
-      "seeAll": "Sab dekhein →"
+      "seeAll": "Sab dekhein →",
+      "applicantsLabel": "Applicants"
     },
     "filters": {
       "salary": "Salary range",

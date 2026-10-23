@@ -217,7 +217,8 @@
       "incentives": "ஊக்கத்தொகை",
       "daysPerWeek": "{count} நாட்கள்/வாரம்",
       "translatePage": "இந்தப் பக்கத்தை மொழிபெயர்",
-      "seeAll": "அனைத்தையும் காண →"
+      "seeAll": "அனைத்தையும் காண →",
+      "applicantsLabel": "விண்ணப்பதாரர்கள்"
     },
     "filters": {
       "salary": "சம்பள வரம்பு",

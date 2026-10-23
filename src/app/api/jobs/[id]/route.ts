@@ -16,6 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       },
       category: { select: { slug: true, nameEn: true, nameHi: true, icon: true } },
       city: { select: { name: true, nameHi: true, stateName: true } },
+      _count: { select: { applications: true } },
     },
   })
 
@@ -87,6 +88,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     // Collected on the post-job form and never shown to anyone until now.
     // Rendered only when present, so the aggregated listings that carry none
     // of it do not show empty rows.
+    // Social proof at the moment of deciding. Competitors lead with this and
+    // it is the same _count the employer dashboard already reads.
+    applicationCount: job._count.applications,
     shiftType: job.shiftType,
     workingDaysPerWeek: job.workingDaysPerWeek,
     incentives: job.incentives,

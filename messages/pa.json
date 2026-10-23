@@ -217,7 +217,8 @@
       "incentives": "ਇਨਸੈਂਟਿਵ",
       "daysPerWeek": "{count} ਦਿਨ/ਹਫ਼ਤਾ",
       "translatePage": "ਇਸ ਪੰਨੇ ਦਾ ਅਨੁਵਾਦ ਕਰੋ",
-      "seeAll": "ਸਭ ਦੇਖੋ →"
+      "seeAll": "ਸਭ ਦੇਖੋ →",
+      "applicantsLabel": "ਬਿਨੈਕਾਰ"
     },
     "filters": {
       "salary": "ਤਨਖ਼ਾਹ ਰੇਂਜ",

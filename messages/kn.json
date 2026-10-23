@@ -217,7 +217,8 @@
       "incentives": "ಪ್ರೋತ್ಸಾಹಧನ",
       "daysPerWeek": "{count} ದಿನ/ವಾರ",
       "translatePage": "ಈ ಪುಟವನ್ನು ಅನುವಾದಿಸಿ",
-      "seeAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ →"
+      "seeAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ →",
+      "applicantsLabel": "ಅರ್ಜಿದಾರರು"
     },
     "filters": {
       "salary": "ವೇತನ ವ್ಯಾಪ್ತಿ",

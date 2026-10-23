@@ -217,7 +217,8 @@
       "incentives": "ప్రోత్సాహకాలు",
       "daysPerWeek": "{count} రోజులు/వారం",
       "translatePage": "ఈ పేజీని అనువదించండి",
-      "seeAll": "అన్నీ చూడండి →"
+      "seeAll": "అన్నీ చూడండి →",
+      "applicantsLabel": "దరఖాస్తుదారులు"
     },
     "filters": {
       "salary": "జీతం పరిధి",
