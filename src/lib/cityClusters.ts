@@ -26,8 +26,8 @@ export const CITY_CLUSTERS: CityCluster[] = [
       "noida",
       "greater-noida",
       "ghaziabad",
-      // Both slugs exist in the City table for the same place; a seeker
-      // filtering one would otherwise miss jobs posted against the other.
+      // "gurgaon" was merged into "gurugram" and deactivated; it stays listed
+      // so any link still carrying the old slug resolves.
       "gurgaon",
       "gurugram",
       "faridabad",
