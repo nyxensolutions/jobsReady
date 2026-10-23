@@ -84,6 +84,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     // Aggregated listings have no employer behind them on this platform, so
     // an in-app application would reach nobody. The client sends the seeker
     // to the original posting instead.
+    // Collected on the post-job form and never shown to anyone until now.
+    // Rendered only when present, so the aggregated listings that carry none
+    // of it do not show empty rows.
+    shiftType: job.shiftType,
+    workingDaysPerWeek: job.workingDaysPerWeek,
+    incentives: job.incentives,
     isExternal: isScraped,
     isVerifiedEmployer: !isScraped && job.employer.status === "VERIFIED",
     applyUrl: isScraped ? job.sourceUrl : null,
