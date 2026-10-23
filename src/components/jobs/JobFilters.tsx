@@ -76,6 +76,25 @@ export default function JobFilters({ activeCategory, onFilterApply, inDrawer }: 
     currentType, currentSalary, currentFreshers || currentExp, currentQual, currentPosted
   ].filter(Boolean).length
 
+  /**
+   * Toggle one value inside a comma-separated param. Category already worked
+   * this way; the API now accepts the same shape for city and type, so they
+   * share it rather than each re-implementing the parsing.
+   */
+  function toggleCsvParam(name: string, key: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    const current = new Set(
+      (searchParams.get(name) ?? "").split(",").map((s) => s.trim()).filter(Boolean)
+    )
+    if (current.has(key)) current.delete(key)
+    else current.add(key)
+    if (current.size === 0) params.delete(name)
+    else params.set(name, Array.from(current).join(","))
+    params.delete("page")
+    router.push(`/jobs?${params.toString()}`)
+    onFilterApply?.()
+  }
+
   function toggleCategory(key: string) {
     const params = new URLSearchParams(searchParams.toString())
     const current = new Set(activeCats)
@@ -87,6 +106,9 @@ export default function JobFilters({ activeCategory, onFilterApply, inDrawer }: 
     router.push(`/jobs?${params.toString()}`)
     onFilterApply?.()
   }
+
+  const activeTypes = (currentType ?? "").split(",").map((t) => t.trim()).filter(Boolean)
+  const typeActive = (t: string) => activeTypes.includes(t)
 
   // Experience — encode as pair (freshers / exp)
   type ExpKey = "fresher" | "lt1" | "lt2" | "lt3" | "lt4" | "gt4"
@@ -160,8 +182,8 @@ export default function JobFilters({ activeCategory, onFilterApply, inDrawer }: 
           <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2.5">{tf("quickFilters")}</p>
           <div className="flex flex-wrap gap-2">
             {[
-              { label: tf("partTime"),    active: currentType === "PART_TIME",    action: () => setFilter("type",     currentType === "PART_TIME" ? null : "PART_TIME") },
-              { label: tf("walkIn"),      active: currentType === "WALK_IN",      action: () => setFilter("type",     currentType === "WALK_IN" ? null : "WALK_IN")    },
+              { label: tf("partTime"),    active: typeActive("PART_TIME"),        action: () => toggleCsvParam("type", "PART_TIME") },
+              { label: tf("walkIn"),      active: typeActive("WALK_IN"),          action: () => toggleCsvParam("type", "WALK_IN")   },
               { label: tf("fresher"),     active: currentFreshers === "1",        action: () => setFilter("freshers", currentFreshers === "1" ? null : "1")            },
               { label: tf("postedToday"), active: currentPosted === "today",      action: () => setFilter("posted",   currentPosted === "today" ? null : "today")      },
             ].map(({ label, active, action }) => (
