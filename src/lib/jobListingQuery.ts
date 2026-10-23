@@ -1,4 +1,5 @@
 import { Prisma, JobType } from "@prisma/client"
+import { expandCitySlugs } from "./cityClusters"
 
 // Shared by the web job search page (src/app/[locale]/jobs/page.tsx) and the
 // mobile-facing GET /api/jobs endpoint, so the two never drift out of sync.
@@ -7,9 +8,9 @@ export const JOBS_PER_PAGE = 20
 
 export type JobListingSearchParams = {
   q?: string
-  city?: string
+  city?: string      // comma-separated city or cluster slugs, e.g. "delhi-ncr,pune"
   category?: string   // comma-separated slugs for multi-select, e.g. "delivery,driver"
-  type?: string
+  type?: string      // comma-separated job types, e.g. "FULL_TIME,PART_TIME"
   sort?: string
   minSalary?: string
   freshers?: string
@@ -21,12 +22,17 @@ export type JobListingSearchParams = {
 
 export function buildJobListingQuery(params: JobListingSearchParams) {
   const q = params.q?.trim() ?? ""
-  const city = params.city?.trim() ?? ""
+  // Cities arrive as slugs now, and may name a cluster ("delhi-ncr") which
+  // stands for several. Legacy callers passing a display name still work: a
+  // single value with no comma falls back to a name match below.
+  const cityRaw = params.city?.trim() ?? ""
+  const citySlugs = cityRaw ? expandCitySlugs(cityRaw.split(",").map((c) => c.trim()).filter(Boolean)) : []
   // category can be a single slug OR comma-separated slugs for multi-select
   const categoryRaw = params.category ?? ""
   const categories = categoryRaw ? categoryRaw.split(",").map(s => s.trim()).filter(Boolean) : []
   const category = categoryRaw  // keep for backward compat usage below
-  const type = params.type ?? ""
+  const typeRaw = params.type ?? ""
+  const types = typeRaw ? typeRaw.split(",").map((t) => t.trim()).filter(Boolean) : []
   const sort = params.sort ?? "newest"
   const minSalary = params.minSalary ? parseInt(params.minSalary) : null
   const freshersOnly = params.freshers === "1"
@@ -52,13 +58,22 @@ export function buildJobListingQuery(params: JobListingSearchParams) {
           ],
         }
       : {}),
-    ...(city ? { city: { name: { contains: city, mode: "insensitive" } } } : {}),
+    ...(citySlugs.length > 1
+      ? { city: { slug: { in: citySlugs } } }
+      : citySlugs.length === 1
+      ? // A single value may be a slug or, from older links, a display name.
+        { city: { OR: [{ slug: citySlugs[0] }, { name: { equals: citySlugs[0], mode: "insensitive" } }] } }
+      : {}),
     ...(categories.length === 1
       ? { category: { slug: categories[0] } }
       : categories.length > 1
       ? { category: { slug: { in: categories } } }
       : {}),
-    ...(type ? { jobType: type as JobType } : {}),
+    ...(types.length === 1
+      ? { jobType: types[0] as JobType }
+      : types.length > 1
+      ? { jobType: { in: types as JobType[] } }
+      : {}),
     ...(minSalary ? { salaryMin: { gte: minSalary } } : {}),
     ...(freshersOnly ? { experienceMin: 0 } : maxExp ? { experienceMin: { lte: maxExp } } : {}),
     ...(qualification ? { qualificationRequired: qualification } : {}),
