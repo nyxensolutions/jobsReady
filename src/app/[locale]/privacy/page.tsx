@@ -54,15 +54,16 @@ export default function PrivacyPage() {
               </ul>
               <h3 className="font-semibold text-gray-700 mt-4 mb-2">2.3 Payment Information (Employers Only)</h3>
               <p className="text-sm mb-2">
-                When employers purchase a subscription plan, payments are processed by <strong>Razorpay</strong>.
+                When employers purchase a subscription plan, payments are processed by <strong>Cashfree Payments</strong>.
                 We receive a payment confirmation token and order ID. We do not store card numbers, UPI IDs,
-                or bank account details on our servers — these are handled entirely by Razorpay.
+                or bank account details on our servers — these are handled entirely by Cashfree.
               </p>
               <h3 className="font-semibold text-gray-700 mt-4 mb-2">2.4 Information from Third Parties</h3>
               <ul className="list-disc pl-5 space-y-1">
-                <li>OTP verification data from our SMS service provider (2Factor.in)</li>
-                <li>Authentication data from Supabase (our authentication provider)</li>
-                <li>Payment status and order details from Razorpay Payments Pvt. Ltd.</li>
+                <li>Phone number verification and sign-in data from Google Firebase Authentication, which sends the one-time passcode used to log in</li>
+                <li>Name, email address and profile picture from Google, if you choose to sign in with your Google account</li>
+                <li>Delivery status from 2Factor.in, which sends our notification SMS</li>
+                <li>Payment status and order details from Cashfree Payments</li>
               </ul>
             </section>
 
@@ -89,7 +90,7 @@ export default function PrivacyPage() {
               <ul className="list-disc pl-5 space-y-2 mt-3">
                 <li><strong>With Employers (Job Seekers only):</strong> When you apply for a job, your profile information (name, phone, experience, skills) is shared with the employer who posted that job.</li>
                 <li><strong>With Job Seekers (Employers only):</strong> Your company name, job listings, and contact phone number are visible to registered job seekers.</li>
-                <li><strong>Service Providers:</strong> We share data with Supabase (authentication), 2Factor.in (OTP), Resend (email), Cashfree (payment processing — employer subscription payments), and our hosting/database provider. These providers are bound by confidentiality agreements and their own privacy policies.</li>
+                <li><strong>Service Providers:</strong> We share data with Google Firebase (sign-in, login OTP delivery, and push notifications), 2Factor.in (notification SMS), Resend (email), Cashfree Payments (employer subscription payments), and Supabase (database hosting). These providers are bound by confidentiality agreements and their own privacy policies.</li>
                 <li><strong>Legal Requirements:</strong> If required by law, court order, or government authority under Indian law.</li>
                 <li><strong>Business Transfer:</strong> In the event of merger, acquisition, or sale of our business, your data may be transferred to the successor entity.</li>
               </ul>
