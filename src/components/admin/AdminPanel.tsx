@@ -4,11 +4,12 @@ import { Link } from "@/i18n/navigation"
 import {
   CheckCircle, XCircle, Star, StarOff, ExternalLink, Phone,
   Building2, MapPin, Tag, Users, ChevronDown, ChevronUp,
-  FileText, Globe, Loader2, AlertTriangle, LogOut, Eye, PlusCircle, Bell,
+  FileText, Globe, Loader2, AlertTriangle, LogOut, Eye, PlusCircle, Bell, Briefcase,
 } from "lucide-react"
 import AddEmployerForm from "./AddEmployerForm"
 import AddSeekerForm from "./AddSeekerForm"
 import PushBroadcastForm from "./PushBroadcastForm"
+import PostJobForm from "./PostJobForm"
 
 type Job = {
   id: string
@@ -97,7 +98,7 @@ function ConfirmDialog({
 }
 
 export default function AdminPanel() {
-  const [section, setSection] = useState<"jobs" | "employers" | "add-employer" | "add-seeker" | "push">("jobs")
+  const [section, setSection] = useState<"jobs" | "employers" | "add-employer" | "add-seeker" | "push" | "post-job">("jobs")
 
   // Jobs state
   const [jobs, setJobs] = useState<Job[]>([])
@@ -269,6 +270,12 @@ export default function AdminPanel() {
             className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 whitespace-nowrap ${section === "add-seeker" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
           >
             <Users size={14} /> Add Seeker
+          </button>
+          <button
+            onClick={() => setSection("post-job")}
+            className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 whitespace-nowrap ${section === "post-job" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+          >
+            <Briefcase size={14} /> Post Job
           </button>
           <button
             onClick={() => setSection("push")}
@@ -669,6 +676,7 @@ export default function AdminPanel() {
         )}
         {section === "add-employer" && <AddEmployerForm />}
         {section === "add-seeker" && <AddSeekerForm />}
+        {section === "post-job" && <PostJobForm />}
         {section === "push" && <PushBroadcastForm />}
       </div>
     </div>

@@ -28,6 +28,40 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Company name is required" }, { status: 400 })
   }
 
+  // Validate companyName length and format
+  if (companyName !== undefined) {
+    const name = companyName.trim()
+    if (name.length < 3) {
+      return NextResponse.json({ error: "Company name must be at least 3 characters" }, { status: 400 })
+    }
+    if (name.length > 100) {
+      return NextResponse.json({ error: "Company name must be under 100 characters" }, { status: 400 })
+    }
+    // Reject if it looks like random keyboard mashing (no vowels and >4 chars)
+    const hasVowel = /[aeiouAEIOU]/.test(name)
+    if (!hasVowel && name.replace(/\s/g, "").length > 4) {
+      return NextResponse.json({ error: "Please enter a valid company name" }, { status: 400 })
+    }
+  }
+
+  // Validate contactPerson
+  if (contactPerson !== undefined && contactPerson?.trim()) {
+    if (contactPerson.trim().length < 2) {
+      return NextResponse.json({ error: "Contact person name must be at least 2 characters" }, { status: 400 })
+    }
+    if (contactPerson.trim().length > 100) {
+      return NextResponse.json({ error: "Contact person name is too long" }, { status: 400 })
+    }
+  }
+
+  // Validate contactPhone — must be 10 digits starting with 6-9
+  if (contactPhone !== undefined && contactPhone?.trim()) {
+    const phone = contactPhone.trim().replace(/\D/g, "")
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+      return NextResponse.json({ error: "Enter a valid 10-digit Indian mobile number" }, { status: 400 })
+    }
+  }
+
   // Build update payload from whichever fields were sent
   const data: Record<string, unknown> = {}
   if (companyName !== undefined)   data.companyName = companyName.trim()
