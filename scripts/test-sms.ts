@@ -66,12 +66,40 @@ async function sendTemplate(to: string, template: string, vars: string[]) {
   console.log(d?.Status === "Success" ? `sent: ${d.Details}` : `refused: ${d?.Details ?? "no response"}`)
 }
 
+/**
+ * Delivery report for a session id.
+ *
+ * The send call returns Success as soon as 2Factor accepts the message, which
+ * says nothing about delivery — a body the telco has not got a registered DLT
+ * content template for comes back DLT-CNT-REJECT here while the send looked
+ * fine. Always check this before believing an SMS went out.
+ */
+async function status(sessionId: string) {
+  const res = await fetch(`https://2factor.in/API/V1/${KEY}/ADDON_SERVICES/RPT/TSMS/${sessionId}`)
+  const xml = await res.text()
+  const pick = (tag: string) => xml.match(new RegExp(`<${tag}>(.*?)</${tag}>`, "s"))?.[1]?.trim() ?? ""
+  console.log(`  to            ${pick("smsTo")}`)
+  console.log(`  from          ${pick("smsFrom")}`)
+  console.log(`  sentAt        ${pick("sentAt")}`)
+  console.log(`  deliveredAt   ${pick("deliveredAt") || "(not delivered)"}`)
+  console.log(`  status        ${pick("statusDesc")}`)
+  console.log(`  credits       ${pick("creditsCharged")}`)
+  if (pick("statusDesc") === "DLT-CNT-REJECT") {
+    console.log("
+  DLT-CNT-REJECT: the telco has no registered content template matching")
+    console.log("  this body. 2Factor approving a template is not the same as DLT")
+    console.log("  registration — see My DLT Registrations.")
+  }
+}
+
 async function main() {
   const args = process.argv.slice(2)
   if (!KEY) return console.error("TWOFACTOR_API_KEY not set")
 
   if (args.includes("--balance")) return balance()
   if (args.includes("--catalogue")) return catalogue()
+  const st = args.indexOf("--status")
+  if (st !== -1) return status(args[st + 1])
 
   const i = args.indexOf("--send")
   if (i !== -1) {
@@ -83,7 +111,7 @@ async function main() {
     console.log(await sendSms(to, MSG.seeker.applied("Delivery Boy", "ABC Logistics")))
     return
   }
-  console.log("flags: --balance | --catalogue | --send <number> [--template <NAME> <var>...]")
+  console.log("flags: --balance | --catalogue | --send <number> [--template <NAME> <var>...] | --status <sessionId>")
 }
 
 main().catch((e) => { console.error(e); process.exit(1) })

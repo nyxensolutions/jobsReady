@@ -105,6 +105,14 @@ export async function sendSms(
  * Request more via 2Factor → TRANSACTIONAL SMS → Manage Sender Ids →
  * "Request Sender Id / Template", then add them here.
  *
+ * **2Factor approving a template is not DLT registration.** Both templates
+ * below show APPROVED in the 2Factor dashboard and both come back
+ * DLT-CNT-REJECT from the telco, undelivered and uncharged, because no
+ * principal entity or content template is registered on the operator's DLT
+ * portal ("My DLT Registrations" is empty). The send call still answers
+ * Success, so `{ ok: true }` here means accepted, NOT delivered — check
+ * `scripts/test-sms.ts --status <sessionId>` for the truth.
+ *
  *   Shortlisted Notification
  *     Congrats! You have been shortlisted for #VAR1# at #VAR2#. Check Job Ready app for details.
  *   Hired Notification
