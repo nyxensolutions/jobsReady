@@ -1,16 +1,18 @@
 /**
- * Notifications — SMS via 2Factor.in, WhatsApp via Interakt.
+ * Notification SMS via 2Factor.in.
  *
- * ── SMS (already working) ────────────────────────────────────────────────────
- *   TWOFACTOR_API_KEY=your_key          (from 2factor.in dashboard)
- *   TWOFACTOR_SENDER_ID=JBSRDY         (DLT-registered sender ID)
+ *   TWOFACTOR_API_KEY=your_key      (from the 2factor.in dashboard)
+ *   TWOFACTOR_SENDER_ID=JBSRDY      (DLT-registered header, 6 chars)
  *
- * ── WhatsApp via Interakt ────────────────────────────────────────────────────
- *   Add your WhatsApp Business number, complete Meta verification (~1-2 days)
- *   Register the templates listed in docs/whatsapp-templates.md
- *   Then add to .env.local:
+ * **India's DLT rules do not allow free-text transactional SMS.** Every
+ * message must be sent as a registered content template: `TemplateName` plus
+ * `VAR1..VARn`, not `Msg`. The account currently has exactly one approved
+ * template (`JOBRDYOTP`, an OTP template), so none of the MSG bodies below can
+ * be delivered yet — each needs registering on the DLT portal and in 2Factor
+ * first. `send()` reports that rather than hiding it.
  *
- * SMS continues to work independently.
+ * Login OTP does NOT come from here; it is sent by Firebase Authentication.
+ * See scripts/test-sms.ts to check balance and send a test message.
  */
 
 const TF_API_KEY   = process.env.TWOFACTOR_API_KEY  ?? ""
@@ -24,17 +26,33 @@ function cleanPhone(phone: string): string {
 
 // ─── SMS via 2Factor.in ───────────────────────────────────────────────────────
 
-export async function sendSms(phone: string | null | undefined, message: string): Promise<void> {
+export type SmsResult =
+  | { ok: true; id: string }
+  | { ok: false; error: string }
+
+/**
+ * Sends one transactional SMS and reports what happened.
+ *
+ * Returns a result rather than throwing, so a failed notification never fails
+ * the request that triggered it — but callers (and the logs) can tell the
+ * difference between sent and silently dropped. The previous version returned
+ * `void` whether it worked or not, which is how this channel stayed broken
+ * without anyone noticing.
+ */
+export async function sendSms(
+  phone: string | null | undefined,
+  message: string
+): Promise<SmsResult> {
   if (!TF_API_KEY) {
     console.warn("[sms] TWOFACTOR_API_KEY not set — skipping SMS")
-    return
+    return { ok: false, error: "NO_API_KEY" }
   }
-  if (!phone) return
+  if (!phone) return { ok: false, error: "NO_PHONE" }
 
   const clean = cleanPhone(phone)
   if (clean.length !== 10) {
-    console.warn("[sms] Invalid phone, skipping:", phone)
-    return
+    console.warn("[sms] invalid phone, skipping:", phone)
+    return { ok: false, error: "INVALID_PHONE" }
   }
 
   try {
@@ -44,14 +62,24 @@ export async function sendSms(phone: string | null | undefined, message: string)
       `&To=${clean}` +
       `&Msg=${encodeURIComponent(message)}`
 
-    const res  = await fetch(url)
-    const data = await res.json().catch(() => null)
+    const res = await fetch(url)
+    const data = (await res.json().catch(() => null)) as
+      | { Status?: string; Details?: string }
+      | null
 
-    if (data?.Status !== "Success") {
-      console.error("[sms] 2Factor error:", data)
+    if (data?.Status === "Success") {
+      return { ok: true, id: String(data.Details ?? "") }
     }
+
+    // Details carries the reason, e.g. "Missing templatename value" when DLT
+    // rejects a free-text body. Log it — it is the only signal this channel has.
+    const error = data?.Details ?? `HTTP ${res.status}`
+    console.error(`[sms] 2Factor refused (${clean}): ${error}`)
+    return { ok: false, error }
   } catch (err) {
-    console.error("[sms] send failed:", err)
+    const error = err instanceof Error ? err.message : String(err)
+    console.error(`[sms] send failed (${clean}): ${error}`)
+    return { ok: false, error }
   }
 }
 
