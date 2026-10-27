@@ -85,8 +85,8 @@ async function status(sessionId: string) {
   console.log(`  status        ${pick("statusDesc")}`)
   console.log(`  credits       ${pick("creditsCharged")}`)
   if (pick("statusDesc") === "DLT-CNT-REJECT") {
-    console.log("
-  DLT-CNT-REJECT: the telco has no registered content template matching")
+    console.log("")
+    console.log("  DLT-CNT-REJECT: the telco has no registered content template matching")
     console.log("  this body. 2Factor approving a template is not the same as DLT")
     console.log("  registration — see My DLT Registrations.")
   }
