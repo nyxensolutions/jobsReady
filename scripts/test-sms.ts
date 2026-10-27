@@ -53,11 +53,16 @@ function catalogue() {
   for (const [name, body] of rows) console.log(`  ${name}\n    ${body}\n`)
 }
 
+/** Template send. This endpoint takes a JSON POST; query parameters are ignored. */
 async function sendTemplate(to: string, template: string, vars: string[]) {
-  const qs = vars.map((v, i) => `&VAR${i + 1}=${encodeURIComponent(v)}`).join("")
-  const d = await api(
-    `ADDON_SERVICES/SEND/TSMS?From=${encodeURIComponent(SENDER)}&To=${to}&TemplateName=${encodeURIComponent(template)}${qs}`
-  )
+  const body: Record<string, string> = { From: SENDER, To: to, TemplateName: template }
+  vars.forEach((v, i) => { body[`VAR${i + 1}`] = v })
+  const res = await fetch(`https://2factor.in/API/V1/${KEY}/ADDON_SERVICES/SEND/TSMS`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  })
+  const d = (await res.json().catch(() => null)) as { Status?: string; Details?: string } | null
   console.log(d?.Status === "Success" ? `sent: ${d.Details}` : `refused: ${d?.Details ?? "no response"}`)
 }
 

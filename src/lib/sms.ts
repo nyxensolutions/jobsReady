@@ -56,13 +56,17 @@ export async function sendSms(
   }
 
   try {
-    const url =
-      `https://2factor.in/API/V1/${TF_API_KEY}/ADDON_SERVICES/SEND/TSMS` +
-      `?From=${encodeURIComponent(TF_SENDER_ID)}` +
-      `&To=${clean}` +
-      `&Msg=${encodeURIComponent(message)}`
-
-    const res = await fetch(url)
+    // POST with a JSON body — this endpoint ignores query parameters, and a
+    // GET produced "Missing 'To' parameter value" no matter what was in the
+    // URL. That is why this channel never delivered anything.
+    const res = await fetch(
+      `https://2factor.in/API/V1/${TF_API_KEY}/ADDON_SERVICES/SEND/TSMS`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ From: TF_SENDER_ID, To: clean, Msg: message }),
+      }
+    )
     const data = (await res.json().catch(() => null)) as
       | { Status?: string; Details?: string }
       | null
