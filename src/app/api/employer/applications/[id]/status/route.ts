@@ -2,7 +2,7 @@
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendSeekerStatusUpdate } from "@/lib/email"
-import { notifySeeker, MSG } from "@/lib/sms"
+import { sendSmsTemplate, SMS_TEMPLATE } from "@/lib/sms"
 import {
   sendSeekerViewedWhatsApp,
   sendSeekerShortlistedWhatsApp,
@@ -105,11 +105,13 @@ export async function PUT(
         const company = application.job.employer.companyName
         const phone = seekerUser?.phone
 
-        const SMS_MSGS: Record<Status, string> = {
-          VIEWED:      MSG.seeker.viewed(title, company),
-          SHORTLISTED: MSG.seeker.shortlisted(title, company),
-          HIRED:       MSG.seeker.hired(title, company),
-          REJECTED:    MSG.seeker.rejected(title),
+        // SMS goes out only for the two statuses with an approved DLT template.
+        // VIEWED and REJECTED have no template, and a free-text body is refused
+        // outright, so there is nothing to send for them — WhatsApp, push and
+        // the in-app notification still cover all four.
+        const SMS_SENDERS: Partial<Record<Status, () => Promise<unknown>>> = {
+          SHORTLISTED: () => sendSmsTemplate(phone, SMS_TEMPLATE.shortlisted, [title, company]),
+          HIRED:       () => sendSmsTemplate(phone, SMS_TEMPLATE.hired, [title, company]),
         }
 
         const seekerName = application.seeker.name ?? "Job Seeker"
@@ -131,7 +133,7 @@ export async function PUT(
                 status: typedStatus,
               })
             : Promise.resolve(),
-          notifySeeker(phone, SMS_MSGS[typedStatus]),
+          SMS_SENDERS[typedStatus]?.() ?? Promise.resolve(),
           WA_SENDERS[typedStatus](),
         ])
       } catch (err) {

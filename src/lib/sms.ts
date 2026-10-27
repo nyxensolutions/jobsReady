@@ -96,6 +96,68 @@ export async function sendSms(
 
 // ─── Convenience helpers ──────────────────────────────────────────────────────
 
+/**
+ * The DLT content templates approved for sender JBSRDY, with their variable
+ * order. Only these can actually be delivered — India's DLT rules reject a
+ * free-text body, which is why `sendSms` fails with "Missing TemplateName
+ * value" for every other message in MSG below.
+ *
+ * Request more via 2Factor → TRANSACTIONAL SMS → Manage Sender Ids →
+ * "Request Sender Id / Template", then add them here.
+ *
+ *   Shortlisted Notification
+ *     Congrats! You have been shortlisted for #VAR1# at #VAR2#. Check Job Ready app for details.
+ *   Hired Notification
+ *     Great news! You have been selected for #VAR1# at #VAR2#. Expect a call from them soon!
+ *
+ * Both still say "Job Ready"; re-register them under the Jobs24India name
+ * when convenient, since the body cannot be edited once approved.
+ */
+export const SMS_TEMPLATE = {
+  shortlisted: "Shortlisted Notification",
+  hired: "Hired Notification",
+} as const
+
+/** Sends one approved DLT template. `vars` map to #VAR1#, #VAR2#, … in order. */
+export async function sendSmsTemplate(
+  phone: string | null | undefined,
+  templateName: string,
+  vars: string[]
+): Promise<SmsResult> {
+  if (!TF_API_KEY) return { ok: false, error: "NO_API_KEY" }
+  if (!phone) return { ok: false, error: "NO_PHONE" }
+
+  const clean = cleanPhone(phone)
+  if (clean.length !== 10) return { ok: false, error: "INVALID_PHONE" }
+
+  const body: Record<string, string> = {
+    From: TF_SENDER_ID,
+    To: clean,
+    TemplateName: templateName,
+  }
+  vars.forEach((v, i) => { body[`VAR${i + 1}`] = v })
+
+  try {
+    const res = await fetch(
+      `https://2factor.in/API/V1/${TF_API_KEY}/ADDON_SERVICES/SEND/TSMS`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+    )
+    const data = (await res.json().catch(() => null)) as
+      | { Status?: string; Details?: string }
+      | null
+
+    if (data?.Status === "Success") return { ok: true, id: String(data.Details ?? "") }
+
+    const error = data?.Details ?? `HTTP ${res.status}`
+    console.error(`[sms] 2Factor refused "${templateName}" (${clean}): ${error}`)
+    return { ok: false, error }
+  } catch (err) {
+    const error = err instanceof Error ? err.message : String(err)
+    console.error(`[sms] template send failed "${templateName}" (${clean}): ${error}`)
+    return { ok: false, error }
+  }
+}
+
 export async function notifySeeker(phone: string | null | undefined, message: string) {
   if (!phone) return
   await Promise.allSettled([
