@@ -1,0 +1,70 @@
+# Scheduled jobs for jobs24india.com.
+#
+# Vercel's Hobby plan allows 2 cron entries, daily only, which is why
+# /api/cron/daily runs four handlers in sequence off a single schedule. These
+# workflows call the same endpoints directly so each can run on its own
+# cadence. Keep vercel.json's daily entry as a safety net: if GitHub is down
+# or a schedule is skipped, the essential jobs still run once a day.
+#
+# Every endpoint checks CRON_SECRET, so each call sends it as a header.
+#
+# Times are UTC. GitHub ignores the runner's timezone, and a "0 8" here fires
+# at 13:30 IST, which is exactly how the original Vercel schedules ended up
+# running five and a half hours late.
+name: Scheduled jobs
+
+on:
+  schedule:
+    # 08:00 IST — new jobs reach seekers at the start of the day.
+    - cron: "30 2 * * *"
+    # 10:00 IST Monday — employer weekly summary.
+    - cron: "30 4 * * 1"
+    # 01:00 IST — expire jobs and lapse subscriptions overnight.
+    - cron: "30 19 * * *"
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Which task to run now
+        required: true
+        type: choice
+        options: [seeker-digest, employer-weekly, expire-jobs, expire-subscriptions]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pick tasks for this trigger
+        id: pick
+        run: |
+          case "${{ github.event.schedule }}" in
+            "30 2 * * *")  TASKS="seeker-digest" ;;
+            "30 4 * * 1")  TASKS="employer-weekly" ;;
+            "30 19 * * *") TASKS="expire-jobs expire-subscriptions" ;;
+            *)             TASKS="${{ inputs.task }}" ;;
+          esac
+          echo "tasks=$TASKS" >> "$GITHUB_OUTPUT"
+          echo "running: $TASKS"
+
+      - name: Call endpoints
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          BASE_URL: https://www.jobs24india.com
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET is not set in repository secrets"
+            exit 1
+          fi
+          FAILED=0
+          for task in ${{ steps.pick.outputs.tasks }}; do
+            echo "::group::$task"
+            CODE=$(curl -s -S --max-time 120 -o /tmp/out.json -w "%{http_code}" \
+              -H "x-cron-secret: $CRON_SECRET" "$BASE_URL/api/cron/$task") || CODE=000
+            echo "HTTP $CODE"
+            cat /tmp/out.json 2>/dev/null || true
+            echo
+            # A non-2xx here means the job did not run. Fail loudly: a silent
+            # cron is how four of these went unnoticed for weeks.
+            case "$CODE" in 2*) ;; *) echo "::error::$task failed with HTTP $CODE"; FAILED=1 ;; esac
+            echo "::endgroup::"
+          done
+          exit $FAILED

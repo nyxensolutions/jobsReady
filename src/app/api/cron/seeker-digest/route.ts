@@ -4,10 +4,18 @@ import { sendSeekerJobDigest } from "@/lib/email"
 import { notifySeeker, MSG } from "@/lib/sms"
 
 /**
- * Daily digest cron — runs every morning at 8 AM IST.
- * Finds seekers with preferredCategories, matches against active jobs
- * posted in the last 48 hours, and sends email + SMS.
- * Vercel calls this via vercel.json schedule "0 8 * * *".
+ * Daily digest cron — invoked from /api/cron/daily at 08:00 IST.
+ *
+ * Matches active jobs posted in the last 48 hours against whatever interest
+ * signal a seeker has, in order: their stated preferred categories, failing
+ * that the categories of jobs they have already applied to, failing that the
+ * city on their profile.
+ *
+ * The fallbacks exist because **no profile form writes preferredCategories**
+ * — every seeker has an empty array, so the original query matched nobody and
+ * this digest had never sent a single message. Collecting the field properly
+ * is the real fix; it also makes employer Talent Search work, which filters
+ * candidates on the same column.
  */
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret") ?? req.nextUrl.searchParams.get("secret")
@@ -17,13 +25,17 @@ export async function GET(req: NextRequest) {
 
   const since = new Date(Date.now() - 48 * 60 * 60 * 1000) // last 48 hours
 
-  // Fetch seekers with at least one preferred category
   const seekers = await prisma.seekerProfile.findMany({
-    where: {
-      preferredCategories: { isEmpty: false },
-      isOpenToWork: true,
+    where: { isOpenToWork: true },
+    include: {
+      user: true,
+      // Revealed preference, for the majority who have stated none.
+      applications: {
+        select: { job: { select: { category: { select: { slug: true } } } } },
+        take: 20,
+        orderBy: { createdAt: "desc" },
+      },
     },
-    include: { user: true },
   })
 
   let notified = 0
@@ -32,24 +44,34 @@ export async function GET(req: NextRequest) {
     seekers.map(async seeker => {
       if (!seeker.user.email && !seeker.user.phone) return
 
-      const categorySlugs: string[] = seeker.preferredCategories ?? []
+      const stated: string[] = seeker.preferredCategories ?? []
+      const applied = [
+        ...new Set(
+          seeker.applications
+            .map(a => a.job.category?.slug)
+            .filter((s): s is string => !!s)
+        ),
+      ]
+      const categorySlugs = stated.length > 0 ? stated : applied
       const preferredCities: string[] = seeker.preferredCities ?? []
 
-      if (categorySlugs.length === 0) return
+      const cityNames = preferredCities.length > 0 ? [] : seeker.city ? [seeker.city] : []
 
-      // Build OR: match preferred categories OR preferred cities
-      const cityFilter = preferredCities.length > 0
-        ? [{ city: { slug: { in: preferredCities } } }]
-        : []
+      // No category and no city means no way to pick jobs they would want.
+      // Sending them everything would be noise, so skip rather than spam.
+      if (categorySlugs.length === 0 && preferredCities.length === 0 && cityNames.length === 0) return
+
+      const match = [
+        ...(categorySlugs.length > 0 ? [{ category: { slug: { in: categorySlugs } } }] : []),
+        ...(preferredCities.length > 0 ? [{ city: { slug: { in: preferredCities } } }] : []),
+        ...(cityNames.length > 0 ? [{ city: { name: { in: cityNames } } }] : []),
+      ]
 
       const jobs = await prisma.jobListing.findMany({
         where: {
           status: "ACTIVE",
           createdAt: { gte: since },
-          OR: [
-            { category: { slug: { in: categorySlugs } } },
-            ...cityFilter,
-          ],
+          OR: match,
         },
         include: {
           employer: { select: { companyName: true } },
