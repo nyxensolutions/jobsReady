@@ -3,6 +3,8 @@ import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { adminAuth } from "@/lib/firebase/admin"
 import { assertAdmin } from "@/lib/admin"
+import { sendEmployerOnboardingWhatsApp, sendSeekerWelcomeWhatsApp } from "@/lib/whatsapp"
+import { sendEmployerWelcomeEmail, sendSeekerWelcomeEmail } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { role, phone } = body
+    const { role, phone, email } = body
     if (!role || !phone) return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
 
     const formattedPhone = `+91${phone}`
@@ -51,10 +53,12 @@ export async function POST(req: NextRequest) {
       create: {
         id: firebaseUid,
         phone: formattedPhone,
+        email: email || null,
         role: role as "SEEKER" | "EMPLOYER",
         emailVerified: false,
       },
-      update: {}, // Don't modify existing user core info
+      // Only fill in an email that was missing; never overwrite an existing one.
+      update: email ? { email } : {},
     })
 
     // 4. Create Profile
@@ -101,6 +105,36 @@ export async function POST(req: NextRequest) {
           skills: skills ? skills.split(",").map((s: string) => s.trim()).filter(Boolean) : undefined,
         },
       })
+    }
+
+    // Tell them the account exists.
+    //
+    // Nothing was sent here before, so an employer signed up in the field
+    // walked away with a working account they had no idea about and no
+    // instruction to sign in with their number. Only send on first creation —
+    // re-saving an existing user must not re-welcome them.
+    if (!existingUser) {
+      void (async () => {
+        try {
+          if (role === "EMPLOYER") {
+            const { companyName, contactPerson } = body
+            const wa = await sendEmployerOnboardingWhatsApp(
+              formattedPhone,
+              contactPerson || companyName,
+              companyName
+            )
+            if (!wa.ok) console.error("[admin/create-user] employer WhatsApp failed:", wa.error)
+            if (email) await sendEmployerWelcomeEmail({ email, companyName })
+          } else {
+            const { name } = body
+            const wa = await sendSeekerWelcomeWhatsApp(formattedPhone, name)
+            if (!wa.ok) console.error("[admin/create-user] seeker WhatsApp failed:", wa.error)
+            if (email) await sendSeekerWelcomeEmail({ email, name })
+          }
+        } catch (err) {
+          console.error("[admin/create-user] welcome notification failed:", err)
+        }
+      })()
     }
 
     return NextResponse.json({ success: true, uid: firebaseUid })
