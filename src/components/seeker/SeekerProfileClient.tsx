@@ -19,6 +19,7 @@ type Profile = {
   isOpenToWork: boolean
   openToRelocate: boolean
   preferredCities: string[]
+  preferredCategories: string[]
   languages: string[]
   photoUrl: string | null
   resumeUrl: string | null
@@ -28,6 +29,7 @@ type Props = {
   initial: Profile | null
   phone: string | null
   cities: string[]
+  categories: { slug: string; name: string }[]
 }
 
 function maskPhone(phone: string | null) {
@@ -37,7 +39,7 @@ function maskPhone(phone: string | null) {
   return digits.slice(0, 3) + "*".repeat(4) + digits.slice(-3)
 }
 
-export default function SeekerProfileClient({ initial, phone, cities }: Props) {
+export default function SeekerProfileClient({ initial, phone, cities, categories }: Props) {
   const router = useRouter()
   const t = useTranslations("seeker.profile")
   const tc = useTranslations("common")
@@ -98,6 +100,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
   const [editLocation, setEditLocation] = useState(false)
   const [openToRelocate, setOpenToRelocate] = useState(initial?.openToRelocate ?? true)
   const [preferredCities, setPreferredCities] = useState<string[]>(initial?.preferredCities ?? [])
+  const [preferredCategories, setPreferredCategories] = useState<string[]>(initial?.preferredCategories ?? [])
   const [locationLoading, setLocationLoading] = useState(false)
 
   // Languages form
@@ -117,7 +120,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
       body: JSON.stringify({
         name: name || displayName,
         city, bio, skills, preferredJobTypes, experienceYears,
-        isOpenToWork, openToRelocate, preferredCities, languages,
+        isOpenToWork, openToRelocate, preferredCities, preferredCategories, languages,
         ...patch,
       }),
     })
@@ -151,7 +154,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
   async function handleSavePrefs() {
     setPrefsLoading(true)
     try {
-      await saveSection({ preferredJobTypes, isOpenToWork })
+      await saveSection({ preferredJobTypes, preferredCategories, isOpenToWork })
       setEditPrefs(false)
     } finally {
       setPrefsLoading(false)
@@ -559,6 +562,23 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
             {editPrefs ? (
               <div className="flex flex-col gap-4">
                 <div>
+                  <p className="text-xs font-medium text-gray-500 mb-2">{t("preferredCategoriesLabel")}</p>
+                  <p className="text-xs text-gray-400 mb-2">{t("preferredCategoriesHint")}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map(({ slug, name }) => (
+                      <button key={slug} type="button"
+                        onClick={() => setPreferredCategories(prev => prev.includes(slug) ? prev.filter(v => v !== slug) : [...prev, slug])}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
+                          preferredCategories.includes(slug)
+                            ? "bg-[#1a3461] text-white border-[#1a3461]"
+                            : "bg-white text-gray-600 border-gray-200 hover:border-[#1a3461]"
+                        }`}>
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
                   <p className="text-xs font-medium text-gray-500 mb-2">{t("preferredJobTypesLabel")}</p>
                   <div className="flex flex-wrap gap-2">
                     {JOB_TYPES.map(({ value, label }) => (
@@ -593,6 +613,7 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
                   <button onClick={() => {
                     setEditPrefs(false)
                     setPreferredJobTypes(initial?.preferredJobTypes ?? [])
+                    setPreferredCategories(initial?.preferredCategories ?? [])
                     setIsOpenToWork(initial?.isOpenToWork ?? true)
                   }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                     {tc("cancel")}
@@ -601,6 +622,15 @@ export default function SeekerProfileClient({ initial, phone, cities }: Props) {
               </div>
             ) : (
               <div className="flex flex-col gap-2">
+                {preferredCategories.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {preferredCategories.map(slug => (
+                      <span key={slug} className="text-xs bg-[#eef2ff] text-[#1a3461] border border-[#1a3461]/20 px-2.5 py-1 rounded-full">
+                        {categories.find(c => c.slug === slug)?.name ?? slug}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 {preferredJobTypes.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5">
                     {preferredJobTypes.map(v => (

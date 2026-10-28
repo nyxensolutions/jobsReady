@@ -382,6 +382,8 @@
       "skillsPlaceholder": "ఉదా. డ్రైవింగ్, MS Excel, హిందీ",
       "addSkills": "నైపుణ్యాలు జోడించండి",
       "preferredJobTypesLabel": "ఇష్టమైన ఉద్యోగ రకాలు",
+      "preferredCategoriesLabel": "మీకు కావలసిన ఉద్యోగ రకాలు",
+      "preferredCategoriesHint": "కొన్నింటిని ఎంచుకోండి, సరిపోయే ఉద్యోగాలు పంపుతాము",
       "openToWorkToggle": "పని చేయడానికి సిద్ధం",
       "visibleToEmployers": "యజమానులకు కనిపిస్తుంది",
       "hiddenFromEmployers": "యజమానుల నుండి దాచబడింది",

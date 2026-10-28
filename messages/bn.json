@@ -382,6 +382,8 @@
       "skillsPlaceholder": "যেমন ড্রাইভিং, MS Excel, বাংলা",
       "addSkills": "দক্ষতা যোগ করুন",
       "preferredJobTypesLabel": "পছন্দের চাকরির ধরন",
+      "preferredCategoriesLabel": "আপনি কোন ধরনের কাজ চান",
+      "preferredCategoriesHint": "কয়েকটি বেছে নিন যাতে আমরা আপনার উপযুক্ত চাকরি পাঠাতে পারি",
       "openToWorkToggle": "কাজের জন্য প্রস্তুত",
       "visibleToEmployers": "নিয়োগকর্তাদের কাছে দৃশ্যমান",
       "hiddenFromEmployers": "নিয়োগকর্তাদের কাছ থেকে লুকানো",

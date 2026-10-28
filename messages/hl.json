@@ -382,6 +382,8 @@
       "skillsPlaceholder": "जैसे ड्राइविंग, MS Excel, हिंदी",
       "addSkills": "स्किल्स जोड़ें",
       "preferredJobTypesLabel": "पसंदीदा नौकरी के प्रकार",
+      "preferredCategoriesLabel": "Aap kis tarah ka kaam chahte hain",
+      "preferredCategoriesHint": "Kuch chunein taaki hum aapke liye sahi jobs bhej sakein",
       "openToWorkToggle": "काम के लिए तैयार",
       "visibleToEmployers": "नियोक्ताओं को दिखाई देता है",
       "hiddenFromEmployers": "नियोक्ताओं से छुपा हुआ",

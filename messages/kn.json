@@ -382,6 +382,8 @@
       "skillsPlaceholder": "ಉದಾ. ಡ್ರೈವಿಂಗ್, MS Excel, ಕನ್ನಡ",
       "addSkills": "ಕೌಶಲ್ಯಗಳನ್ನು ಸೇರಿಸಿ",
       "preferredJobTypesLabel": "ಆದ್ಯತೆಯ ಉದ್ಯೋಗ ವಿಧಗಳು",
+      "preferredCategoriesLabel": "ನಿಮಗೆ ಬೇಕಾದ ಕೆಲಸದ ವಿಧಗಳು",
+      "preferredCategoriesHint": "ಕೆಲವನ್ನು ಆರಿಸಿ, ಸೂಕ್ತವಾದ ಕೆಲಸಗಳನ್ನು ಕಳುಹಿಸುತ್ತೇವೆ",
       "openToWorkToggle": "ಕೆಲಸಕ್ಕೆ ಸಿದ್ಧ",
       "visibleToEmployers": "ಉದ್ಯೋಗದಾತರಿಗೆ ಕಾಣಿಸುತ್ತದೆ",
       "hiddenFromEmployers": "ಉದ್ಯೋಗದಾತರಿಂದ ಮರೆಮಾಡಲಾಗಿದೆ",

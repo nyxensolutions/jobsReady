@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   }
 
   const {
-    name, city, bio, skills, preferredJobTypes, experienceYears,
+    name, city, bio, skills, preferredJobTypes, preferredCategories, experienceYears,
     isOpenToWork, openToRelocate, preferredCities, languages,
   } = await req.json()
 
@@ -45,6 +45,9 @@ export async function POST(req: NextRequest) {
     bio: bio?.trim() || null,
     skills: Array.isArray(skills) ? skills.filter(Boolean) : [],
     preferredJobTypes: Array.isArray(preferredJobTypes) ? preferredJobTypes : [],
+    // Drives the daily digest and employer Talent Search, both of which match
+    // on this column; until this form wrote it, every seeker had an empty array.
+    preferredCategories: Array.isArray(preferredCategories) ? preferredCategories.filter(Boolean) : [],
     experienceYears: experienceYears != null ? parseInt(experienceYears) : 0,
     isOpenToWork: isOpenToWork ?? true,
     openToRelocate: openToRelocate ?? true,

@@ -382,6 +382,8 @@
       "skillsPlaceholder": "e.g. Driving, MS Excel, Hindi",
       "addSkills": "Add skills",
       "preferredJobTypesLabel": "Preferred Job Types",
+      "preferredCategoriesLabel": "Job categories you want",
+      "preferredCategoriesHint": "Pick a few so we can send you matching jobs",
       "openToWorkToggle": "Open to Work",
       "visibleToEmployers": "Visible to employers",
       "hiddenFromEmployers": "Hidden from employers",

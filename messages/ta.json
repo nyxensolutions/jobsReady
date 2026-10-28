@@ -382,6 +382,8 @@
       "skillsPlaceholder": "எ.கா. ஓட்டுநர், MS Excel, தமிழ்",
       "addSkills": "திறன்களை சேர்க்கவும்",
       "preferredJobTypesLabel": "விரும்பிய வேலை வகைகள்",
+      "preferredCategoriesLabel": "நீங்கள் விரும்பும் வேலை வகைகள்",
+      "preferredCategoriesHint": "சிலவற்றைத் தேர்ந்தெடுங்கள், பொருத்தமான வேலைகளை அனுப்புவோம்",
       "openToWorkToggle": "வேலைக்கு தயார்",
       "visibleToEmployers": "முதலாளிகளுக்கு தெரியும்",
       "hiddenFromEmployers": "முதலாளிகளிடமிருந்து மறைக்கப்பட்டது",
