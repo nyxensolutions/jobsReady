@@ -10,8 +10,12 @@ import {
   tableOfContents,
   readingMinutes,
   formatPostDate,
+  localizePost,
+  localizeCategory,
+  translatedLocales,
 } from "@/lib/blog"
-import { alternatesFor, absoluteUrl, localePath, SITE_NAME, SITE_URL } from "@/lib/seo"
+import { contentAlternates, absoluteUrl, localePath, SITE_NAME, SITE_URL } from "@/lib/seo"
+import { blogUi } from "@/data/blog/ui"
 import ArticleBody from "@/components/blog/ArticleBody"
 import TableOfContents from "@/components/blog/TableOfContents"
 import FaqSection from "@/components/blog/FaqSection"
@@ -26,10 +30,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, category, slug } = await params
-  const post = getPost(category, slug)
-  if (!post) return {}
+  const original = getPost(category, slug)
+  if (!original) return {}
 
+  const post = localizePost(original, locale)
   const path = `/blog/${category}/${slug}`
+  // Canonical points at the URL whose language matches the content actually served.
+  const alternates = contentAlternates(locale, path, translatedLocales(slug))
 
   return {
     // Deliberately different from the <h1> — two keyword variants for one page.
@@ -37,12 +44,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.description,
     keywords: post.keywords,
     authors: [{ name: post.author }],
-    alternates: alternatesFor(locale, path),
+    alternates,
     openGraph: {
       title: post.seoTitle,
       description: post.description,
-      url: absoluteUrl(localePath(locale, path)),
+      url: alternates.canonical,
       type: "article",
+      locale: post.lang === "hi" ? "hi_IN" : "en_IN",
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt ?? post.publishedAt,
       authors: [post.author],
@@ -59,16 +67,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { locale, category: categorySlug, slug } = await params
 
-  const post = getPost(categorySlug, slug)
-  if (!post) notFound()
+  const original = getPost(categorySlug, slug)
+  if (!original) notFound()
 
-  const category = getBlogCategory(categorySlug)
-  if (!category) notFound()
+  const baseCategory = getBlogCategory(categorySlug)
+  if (!baseCategory) notFound()
+
+  const post = localizePost(original, locale)
+  const lang = post.lang
+  const ui = blogUi(lang)
+  const category = localizeCategory(baseCategory, lang)
 
   const path = `/blog/${categorySlug}/${slug}`
-  const url = absoluteUrl(localePath(locale, path))
+  // Structured data points at the canonical URL for the language actually being
+  // served: /hi/ for a translated Hindi page, the English URL for everything else.
+  const schemaLocale = lang === "hi" ? "hi" : "en"
+  const url = absoluteUrl(localePath(schemaLocale, path))
   const toc = tableOfContents(post)
-  const related = getRelatedPosts(post)
+  const related = getRelatedPosts(original, 3, locale).map((p) => localizePost(p, locale))
   const minutes = readingMinutes(post)
 
   // Structured data: BlogPosting + BreadcrumbList + FAQPage, matching what the
@@ -84,7 +100,7 @@ export default async function BlogPostPage({ params }: Props) {
         keywords: post.keywords.join(", "),
         datePublished: post.publishedAt,
         dateModified: post.updatedAt ?? post.publishedAt,
-        inLanguage: locale,
+        inLanguage: lang,
         author: { "@type": "Organization", name: post.author, url: SITE_URL },
         publisher: {
           "@type": "Organization",
@@ -99,13 +115,13 @@ export default async function BlogPostPage({ params }: Props) {
         "@type": "BreadcrumbList",
         "@id": `${url}#breadcrumb`,
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl(localePath(locale, "/")) },
-          { "@type": "ListItem", position: 2, name: "Career Guide", item: absoluteUrl(localePath(locale, "/blog")) },
+          { "@type": "ListItem", position: 1, name: ui.home, item: absoluteUrl(localePath(schemaLocale, "/")) },
+          { "@type": "ListItem", position: 2, name: ui.careerGuide, item: absoluteUrl(localePath(schemaLocale, "/blog")) },
           {
             "@type": "ListItem",
             position: 3,
             name: category.label,
-            item: absoluteUrl(localePath(locale, `/blog/${categorySlug}`)),
+            item: absoluteUrl(localePath(schemaLocale, `/blog/${categorySlug}`)),
           },
           { "@type": "ListItem", position: 4, name: post.title, item: url },
         ],
@@ -127,15 +143,17 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    // lang on the wrapper tells browsers/screen readers which script this content is in,
+    // so Devanagari picks a proper font and Chrome doesn't offer to "translate" Hindi.
+    <div lang={lang} className="min-h-screen bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center flex-wrap gap-1.5 text-xs text-gray-400 mb-5">
-          <Link href="/" className="hover:text-[#1a3461]">Home</Link>
+          <Link href="/" className="hover:text-[#1a3461]">{ui.home}</Link>
           <ChevronRight size={12} />
-          <Link href="/blog" className="hover:text-[#1a3461]">Career Guide</Link>
+          <Link href="/blog" className="hover:text-[#1a3461]">{ui.careerGuide}</Link>
           <ChevronRight size={12} />
           <Link href={`/blog/${categorySlug}`} className="hover:text-[#1a3461]">{category.label}</Link>
         </nav>
@@ -152,34 +170,34 @@ export default async function BlogPostPage({ params }: Props) {
               {post.title}
             </h1>
             <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
-              <span>By {post.author}</span>
+              <span>{ui.by} {post.author}</span>
               <span className="inline-flex items-center gap-1">
                 <CalendarDays size={12} />
-                <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt)}</time>
+                <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt, lang)}</time>
               </span>
               <span className="inline-flex items-center gap-1">
                 <Clock size={12} />
-                {minutes} min read
+                {ui.readTime(minutes)}
               </span>
             </div>
           </header>
 
-          <TableOfContents entries={toc} />
+          <TableOfContents entries={toc} lang={lang} />
 
-          <ArticleBody blocks={post.blocks} />
+          <ArticleBody blocks={post.blocks} lang={lang} />
 
-          <FaqSection faqs={post.faqs} />
+          <FaqSection faqs={post.faqs} lang={lang} />
 
-          <ShareRow url={url} title={post.title} />
+          <ShareRow url={url} title={post.title} lang={lang} />
         </article>
 
         {/* Related posts */}
         {related.length > 0 && (
           <section className="mt-10">
-            <h2 className="text-sm font-black text-[#1a3461] uppercase tracking-wide mb-4">Related guides</h2>
+            <h2 className="text-sm font-black text-[#1a3461] uppercase tracking-wide mb-4">{ui.related}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {related.map((item) => (
-                <PostCard key={item.slug} post={item} />
+                <PostCard key={item.slug} post={item} pageLang={lang} />
               ))}
             </div>
           </section>
@@ -187,9 +205,9 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Visible breadcrumb trail at the foot, mirroring the schema */}
         <p className="mt-8 text-xs text-gray-400">
-          <Link href="/" className="hover:text-[#1a3461]">Home</Link>
+          <Link href="/" className="hover:text-[#1a3461]">{ui.home}</Link>
           {" » "}
-          <Link href="/blog" className="hover:text-[#1a3461]">Career Guide</Link>
+          <Link href="/blog" className="hover:text-[#1a3461]">{ui.careerGuide}</Link>
           {" » "}
           <Link href={`/blog/${categorySlug}`} className="hover:text-[#1a3461]">{category.label}</Link>
           {" » "}

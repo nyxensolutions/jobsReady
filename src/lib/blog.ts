@@ -1,14 +1,23 @@
 import { ALL_POSTS } from "@/data/blog"
-import { BLOG_CATEGORIES, getBlogCategory } from "@/data/blog/categories"
+import { BLOG_CATEGORIES, CATEGORY_HI, getBlogCategory, type BlogCategory } from "@/data/blog/categories"
+import { HI_TRANSLATIONS } from "@/data/blog/translations"
+import { blogUi, type ContentLang } from "@/data/blog/ui"
 import { blockText, type BlogPost, type Block } from "@/data/blog/types"
 
 const WORDS_PER_MINUTE = 200
 
-/** Stable anchor id for a heading — used by the TOC and by heading elements. */
+/**
+ * Stable anchor id for a heading — used by the TOC and by heading elements.
+ *
+ * Unicode-aware on purpose: letters (\p{L}), combining marks (\p{M}, which carry
+ * Devanagari vowel signs) and digits survive, so Hindi headings get real ids
+ * instead of collapsing to an empty string. For English text the result is
+ * identical to the old ASCII-only version, so existing anchors do not change.
+ */
 export function anchorId(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/[^\p{L}\p{M}\p{N}\s-]/gu, "")
     .trim()
     .replace(/\s+/g, "-")
 }
@@ -56,10 +65,21 @@ export function countByCategory(slug: string): number {
   return ALL_POSTS.filter((p) => p.category === slug).length
 }
 
-/** Same category first, then anything else, to fill three slots. */
-export function getRelatedPosts(post: BlogPost, limit = 3): BlogPost[] {
-  const sameCategory = ALL_POSTS.filter((p) => p.category === post.category && p.slug !== post.slug).sort(byNewest)
-  const others = ALL_POSTS.filter((p) => p.category !== post.category && p.slug !== post.slug).sort(byNewest)
+/**
+ * Same category first, then anything else, to fill three slots. On Hindi pages
+ * translated posts rank first inside each group, so a Hindi reader is pointed at
+ * Hindi articles before English ones.
+ */
+export function getRelatedPosts(post: BlogPost, limit = 3, locale?: string): BlogPost[] {
+  const rank = (a: BlogPost, b: BlogPost) => {
+    if (locale === "hi") {
+      const diff = Number(hasHindi(b.slug)) - Number(hasHindi(a.slug))
+      if (diff !== 0) return diff
+    }
+    return byNewest(a, b)
+  }
+  const sameCategory = ALL_POSTS.filter((p) => p.category === post.category && p.slug !== post.slug).sort(rank)
+  const others = ALL_POSTS.filter((p) => p.category !== post.category && p.slug !== post.slug).sort(rank)
   return [...sameCategory, ...others].slice(0, limit)
 }
 
@@ -67,8 +87,60 @@ export function postUrl(post: BlogPost): string {
   return `/blog/${post.category}/${post.slug}`
 }
 
-export function formatPostDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })
+export function formatPostDate(iso: string, lang: ContentLang = "en"): string {
+  return new Date(iso).toLocaleDateString(lang === "hi" ? "hi-IN" : "en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
+}
+
+// ── Localisation ────────────────────────────────────────────────────────────
+
+export type LocalizedPost = BlogPost & { lang: ContentLang }
+export type LocalizedCategory = BlogCategory & { lang: ContentLang }
+
+export function hasHindi(slug: string): boolean {
+  return slug in HI_TRANSLATIONS
+}
+
+/** Locales (other than the default English) that have a real translation of this post. */
+export function translatedLocales(slug: string): string[] {
+  return hasHindi(slug) ? ["hi"] : []
+}
+
+/**
+ * Returns the post in the reader's language when a translation exists, otherwise
+ * the English original. `lang` records which one you got so the page chrome can
+ * match the content instead of mixing languages.
+ */
+export function localizePost(post: BlogPost, locale: string): LocalizedPost {
+  if (locale === "hi") {
+    const hi = HI_TRANSLATIONS[post.slug]
+    if (hi) return { ...post, ...hi, author: blogUi("hi").author, lang: "hi" }
+  }
+  return { ...post, lang: "en" }
+}
+
+/** On Hindi pages, translated posts come first; otherwise order is left as given. */
+export function localizeAll(posts: BlogPost[], locale: string): LocalizedPost[] {
+  const localized = posts.map((p) => localizePost(p, locale))
+  if (locale !== "hi") return localized
+  return [...localized].sort((a, b) => Number(b.lang === "hi") - Number(a.lang === "hi"))
+}
+
+export function localizeCategory(category: BlogCategory, lang: ContentLang): LocalizedCategory {
+  const hi = lang === "hi" ? CATEGORY_HI[category.slug] : undefined
+  return hi ? { ...category, ...hi, lang } : { ...category, lang }
+}
+
+/** Does this category have at least one Hindi article? Decides whether its /hi/ page is worth indexing. */
+export function categoryHasHindi(slug: string): boolean {
+  return ALL_POSTS.some((p) => p.category === slug && hasHindi(p.slug))
+}
+
+export function anyHindi(): boolean {
+  return ALL_POSTS.some((p) => hasHindi(p.slug))
 }
 
 export { BLOG_CATEGORIES, getBlogCategory }

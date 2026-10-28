@@ -1,20 +1,22 @@
 import { Link } from "@/i18n/navigation"
 import { MapPin, Users, ArrowRight } from "lucide-react"
 import { prisma } from "@/lib/db"
+import { blogUi, type BlogUi, type ContentLang } from "@/data/blog/ui"
 
 type Props = {
   heading: string
   categorySlug?: string
   citySlug?: string
+  lang?: ContentLang
 }
 
-function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {
-  const suffix = unit === "daily" ? "/day" : "/month"
+function formatSalary(ui: BlogUi, min?: number | null, max?: number | null, unit = "monthly") {
+  const suffix = unit === "daily" ? ui.perDay : ui.perMonth
   const fmt = (n: number) => (n >= 1000 ? `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : `₹${n}`)
   if (min && max) return `${fmt(min)} – ${fmt(max)}${suffix}`
-  if (min) return `From ${fmt(min)}${suffix}`
-  if (max) return `Up to ${fmt(max)}${suffix}`
-  return "As per interview"
+  if (min) return `${ui.salaryFrom(fmt(min))}${suffix}`
+  if (max) return `${ui.salaryUpTo(fmt(max))}${suffix}`
+  return ui.asPerInterview
 }
 
 const SELECT = {
@@ -26,7 +28,7 @@ const SELECT = {
   vacancies: true,
   source: true,
   employer: { select: { companyName: true } },
-  city: { select: { name: true } },
+  city: { select: { name: true, nameHi: true } },
 } as const
 
 /**
@@ -36,7 +38,8 @@ const SELECT = {
  * link equity to job pages. It degrades quietly: a DB error or an empty result
  * renders nothing rather than breaking the article.
  */
-export default async function LiveJobs({ heading, categorySlug, citySlug }: Props) {
+export default async function LiveJobs({ heading, categorySlug, citySlug, lang = "en" }: Props) {
+  const ui = blogUi(lang)
   let jobs: Array<{
     id: string
     title: string
@@ -46,7 +49,7 @@ export default async function LiveJobs({ heading, categorySlug, citySlug }: Prop
     vacancies: number
     source: string
     employer: { companyName: string }
-    city: { name: string }
+    city: { name: string; nameHi: string | null }
   }> = []
 
   try {
@@ -89,7 +92,7 @@ export default async function LiveJobs({ heading, categorySlug, citySlug }: Prop
           href={browseHref}
           className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 shrink-0"
         >
-          View all
+          {ui.viewAll}
           <ArrowRight size={13} />
         </Link>
       </div>
@@ -108,16 +111,16 @@ export default async function LiveJobs({ heading, categorySlug, citySlug }: Prop
               <p className="text-xs text-gray-500 mt-1 truncate">{job.employer.companyName}</p>
             )}
             <p className="text-sm font-bold text-green-700 mt-2">
-              {formatSalary(job.salaryMin, job.salaryMax, job.salaryUnit)}
+              {formatSalary(ui, job.salaryMin, job.salaryMax, job.salaryUnit)}
             </p>
             <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
               <span className="inline-flex items-center gap-1">
                 <MapPin size={12} />
-                {job.city.name}
+                {lang === "hi" ? (job.city.nameHi ?? job.city.name) : job.city.name}
               </span>
               <span className="inline-flex items-center gap-1">
                 <Users size={12} />
-                {job.vacancies} {job.vacancies === 1 ? "opening" : "openings"}
+                {job.vacancies} {job.vacancies === 1 ? ui.opening : ui.openings}
               </span>
             </div>
           </Link>

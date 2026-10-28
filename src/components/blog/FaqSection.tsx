@@ -1,18 +1,20 @@
 import { ChevronDown } from "lucide-react"
 import { anchorId } from "@/lib/blog"
 import type { Faq } from "@/data/blog/types"
+import { blogUi, type ContentLang } from "@/data/blog/ui"
 
 /**
  * Native <details> accordion — no client JS, so the answers are present in the
  * server-rendered HTML and remain crawlable while staying collapsed for readers.
  */
-export default function FaqSection({ faqs }: { faqs: Faq[] }) {
+export default function FaqSection({ faqs, lang = "en" }: { faqs: Faq[]; lang?: ContentLang }) {
   if (faqs.length === 0) return null
+  const ui = blogUi(lang)
 
   return (
     <section className="mt-10">
       <h2 id="faqs" className="scroll-mt-24 text-xl sm:text-2xl font-black text-[#1a3461] mb-4">
-        Frequently Asked Questions
+        {ui.faqHeading}
       </h2>
       <div className="space-y-2">
         {faqs.map((faq, i) => (

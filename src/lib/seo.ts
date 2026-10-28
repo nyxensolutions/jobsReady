@@ -38,3 +38,25 @@ export function alternatesFor(locale: string, path = "/") {
     languages: languageAlternates(path),
   }
 }
+
+/**
+ * Canonical + hreflang for content that only exists in some languages (the blog).
+ *
+ * `translated` lists the non-default locales that have a *real* translation of
+ * this page. Rules:
+ *  - hreflang advertises only the default locale plus those translations — never
+ *    a locale that would just serve the English text under another URL.
+ *  - A locale without a translation (ta, te, hl, or hi on an untranslated post)
+ *    canonicalises to the English URL, so the English-text duplicates it serves
+ *    are not indexed as separate pages.
+ */
+export function contentAlternates(locale: string, path: string, translated: readonly string[]) {
+  const available = [defaultLocale, ...translated]
+  const canonicalLocale = available.includes(locale as (typeof available)[number]) ? locale : defaultLocale
+
+  const languages: Record<string, string> = {}
+  for (const l of available) languages[l] = absoluteUrl(localePath(l, path))
+  languages["x-default"] = absoluteUrl(localePath(defaultLocale, path))
+
+  return { canonical: absoluteUrl(localePath(canonicalLocale, path)), languages }
+}

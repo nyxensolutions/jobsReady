@@ -1,8 +1,19 @@
+import { blogUi, type ContentLang } from "@/data/blog/ui"
+
 /**
  * Share links as plain anchors — no client JS. WhatsApp comes first because
  * that is how job content actually circulates among our audience.
  */
-export default function ShareRow({ url, title }: { url: string; title: string }) {
+export default function ShareRow({
+  url,
+  title,
+  lang = "en",
+}: {
+  url: string
+  title: string
+  lang?: ContentLang
+}) {
+  const ui = blogUi(lang)
   const encodedUrl = encodeURIComponent(url)
   const encodedTitle = encodeURIComponent(title)
 
@@ -15,7 +26,7 @@ export default function ShareRow({ url, title }: { url: string; title: string })
 
   return (
     <div className="flex flex-wrap items-center gap-2 mt-8 pt-6 border-t border-gray-200">
-      <span className="text-xs font-bold text-gray-500 uppercase tracking-wide mr-1">Share</span>
+      <span className="text-xs font-bold text-gray-500 uppercase tracking-wide mr-1">{ui.share}</span>
       {links.map((link) => (
         <a
           key={link.label}

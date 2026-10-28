@@ -41,6 +41,21 @@ export type BlogPost = {
   faqs: Faq[]
 }
 
+/**
+ * A translated version of a post. Only the human-readable fields are repeated —
+ * slug, category and dates always come from the English post, so a translation
+ * can never drift onto a different URL.
+ */
+export type PostTranslation = {
+  title: string
+  seoTitle: string
+  description: string
+  excerpt: string
+  keywords: string[]
+  blocks: Block[]
+  faqs: Faq[]
+}
+
 /** Text-bearing block types, used for word counting and TOC extraction. */
 export function blockText(block: Block): string {
   switch (block.type) {

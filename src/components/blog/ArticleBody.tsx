@@ -2,6 +2,7 @@
 import { Lightbulb, TriangleAlert, ArrowRight } from "lucide-react"
 import { anchorId } from "@/lib/blog"
 import type { Block } from "@/data/blog/types"
+import type { ContentLang } from "@/data/blog/ui"
 import LiveJobs from "./LiveJobs"
 
 function Callout({ tone, title, text }: { tone: "tip" | "warn"; title: string; text: string }) {
@@ -60,7 +61,7 @@ function Table({ caption, head, rows }: { caption?: string; head: string[]; rows
   )
 }
 
-export default function ArticleBody({ blocks }: { blocks: Block[] }) {
+export default function ArticleBody({ blocks, lang = "en" }: { blocks: Block[]; lang?: ContentLang }) {
   return (
     <div>
       {blocks.map((block, i) => {
@@ -142,6 +143,7 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
                 heading={block.heading}
                 categorySlug={block.categorySlug}
                 citySlug={block.citySlug}
+                lang={lang}
               />
             )
         }

@@ -1,10 +1,38 @@
 "use client"
 
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
 import Image from "next/image"
 
 const NO_FOOTER_SEGMENTS = ["/employer/", "/admin"]
+
+// Kept inline rather than imported from the blog data so the article content
+// isn't bundled into this client component. Hindi visitors get Hindi labels,
+// and only guides that actually have a Hindi version (the links are locale-aware).
+const FOOTER_GUIDES = {
+  en: {
+    heading: "Popular blog articles",
+    links: [
+      ["/blog/delivery/delivery-boy-salary-in-india", "Delivery boy salary in India"],
+      ["/blog/security/security-guard-night-shift-salary-delhi-ncr", "Security guard night shift salary"],
+      ["/blog/telecaller/telecaller-job-description-salary-skills", "Telecaller job & salary"],
+      ["/blog/warehouse/warehouse-jobs-in-greater-noida", "Warehouse jobs in Greater Noida"],
+      ["/blog/job-safety/how-to-spot-a-fake-job-offer", "How to spot a fake job offer"],
+      ["/blog/resume/resume-for-freshers-without-experience", "Resume for freshers"],
+    ],
+  },
+  hi: {
+    heading: "लोकप्रिय ब्लॉग लेख",
+    links: [
+      ["/blog/delivery/delivery-boy-salary-in-india", "डिलीवरी बॉय की सैलरी"],
+      ["/blog/security/security-guard-night-shift-salary-delhi-ncr", "सिक्योरिटी गार्ड नाइट शिफ्ट सैलरी"],
+      ["/blog/telecaller/telecaller-job-description-salary-skills", "टेलीकॉलर जॉब और सैलरी"],
+      ["/blog/driver/driver-job-salary-in-india", "ड्राइवर की सैलरी"],
+      ["/blog/job-safety/how-to-spot-a-fake-job-offer", "फर्जी जॉब ऑफर कैसे पहचानें"],
+      ["/blog/resume/resume-for-freshers-without-experience", "फ्रेशर के लिए रिज्यूमे"],
+    ],
+  },
+} as const
 
 type Props = {
   userRole?: "SEEKER" | "EMPLOYER" | "ADMIN" | null
@@ -12,6 +40,8 @@ type Props = {
 
 export default function Footer({ userRole }: Props) {
   const t = useTranslations("nav")
+  const locale = useLocale()
+  const guides = locale === "hi" ? FOOTER_GUIDES.hi : FOOTER_GUIDES.en
   const pathname = usePathname()
   const hide = NO_FOOTER_SEGMENTS.some((s) => pathname.includes(s))
   if (hide) return null
@@ -96,14 +126,11 @@ export default function Footer({ userRole }: Props) {
         {/* Popular blog articles — only shown on public pages, not when seeker is logged in */}
         {!isSeeker && (
           <div className="border-t border-gray-800 mt-10 pt-6">
-            <h4 className="text-white font-semibold mb-3 text-xs uppercase tracking-wide">Popular blog articles</h4>
+            <h4 className="text-white font-semibold mb-3 text-xs uppercase tracking-wide">{guides.heading}</h4>
             <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
-              <Link href="/blog/delivery/delivery-boy-salary-in-india" className="hover:text-white transition-colors">Delivery boy salary in India</Link>
-              <Link href="/blog/security/security-guard-night-shift-salary-delhi-ncr" className="hover:text-white transition-colors">Security guard night shift salary</Link>
-              <Link href="/blog/telecaller/telecaller-job-description-salary-skills" className="hover:text-white transition-colors">Telecaller job &amp; salary</Link>
-              <Link href="/blog/warehouse/warehouse-jobs-in-greater-noida" className="hover:text-white transition-colors">Warehouse jobs in Greater Noida</Link>
-              <Link href="/blog/job-safety/how-to-spot-a-fake-job-offer" className="hover:text-white transition-colors">How to spot a fake job offer</Link>
-              <Link href="/blog/resume/resume-for-freshers-without-experience" className="hover:text-white transition-colors">Resume for freshers</Link>
+              {guides.links.map(([href, label]) => (
+                <Link key={href} href={href} className="hover:text-white transition-colors">{label}</Link>
+              ))}
             </div>
           </div>
         )}
