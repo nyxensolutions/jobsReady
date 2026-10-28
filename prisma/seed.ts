@@ -49,6 +49,7 @@ async function main() {
     { slug: "insurance-agent", nameEn: "Insurance Agent", nameHi: "बीमा एजेंट", nameTe: "ఇన్సూరెన్స్ ఏజెంట్", nameTa: "காப்பீட்டு முகவர்", nameKn: "ವಿಮೆ ಏಜೆಂಟ್", nameBn: "বীমা এজেন্ট", namePa: "ਬੀਮਾ ਏਜੰਟ", icon: "ShieldCheck", sortOrder: 35 },
     { slug: "runner", nameEn: "Runner / Office Runner", nameHi: "रनर / ऑफिस रनर", nameTe: "రన్నర్ / ఆఫీస్ రన్నర్", nameTa: "ரன்னர் / அலுவலக ரன்னர்", nameKn: "ರನ್ನರ್ / ಆಫೀಸ್ ರನ್ನರ್", nameBn: "রানার / অফিস রানার", namePa: "ਰਨਰ / ਦਫ਼ਤਰ ਰਨਰ", icon: "Footprints", sortOrder: 36 },
     { slug: "broker", nameEn: "Real Estate Broker", nameHi: "रियल एस्टेट ब्रोकर", nameTe: "రియల్ ఎస్టేట్ బ్రోకర్", nameTa: "ரியல் எஸ்டேட் தரகர்", nameKn: "ರಿಯಲ್ ಎಸ್ಟೇಟ್ ದಲ್ಲಾಳಿ", nameBn: "রিয়েল এস্টেট ব্রোকার", namePa: "ਰੀਅਲ ਅਸਟੇਟ ਬ੍ਰੋਕਰ", icon: "Building2", sortOrder: 37 },
+    { slug: "media-creative", nameEn: "Media / Creative", nameHi: "मीडिया / क्रिएटिव", nameTe: "మీడియా / క్రియేటివ్", nameTa: "ஊடகம் / படைப்பு", nameKn: "ಮೀಡಿಯಾ / ಕ್ರಿಯೇಟಿವ್", nameBn: "মিডিয়া / ক্রিয়েটিভ", namePa: "ਮੀਡੀਆ / ਕ੍ਰਿਏਟਿਵ", icon: "Clapperboard", sortOrder: 38 },
   ]
 
   for (const cat of categories) {

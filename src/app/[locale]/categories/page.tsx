@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation"
 import {
   Truck, Car, TrendingUp, Shield, Sparkles, UtensilsCrossed,
   HardHat, Factory, ShoppingBag, ClipboardList, Monitor, Heart,
-  Package, Scissors, Wrench, Paintbrush, ChevronRight,
+  Package, Scissors, Wrench, Paintbrush, ChevronRight, Clapperboard,
 } from "lucide-react"
 import { alternatesFor } from "@/lib/seo"
 
@@ -34,7 +34,8 @@ const CATEGORIES = [
   { key: "warehouse",    label: "Warehouse",          Icon: Package,         vacancies: "45,000+",    color: "bg-cyan-50 text-cyan-600 border-cyan-100",       desc: "Warehouse workers, pickers, packers, inventory staff" },
   { key: "beauty",       label: "Beauty & Salon",     Icon: Scissors,        vacancies: "15,000+",    color: "bg-fuchsia-50 text-fuchsia-600 border-fuchsia-100", desc: "Hair stylists, beauticians, spa attendants, makeup artists" },
   { key: "technician",   label: "Technician",         Icon: Wrench,          vacancies: "30,000+",    color: "bg-lime-50 text-lime-700 border-lime-100",       desc: "AC technicians, mobile repair, appliance repair, plumbers" },
-  { key: "painter",      label: "Painter",            Icon: Paintbrush,      vacancies: "25,000+",    color: "bg-violet-50 text-violet-600 border-violet-100", desc: "House painters, industrial painters, waterproofing workers" },
+  { key: "painter",        label: "Painter",            Icon: Paintbrush,      vacancies: "25,000+",  color: "bg-violet-50 text-violet-600 border-violet-100",  desc: "House painters, industrial painters, waterproofing workers" },
+  { key: "media-creative", label: "Media / Creative",   Icon: Clapperboard,    vacancies: "8,000+",   color: "bg-red-50 text-red-600 border-red-100",            desc: "Video editors, anchors, social media managers, content creators, photographers" },
 ]
 
 export default function CategoriesPage() {
