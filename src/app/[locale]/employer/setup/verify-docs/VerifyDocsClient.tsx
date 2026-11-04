@@ -202,8 +202,11 @@ export default function VerifyDocsClient({ uploadedDocs }: { uploadedDocs: strin
         {/* Help */}
         <p className="text-center text-xs text-gray-400 mt-6">
           Need help?{" "}
-          <a href="tel:18002035244" className="text-[#1a3461] font-semibold hover:underline">
-            Reach us at 1800-203-5244
+          {/* Was tel:1800-203-5244, which is the Udyam Registration helpline and
+              not ours: an employer stuck on document verification was being sent
+              to a government call centre that has never heard of us. */}
+          <a href="mailto:support@jobs24india.com" className="text-[#1a3461] font-semibold hover:underline">
+            Email support@jobs24india.com
           </a>
         </p>
       </div>
