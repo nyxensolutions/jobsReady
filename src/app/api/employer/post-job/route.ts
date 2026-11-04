@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   // ── Plan guard: active job limit ───────────────────────────────
   const limitError = await checkPostJobLimit(employer.id)
   if (limitError) {
-    return NextResponse.json({ error: "UPGRADE_REQUIRED", message: limitError }, { status: 402 })
+    return NextResponse.json({ error: limitError, code: "UPGRADE_REQUIRED", message: limitError }, { status: 402 })
   }
 
   const [category, city] = await Promise.all([
