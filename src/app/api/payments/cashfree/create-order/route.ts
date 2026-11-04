@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { SITE_URL } from "@/lib/seo"
 
 const CF_BASE =
   process.env.CASHFREE_ENV === "PROD"
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
     const email = dbUser.email || `emp_${employer.id.slice(0, 8)}@jobs24india.com`
 
     const orderId = `jr_${employer.id.slice(0, 8)}_${Date.now()}`
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://jobs24india.com"
+    const appUrl = SITE_URL
 
     const cfRes = await fetch(`${CF_BASE}/orders`, {
       method: "POST",

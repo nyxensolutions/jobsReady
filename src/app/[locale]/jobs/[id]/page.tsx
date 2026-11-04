@@ -219,7 +219,7 @@ export default async function JobDetailPage({ params }: Props) {
     },
   ]
 
-  const whatsappText = encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: https://jobs24india.com/jobs/${job.id}`)
+  const whatsappText = encodeURIComponent(`${job.title} in ${job.city.name} — ${salary} — Apply: ${SITE_URL}/jobs/${job.id}`)
 
   const jsonLd = {
     "@context": "https://schema.org/",
@@ -421,7 +421,7 @@ export default async function JobDetailPage({ params }: Props) {
             {/* Translate hint — shown only in Hindi locale since job content is user-posted in English */}
             {locale === "hi" && (
               <a
-                href={`https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(`https://jobs24india.com/hi/jobs/${job.id}`)}`}
+                href={`https://translate.google.com/translate?sl=en&tl=hi&u=${encodeURIComponent(`${SITE_URL}/hi/jobs/${job.id}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 text-sm text-blue-700 font-medium hover:bg-blue-100 transition-colors"
