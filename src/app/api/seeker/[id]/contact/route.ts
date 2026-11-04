@@ -13,6 +13,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
     if (!employer) return NextResponse.json({ error: "Employer not found" }, { status: 404 })
 
+    // Contact details only go to verified businesses. Without this check any
+    // signup can read every seeker phone number and email, because the free
+    // plan is granted automatically and its unlock credits never run out.
+    if (employer.status !== "VERIFIED") {
+      return NextResponse.json(
+        {
+          error: "VERIFICATION_REQUIRED",
+          message: "Your company must be verified before you can unlock candidate contact details.",
+        },
+        { status: 403 }
+      )
+    }
+
     // Already unlocked by this employer?
     const existing = await prisma.candidateUnlock.findUnique({
       where: { employerId_seekerId: { employerId: employer.id, seekerId } },
