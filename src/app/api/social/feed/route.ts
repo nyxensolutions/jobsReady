@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { expandCitySlugs, CITY_CLUSTERS } from "@/lib/cityClusters"
 import { areaBySlug, JOB_AREAS } from "@/lib/areas"
+import { SITE_URL } from "@/lib/seo"
 import { liveJobWhere } from "@/lib/jobListingQuery"
 import { salaryRangeError } from "@/lib/salary"
 
@@ -188,7 +189,9 @@ export async function GET(req: NextRequest) {
       // The Hindi name comes from the vocabulary, never from the row, so a
       // caption cannot end up with four spellings of the same place.
       areaHi: job.area ? (areaBySlug(job.area)?.nameHi ?? null) : null,
-      url: `https://www.jobs24india.com/hi/jobs/${job.id}`,
+      // From SITE_URL, not a second hardcoded host: a caption that links to
+      // a redirecting URL is the same mistake that cost the canonicals.
+      url: `${SITE_URL}/hi/jobs/${job.id}`,
     }))
 
   const ready = jobs.length >= rules.minimum

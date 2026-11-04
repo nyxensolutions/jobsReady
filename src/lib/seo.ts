@@ -1,6 +1,21 @@
 import { locales, defaultLocale } from "@/i18n/config"
 
-export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://jobs24india.com"
+/**
+ * The canonical origin, and the only place the site's own host is decided.
+ *
+ * It must carry the `www`. Vercel serves www as the primary domain and 308s
+ * the apex to it, so a canonical, hreflang or sitemap URL without the www
+ * points at a redirect — and a canonical that redirects is discarded, while
+ * hreflang alternates that redirect are commonly ignored wholesale. For two
+ * months `NEXT_PUBLIC_APP_URL` was set to the apex, every page declared a
+ * canonical that redirected away from itself, and Search Console reported 332
+ * pages not indexed against 14 indexed.
+ *
+ * Anything that needs the public origin imports this rather than reading the
+ * environment variable again with its own default; several copies of that
+ * default is how the wrong host survived in the first place.
+ */
+export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.jobs24india.com"
 export const SITE_NAME = "Jobs24India"
 
 /** Absolute URL for a site-relative path. */
