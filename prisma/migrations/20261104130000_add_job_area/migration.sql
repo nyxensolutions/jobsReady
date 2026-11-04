@@ -1,0 +1,13 @@
+-- Sub-city area on a job, as a slug from src/lib/areas.ts ("okhla").
+--
+-- Nullable with no default and no backfill: the column is additive, every
+-- existing row keeps its meaning, and nothing reads it until an employer sets
+-- it. Areas are deliberately not City rows — City is flat, so an area row
+-- would become a sibling of Delhi and "Delhi" search would miss it.
+--
+-- IF NOT EXISTS because the column was already present on the production
+-- database when this migration first ran — created outside the migration
+-- history, most likely by a `prisma db push`. This migration was marked
+-- applied there by hand; the guard is what lets a fresh database, or a preview
+-- branch, run the same history without failing on 42701.
+ALTER TABLE "job_listings" ADD COLUMN IF NOT EXISTS "area" TEXT;

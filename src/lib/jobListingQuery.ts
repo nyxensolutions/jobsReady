@@ -42,6 +42,8 @@ export function isJobLive(
 export type JobListingSearchParams = {
   q?: string
   city?: string      // comma-separated city or cluster slugs, e.g. "delhi-ncr,pune"
+  /** Sub-city area slug from src/lib/areas.ts, e.g. "okhla". Optional. */
+  area?: string
   category?: string   // comma-separated slugs for multi-select, e.g. "delivery,driver"
   type?: string      // comma-separated job types, e.g. "FULL_TIME,PART_TIME"
   sort?: string
@@ -67,6 +69,7 @@ export function buildJobListingQuery(params: JobListingSearchParams) {
   const typeRaw = params.type ?? ""
   const types = typeRaw ? typeRaw.split(",").map((t) => t.trim()).filter(Boolean) : []
   const sort = params.sort ?? "newest"
+  const area = params.area?.trim() || ""
   const minSalary = params.minSalary ? parseInt(params.minSalary) : null
   const freshersOnly = params.freshers === "1"
   const maxExp = params.exp ? parseInt(params.exp) : null
@@ -107,6 +110,7 @@ export function buildJobListingQuery(params: JobListingSearchParams) {
       : types.length > 1
       ? { jobType: { in: types as JobType[] } }
       : {}),
+    ...(area ? { area } : {}),
     ...(minSalary ? { salaryMin: { gte: minSalary } } : {}),
     ...(freshersOnly ? { experienceMin: 0 } : maxExp ? { experienceMin: { lte: maxExp } } : {}),
     ...(qualification ? { qualificationRequired: qualification } : {}),

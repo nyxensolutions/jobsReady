@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { expandCitySlugs, CITY_CLUSTERS } from "@/lib/cityClusters"
+import { areaBySlug, JOB_AREAS } from "@/lib/areas"
 import { liveJobWhere } from "@/lib/jobListingQuery"
 import { salaryRangeError } from "@/lib/salary"
 
@@ -93,6 +94,29 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  /**
+   * Narrows the cluster to one sub-city market, so a caption can say "ओखला"
+   * and mean it. Validated against the city the area belongs to: an area
+   * outside the requested cluster would otherwise produce an honest-looking
+   * empty slot instead of saying the request made no sense.
+   */
+  const area = params.get("area")?.trim() || null
+  if (area) {
+    const known = areaBySlug(area)
+    if (!known) {
+      return NextResponse.json(
+        { error: `Unknown area "${area}".`, areas: JOB_AREAS.map(a => a.slug) },
+        { status: 400 },
+      )
+    }
+    if (citySlugs && !citySlugs.includes(known.citySlug)) {
+      return NextResponse.json(
+        { error: `Area "${area}" is in ${known.citySlug}, not in cluster "${cluster}".` },
+        { status: 400 },
+      )
+    }
+  }
+
   /** Job ids the caller has already posted recently, so cards do not repeat. */
   const exclude = (params.get("exclude") ?? "")
     .split(",")
@@ -111,6 +135,7 @@ export async function GET(req: NextRequest) {
       // A card with no pay on it is not worth posting; seekers scroll past it.
       salaryMin: { not: null },
       ...(citySlugs ? { city: { slug: { in: citySlugs } } } : {}),
+      ...(area ? { area } : {}),
       ...(exclude.length ? { id: { notIn: exclude } } : {}),
     },
     select: {
@@ -123,6 +148,7 @@ export async function GET(req: NextRequest) {
       shiftType: true,
       vacancies: true,
       pincode: true,
+      area: true,
       publishedAt: true,
       city: { select: { name: true, nameHi: true, slug: true } },
       category: { select: { slug: true, nameEn: true, nameHi: true } },
@@ -158,6 +184,10 @@ export async function GET(req: NextRequest) {
       cityEn: job.city.name,
       cityHi: job.city.nameHi,
       pincode: job.pincode,
+      area: job.area,
+      // The Hindi name comes from the vocabulary, never from the row, so a
+      // caption cannot end up with four spellings of the same place.
+      areaHi: job.area ? (areaBySlug(job.area)?.nameHi ?? null) : null,
       url: `https://www.jobs24india.com/hi/jobs/${job.id}`,
     }))
 
@@ -166,6 +196,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     slot: slotParam,
     cluster,
+    area,
     generatedAt: now.toISOString(),
     minimum: rules.minimum,
     count: jobs.length,
