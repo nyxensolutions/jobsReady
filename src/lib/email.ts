@@ -698,3 +698,83 @@ export async function sendSeekerShortlistAlert({
     `,
   })
 }
+
+// ─── Inbound admin alerts ─────────────────────────────────────────────────────
+
+/**
+ * Who gets told when something needs an admin.
+ *
+ * Deliberately an env var rather than a lookup of `isAdmin` users: both admin
+ * accounts are phone-only and have no email on record, so a DB lookup would
+ * silently find nobody. Comma-separated so a second pair of eyes can be added
+ * without a deploy.
+ */
+function adminRecipients(): string[] {
+  const raw = process.env.ADMIN_ALERT_EMAILS ?? ""
+  const list = raw.split(",").map((a) => a.trim()).filter(Boolean)
+  if (list.length === 0) {
+    console.error("[email] ADMIN_ALERT_EMAILS is unset — admin alert not sent")
+  }
+  return list
+}
+
+/**
+ * A new employer has registered and is sitting at PENDING.
+ *
+ * They cannot unlock candidate contacts until someone verifies them, so this
+ * is time-sensitive: an employer left pending experiences the product as
+ * broken. Carries enough detail to approve or reject without opening the
+ * record first.
+ */
+export async function sendAdminNewEmployerAlert({
+  companyName,
+  contactPerson,
+  contactPhone,
+  email,
+  industry,
+  city,
+  gstCin,
+  website,
+}: {
+  companyName: string
+  contactPerson: string
+  contactPhone: string
+  email?: string | null
+  industry: string
+  city: string
+  gstCin?: string | null
+  website?: string | null
+}) {
+  const to = adminRecipients()
+  if (to.length === 0) return
+
+  const row = (label: string, value: string | null | undefined) =>
+    value ? `<p style="margin:0 0 8px;color:#374151"><strong>${label}:</strong> ${value}</p>` : ""
+
+  await send({
+    from: `Jobs24India <${FROM}>`,
+    to,
+    subject: `New employer awaiting verification: ${companyName}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
+        <h2 style="color:#1a3461;margin:0 0 8px">New employer signed up</h2>
+        <p style="color:#6b7280;margin:0 0 24px">They are at <strong>PENDING</strong> and cannot view candidate contact details until verified.</p>
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:24px">
+          ${row("Company", companyName)}
+          ${row("Contact", contactPerson)}
+          ${row("Phone", contactPhone)}
+          ${row("Email", email)}
+          ${row("Industry", industry)}
+          ${row("City", city)}
+          ${row("GST / CIN", gstCin)}
+          ${row("Website", website)}
+        </div>
+        <a href="${APP_URL}/en/admin"
+           style="display:inline-block;background:#1a3461;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
+          Review in Admin Panel →
+        </a>
+        <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · internal notification</p>
+      </div>
+    `,
+  })
+}
