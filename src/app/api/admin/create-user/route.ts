@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db"
 import { adminAuth } from "@/lib/firebase/admin"
 import { assertAdmin } from "@/lib/admin"
 import { sendEmployerOnboardingWhatsApp, sendSeekerWelcomeWhatsApp } from "@/lib/whatsapp"
-import { sendEmployerWelcomeEmail, sendSeekerWelcomeEmail } from "@/lib/email"
+import { sendAdminCreatedEmployerEmail, sendSeekerWelcomeEmail } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
   try {
@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
               companyName
             )
             if (!wa.ok) console.error("[admin/create-user] employer WhatsApp failed:", wa.error)
-            if (email) await sendEmployerWelcomeEmail({ email, companyName })
+            if (email) await sendAdminCreatedEmployerEmail({ email, companyName, contactPerson })
           } else {
             const { name } = body
             const wa = await sendSeekerWelcomeWhatsApp(formattedPhone, name)

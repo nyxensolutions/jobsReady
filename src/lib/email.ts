@@ -138,6 +138,35 @@ export async function sendEmployerWelcomeEmail({ email, companyName }: { email: 
   })
 }
 
+export async function sendAdminCreatedEmployerEmail({ email, companyName, contactPerson }: { email: string; companyName: string; contactPerson?: string | null }) {
+  if (!email) return
+  const name = contactPerson || companyName
+  const body = `
+    <h2 style="margin:0 0 4px;color:#1a3461;font-size:20px">Your Jobs24India account is ready! 🎉</h2>
+    <p style="margin:0 0 16px;color:#6b7280;font-size:14px">Hi ${name},</p>
+    <p style="margin:0 0 24px;color:#4b5563;font-size:14px;line-height:1.6">
+      Your employer account for <strong>${companyName}</strong> has been created and is already verified.
+      You can log in right now using the mobile number you registered with — no password needed.
+    </p>
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px;margin-bottom:24px">
+      <h3 style="margin:0 0 12px;color:#15803d;font-size:14px">✅ Your account is active. Here's what to do next:</h3>
+      <ul style="margin:0;padding-left:20px;color:#4b5563;font-size:14px;line-height:1.5">
+        <li style="margin-bottom:8px"><strong>Log in:</strong> Open <a href="${APP_URL}" style="color:#1a3461">jobs24india.com</a> and sign in with your registered phone number via OTP.</li>
+        <li style="margin-bottom:8px"><strong>Post a job:</strong> Start posting jobs immediately — your account is pre-approved.</li>
+        <li><strong>Review candidates:</strong> You'll be notified as soon as someone applies.</li>
+      </ul>
+    </div>
+    ${btn(`${APP_URL}/employer/post-job`, "Post Your First Job", "#15803d")}
+    <p style="margin:24px 0 0;color:#6b7280;font-size:14px">Happy hiring! Reach us at <a href="mailto:support@jobs24india.com" style="color:#1a3461">support@jobs24india.com</a> if you need any help.</p>
+  `
+  await send({
+    from: `Jobs24India <${FROM}>`,
+    to: email,
+    subject: `Your Jobs24India employer account is ready — ${companyName}`,
+    html: emailShell(body),
+  })
+}
+
 // ─── Payment receipt ──────────────────────────────────────────────────────────
 
 export async function sendPaymentReceipt({
