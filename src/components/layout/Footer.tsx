@@ -54,7 +54,7 @@ export default function Footer({ userRole }: Props) {
   return (
     <footer className="bg-gray-900 text-gray-400 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-start">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center mb-1">
               <Image src="/Logo_Light.png" alt="Jobs24India" width={180} height={50} className="object-contain" />

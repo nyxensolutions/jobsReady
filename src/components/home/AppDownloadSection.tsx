@@ -132,14 +132,14 @@ export default async function AppDownloadSection() {
                 </div>
               </div>
 
-              {/* Top-left badge: Job alerts */}
-              <div className="absolute left-0 top-3 bg-[#f97316] rounded-2xl shadow-xl px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-white z-10">
+              {/* Top-left badge: Job alerts — 1/4 on bg, 3/4 on phone */}
+              <div className="absolute -left-4 top-10 bg-[#f97316] rounded-2xl shadow-xl px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-white z-10 animate-float">
                 <span>🔔</span>
                 {t("jobAlerts")}
               </div>
 
               {/* Bottom-right badge: Verified employers */}
-              <div className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 text-xs font-bold text-[#1a3461] z-10">
+              <div className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 text-xs font-bold text-[#1a3461] z-10 animate-float-delayed">
                 <span className="text-green-500 text-base">✓</span>
                 {t("verifiedEmployers")}
               </div>
