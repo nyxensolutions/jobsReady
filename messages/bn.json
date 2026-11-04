@@ -577,5 +577,23 @@
     "Night": "রাতের শিফট",
     "Rotational": "ঘূর্ণায়মান শিফট",
     "Flexible": "নমনীয় সময়"
+  },
+  "appDownload": {
+    "badge": "এখন Google Play-এ",
+    "title": "দ্রুত চাকরি খুঁজুন — আপনার ফোনে",
+    "subtitle": "হাজারো যাচাইকৃত চাকরি ব্রাউজ করুন, এক ট্যাপে আবেদন করুন — Jobs24India অ্যাপ থেকে। বিনামূল্যে। দ্রুত। CV দরকার নেই।",
+    "feature1": "১০০% বিনামূল্যে",
+    "feature2": "OTP লগইন — পাসওয়ার্ড নেই",
+    "feature3": "হিন্দি ও ৭টি ভাষা",
+    "feature4": "সরাসরি HR-কে কল করুন",
+    "scanToDownload": "স্ক্যান করে ডাউনলোড করুন",
+    "getItOn": "Google Play-এ পান",
+    "freeAndroid": "বিনামূল্যে · Android · 4.5★",
+    "verifiedEmployers": "যাচাইকৃত নিয়োগকর্তা",
+    "jobAlerts": "চাকরির অ্যালার্ট",
+    "footerTagline": "Android-এ পাওয়া যাচ্ছে",
+    "footerDesc": "যেতে যেতে চাকরি খুঁজুন — বিনামূল্যে ও দ্রুত",
+    "footerButton": "Google Play-এ পান",
+    "headerLabel": "অ্যাপ ডাউনলোড"
   }
 }

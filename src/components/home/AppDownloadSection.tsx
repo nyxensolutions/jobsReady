@@ -1,11 +1,16 @@
 import Image from "next/image"
+import { getTranslations } from "next-intl/server"
 
 const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.nyxensolutions.jobs24india"
-const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&color=1a3461&bgcolor=ffffff&qzone=1&data=${encodeURIComponent(PLAY_STORE_URL)}`
 
-export default function AppDownloadSection() {
+export default async function AppDownloadSection() {
+  const t = await getTranslations("appDownload")
+  const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&color=1a3461&bgcolor=ffffff&qzone=1&data=${encodeURIComponent(PLAY_STORE_URL)}`
+
+  const features = [t("feature1"), t("feature2"), t("feature3"), t("feature4")]
+
   return (
-    <section className="relative overflow-hidden bg-[#0f2347] py-16 sm:py-20">
+    <section id="app-download" className="relative overflow-hidden bg-[#0f2347] py-16 sm:py-20">
       {/* Background blobs */}
       <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-[#f97316]/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-16 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl" />
@@ -18,25 +23,20 @@ export default function AppDownloadSection() {
             {/* Badge */}
             <span className="inline-flex items-center gap-1.5 rounded-full bg-[#f97316]/15 px-3 py-1 text-xs font-semibold text-[#f97316] mb-5">
               <span className="h-1.5 w-1.5 rounded-full bg-[#f97316] animate-pulse" />
-              Now on Google Play
+              {t("badge")}
             </span>
 
             <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-4">
-              Find jobs faster —{" "}
-              <span className="text-[#f97316]">on your phone</span>
+              {t("title").split("—")[0]}—{" "}
+              <span className="text-[#f97316]">{t("title").split("—")[1]?.trim()}</span>
             </h2>
             <p className="text-gray-400 text-base leading-relaxed mb-8 max-w-md">
-              Browse thousands of verified jobs, apply in one tap, and track your applications — all from the Jobs24India app. Free. Fast. No CV needed.
+              {t("subtitle")}
             </p>
 
             {/* Features */}
             <div className="flex flex-wrap gap-3 mb-10">
-              {[
-                "100% Free to use",
-                "OTP login — no password",
-                "Hindi & 7 more languages",
-                "Call HR directly",
-              ].map((f) => (
+              {features.map((f) => (
                 <span key={f} className="flex items-center gap-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
                   <svg className="text-green-400 shrink-0" width="13" height="13" viewBox="0 0 13 13" fill="none">
                     <path d="M2 6.5L5.2 9.5L11 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -54,13 +54,13 @@ export default function AppDownloadSection() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={QR_URL}
-                    alt="QR code to download Jobs24India on Google Play"
+                    alt={t("scanToDownload")}
                     width={120}
                     height={120}
                     className="block rounded-lg"
                   />
                 </div>
-                <p className="text-xs text-gray-500 text-center">Scan to download</p>
+                <p className="text-xs text-gray-500 text-center">{t("scanToDownload")}</p>
               </div>
 
               {/* Divider */}
@@ -76,18 +76,18 @@ export default function AppDownloadSection() {
                   href={PLAY_STORE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Get Jobs24India on Google Play"
+                  aria-label={t("getItOn")}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                    alt="Get it on Google Play"
+                    alt={t("getItOn")}
                     width={180}
                     height={54}
                     className="block"
                   />
                 </a>
-                <p className="text-xs text-gray-600 pl-1">Free · Android · 4.5★</p>
+                <p className="text-xs text-gray-600 pl-1">{t("freeAndroid")}</p>
               </div>
             </div>
           </div>
@@ -132,14 +132,16 @@ export default function AppDownloadSection() {
                 </div>
               </div>
 
-              {/* Floating badge */}
-              <div className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 text-xs font-bold text-[#1a3461]">
-                <span className="text-green-500 text-base">✓</span>
-                Verified employers
-              </div>
-              <div className="absolute left-1 top-1/2 -translate-y-1/2 bg-[#f97316] rounded-2xl shadow-xl px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-white">
+              {/* Top-left badge: Job alerts */}
+              <div className="absolute left-0 top-3 bg-[#f97316] rounded-2xl shadow-xl px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-white z-10">
                 <span>🔔</span>
-                Job alerts
+                {t("jobAlerts")}
+              </div>
+
+              {/* Bottom-right badge: Verified employers */}
+              <div className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 text-xs font-bold text-[#1a3461] z-10">
+                <span className="text-green-500 text-base">✓</span>
+                {t("verifiedEmployers")}
               </div>
             </div>
           </div>

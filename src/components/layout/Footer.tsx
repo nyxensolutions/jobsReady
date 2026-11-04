@@ -4,6 +4,8 @@ import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
 import Image from "next/image"
 
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.nyxensolutions.jobs24india"
+
 const NO_FOOTER_SEGMENTS = ["/employer/", "/admin"]
 
 // Kept inline rather than imported from the blog data so the article content
@@ -40,6 +42,7 @@ type Props = {
 
 export default function Footer({ userRole }: Props) {
   const t = useTranslations("nav")
+  const tApp = useTranslations("appDownload")
   const locale = useLocale()
   const guides = locale === "hi" ? FOOTER_GUIDES.hi : FOOTER_GUIDES.en
   const pathname = usePathname()
@@ -62,9 +65,42 @@ export default function Footer({ userRole }: Props) {
                 NyxenCloud Solutions
               </a>
             </p>
-            <p className="text-gray-500 text-xs leading-relaxed">
+            <p className="text-gray-500 text-xs leading-relaxed mb-5">
               India's trusted job portal for frontline workers.
             </p>
+
+            {/* App download — compact stacked block */}
+            <div>
+              <p className="text-white text-xs font-semibold mb-0.5">{tApp("footerTagline")}</p>
+              <p className="text-gray-600 text-xs mb-3">{tApp("footerDesc")}</p>
+              <div className="flex items-center gap-3">
+                {/* Mini QR */}
+                <div className="bg-white rounded-xl p-1.5 shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=56x56&color=0f2347&bgcolor=ffffff&qzone=1&data=${encodeURIComponent(PLAY_STORE_URL)}`}
+                    alt={tApp("scanToDownload")}
+                    width={56}
+                    height={56}
+                    className="block rounded-md"
+                  />
+                </div>
+                <a
+                  href={PLAY_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white text-xs font-semibold rounded-lg px-3 py-2 transition-colors"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.18 1.56L13.47 12 3.18 22.44C2.68 22.14 2.4 21.6 2.4 21V3C2.4 2.4 2.68 1.86 3.18 1.56Z" fill="#EA4335"/>
+                    <path d="M20.1 10.14L17.46 8.64L14.88 12L17.46 15.36L20.1 13.86C20.82 13.44 21.3 12.78 21.3 12C21.3 11.22 20.82 10.56 20.1 10.14Z" fill="#FBBC04"/>
+                    <path d="M3.18 1.56L13.47 12L17.46 8.64L5.76 2.04C5.04 1.62 4.08 1.62 3.18 1.56Z" fill="#4285F4"/>
+                    <path d="M3.18 22.44C4.08 22.38 5.04 22.38 5.76 21.96L17.46 15.36L13.47 12L3.18 22.44Z" fill="#34A853"/>
+                  </svg>
+                  {tApp("footerButton")}
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Job Seekers section */}
@@ -120,47 +156,6 @@ export default function Footer({ userRole }: Props) {
               <li><Link href="/cancellation-policy" className="hover:text-white transition-colors">{t("cancellationPolicy")}</Link></li>
               <li><Link href="/cookie-policy" className="hover:text-white transition-colors">Cookie Policy</Link></li>
             </ul>
-          </div>
-        </div>
-
-        {/* App download strip */}
-        <div className="border-t border-gray-800 mt-10 pt-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-            <div>
-              <p className="text-white font-semibold text-sm mb-1">Jobs24India is now on Android</p>
-              <p className="text-gray-500 text-xs">Apply to jobs faster — browse, apply &amp; track in one tap. Free.</p>
-            </div>
-            <div className="flex items-center gap-4 shrink-0">
-              {/* QR */}
-              <div className="bg-white rounded-xl p-1.5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=72x72&color=0f2347&bgcolor=ffffff&qzone=1&data=${encodeURIComponent("https://play.google.com/store/apps/details?id=com.nyxensolutions.jobs24india")}`}
-                  alt="Scan to download Jobs24India"
-                  width={72}
-                  height={72}
-                  className="block rounded-lg"
-                />
-              </div>
-              <div>
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.nyxensolutions.jobs24india"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-white text-gray-900 font-semibold text-xs rounded-lg px-3.5 py-2.5 hover:bg-gray-100 transition-colors"
-                >
-                  {/* Play Store icon */}
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.18 1.56L13.47 12 3.18 22.44C2.68 22.14 2.4 21.6 2.4 21V3C2.4 2.4 2.68 1.86 3.18 1.56Z" fill="#EA4335"/>
-                    <path d="M20.1 10.14L17.46 8.64L14.88 12L17.46 15.36L20.1 13.86C20.82 13.44 21.3 12.78 21.3 12C21.3 11.22 20.82 10.56 20.1 10.14Z" fill="#FBBC04"/>
-                    <path d="M3.18 1.56L13.47 12L17.46 8.64L5.76 2.04C5.04 1.62 4.08 1.62 3.18 1.56Z" fill="#4285F4"/>
-                    <path d="M3.18 22.44C4.08 22.38 5.04 22.38 5.76 21.96L17.46 15.36L13.47 12L3.18 22.44Z" fill="#34A853"/>
-                  </svg>
-                  Get it on Google Play
-                </a>
-                <p className="text-gray-600 text-xs mt-1.5 pl-0.5">Free · Android</p>
-              </div>
-            </div>
           </div>
         </div>
 

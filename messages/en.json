@@ -577,5 +577,23 @@
     "accounting": "Accounting",
     "beauty": "Beauty / Salon",
     "logistics": "Warehouse"
+  },
+  "appDownload": {
+    "badge": "Now on Google Play",
+    "title": "Find jobs faster — on your phone",
+    "subtitle": "Browse thousands of verified jobs, apply in one tap, and track your applications — all from the Jobs24India app. Free. Fast. No CV needed.",
+    "feature1": "100% Free to use",
+    "feature2": "OTP login — no password",
+    "feature3": "Hindi & 7 more languages",
+    "feature4": "Call HR directly",
+    "scanToDownload": "Scan to download",
+    "getItOn": "Get it on Google Play",
+    "freeAndroid": "Free · Android · 4.5★",
+    "verifiedEmployers": "Verified employers",
+    "jobAlerts": "Job alerts",
+    "footerTagline": "Available on Android",
+    "footerDesc": "Apply to jobs on the go — fast & free",
+    "footerButton": "Get it on Google Play",
+    "headerLabel": "Get App"
   }
 }

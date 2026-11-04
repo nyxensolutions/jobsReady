@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
-import { Menu, X, User, Briefcase, LogOut, ChevronDown, ShieldCheck } from "lucide-react"
+import { Menu, X, User, Briefcase, LogOut, ChevronDown, ShieldCheck, Smartphone } from "lucide-react"
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher"
 import NotificationBell from "@/components/layout/NotificationBell"
 import { auth } from "@/lib/firebase/client"
@@ -27,6 +27,7 @@ const HIDE_HEADER_SEGMENTS = ["/employer/", "/admin"]
 
 export default function Header({ initialAuth }: Props) {
   const t = useTranslations("nav")
+  const tApp = useTranslations("appDownload")
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [authUser, setAuthUser] = useState<AuthUser | null>(initialAuth ?? null)
@@ -161,6 +162,17 @@ export default function Header({ initialAuth }: Props) {
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
+            {/* App download icon — shown on desktop for non-employer users */}
+            {authUser?.role !== "EMPLOYER" && (
+              <a
+                href="/#app-download"
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-[#1a3461] hover:bg-[#f0f4ff] hover:border-[#1a3461] transition-all"
+                title={tApp("headerLabel")}
+              >
+                <Smartphone size={15} />
+                <span>{tApp("headerLabel")}</span>
+              </a>
+            )}
             <LocaleSwitcher />
 
             {authUser ? (
@@ -270,6 +282,15 @@ export default function Header({ initialAuth }: Props) {
             <Link href="/jobs" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">
               🔍 {t("findJobs")}
             </Link>
+          )}
+          {authUser?.role !== "EMPLOYER" && (
+            <a
+              href="/#app-download"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]"
+            >
+              📱 {tApp("headerLabel")}
+            </a>
           )}
           {!authUser && (
             <Link href="/login?role=employer" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-[#1a3461]">

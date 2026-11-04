@@ -577,5 +577,23 @@
     "Night": "ਰਾਤ ਦੀ ਸ਼ਿਫਟ",
     "Rotational": "ਬਦਲਵੀਂ ਸ਼ਿਫਟ",
     "Flexible": "ਲਚਕਦਾਰ ਸਮਾਂ"
+  },
+  "appDownload": {
+    "badge": "ਹੁਣ Google Play 'ਤੇ",
+    "title": "ਨੌਕਰੀ ਜਲਦੀ ਲੱਭੋ — ਆਪਣੇ ਫ਼ੋਨ 'ਤੇ",
+    "subtitle": "ਹਜ਼ਾਰਾਂ ਤਸਦੀਕਸ਼ੁਦਾ ਨੌਕਰੀਆਂ ਬ੍ਰਾਊਜ਼ ਕਰੋ, ਇੱਕ ਟੈਪ ਵਿੱਚ ਅਪਲਾਈ ਕਰੋ — Jobs24India ਐਪ ਤੋਂ। ਮੁਫ਼ਤ। ਤੇਜ਼।",
+    "feature1": "100% ਮੁਫ਼ਤ",
+    "feature2": "OTP ਲੌਗਇਨ — ਪਾਸਵਰਡ ਨਹੀਂ",
+    "feature3": "ਹਿੰਦੀ ਅਤੇ 7 ਹੋਰ ਭਾਸ਼ਾਵਾਂ",
+    "feature4": "HR ਨੂੰ ਸਿੱਧਾ ਕਾਲ ਕਰੋ",
+    "scanToDownload": "ਸਕੈਨ ਕਰਕੇ ਡਾਊਨਲੋਡ ਕਰੋ",
+    "getItOn": "Google Play 'ਤੇ ਪਾਓ",
+    "freeAndroid": "ਮੁਫ਼ਤ · Android · 4.5★",
+    "verifiedEmployers": "ਤਸਦੀਕਸ਼ੁਦਾ ਮਾਲਕ",
+    "jobAlerts": "ਨੌਕਰੀ ਅਲਰਟ",
+    "footerTagline": "Android 'ਤੇ ਉਪਲਬਧ",
+    "footerDesc": "ਚੱਲਦੇ-ਫਿਰਦੇ ਨੌਕਰੀ ਲੱਭੋ — ਮੁਫ਼ਤ ਅਤੇ ਤੇਜ਼",
+    "footerButton": "Google Play 'ਤੇ ਪਾਓ",
+    "headerLabel": "ਐਪ ਡਾਊਨਲੋਡ"
   }
 }

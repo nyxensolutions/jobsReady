@@ -577,5 +577,23 @@
     "Night": "రాత్రి షిఫ్ట్",
     "Rotational": "రొటేషనల్ షిఫ్ట్",
     "Flexible": "సౌకర్యవంతమైన సమయం"
+  },
+  "appDownload": {
+    "badge": "ఇప్పుడు Google Play లో",
+    "title": "ఉద్యోగాన్ని వేగంగా వెతకండి — మీ ఫోన్‌లో",
+    "subtitle": "వేలాది ధృవీకరించిన ఉద్యోగాలను బ్రౌజ్ చేయండి, ఒక్క ట్యాప్‌లో దరఖాస్తు చేయండి — Jobs24India యాప్ నుండి. ఉచితం. వేగం.",
+    "feature1": "100% ఉచితం",
+    "feature2": "OTP లాగిన్ — పాస్‌వర్డ్ అవసరం లేదు",
+    "feature3": "హిందీ & 7 మరిన్ని భాషలు",
+    "feature4": "HR కి నేరుగా కాల్ చేయండి",
+    "scanToDownload": "స్కాన్ చేసి డౌన్‌లోడ్ చేయండి",
+    "getItOn": "Google Play లో పొందండి",
+    "freeAndroid": "ఉచితం · Android · 4.5★",
+    "verifiedEmployers": "ధృవీకరించిన యజమానులు",
+    "jobAlerts": "జాబ్ అలర్ట్‌లు",
+    "footerTagline": "Android లో అందుబాటులో ఉంది",
+    "footerDesc": "వెళ్తూ ఉద్యోగాలు వెతకండి — ఉచితం & వేగం",
+    "footerButton": "Google Play లో పొందండి",
+    "headerLabel": "యాప్ డౌన్‌లోడ్"
   }
 }

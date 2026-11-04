@@ -577,5 +577,23 @@
     "Night": "Raat ki shift",
     "Rotational": "Rotational shift",
     "Flexible": "Flexible hours"
+  },
+  "appDownload": {
+    "badge": "Ab Google Play par",
+    "title": "Naukri jaldi pao — apne phone se",
+    "subtitle": "Hazaron verified naukri browse karo, ek tap mein apply karo — Jobs24India app se. Free. Fast. CV nahi chahiye.",
+    "feature1": "100% Free",
+    "feature2": "OTP login — password nahi",
+    "feature3": "Hindi aur 7 aur bhashaein",
+    "feature4": "HR ko seedha call karo",
+    "scanToDownload": "Scan karke download karo",
+    "getItOn": "Google Play par pao",
+    "freeAndroid": "Free · Android · 4.5★",
+    "verifiedEmployers": "Verified employers",
+    "jobAlerts": "Naukri alerts",
+    "footerTagline": "Android par available",
+    "footerDesc": "Chalte-phirte naukri dhundo — free aur fast",
+    "footerButton": "Google Play par pao",
+    "headerLabel": "App download"
   }
 }

@@ -577,5 +577,23 @@
     "Night": "ರಾತ್ರಿ ಪಾಳಿ",
     "Rotational": "ಸರದಿ ಪಾಳಿ",
     "Flexible": "ಹೊಂದಿಕೊಳ್ಳುವ ಸಮಯ"
+  },
+  "appDownload": {
+    "badge": "ಈಗ Google Play ನಲ್ಲಿ",
+    "title": "ಉದ್ಯೋಗ ಬೇಗ ಹುಡುಕಿ — ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ",
+    "subtitle": "ಸಾವಿರಾರು ಪರಿಶೀಲಿತ ಉದ್ಯೋಗಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ, ಒಂದೇ ಟ್ಯಾಪ್‌ನಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ — Jobs24India ಆಪ್‌ನಿಂದ. ಉಚಿತ. ವೇಗ.",
+    "feature1": "100% ಉಚಿತ",
+    "feature2": "OTP ಲಾಗಿನ್ — ಪಾಸ್‌ವರ್ಡ್ ಬೇಡ",
+    "feature3": "ಹಿಂದಿ ಮತ್ತು 7 ಭಾಷೆಗಳು",
+    "feature4": "HR ಗೆ ನೇರವಾಗಿ ಕರೆ ಮಾಡಿ",
+    "scanToDownload": "ಸ್ಕ್ಯಾನ್ ಮಾಡಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+    "getItOn": "Google Play ನಲ್ಲಿ ಪಡೆಯಿರಿ",
+    "freeAndroid": "ಉಚಿತ · Android · 4.5★",
+    "verifiedEmployers": "ಪರಿಶೀಲಿತ ಉದ್ಯೋಗದಾತರು",
+    "jobAlerts": "ಉದ್ಯೋಗ ಎಚ್ಚರಿಕೆಗಳು",
+    "footerTagline": "Android ನಲ್ಲಿ ಲಭ್ಯವಿದೆ",
+    "footerDesc": "ಓಡಾಡುತ್ತಲೇ ಉದ್ಯೋಗ ಹುಡುಕಿ — ಉಚಿತ ಮತ್ತು ವೇಗ",
+    "footerButton": "Google Play ನಲ್ಲಿ ಪಡೆಯಿರಿ",
+    "headerLabel": "ಆಪ್ ಡೌನ್‌ಲೋಡ್"
   }
 }

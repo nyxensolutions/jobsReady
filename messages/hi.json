@@ -577,5 +577,23 @@
     "website": "वेबसाइट",
     "description": "विवरण",
     "gstCin": "GST / CIN"
+  },
+  "appDownload": {
+    "badge": "अब Google Play पर",
+    "title": "नौकरी जल्दी पाएं — अपने फ़ोन से",
+    "subtitle": "हज़ारों वेरीफाइड नौकरियां ब्राउज़ करें, एक टैप में अप्लाई करें — Jobs24India ऐप से। फ्री। तेज़। CV की ज़रूरत नहीं।",
+    "feature1": "100% मुफ़्त",
+    "feature2": "OTP लॉगिन — पासवर्ड नहीं",
+    "feature3": "हिंदी और 7 और भाषाएं",
+    "feature4": "HR को सीधे कॉल करें",
+    "scanToDownload": "स्कैन करके डाउनलोड करें",
+    "getItOn": "Google Play पर पाएं",
+    "freeAndroid": "फ्री · Android · 4.5★",
+    "verifiedEmployers": "वेरीफाइड नियोक्ता",
+    "jobAlerts": "नौकरी अलर्ट",
+    "footerTagline": "Android पर उपलब्ध",
+    "footerDesc": "चलते-फिरते नौकरी ढूंढें — फ्री और तेज़",
+    "footerButton": "Google Play पर पाएं",
+    "headerLabel": "ऐप डाउनलोड"
   }
 }
