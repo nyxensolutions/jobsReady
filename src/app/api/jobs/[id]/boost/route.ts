@@ -22,7 +22,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     // Every employer has a subscription — the free launch plan if nothing else
     // — so this is purely a credit check.
     if (limits.boostsLeft <= 0) {
-      return NextResponse.json({ error: "UPGRADE_REQUIRED", message: "You have used all your boost credits. Upgrade to get more." }, { status: 402 })
+      return NextResponse.json({ error: "You have used all your boost credits. Upgrade to get more.", code: "UPGRADE_REQUIRED", message: "You have used all your boost credits. Upgrade to get more." }, { status: 402 })
     }
 
     // Check if already boosted and still active

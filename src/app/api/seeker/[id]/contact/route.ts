@@ -19,7 +19,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (employer.status !== "VERIFIED") {
       return NextResponse.json(
         {
-          error: "VERIFICATION_REQUIRED",
+          // Mobile shows `error` to the user verbatim (apiErrorMessage in
+          // jobs24Mobile/src/lib/api.ts), so it carries the sentence and the
+          // machine-readable string moves to `code`. `message` is kept for any
+          // caller still reading the old shape.
+          error: "Your company must be verified before you can unlock candidate contact details.",
+          code: "VERIFICATION_REQUIRED",
           message: "Your company must be verified before you can unlock candidate contact details.",
         },
         { status: 403 }
@@ -48,7 +53,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (limits.unlocksLeft <= 0) {
       return NextResponse.json(
         {
-          error: "UPGRADE_REQUIRED",
+          error: "You have used all your candidate unlock credits. Upgrade to unlock more.",
+          code: "UPGRADE_REQUIRED",
           message: "You have used all your candidate unlock credits. Upgrade to unlock more.",
         },
         { status: 402 }

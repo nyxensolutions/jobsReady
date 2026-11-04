@@ -53,6 +53,17 @@ export async function POST(req: NextRequest) {
     openToRelocate: openToRelocate ?? true,
     preferredCities: Array.isArray(preferredCities) ? preferredCities.filter(Boolean) : [],
     languages: Array.isArray(languages) ? languages.filter(Boolean) : [],
+    // Nothing ever set this: the column was written only by the admin
+    // create-user path, so all 37 seekers read as incomplete regardless of
+    // what they had filled in. Derived here from the fields that actually
+    // drive matching — the daily digest and employer Talent Search both need a
+    // city and at least one category to return anything.
+    isProfileComplete: Boolean(
+      name.trim() &&
+        city?.trim() &&
+        Array.isArray(preferredCategories) &&
+        preferredCategories.filter(Boolean).length > 0
+    ),
   }
 
   const existingProfile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })

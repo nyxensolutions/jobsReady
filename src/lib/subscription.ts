@@ -22,6 +22,18 @@ export async function getActiveSub(employerId: string): Promise<ActiveSub | null
  */
 export const UNLIMITED = 2_147_483_647
 
+/**
+ * Candidate unlocks and boosts granted by the free plan.
+ *
+ * Separate constants rather than UNLIMITED inline, because these are the
+ * knobs to turn when the launch giveaway ends. Lowering either takes effect
+ * on the next request: ensureFreeSubscription syncs them onto the plan row.
+ * Note that lowering below what an employer has already used leaves them with
+ * no credits, which is the intended reading of a reduced allowance.
+ */
+export const FREE_UNLOCK_CREDITS = UNLIMITED
+export const FREE_BOOST_CREDITS = UNLIMITED
+
 /** Maximum active jobs allowed on the free plan. */
 export const FREE_JOB_LIMIT = 10
 
@@ -39,8 +51,8 @@ export const FREE_PLAN_DURATION_DAYS = 3650
  */
 export const FREE_LIMITS = {
   activeJobLimit: FREE_JOB_LIMIT,
-  candidateUnlockCredits: UNLIMITED,
-  boostCredits: UNLIMITED,
+  candidateUnlockCredits: FREE_UNLOCK_CREDITS,
+  boostCredits: FREE_BOOST_CREDITS,
   isHighReach: true,
 }
 
@@ -77,14 +89,22 @@ export async function ensureFreeSubscription(employerId: string): Promise<Active
       durationDays: FREE_PLAN_DURATION_DAYS,
       priceRupees: 0,
       activeJobLimit: FREE_JOB_LIMIT,
-      candidateUnlockCredits: UNLIMITED,
-      boostCredits: UNLIMITED,
+      candidateUnlockCredits: FREE_UNLOCK_CREDITS,
+      boostCredits: FREE_BOOST_CREDITS,
       isTrial: false,
       isPopular: false,
       isActive: true,
       sortOrder: 0,
     },
-    update: { activeJobLimit: FREE_JOB_LIMIT },
+    // Syncs all three limits, not just activeJobLimit. The plan row already
+    // exists in production, so `create` never runs again — before this,
+    // changing FREE_UNLOCK_CREDITS in code had no effect on the live plan and
+    // nothing indicated the change had been ignored.
+    update: {
+      activeJobLimit: FREE_JOB_LIMIT,
+      candidateUnlockCredits: FREE_UNLOCK_CREDITS,
+      boostCredits: FREE_BOOST_CREDITS,
+    },
   })
 
   const expiresAt = new Date()

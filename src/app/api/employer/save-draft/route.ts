@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
   if (submit) {
     const limitError = await checkPostJobLimit(employer.id)
     if (limitError) {
-      return NextResponse.json({ error: "UPGRADE_REQUIRED", message: limitError }, { status: 402 })
+      return NextResponse.json({ error: limitError, code: "UPGRADE_REQUIRED", message: limitError }, { status: 402 })
     }
   }
 
