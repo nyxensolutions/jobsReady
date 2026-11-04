@@ -100,6 +100,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     applyUrl: isScraped ? job.sourceUrl : null,
     createdAt: job.createdAt,
     expiresAt: job.expiresAt,
+    area: job.area,
     isSaved,
     hasApplied,
     similarJobs: similarJobs.map((j) => ({

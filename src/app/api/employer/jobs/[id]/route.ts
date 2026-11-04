@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { isAreaInCity } from "@/lib/areas"
 
 async function getEmployerJob(userId: string, jobId: string) {
   const employer = await prisma.employerProfile.findUnique({ where: { userId } })
@@ -27,6 +28,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     title, categorySlug, citySlug, jobType,
     salaryMin, salaryMax, salaryUnit, vacancies,
     experienceMin, qualificationRequired, description, requirements, perks, pincode,
+    area,
   } = body
 
   if (!title || !categorySlug || !citySlug || !jobType || !description) {
@@ -39,6 +41,22 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   ])
   if (!category) return NextResponse.json({ error: "Invalid category" }, { status: 400 })
   if (!city) return NextResponse.json({ error: "Invalid city" }, { status: 400 })
+
+  /**
+   * An edit can move the job to another city, so the area is re-checked
+   * against the new one. A stale area is the bad case: the job moves to
+   * Hyderabad and keeps saying Okhla, which sends a seeker across the country.
+   */
+  let areaSlug: string | null = null
+  if (typeof area === "string" && area.trim()) {
+    areaSlug = area.trim()
+    if (!isAreaInCity(areaSlug, city.slug)) {
+      return NextResponse.json(
+        { error: `"${areaSlug}" is not an area in ${city.name}.` },
+        { status: 400 },
+      )
+    }
+  }
 
   // Any edit resets to PENDING_REVIEW (re-review by admin)
   const updated = await prisma.jobListing.update({
@@ -58,6 +76,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       requirements: Array.isArray(requirements) ? requirements.filter(Boolean) : [],
       perks: Array.isArray(perks) ? perks.filter(Boolean) : [],
       pincode: pincode?.trim() || null,
+      area: areaSlug,
       status: "PENDING_REVIEW",
       publishedAt: null,
     },

@@ -3,13 +3,15 @@ import { prisma } from "@/lib/db"
 import { buildJobListingQuery } from "@/lib/jobListingQuery"
 
 // GET /api/jobs — search/browse, same filters as the web /jobs page
-// (q, city, category, type, sort, minSalary, freshers, qualification, posted, page).
+// (q, city, area, category, type, sort, minSalary, freshers, qualification,
+// posted, page).
 // Public — no auth required, mirrors the public web listing page.
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams
   const params = {
     q: sp.get("q") ?? undefined,
     city: sp.get("city") ?? undefined,
+    area: sp.get("area") ?? undefined,
     category: sp.get("category") ?? undefined,
     type: sp.get("type") ?? undefined,
     sort: sp.get("sort") ?? undefined,

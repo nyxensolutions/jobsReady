@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "@/i18n/navigation"
 import { Plus, X, Loader2, CheckCircle } from "lucide-react"
+import { areasForCity } from "@/lib/areas"
 
 type Category = { id: string; slug: string; nameEn: string }
 type City = { id: string; slug: string; name: string; stateName: string }
@@ -11,6 +12,7 @@ export type JobFormData = {
   title: string
   categorySlug: string
   citySlug: string
+  area?: string | null
   jobType: string
   salaryMin: string
   salaryMax: string
@@ -119,6 +121,7 @@ export default function PostJobForm({
   const [title, setTitle] = useState(initialData?.title ?? "")
   const [categorySlug, setCategorySlug] = useState(initialData?.categorySlug ?? "")
   const [citySlug, setCitySlug] = useState(initialData?.citySlug ?? "")
+  const [area, setArea] = useState(initialData?.area ?? "")
   const [jobType, setJobType] = useState(initialData?.jobType ?? "FULL_TIME")
   const [salaryMin, setSalaryMin] = useState(initialData?.salaryMin ?? "")
   const [salaryMax, setSalaryMax] = useState(initialData?.salaryMax ?? "")
@@ -154,6 +157,7 @@ export default function PostJobForm({
           salaryUnit, vacancies, experienceMin,
           qualificationRequired: qualificationRequired || null,
           description, requirements, perks, pincode,
+          area: area || null,
         }),
       })
       const data = await res.json()
@@ -234,12 +238,28 @@ export default function PostJobForm({
         {/* City */}
         <div>
           <label className={labelCls}>City <span className="text-red-500">*</span></label>
-          <select value={citySlug} onChange={(e) => setCitySlug(e.target.value)} className={inputCls + " bg-white text-gray-700"}>
+          <select
+            value={citySlug}
+            onChange={(e) => { setCitySlug(e.target.value); setArea("") }}
+            className={inputCls + " bg-white text-gray-700"}
+          >
             <option value="">Select city</option>
             {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}, {c.stateName}</option>)}
           </select>
         </div>
       </div>
+
+      {/* Area — shown only where the city has any. An area belongs to one
+          city, so switching city clears it above. */}
+      {areasForCity(citySlug).length > 0 && (
+        <div>
+          <label className={labelCls}>Area</label>
+          <select value={area} onChange={(e) => setArea(e.target.value)} className={inputCls + " bg-white text-gray-700"}>
+            <option value="">No specific area</option>
+            {areasForCity(citySlug).map((a) => <option key={a.slug} value={a.slug}>{a.name}</option>)}
+          </select>
+        </div>
+      )}
 
       <div className="grid sm:grid-cols-2 gap-4">
         {/* Job Type */}

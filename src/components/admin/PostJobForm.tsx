@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { Briefcase, Loader2, CheckCircle } from "lucide-react"
+import { areasForCity } from "@/lib/areas"
 
 type EmployerProfile = {
   id: string
@@ -19,6 +20,7 @@ const EMPTY_FORM = {
   title: "",
   categorySlug: "",
   citySlug: "",
+  area: "",
   jobType: "FULL_TIME",
   description: "",
   salaryMin: "",
@@ -56,7 +58,8 @@ export default function PostJobForm() {
   }, [])
 
   function set(field: string, value: string) {
-    setForm(f => ({ ...f, [field]: value }))
+    // Changing city invalidates the area, which belongs to exactly one city.
+    setForm(f => (field === "citySlug" ? { ...f, citySlug: value, area: "" } : { ...f, [field]: value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -182,6 +185,24 @@ export default function PostJobForm() {
             </select>
           </div>
         </div>
+
+        {/* Area — only for cities that have any, and cleared when the city
+            changes so a Delhi area cannot survive a switch to Noida. */}
+        {areasForCity(form.citySlug).length > 0 && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Area</label>
+            <select
+              value={form.area}
+              onChange={e => set("area", e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a3461]/30 bg-white"
+            >
+              <option value="">No specific area</option>
+              {areasForCity(form.citySlug).map(a => (
+                <option key={a.slug} value={a.slug}>{a.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Job Type */}
         <div>

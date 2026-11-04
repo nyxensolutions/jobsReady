@@ -47,6 +47,8 @@ export default async function EditJobPage({ params }: { params: Promise<{ id: st
     requirements: job.requirements,
     perks: job.perks,
     pincode: job.pincode ?? "",
+    // Without this the form starts blank and the PUT clears the stored area.
+    area: job.area ?? "",
   }
 
   return (

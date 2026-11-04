@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { isAreaInCity } from "@/lib/areas"
 import { assertAdmin } from "@/lib/admin"
 import { salaryRangeError } from "@/lib/salary"
 
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
     qualificationRequired,
     requirements,
     perks,
+    area,
     status = "ACTIVE",
   } = body
 
@@ -43,6 +45,22 @@ export async function POST(req: NextRequest) {
   if (!category) return NextResponse.json({ error: "Invalid category" }, { status: 400 })
   if (!city) return NextResponse.json({ error: "Invalid city" }, { status: 400 })
 
+
+  /**
+   * An area is optional, but a wrong one sends a seeker across the city for a
+   * job that is not there, so a mismatch is refused rather than stored.
+   */
+  let areaSlug: string | null = null
+  if (typeof area === "string" && area.trim()) {
+    areaSlug = area.trim()
+    if (!isAreaInCity(areaSlug, city.slug)) {
+      return NextResponse.json(
+        { error: `"${areaSlug}" is not an area in ${city.name}.` },
+        { status: 400 },
+      )
+    }
+  }
+
   const finalStatus = status === "ACTIVE" ? "ACTIVE" : "PENDING_REVIEW"
 
   const job = await prisma.jobListing.create({
@@ -61,6 +79,7 @@ export async function POST(req: NextRequest) {
       vacancies: parseInt(vacancies) || 1,
       experienceMin: parseFloat(experienceMin) || 0,
       qualificationRequired: qualificationRequired?.trim() || null,
+      area: areaSlug,
       status: finalStatus,
       isHighReach: false,
     },

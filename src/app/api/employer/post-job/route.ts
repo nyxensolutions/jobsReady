@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { salaryRangeError } from "@/lib/salary"
+import { isAreaInCity } from "@/lib/areas"
 import { checkPostJobLimit, getPlanLimits } from "@/lib/subscription"
 
 export async function POST(req: NextRequest) {
@@ -24,6 +25,7 @@ export async function POST(req: NextRequest) {
     requirements,
     perks,
     pincode,
+    area,
     languagesRequired,
     callToHrEnabled,
     callToHrPhone,
@@ -64,6 +66,22 @@ export async function POST(req: NextRequest) {
 
   if (!category) return NextResponse.json({ error: "Invalid category" }, { status: 400 })
   if (!city) return NextResponse.json({ error: "Invalid city" }, { status: 400 })
+  /**
+   * An area is optional, but a wrong one is worse than none: it sends a seeker
+   * across the city for a job that is not there. "okhla" on a Hyderabad
+   * listing is a caller bug, so it is refused rather than stored.
+   */
+  let areaSlug: string | null = null
+  if (typeof area === "string" && area.trim()) {
+    areaSlug = area.trim()
+    if (!isAreaInCity(areaSlug, city.slug)) {
+      return NextResponse.json(
+        { error: `"${areaSlug}" is not an area in ${city.name}.` },
+        { status: 400 },
+      )
+    }
+  }
+
 
   const job = await prisma.jobListing.create({
     data: {
@@ -81,6 +99,7 @@ export async function POST(req: NextRequest) {
       vacancies: parseInt(vacancies) || 1,
       experienceMin: parseFloat(experienceMin) || 0,
       pincode: pincode?.trim() || null,
+      area: areaSlug,
       qualificationRequired: qualificationRequired ?? null,
       languagesRequired: Array.isArray(languagesRequired) ? languagesRequired.filter(Boolean) : [],
       status: "PENDING_REVIEW",

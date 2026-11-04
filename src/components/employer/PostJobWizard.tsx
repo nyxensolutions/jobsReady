@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import JobTitleInput from "@/components/employer/JobTitleInput"
 import UpgradeModal from "@/components/employer/UpgradeModal"
+import { areasForCity } from "@/lib/areas"
 
 type Category = { id: string; slug: string; nameEn: string }
 type City = { id: string; slug: string; name: string; stateName: string }
@@ -26,6 +27,7 @@ type DraftJob = {
   requirements: string[]
   perks: string[]
   pincode: string | null
+  area: string | null
   languagesRequired: string[]
   incentives: string | null
   workingDaysPerWeek: number | null
@@ -41,6 +43,8 @@ type WizardData = {
   title: string
   categorySlug: string
   citySlug: string
+  /** Sub-city area slug from src/lib/areas.ts; "" means none chosen. */
+  area: string
   vacancies: number
   jobType: string
   // Step 2
@@ -74,7 +78,7 @@ type WizardData = {
 }
 
 const INITIAL: WizardData = {
-  title: "", categorySlug: "", citySlug: "", vacancies: 1, jobType: "FULL_TIME",
+  title: "", categorySlug: "", citySlug: "", area: "", vacancies: 1, jobType: "FULL_TIME",
   salaryMin: "", salaryMax: "", salaryUnit: "monthly", benefits: [], shift: "",
   gender: "Any", qualification: "Any", experienceMin: "0", experienceMax: "",
   freshersOnly: false, skills: [], description: "",
@@ -421,7 +425,7 @@ function Step1({
         <label className={label}>Choose City <span className="text-red-500">*</span></label>
         <select
           value={data.citySlug}
-          onChange={(e) => update("citySlug", e.target.value)}
+          onChange={(e) => { update("citySlug", e.target.value); update("area", "") }}
           className={input + " bg-white text-gray-700"}
         >
           <option value="">Select or type your city...</option>
@@ -430,6 +434,26 @@ function Step1({
           ))}
         </select>
       </div>
+
+      {/* Area — shown only where the chosen city has any. Optional: it narrows
+          the job to one local market, which is what a seeker who walks or
+          takes a shared auto to work actually filters on. Cleared above when
+          the city changes, since an area belongs to exactly one city. */}
+      {areasForCity(data.citySlug).length > 0 && (
+        <div>
+          <label className={label}>Area <span className="text-gray-400 font-normal">(optional)</span></label>
+          <select
+            value={data.area}
+            onChange={(e) => update("area", e.target.value)}
+            className={input + " bg-white text-gray-700"}
+          >
+            <option value="">No specific area</option>
+            {areasForCity(data.citySlug).map((a) => (
+              <option key={a.slug} value={a.slug}>{a.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   )
 }
@@ -920,6 +944,7 @@ export default function PostJobWizard({
       title: draftJob.title,
       categorySlug: draftJob.category.slug,
       citySlug: draftJob.city.slug,
+      area: draftJob.area ?? "",
       vacancies: draftJob.vacancies,
       jobType: draftJob.jobType,
       salaryMin: draftJob.salaryMin?.toString() ?? "",
@@ -1003,6 +1028,7 @@ export default function PostJobWizard({
       requirements,
       perks,
       pincode: data.pincode,
+      area: data.area || null,
       languagesRequired: data.languagesRequired ?? [],
       incentives: data.incentives.trim() || null,
       workingDaysPerWeek: data.workingDaysPerWeek ? parseInt(data.workingDaysPerWeek) : null,

@@ -18,7 +18,7 @@ enum JobStatus {
   DRAFT
   PENDING_REVIEW
   ACTIVE
-  PAUSED     // plan expired; job reactivates automatically on plan renewal
+  PAUSED // plan expired; job reactivates automatically on plan renewal
   EXPIRED
   CLOSED
   REJECTED
@@ -180,44 +180,48 @@ model City {
 }
 
 model JobListing {
-  id            String    @id @default(uuid())
-  employerId    String
-  categoryId    String
-  cityId        String
-  title         String
-  description   String
-  salaryMin     Int?
-  salaryMax     Int?
-  salaryUnit    String    @default("monthly")
-  vacancies     Int       @default(1)
-  jobType       JobType   @default(FULL_TIME)
-  experienceMin Int       @default(0)
-  pincode       String?
-  requirements  String[]
-  perks         String[]
-  status        JobStatus @default(PENDING_REVIEW)
-  isFeatured    Boolean   @default(false)
-  viewCount     Int       @default(0)
+  id                    String    @id @default(uuid())
+  employerId            String
+  categoryId            String
+  cityId                String
+  title                 String
+  description           String
+  salaryMin             Int?
+  salaryMax             Int?
+  salaryUnit            String    @default("monthly")
+  vacancies             Int       @default(1)
+  jobType               JobType   @default(FULL_TIME)
+  experienceMin         Int       @default(0)
+  pincode               String?
+  /// Sub-city area slug from src/lib/areas.ts ("okhla"). The job keeps its
+  /// real city; this narrows it for hyperlocal search and social captions.
+  /// Nullable and never backfilled — most rows are scraped and have no area.
+  area                  String?
+  requirements          String[]
+  perks                 String[]
+  status                JobStatus @default(PENDING_REVIEW)
+  isFeatured            Boolean   @default(false)
+  viewCount             Int       @default(0)
   qualificationRequired String?
   languagesRequired     String[]
-  source        String    @default("EMPLOYER")
-  sourceUrl     String?
-  lastScrapedAt DateTime?
-  expiresAt     DateTime?
-  publishedAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  source                String    @default("EMPLOYER")
+  sourceUrl             String?
+  lastScrapedAt         DateTime?
+  expiresAt             DateTime?
+  publishedAt           DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-  isHighReach      Boolean  @default(false)
+  isHighReach Boolean @default(false)
 
   // ── Extra job details ──────────────────────────────────────────────────────
-  incentives          String?   // e.g. "₹2,000/month performance bonus"
-  workingDaysPerWeek  Int?      // 5, 6, or 7
-  shiftType           String?   // "Day" | "Night" | "Rotational" | "Flexible"
+  incentives         String? // e.g. "₹2,000/month performance bonus"
+  workingDaysPerWeek Int? // 5, 6, or 7
+  shiftType          String? // "Day" | "Night" | "Rotational" | "Flexible"
 
   // ── Call-to-HR: employer can expose their phone for direct candidate calls ──
-  callToHrEnabled  Boolean  @default(false)
-  callToHrPhone    String?
+  callToHrEnabled Boolean @default(false)
+  callToHrPhone   String?
 
   employer     EmployerProfile @relation(fields: [employerId], references: [id], onDelete: Cascade)
   category     Category        @relation(fields: [categoryId], references: [id])
@@ -280,9 +284,9 @@ model Plan {
   slug                   String   @unique
   name                   String
   type                   PlanType
-  durationDays           Int      // how long the subscription runs
+  durationDays           Int // how long the subscription runs
   listingDays            Int      @default(30) // how long each job stays live
-  priceRupees            Int      // full upfront price in ₹
+  priceRupees            Int // full upfront price in ₹
   activeJobLimit         Int
   candidateUnlockCredits Int
   boostCredits           Int
@@ -326,7 +330,7 @@ model CandidateUnlock {
   subscriptionId String
   unlockedAt     DateTime @default(now())
 
-  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
   @@unique([employerId, seekerId])
   @@index([employerId])
@@ -341,7 +345,7 @@ model JobBoost {
   boostedAt      DateTime @default(now())
   expiresAt      DateTime
 
-  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
   job          JobListing   @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@index([employerId])
