@@ -9,6 +9,7 @@ import StatsBar from "@/components/home/StatsBar"
 import GetJobNowSection from "@/components/home/GetJobNowSection"
 import QualificationSection from "@/components/home/QualificationSection"
 import CitiesSection from "@/components/home/CitiesSection"
+import AppDownloadSection from "@/components/home/AppDownloadSection"
 import { alternatesFor, SITE_URL } from "@/lib/seo"
 
 type Props = { params: Promise<{ locale: string }> }
@@ -134,6 +135,7 @@ export default async function HomePage() {
       <QualificationSection />
       <CitiesSection />
       <HowItWorks />
+      <AppDownloadSection />
     </div>
   )
 }
