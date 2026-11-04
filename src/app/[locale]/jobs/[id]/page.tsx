@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation"
 import { MapPin, Clock, Users, ArrowLeft, CheckCircle, IndianRupee, Briefcase, Calendar, GraduationCap, ChevronRight, Share2, Phone } from "lucide-react"
 import { formatRelativeTime } from "@/lib/utils"
 import { prisma } from "@/lib/db"
+import { isJobLive, liveJobWhere } from "@/lib/jobListingQuery"
 import { getServerSession } from "@/lib/firebase/session"
 import ApplyButton from "@/components/jobs/ApplyButton"
 import { ExternalLink, ShieldCheck } from "lucide-react"
@@ -138,14 +139,14 @@ export default async function JobDetailPage({ params }: Props) {
   const isScraped = job?.source === "SCRAPED"
   const displayCompany = isScraped ? null : job?.employer.companyName
 
-  if (!job || job.status !== "ACTIVE") notFound()
+  if (!job || !isJobLive(job)) notFound()
 
   // fire-and-forget — don't block render
   prisma.jobListing.update({ where: { id }, data: { viewCount: { increment: 1 } } }).catch(() => {})
 
   // Similar jobs — same category, exclude current
   const similarJobs = await prisma.jobListing.findMany({
-    where: { status: "ACTIVE", categoryId: job.categoryId, id: { not: id } },
+    where: { ...liveJobWhere(), categoryId: job.categoryId, id: { not: id } },
     include: {
       employer: { select: { companyName: true } },
       city: { select: { name: true } },

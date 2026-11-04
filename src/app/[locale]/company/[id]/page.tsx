@@ -1,6 +1,7 @@
 ﻿import { notFound } from "next/navigation"
 import { Link } from "@/i18n/navigation"
 import { prisma } from "@/lib/db"
+import { liveJobWhere } from "@/lib/jobListingQuery"
 import { MapPin, Globe, Phone, Briefcase, Building2 } from "lucide-react"
 
 function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {
@@ -18,7 +19,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
     where: { id },
     include: {
       jobListings: {
-        where: { status: "ACTIVE" },
+        where: liveJobWhere(),
         include: { city: { select: { name: true } }, category: { select: { nameEn: true } } },
         orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
       },

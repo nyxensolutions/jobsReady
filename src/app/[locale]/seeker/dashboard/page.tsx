@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation"
 import { getTranslations } from "next-intl/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { liveJobWhere } from "@/lib/jobListingQuery"
 import {
   MapPin, Briefcase, Clock, CheckCircle,
   Star, ChevronRight, Bookmark, Bell, User, TrendingUp, ArrowUpRight
@@ -55,7 +56,7 @@ export default async function SeekerDashboardPage() {
     prisma.user.findUnique({ where: { id: session.uid } }),
     prisma.seekerProfile.findUnique({ where: { userId: session.uid } }),
     prisma.jobListing.findMany({
-      where: { status: "ACTIVE" },
+      where: liveJobWhere(),
       include: {
         employer: { select: { companyName: true, contactPhone: true } },
         city: { select: { name: true } },

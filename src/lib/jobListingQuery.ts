@@ -6,6 +6,39 @@ import { expandCitySlugs } from "./cityClusters"
 
 export const JOBS_PER_PAGE = 20
 
+/**
+ * The filter that decides whether a job is live, for every seeker-facing read.
+ *
+ * `status: "ACTIVE"` is not sufficient on its own. Nothing in the app moves a
+ * job to EXPIRED except the expire-jobs cron, and that cron had never run: no
+ * vercel.json entry ever carried the secret the route checks for, and Vercel
+ * sends its own `Authorization: Bearer` header instead, so every scheduled
+ * invocation was a 401. Four jobs sat ACTIVE up to five weeks past their
+ * expiry, fully listed and applicable.
+ *
+ * Checking expiry at read time makes a dead scheduler a staleness problem
+ * rather than a correctness one: a seeker is never shown a closed vacancy even
+ * if nothing ever flips the status.
+ *
+ * The expiry clause is nested under `AND` because the search builder already
+ * spends the top-level `OR` key on the keyword match, and a second `OR` on the
+ * same object would silently overwrite it.
+ */
+export function liveJobWhere(now: Date = new Date()): Prisma.JobListingWhereInput {
+  return {
+    status: "ACTIVE",
+    AND: [{ OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] }],
+  }
+}
+
+/** The same rule for a job already loaded by id. Keep the two in step. */
+export function isJobLive(
+  job: { status: string; expiresAt: Date | null },
+  now: Date = new Date(),
+): boolean {
+  return job.status === "ACTIVE" && (job.expiresAt === null || job.expiresAt > now)
+}
+
 export type JobListingSearchParams = {
   q?: string
   city?: string      // comma-separated city or cluster slugs, e.g. "delhi-ncr,pune"
@@ -49,7 +82,7 @@ export function buildJobListingQuery(params: JobListingSearchParams) {
       : null
 
   const where: Prisma.JobListingWhereInput = {
-    status: "ACTIVE",
+    ...liveJobWhere(),
     ...(q
       ? {
           OR: [

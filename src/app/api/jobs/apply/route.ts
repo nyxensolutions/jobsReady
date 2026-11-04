@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { isJobLive } from "@/lib/jobListingQuery"
 import { sendEmployerApplicationAlert, sendSeekerApplicationConfirmation } from "@/lib/email"
 import { sendSeekerApplicationWhatsApp, sendEmployerApplicationWhatsApp } from "@/lib/whatsapp"
 import { notifySeeker, MSG } from "@/lib/sms"
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
       },
     },
   })
-  if (!job || job.status !== "ACTIVE") {
+  if (!job || !isJobLive(job)) {
     return NextResponse.json({ error: "Job not available" }, { status: 404 })
   }
 

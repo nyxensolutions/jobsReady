@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { liveJobWhere } from "@/lib/jobListingQuery"
 import { sendSeekerJobDigest } from "@/lib/email"
 import { notifySeeker, MSG } from "@/lib/sms"
 
 /**
- * Daily digest cron — invoked from /api/cron/daily at 08:00 IST.
+ * Daily digest cron. Called by .github/workflows/cron.yml on "30 2 * * *" —
+ * 08:00 IST.
+ *
+ * There is no send log, so calling this twice in a day mails and texts every
+ * matched seeker twice. Exactly one scheduler may own it.
  *
  * Matches active jobs posted in the last 48 hours against whatever interest
  * signal a seeker has, in order: their stated preferred categories, failing
@@ -17,6 +22,9 @@ import { notifySeeker, MSG } from "@/lib/sms"
  * is the real fix; it also makes employer Talent Search work, which filters
  * candidates on the same column.
  */
+/** Mail and SMS fan-out: the default function timeout is not enough. */
+export const maxDuration = 60
+
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret") ?? req.nextUrl.searchParams.get("secret")
   if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
@@ -69,7 +77,11 @@ export async function GET(req: NextRequest) {
 
       const jobs = await prisma.jobListing.findMany({
         where: {
-          status: "ACTIVE",
+          // Not merely ACTIVE: mailing a seeker a vacancy that closed last
+          // week is worse than mailing them nothing. `liveJobWhere` nests its
+          // expiry clause under `AND` precisely so it can sit beside the `OR`
+          // below without clobbering it.
+          ...liveJobWhere(),
           createdAt: { gte: since },
           OR: match,
         },

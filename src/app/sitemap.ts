@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next"
 import { prisma } from "@/lib/db"
+import { liveJobWhere } from "@/lib/jobListingQuery"
 import { SITE_URL, languageAlternates, contentAlternates } from "@/lib/seo"
 import { getAllPosts, BLOG_CATEGORIES, translatedLocales, categoryHasHindi, anyHindi } from "@/lib/blog"
 
@@ -31,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let jobs: Array<{ id: string; updatedAt: Date }> = []
   try {
     jobs = await prisma.jobListing.findMany({
-      where: { status: "ACTIVE" },
+      where: liveJobWhere(),
       select: { id: true, updatedAt: true },
       orderBy: { updatedAt: "desc" },
       take: 5000,

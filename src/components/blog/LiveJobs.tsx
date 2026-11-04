@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation"
 import { MapPin, Users, ArrowRight } from "lucide-react"
 import { prisma } from "@/lib/db"
+import { liveJobWhere } from "@/lib/jobListingQuery"
 import { blogUi, type BlogUi, type ContentLang } from "@/data/blog/ui"
 
 type Props = {
@@ -54,7 +55,7 @@ export default async function LiveJobs({ heading, categorySlug, citySlug, lang =
 
   try {
     const base = {
-      status: "ACTIVE" as const,
+      ...liveJobWhere(),
       ...(categorySlug ? { category: { slug: categorySlug } } : {}),
     }
 

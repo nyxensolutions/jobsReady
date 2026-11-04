@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 
+/** One updateMany, but a cold connection to a sleeping DB can still be slow. */
+export const maxDuration = 60
+
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret") ?? req.nextUrl.searchParams.get("secret")
   if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {

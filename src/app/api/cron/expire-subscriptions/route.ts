@@ -4,7 +4,9 @@ import { sendEmployerPlanExpiring } from "@/lib/email"
 import { notifyEmployer, MSG } from "@/lib/sms"
 
 /**
- * Subscription lifecycle cron — runs daily at 2:30 AM IST.
+ * Subscription lifecycle cron. Called by .github/workflows/cron.yml on
+ * "30 19 * * *" — 01:00 IST, the following day in IST terms.
+ *
  * Two jobs in one pass:
  *
  * 1. EXPIRE: mark subscriptions whose expiresAt is in the past as EXPIRED,
@@ -14,6 +16,9 @@ import { notifyEmployer, MSG } from "@/lib/sms"
  *    (only once per threshold — checked via a lastWarnedAt field workaround
  *    using the updatedAt + checking if we already sent this interval).
  */
+/** Mail and SMS fan-out: the default function timeout is not enough. */
+export const maxDuration = 60
+
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret") ?? req.nextUrl.searchParams.get("secret")
   if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {

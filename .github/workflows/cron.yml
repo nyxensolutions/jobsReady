@@ -1,10 +1,17 @@
 # Scheduled jobs for jobs24india.com.
 #
-# Vercel's Hobby plan allows 2 cron entries, daily only, which is why
-# /api/cron/daily runs four handlers in sequence off a single schedule. These
-# workflows call the same endpoints directly so each can run on its own
-# cadence. Keep vercel.json's daily entry as a safety net: if GitHub is down
-# or a schedule is skipped, the essential jobs still run once a day.
+# This is the only scheduler. Vercel's Hobby plan allows 2 cron entries, daily
+# only, which is why /api/cron/daily exists to run four handlers off a single
+# schedule; these jobs call the same endpoints directly instead, so each runs
+# on its own cadence.
+#
+# vercel.json no longer declares a cron. Its entry had never once run: Vercel
+# authenticates by sending "Authorization: Bearer $CRON_SECRET", the endpoints
+# only read "x-cron-secret" or "?secret=", so every nightly invocation was a
+# 401 that looked like a working backup. Reinstating it as a real fallback
+# would need Bearer support in the endpoints AND a different hour — it was set
+# to 30 2 * * *, the same minute as seeker-digest below, and the digest has no
+# send log, so a working duplicate would mail and text every seeker twice.
 #
 # Every endpoint checks CRON_SECRET, so each call sends it as a header.
 #

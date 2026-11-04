@@ -20,9 +20,11 @@ import { GET as employerWeekly } from "../employer-weekly/route"
  * mail-sending ones, so a timeout costs a digest rather than leaving expired
  * jobs live.
  *
- * Scheduled at 02:30 UTC, which is 08:00 IST. Vercel reads cron expressions
- * as UTC - the previous "0 8 * * *" was documented as 8 AM IST but fired at
- * 13:30 IST.
+ * Nothing schedules this route any more — .github/workflows/cron.yml calls
+ * each task on its own cadence. It is kept because it is the one call that
+ * runs everything, which makes it the right thing to hit by hand after an
+ * outage, and the right single entry point if the app ever moves to a plan
+ * where one platform cron is all you get.
  */
 
 export const maxDuration = 60

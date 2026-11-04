@@ -2,6 +2,7 @@
 import { Link } from "@/i18n/navigation"
 import { CheckCircle, MapPin, ChevronRight } from "lucide-react"
 import { prisma } from "@/lib/db"
+import { liveJobWhere } from "@/lib/jobListingQuery"
 import { getServerSession } from "@/lib/firebase/session"
 import { getTranslations } from "next-intl/server"
 
@@ -43,7 +44,7 @@ export default async function AppliedPage({ params }: { params: Promise<{ id: st
   if (!job) notFound()
 
   const similarJobs = await prisma.jobListing.findMany({
-    where: { status: "ACTIVE", categoryId: job.categoryId, id: { not: id } },
+    where: { ...liveJobWhere(), categoryId: job.categoryId, id: { not: id } },
     include: {
       employer: { select: { companyName: true } },
       city: { select: { name: true } },

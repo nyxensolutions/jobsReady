@@ -4,11 +4,14 @@ import { sendEmployerWeeklySummary } from "@/lib/email"
 import { notifyEmployer, MSG } from "@/lib/sms"
 
 /**
- * Weekly summary cron — runs every Monday at 9 AM IST.
- * For each employer with an ACTIVE subscription, sends a summary of
- * their active jobs and applications received in the last 7 days.
- * Vercel calls this via vercel.json schedule "0 9 * * 1".
+ * Weekly summary cron. For each employer with an ACTIVE subscription, sends a
+ * summary of their active jobs and applications received in the last 7 days.
+ *
+ * Called by .github/workflows/cron.yml on "30 4 * * 1" — Monday 10:00 IST.
  */
+/** Mail and SMS fan-out: the default function timeout is not enough. */
+export const maxDuration = 60
+
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret") ?? req.nextUrl.searchParams.get("secret")
   if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {

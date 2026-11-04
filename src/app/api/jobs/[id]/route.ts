@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { liveJobWhere } from "@/lib/jobListingQuery"
 import { getServerSession } from "@/lib/firebase/session"
 
 // GET /api/jobs/[id] — job detail. Public (auth optional — when a seeker is
@@ -50,7 +51,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 
   const similarJobs = await prisma.jobListing.findMany({
-    where: { status: "ACTIVE", categoryId: job.categoryId, id: { not: id } },
+    where: { ...liveJobWhere(), categoryId: job.categoryId, id: { not: id } },
     include: {
       employer: { select: { companyName: true } },
       city: { select: { name: true } },
