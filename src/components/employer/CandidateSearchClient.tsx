@@ -261,6 +261,8 @@ export default function CandidateSearchClient({
   initialCandidates,
   initialTotal,
   initialPage,
+  suggested,
+  relaxedCategory,
   activeJobs,
   categories,
   cities,
@@ -270,6 +272,8 @@ export default function CandidateSearchClient({
   initialCandidates: Candidate[]
   initialTotal: number
   initialPage: number
+  suggested: Candidate[]
+  relaxedCategory: string | null
   activeJobs: Job[]
   categories: Category[]
   cities: City[]
@@ -312,6 +316,10 @@ export default function CandidateSearchClient({
   }
 
   const hasActiveFilters = !!(city || category || keyword || minExp || language)
+  const relaxedCategoryLabel = relaxedCategory
+    ? (categories.find((c) => c.slug === relaxedCategory)?.nameEn ?? relaxedCategory)
+    : null
+
   const totalPages = Math.ceil(initialTotal / 24)
 
   const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1a3461] bg-white"
@@ -425,16 +433,43 @@ export default function CandidateSearchClient({
 
         {/* Candidate grid */}
         {initialCandidates.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-200 py-16 text-center">
-            <div className="text-4xl mb-3">🔍</div>
-            <p className="font-semibold text-gray-700">No candidates match your filters</p>
-            <p className="text-sm text-gray-400 mt-1">Try adjusting the city or removing filters</p>
-            {hasActiveFilters && (
-              <button onClick={clearFilters} className="mt-4 text-sm font-medium text-[#1a3461] hover:underline">
-                Clear all filters
-              </button>
+          <>
+            <div className="bg-white rounded-2xl border border-gray-200 py-12 text-center">
+              <div className="text-4xl mb-3">🔍</div>
+              <p className="font-semibold text-gray-700">
+                {relaxedCategoryLabel
+                  ? `No candidate has listed ${relaxedCategoryLabel} yet`
+                  : "No candidates match your filters"}
+              </p>
+              <p className="text-sm text-gray-400 mt-1">
+                {relaxedCategoryLabel
+                  ? "Job seekers are still filling in their preferred categories, so this filter has little to match on."
+                  : "Try adjusting the city or removing filters"}
+              </p>
+              {hasActiveFilters && (
+                <button onClick={clearFilters} className="mt-4 text-sm font-medium text-[#1a3461] hover:underline">
+                  Clear all filters
+                </button>
+              )}
+            </div>
+
+            {/* Shown only when the category filter matched nobody. Labelled as
+                other candidates rather than slipped into the results above, so
+                the filter is never silently ignored. */}
+            {suggested.length > 0 && (
+              <div className="mt-6">
+                <p className="text-sm text-gray-500 mb-3">
+                  Other candidates open to work
+                  <span className="text-gray-400"> — not filtered by {relaxedCategoryLabel}</span>
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {suggested.map((c) => (
+                    <CandidateCard key={c.id} candidate={c} jobs={activeJobs} />
+                  ))}
+                </div>
+              </div>
             )}
-          </div>
+          </>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {initialCandidates.map((c) => (

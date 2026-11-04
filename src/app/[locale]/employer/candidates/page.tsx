@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
+import { searchCandidates } from "@/lib/candidateQuery"
 import CandidateSearchClient from "@/components/employer/CandidateSearchClient"
 
 type SearchParams = {
@@ -58,43 +59,18 @@ export default async function CandidatesPage({
   const page = Math.max(1, parseInt(sp.page ?? "1"))
   const take = 24
 
-  const where = {
-    city: { not: null } as any,
-    skills: { isEmpty: false },
-    isOpenToWork: true,
-    ...(city ? { city: { contains: city, mode: "insensitive" as const } } : {}),
-    ...(category ? { preferredCategories: { hasSome: [category] } } : {}),
-    ...(minExp !== undefined ? { experienceYears: { gte: minExp } } : {}),
-    ...(language ? { languages: { hasSome: [language] } } : {}),
-    ...(keyword ? {
-      OR: [
-        { bio: { contains: keyword, mode: "insensitive" as const } },
-        { skills: { hasSome: [keyword] } },
-      ],
-    } : {}),
-  }
-
-  const [candidates, total] = await Promise.all([
-    prisma.seekerProfile.findMany({
-      where,
-      select: {
-        id: true, name: true, city: true, stateCode: true,
-        experienceYears: true, skills: true, preferredCategories: true,
-        preferredJobTypes: true, bio: true, photoUrl: true, updatedAt: true,
-        languages: true, openToRelocate: true, preferredCities: true,
-      },
-      orderBy: { updatedAt: "desc" },
-      skip: (page - 1) * take,
-      take,
-    }),
-    prisma.seekerProfile.count({ where }),
-  ])
+  const { candidates, total, suggested, relaxedCategory } = await searchCandidates(
+    { city, category, keyword, minExp, language },
+    page
+  )
 
   return (
     <CandidateSearchClient
       initialCandidates={candidates as any}
       initialTotal={total}
       initialPage={page}
+      suggested={suggested as any}
+      relaxedCategory={relaxedCategory}
       activeJobs={activeJobs as any}
       categories={categories}
       cities={cities}
