@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
-import { sendEmployerWelcomeEmail } from "@/lib/email"
+import { sendAdminNewEmployerAlert, sendEmployerWelcomeEmail } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
   const { companyName, email, contactPerson, contactPhone, industry, city, gstCin, website } =
@@ -50,9 +50,32 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  if (!existingProfile && dbUser.email) {
-    // Fire and forget welcome email
-    void sendEmployerWelcomeEmail({ email: dbUser.email, companyName })
+  if (!existingProfile) {
+    // Both sends are side-effects of registration, not the point of it, so
+    // they must not fail the request. They are awaited together rather than
+    // dropped with a bare `void`, which is how earlier notification bugs
+    // stayed invisible for weeks.
+    const results = await Promise.allSettled([
+      dbUser.email
+        ? sendEmployerWelcomeEmail({ email: dbUser.email, companyName })
+        : Promise.resolve(),
+      // The employer lands on PENDING and cannot unlock candidate contacts
+      // until an admin verifies them, so this alert is what keeps that wait
+      // short.
+      sendAdminNewEmployerAlert({
+        companyName,
+        contactPerson,
+        contactPhone,
+        email: dbUser.email,
+        industry,
+        city,
+        gstCin: gstCin || null,
+        website: website || null,
+      }),
+    ])
+    for (const r of results) {
+      if (r.status === "rejected") console.error("[employer/register] notification failed:", r.reason)
+    }
   }
 
   return NextResponse.json({ success: true })
