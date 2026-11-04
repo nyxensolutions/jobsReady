@@ -65,5 +65,7 @@ export async function GET(req: NextRequest) {
     perPage,
     total,
     totalPages: Math.max(1, Math.ceil(total / perPage)),
+  }, {
+    headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600" },
   })
 }

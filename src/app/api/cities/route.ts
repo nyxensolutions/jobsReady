@@ -19,5 +19,7 @@ export async function GET() {
       stateName: true,
     },
   })
-  return NextResponse.json(cities)
+  return NextResponse.json(cities, {
+    headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" },
+  })
 }

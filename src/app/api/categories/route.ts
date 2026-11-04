@@ -19,5 +19,7 @@ export async function GET() {
       icon: true,
     },
   })
-  return NextResponse.json(categories)
+  return NextResponse.json(categories, {
+    headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" },
+  })
 }

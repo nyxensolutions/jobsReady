@@ -25,5 +25,7 @@ export async function GET() {
     cities: cluster.cities.filter((c) => existing.has(c)),
   })).filter((cluster) => cluster.cities.length > 1)
 
-  return NextResponse.json(clusters)
+  return NextResponse.json(clusters, {
+    headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" },
+  })
 }
