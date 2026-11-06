@@ -8,7 +8,7 @@ import { prisma } from "@/lib/db"
 import { isJobLive, liveJobWhere } from "@/lib/jobListingQuery"
 import { getServerSession } from "@/lib/firebase/session"
 import ApplyButton from "@/components/jobs/ApplyButton"
-import { ExternalLink, ShieldCheck } from "lucide-react"
+import { ExternalLink, ShieldCheck, Globe } from "lucide-react"
 import SaveJobButton from "@/components/jobs/SaveJobButton"
 import { alternatesFor, SITE_URL } from "@/lib/seo"
 
@@ -125,7 +125,16 @@ export default async function JobDetailPage({ params }: Props) {
     where: { id },
     include: {
       employer: {
-        select: { companyName: true, description: true, contactPhone: true, city: true, status: true },
+        select: {
+          id: true,
+          companyName: true,
+          description: true,
+          contactPhone: true,
+          city: true,
+          status: true,
+          industry: true,
+          website: true,
+        },
       },
       category: { select: { slug: true, nameEn: true } },
       city: { select: { name: true } },
@@ -192,7 +201,10 @@ export default async function JobDetailPage({ params }: Props) {
     ...(job.shiftType        ? [{ label: t("jobDetail.shift"),       value: (() => { try { return ts(job.shiftType as any) } catch { return `${job.shiftType} Shift` } })() }] : []),
     ...(job.workingDaysPerWeek ? [{ label: t("jobDetail.workingDays"), value: t("jobDetail.daysPerWeek", { count: job.workingDaysPerWeek }) }] : []),
     ...(job.incentives       ? [{ label: t("jobDetail.incentives"),  value: job.incentives }] : []),
-    ...(job.qualificationRequired ? [{ label: t("jobDetail.qualification"), value: job.qualificationRequired }] : []),
+    // `jobDetail.qualification` does not exist in any locale file, so this
+    // rendered the raw key to seekers on every job that sets a qualification.
+    // The translation lives under `filters`, where the search sidebar uses it.
+    ...(job.qualificationRequired ? [{ label: t("filters.qualification"), value: job.qualificationRequired }] : []),
     ...(job.languagesRequired?.length ? [{ label: t("jobDetail.languages"), value: job.languagesRequired.join(", ") }] : []),
     // Social proof, the thing competitors lead with; the count already exists.
     ...(job._count.applications ? [{ label: t("jobDetail.applicantsLabel"), value: `${job._count.applications}` }] : []),
@@ -305,7 +317,17 @@ export default async function JobDetailPage({ params }: Props) {
                   <h1 className="text-xl sm:text-2xl font-bold text-[#1a3461] leading-tight">{job.title}</h1>
                   {displayCompany && (
                     <p className="text-gray-500 mt-1 text-sm flex items-center gap-2">
-                      {displayCompany}
+                      {/*
+                        Links to the company page, which only exists for a real
+                        employer — scraped listings are already excluded here by
+                        `displayCompany` being null for them.
+                      */}
+                      <Link
+                        href={`/company/${job.employer.id}`}
+                        className="hover:text-[#1a3461] hover:underline"
+                      >
+                        {displayCompany}
+                      </Link>
                       {job.employer.status === "VERIFIED" && (
                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
                           <ShieldCheck size={10} /> Verified
@@ -469,11 +491,42 @@ export default async function JobDetailPage({ params }: Props) {
               </div>
             </div>
 
-            {/* About company */}
-            {!isScraped && job.employer.description && (
+            {/*
+              About company.
+
+              Previously gated on `description` alone, so it never rendered at
+              all: not one employer row has a description set. Now any one of
+              description / industry / website is enough to show the block, and
+              the company name always links on to the fuller company page.
+            */}
+            {!isScraped && (job.employer.description || job.employer.industry || job.employer.website) && (
               <div className="bg-white rounded-2xl border border-gray-200 p-5">
                 <h2 className="font-bold text-gray-900 mb-3">{t("jobDetail.aboutCompany")}</h2>
-                <p className="text-sm text-gray-700 leading-relaxed">{job.employer.description}</p>
+                {job.employer.industry && (
+                  <p className="text-xs text-gray-500 mb-2">{job.employer.industry}</p>
+                )}
+                {job.employer.description && (
+                  <p className="text-sm text-gray-700 leading-relaxed">{job.employer.description}</p>
+                )}
+                <div className="flex flex-wrap items-center gap-4 mt-3">
+                  {job.employer.website && (
+                    <a
+                      href={job.employer.website}
+                      target="_blank"
+                      rel="noreferrer nofollow"
+                      className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:underline"
+                    >
+                      <Globe size={14} />
+                      {job.employer.website.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                    </a>
+                  )}
+                  <Link
+                    href={`/company/${job.employer.id}`}
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-[#1a3461] hover:underline"
+                  >
+                    {displayCompany} <ChevronRight size={14} />
+                  </Link>
+                </div>
               </div>
             )}
 
