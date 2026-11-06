@@ -1,8 +1,31 @@
 ﻿import { notFound } from "next/navigation"
+import { Metadata } from "next"
 import { Link } from "@/i18n/navigation"
 import { prisma } from "@/lib/db"
 import { liveJobWhere } from "@/lib/jobListingQuery"
-import { MapPin, Globe, Phone, Briefcase, Building2 } from "lucide-react"
+import { alternatesFor } from "@/lib/seo"
+import { MapPin, Globe, Briefcase, Building2 } from "lucide-react"
+
+/**
+ * Public company profile, linked from the company name on every job detail page.
+ *
+ * Two rules this page has to hold, because it is the one seeker-facing surface
+ * that speaks for a company rather than a listing:
+ *
+ * 1. Only a VERIFIED employer gets a page. A PENDING or REJECTED company with a
+ *    public, indexable profile reads as endorsement we have not given, and the
+ *    id is guessable from any job it has posted.
+ *
+ * 2. Only EMPLOYER-source jobs are listed. The scraped corpus is held under a
+ *    real employer row ("Jobs24India Partner List", 265 listings at the time of
+ *    writing) which is itself VERIFIED, so listing every live job here would
+ *    present a few hundred aggregated adverts as one company's own openings —
+ *    the exact claim `jobs/page.tsx` and the social feed both refuse to make.
+ *
+ * The employer's contact phone used to be rendered here. It is not any more: a
+ * public page keyed on a guessable id is the cheapest possible scrape of every
+ * employer phone number we hold, and the apply flow already carries contact.
+ */
 
 function formatSalary(min?: number | null, max?: number | null, unit = "monthly") {
   const suffix = unit === "daily" ? "/day" : "/month"
@@ -12,21 +35,57 @@ function formatSalary(min?: number | null, max?: number | null, unit = "monthly"
   return "Salary not mentioned"
 }
 
-export default async function CompanyPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-
-  const employer = await prisma.employerProfile.findUnique({
+/** Shared by the page and its metadata so the two cannot disagree. */
+async function getCompany(id: string) {
+  return prisma.employerProfile.findUnique({
     where: { id },
     include: {
       jobListings: {
-        where: liveJobWhere(),
+        // Live, employer-posted only — see rule 2 in the file comment.
+        where: { ...liveJobWhere(), source: "EMPLOYER" },
         include: { city: { select: { name: true } }, category: { select: { nameEn: true } } },
         orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
       },
     },
   })
+}
 
-  if (!employer) notFound()
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string; locale: string }>
+}): Promise<Metadata> {
+  const { id, locale } = await params
+  const employer = await getCompany(id)
+
+  if (!employer || employer.status !== "VERIFIED") {
+    return { title: "Company not found", robots: { index: false, follow: false } }
+  }
+
+  const count = employer.jobListings.length
+  return {
+    // No "| Jobs24India" suffix here — the root layout's title template adds it.
+    title: `${employer.companyName} — Jobs & Company Details`,
+    description:
+      employer.description?.slice(0, 160) ??
+      `${employer.companyName}${employer.city ? ` in ${employer.city}` : ""} has ${count} open ${count === 1 ? "position" : "positions"} on Jobs24India.`,
+    alternates: alternatesFor(locale, `/company/${id}`),
+    // A company with nothing open is a thin page that will be crawled far more
+    // often than it changes; let it be followed but not indexed until it has
+    // something to say.
+    robots: count === 0 ? { index: false, follow: true } : undefined,
+  }
+}
+
+export default async function CompanyPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+
+  const employer = await getCompany(id)
+
+  // Rule 1: an unverified company has no public profile. 404 rather than a
+  // "not verified" page, which would still confirm the company exists to anyone
+  // walking ids.
+  if (!employer || employer.status !== "VERIFIED") notFound()
 
   const jobs = employer.jobListings
 
@@ -48,15 +107,11 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
                   <span className="flex items-center gap-1"><MapPin size={14} className="text-gray-400" />{employer.city}</span>
                 )}
                 {employer.website && (
-                  <a href={employer.website} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-blue-600 hover:underline">
+                  <a href={employer.website} target="_blank" rel="noreferrer nofollow" className="flex items-center gap-1 text-blue-600 hover:underline">
                     <Globe size={14} />{employer.website.replace(/^https?:\/\//, "")}
                   </a>
                 )}
-                {employer.contactPhone && (
-                  <a href={`tel:${employer.contactPhone}`} className="flex items-center gap-1 text-green-600 hover:underline">
-                    <Phone size={14} />{employer.contactPhone}
-                  </a>
-                )}
+
               </div>
             </div>
           </div>

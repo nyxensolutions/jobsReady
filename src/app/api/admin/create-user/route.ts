@@ -66,22 +66,42 @@ export async function POST(req: NextRequest) {
       const { companyName, contactPerson, city, industry } = body
       if (!companyName) return NextResponse.json({ error: "Company name required" }, { status: 400 })
 
+      // Blank inputs arrive as "", which would otherwise be stored as an empty
+      // string — indistinguishable from a real value to every `employer.website &&`
+      // check on the seeker side, so the company page would render an empty link.
+      const clean = (v: unknown) => {
+        const s = typeof v === "string" ? v.trim() : ""
+        return s === "" ? null : s
+      }
+
+      // A bare domain typed by an admin in a hurry ("acmecorp.com") is not a
+      // usable href: the browser resolves it relative to jobs24india.com and the
+      // seeker lands on a 404 of ours. Normalise here rather than at render time,
+      // so the stored value is the one thing every surface can trust.
+      const rawSite = clean(body.website)
+      const website = rawSite && !/^https?:\/\//i.test(rawSite) ? `https://${rawSite}` : rawSite
+
+      const details = {
+        contactPerson: clean(contactPerson),
+        city: clean(city),
+        industry: clean(industry),
+        website,
+        description: clean(body.description),
+        pincode: clean(body.pincode),
+      }
+
       await prisma.employerProfile.upsert({
         where: { userId: firebaseUid },
         create: {
           userId: firebaseUid,
           companyName,
-          contactPerson,
           contactPhone: phone, // Store without +91 as per normal flow
-          city,
-          industry,
+          ...details,
           status: "VERIFIED", // Admin created employers are automatically verified
         },
         update: {
           companyName,
-          contactPerson,
-          city,
-          industry,
+          ...details,
         },
       })
     } else if (role === "SEEKER") {

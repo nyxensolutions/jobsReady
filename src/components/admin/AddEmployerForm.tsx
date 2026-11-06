@@ -40,6 +40,8 @@ export default function AddEmployerForm() {
 
     const email = (formData.get("email") as string)?.trim() || undefined
 
+    // Sent even when blank so clearing a field in the form clears it on the
+    // profile; the route turns "" into null rather than writing an empty string.
     const payload = {
       role: "EMPLOYER",
       phone,
@@ -48,6 +50,9 @@ export default function AddEmployerForm() {
       contactPerson: formData.get("contactPerson"),
       city: formData.get("city"),
       industry: formData.get("industry"),
+      website: formData.get("website"),
+      description: formData.get("description"),
+      pincode: formData.get("pincode"),
     }
 
     try {
@@ -191,6 +196,54 @@ export default function AddEmployerForm() {
             className="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#1a3461] focus:ring-[#1a3461]"
             placeholder="e.g. Retail, IT, Manufacturing"
           />
+        </div>
+
+        {/* Pincode */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Pincode <span className="font-normal text-gray-400">(optional)</span>
+          </label>
+          <input
+            type="text"
+            name="pincode"
+            inputMode="numeric"
+            maxLength={6}
+            className="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#1a3461] focus:ring-[#1a3461]"
+            placeholder="e.g. 110020"
+          />
+        </div>
+
+        {/* Website */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Website <span className="font-normal text-gray-400">(optional)</span>
+          </label>
+          <input
+            type="text"
+            name="website"
+            className="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#1a3461] focus:ring-[#1a3461]"
+            placeholder="acmecorp.com"
+          />
+          <p className="mt-1 text-xs text-gray-400">
+            Shown to seekers on the company page. https:// is added if you leave it off.
+          </p>
+        </div>
+
+        {/* About the company */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            About the company <span className="font-normal text-gray-400">(optional)</span>
+          </label>
+          <textarea
+            name="description"
+            rows={3}
+            maxLength={1000}
+            className="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#1a3461] focus:ring-[#1a3461]"
+            placeholder="What the company does, how long it has been running, what it is like to work there."
+          />
+          <p className="mt-1 text-xs text-gray-400">
+            Shown on every job this company posts. Two or three plain sentences work best.
+          </p>
         </div>
 
         {/* Logo */}
