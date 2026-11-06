@@ -13,10 +13,27 @@ import { SITE_URL } from "@/lib/seo"
  * 1. EXPIRE: mark subscriptions whose expiresAt is in the past as EXPIRED,
  *    pause their active jobs (set status → PAUSED), notify employer.
  *
- * 2. WARN: send renewal reminders at 30 / 20 / 10 / 3 days before expiry
- *    (only once per threshold — checked via a lastWarnedAt field workaround
- *    using the updatedAt + checking if we already sent this interval).
+ * 2. WARN: send renewal reminders at 30 / 20 / 10 / 3 days before expiry.
+ *    Each threshold is one IST calendar day wide, so a once-a-day run sends
+ *    each reminder exactly once. There is no per-subscription send log — the
+ *    schedule is the dedupe — so running this route twice in an IST day sends
+ *    the same reminder twice.
  */
+
+const IST_OFFSET_MS = 5.5 * 3600_000
+
+/**
+ * Start of the IST calendar day containing `t`, as a UTC instant.
+ *
+ * Done by shifting into IST, truncating, and shifting back rather than with a
+ * timezone library: the only zone this product schedules in is IST, and the
+ * offset has no DST to account for.
+ */
+function startOfIstDay(t: Date): Date {
+  const ist = new Date(t.getTime() + IST_OFFSET_MS)
+  ist.setUTCHours(0, 0, 0, 0)
+  return new Date(ist.getTime() - IST_OFFSET_MS)
+}
 /** Mail and SMS fan-out: the default function timeout is not enough. */
 export const maxDuration = 60
 
@@ -78,14 +95,33 @@ export async function GET(req: NextRequest) {
   // Warning thresholds (days before expiry)
   const WARN_DAYS = [30, 20, 10, 3]
 
+  /**
+   * Each threshold matches a whole IST calendar day, not an instant.
+   *
+   * This used to be a ±1 hour window centred on `now + N days`. That is correct
+   * for an hourly job, but this one runs once a day at 19:30 UTC, so 22 of every
+   * 24 hours were never covered. `expiresAt` is set at purchase as
+   * `now + plan.durationDays`, so it inherits the purchase time of day — meaning
+   * only employers who happened to buy between roughly 18:30 and 20:30 UTC ever
+   * got a renewal reminder, and everyone else went from silence straight to an
+   * expiry notice. Nothing surfaced the misses: `warned` counted the sends it
+   * made, not the subscriptions it skipped.
+   *
+   * A day-wide window still fires exactly once per threshold **because the cron
+   * runs once a day**. Running this route twice in one IST day double-warns, so
+   * `workflow_dispatch` reruns of `expire-subscriptions` are not free — there is
+   * no per-subscription send log to fall back on.
+   */
   for (const days of WARN_DAYS) {
-    const windowStart = new Date(now.getTime() + days * 86400000 - 3600000)      // days ahead - 1h
-    const windowEnd   = new Date(now.getTime() + days * 86400000 + 3600000)      // days ahead + 1h
+    const windowStart = startOfIstDay(new Date(now.getTime() + days * 86400000))
+    const windowEnd   = new Date(windowStart.getTime() + 86400000)
 
     const expiring = await prisma.subscription.findMany({
       where: {
         status: "ACTIVE",
-        expiresAt: { gte: windowStart, lte: windowEnd },
+        // `lt` on the end, so a subscription on the boundary cannot be caught
+        // by two adjacent thresholds.
+        expiresAt: { gte: windowStart, lt: windowEnd },
       },
       include: {
         employer: { include: { user: true } },
