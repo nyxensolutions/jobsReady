@@ -163,7 +163,17 @@
     "enterMobile": "ਆਪਣਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ",
     "orDivider": "ਜਾਂ",
     "lookingForJob": "ਨੌਕਰੀ ਲੱਭ ਰਹੇ ਹੋ?",
-    "jobSeekerLogin": "ਨੌਕਰੀ ਭਾਲਕ ਲੌਗਇਨ"
+    "jobSeekerLogin": "ਨੌਕਰੀ ਭਾਲਕ ਲੌਗਇਨ",
+    "continueWithEmail": "ਈਮੇਲ ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    "passwordLabel": "ਪਾਸਵਰਡ",
+    "passwordPlaceholder": "ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰ",
+    "createEmployerAccount": "ਖਾਤਾ ਬਣਾਓ",
+    "signInButton": "ਸਾਈਨ ਇਨ",
+    "forgotPassword": "ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?",
+    "resetEmailSent": "ਰੀਸੈਟ ਲਿੰਕ ਭੇਜ ਦਿੱਤਾ ਗਿਆ। ਆਪਣਾ ਇਨਬਾਕਸ ਵੇਖੋ।",
+    "switchToSignIn": "ਪਹਿਲਾਂ ਹੀ ਖਾਤਾ ਹੈ? ਸਾਈਨ ਇਨ ਕਰੋ",
+    "switchToSignUp": "ਨਵੇਂ ਹੋ? ਖਾਤਾ ਬਣਾਓ",
+    "passwordTooShort": "ਪਾਸਵਰਡ ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
   },
   "jobs": {
     "searchResults": "{count} ਨੌਕਰੀਆਂ ਮਿਲੀਆਂ",

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db"
 import { salaryRangeError } from "@/lib/salary"
 import { isAreaInCity } from "@/lib/areas"
 import { checkPostJobLimit, getPlanLimits } from "@/lib/subscription"
+import { emailVerificationBlock } from "@/lib/employerAuth"
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession()
@@ -51,6 +52,16 @@ export async function POST(req: NextRequest) {
   const employer = await prisma.employerProfile.findUnique({ where: { userId: session.uid } })
   if (!employer) {
     return NextResponse.json({ error: "Complete employer registration first" }, { status: 403 })
+  }
+
+  // Password accounts post nothing until the address is confirmed. Phone and
+  // Google employers are unaffected — see emailVerificationBlock.
+  const emailError = await emailVerificationBlock(session)
+  if (emailError) {
+    return NextResponse.json(
+      { error: emailError, code: "EMAIL_VERIFICATION_REQUIRED", message: emailError },
+      { status: 403 }
+    )
   }
 
   // ── Plan guard: active job limit ───────────────────────────────

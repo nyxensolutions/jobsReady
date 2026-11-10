@@ -163,7 +163,17 @@
     "enterMobile": "আপনার মোবাইল নম্বর দিন",
     "orDivider": "বা",
     "lookingForJob": "চাকরি খুঁজছেন?",
-    "jobSeekerLogin": "চাকরিপ্রার্থী লগইন"
+    "jobSeekerLogin": "চাকরিপ্রার্থী লগইন",
+    "continueWithEmail": "ইমেইল দিয়ে চালিয়ে যান",
+    "passwordLabel": "পাসওয়ার্ড",
+    "passwordPlaceholder": "কমপক্ষে ৮টি অক্ষর",
+    "createEmployerAccount": "অ্যাকাউন্ট তৈরি করুন",
+    "signInButton": "সাইন ইন",
+    "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+    "resetEmailSent": "রিসেট লিঙ্ক পাঠানো হয়েছে। আপনার ইনবক্স দেখুন।",
+    "switchToSignIn": "আগেই অ্যাকাউন্ট আছে? সাইন ইন করুন",
+    "switchToSignUp": "নতুন? অ্যাকাউন্ট তৈরি করুন",
+    "passwordTooShort": "পাসওয়ার্ড কমপক্ষে ৮টি অক্ষরের হতে হবে"
   },
   "jobs": {
     "searchResults": "{count}টি চাকরি পাওয়া গেছে",

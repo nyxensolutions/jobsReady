@@ -163,7 +163,17 @@
     "enterMobile": "Enter your mobile number",
     "orDivider": "or",
     "lookingForJob": "Looking for a job?",
-    "jobSeekerLogin": "Job seeker login"
+    "jobSeekerLogin": "Job seeker login",
+    "continueWithEmail": "Continue with email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "At least 8 characters",
+    "createEmployerAccount": "Create account",
+    "signInButton": "Sign in",
+    "forgotPassword": "Forgot password?",
+    "resetEmailSent": "Reset link sent. Check your inbox.",
+    "switchToSignIn": "Already have an account? Sign in",
+    "switchToSignUp": "New here? Create an account",
+    "passwordTooShort": "Password must be at least 8 characters"
   },
   "jobs": {
     "searchResults": "{count} jobs found",

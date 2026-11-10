@@ -5,17 +5,20 @@ import { useTranslations } from "next-intl"
 import { useSearchParams } from "next/navigation"
 import { Link, useRouter } from "@/i18n/navigation"
 import Image from "next/image"
-import { Phone, ArrowRight, Loader2, ShieldCheck, Briefcase, Users } from "lucide-react"
+import { Phone, ArrowRight, Loader2, ShieldCheck, Briefcase, Users, Mail } from "lucide-react"
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
   GoogleAuthProvider,
   signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   ConfirmationResult,
 } from "firebase/auth"
 import { auth } from "@/lib/firebase/client"
 
-type Step = "role" | "phone" | "otp" | "employer"
+type Step = "role" | "phone" | "otp" | "employer" | "employerEmail"
 type Role = "seeker" | "employer"
 
 async function createSession(idToken: string, role: "SEEKER" | "EMPLOYER") {
@@ -25,7 +28,7 @@ async function createSession(idToken: string, role: "SEEKER" | "EMPLOYER") {
     body: JSON.stringify({ idToken, role }),
   })
   if (!res.ok) throw new Error((await res.json()).error ?? "Session error")
-  return res.json() as Promise<{ role: string; requiresProfile: boolean }>
+  return res.json() as Promise<{ role: string; requiresProfile: boolean; emailVerified: boolean }>
 }
 
 function LoginPageContent() {
@@ -45,6 +48,10 @@ function LoginPageContent() {
   const [otp, setOtp] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [emailMode, setEmailMode] = useState<"signin" | "signup">("signin")
+  const [resetSent, setResetSent] = useState(false)
   const confirmRef = useRef<ConfirmationResult | null>(null)
   const recaptchaRef = useRef<RecaptchaVerifier | null>(null)
 
@@ -93,8 +100,13 @@ function LoginPageContent() {
     setStep("phone")
   }
 
-  function getRedirect(roleStr: string, requiresProfile: boolean) {
+  function getRedirect(roleStr: string, requiresProfile: boolean, needsEmailVerification = false) {
     if (requiresProfile) return "/employer/register"
+    // A password employer that never confirmed its address can neither post a
+    // job nor unlock a contact, so it goes to the existing OTP page instead of
+    // a dashboard where every action would be refused. Only the email/password
+    // handler passes this — phone employers legitimately have no email at all.
+    if (needsEmailVerification) return "/employer/setup/verify-email"
     if (nextUrl) return nextUrl
     if (roleStr === "ADMIN") return "/admin"
     return roleStr === "EMPLOYER" ? "/employer/dashboard" : "/seeker/dashboard"
@@ -163,6 +175,68 @@ function LoginPageContent() {
           : "Verification failed. Try again."
       )
     } finally {
+      setLoading(false)
+    }
+  }
+
+  const isValidEmail = (a: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(a)
+
+  async function emailPasswordSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError("")
+    setResetSent(false)
+    const addr = email.trim().toLowerCase()
+    if (!isValidEmail(addr)) { setError("Enter a valid email address"); return }
+    if (password.length < 8) { setError(t("passwordTooShort")); return }
+    setLoading(true)
+    try {
+      const cred =
+        emailMode === "signup"
+          ? await createUserWithEmailAndPassword(auth, addr, password)
+          : await signInWithEmailAndPassword(auth, addr, password)
+      const idToken = await cred.user.getIdToken()
+      const data = await createSession(idToken, "EMPLOYER")
+      window.location.href = getRedirect(data.role, data.requiresProfile, !data.emailVerified)
+    } catch (err: any) {
+      const code = err.code ?? ""
+      const msg = err.message ?? ""
+      setError(
+        // Our own API returns finished sentences — show those verbatim.
+        msg.includes("already registered as") || msg.includes("already exists with this email")
+          ? msg
+          : code === "auth/email-already-in-use"
+          ? "That email already has an account. Sign in instead."
+          // With email-enumeration protection on, Firebase deliberately
+          // collapses a wrong password and an unknown address into one code.
+          : code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found"
+          ? "Email or password is incorrect."
+          : code === "auth/weak-password"
+          ? t("passwordTooShort")
+          : code === "auth/too-many-requests"
+          ? "Too many attempts. Please wait and try again."
+          // Shown if the Email/Password provider is not enabled in Firebase.
+          // Without this branch the setup gap looks like a random failure.
+          : code === "auth/operation-not-allowed"
+          ? "Email sign-in is not available yet. Please use your mobile number."
+          : "Sign-in failed. Please try again."
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function forgotPassword() {
+    setError("")
+    const addr = email.trim().toLowerCase()
+    if (!isValidEmail(addr)) { setError("Enter your email address first"); return }
+    setLoading(true)
+    try {
+      await sendPasswordResetEmail(auth, addr)
+    } catch {
+      // Swallowed deliberately: reporting "no such account" would turn this
+      // box into a way to test which addresses are registered.
+    } finally {
+      setResetSent(true)
       setLoading(false)
     }
   }
@@ -378,6 +452,15 @@ function LoginPageContent() {
                 {t("enterMobile")}
               </button>
 
+              {/* Email + password option */}
+              <button
+                onClick={() => { setError(""); setResetSent(false); setStep("employerEmail") }}
+                className="w-full py-3 rounded-xl border-2 border-gray-200 hover:border-[#1a3461] hover:bg-[#1a3461]/5 text-gray-700 font-semibold text-sm transition-all flex items-center justify-center gap-3"
+              >
+                <Mail size={17} className="text-[#1a3461]" />
+                {t("continueWithEmail")}
+              </button>
+
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-gray-200" />
                 <span className="text-xs text-gray-400">{t("orDivider")}</span>
@@ -404,6 +487,81 @@ function LoginPageContent() {
                 {t("continueWithGoogle")}
               </button>
             </div>
+          )}
+
+          {/* Step: Employer email + password */}
+          {step === "employerEmail" && (
+            <form onSubmit={emailPasswordSubmit} className="flex flex-col gap-4">
+              <button
+                type="button"
+                onClick={() => { setError(""); setStep("employer") }}
+                className="text-sm text-gray-500 hover:text-gray-700 text-left"
+              >
+                {t("backButton")}
+              </button>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  {t("emailLabel")}
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t("emailPlaceholder")}
+                  autoComplete="email"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#1a3461]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  {t("passwordLabel")}
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={t("passwordPlaceholder")}
+                  autoComplete={emailMode === "signup" ? "new-password" : "current-password"}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#1a3461]"
+                />
+              </div>
+
+              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+              {resetSent && (
+                <p className="text-green-600 text-sm text-center">{t("resetEmailSent")}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 rounded-xl bg-[#1a3461] text-white font-semibold text-sm hover:bg-[#142a52] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                {loading && <Loader2 size={15} className="animate-spin" />}
+                {emailMode === "signup" ? t("createEmployerAccount") : t("signInButton")}
+              </button>
+
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setEmailMode(emailMode === "signup" ? "signin" : "signup"); setError("") }}
+                  className="text-sm text-[#1a3461] font-medium hover:underline text-left"
+                >
+                  {emailMode === "signup" ? t("switchToSignIn") : t("switchToSignUp")}
+                </button>
+                {emailMode === "signin" && (
+                  <button
+                    type="button"
+                    onClick={forgotPassword}
+                    disabled={loading}
+                    className="text-sm text-gray-500 hover:text-gray-700 disabled:opacity-60 shrink-0"
+                  >
+                    {t("forgotPassword")}
+                  </button>
+                )}
+              </div>
+            </form>
           )}
         </div>
 
