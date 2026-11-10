@@ -32,6 +32,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No email address on file" }, { status: 422 })
   }
 
+
+  // User.email is unique, so pointing it at an address another account already
+  // holds throws P2002 straight out of the handler as an opaque 500. This turns
+  // that into something the employer can act on.
+  if (newEmail && newEmail !== dbUser.email) {
+    const taken = await prisma.user.findFirst({
+      where: { email: newEmail, id: { not: dbUser.id } },
+      select: { id: true },
+    })
+    if (taken) {
+      return NextResponse.json(
+        { error: "That email address is already used by another account.", code: "EMAIL_IN_USE" },
+        { status: 409 }
+      )
+    }
+  }
+
   // Throttle: don't re-send if one was issued in the last 2 minutes
   if (
     dbUser.emailVerifyExpires &&
