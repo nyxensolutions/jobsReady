@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "An account already exists with this email address. Sign in the way you did originally, then add a password from your dashboard.",
+            "An account already exists with this email address. Please sign in using the method you registered with — your mobile number or Google.",
           code: "EMAIL_IN_USE",
         },
         { status: 409 }
