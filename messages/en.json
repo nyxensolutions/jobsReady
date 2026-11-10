@@ -166,14 +166,14 @@
     "jobSeekerLogin": "Job seeker login",
     "continueWithEmail": "Continue with email",
     "passwordLabel": "Password",
-    "passwordPlaceholder": "At least 8 characters",
+    "passwordPlaceholder": "8+ characters, with a number and symbol",
     "createEmployerAccount": "Create account",
     "signInButton": "Sign in",
     "forgotPassword": "Forgot password?",
     "resetEmailSent": "Reset link sent. Check your inbox.",
     "switchToSignIn": "Already have an account? Sign in",
     "switchToSignUp": "New here? Create an account",
-    "passwordTooShort": "Password must be at least 8 characters"
+    "passwordTooShort": "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, a number and a symbol."
   },
   "jobs": {
     "searchResults": "{count} jobs found",

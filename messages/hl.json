@@ -166,14 +166,14 @@
     "jobSeekerLogin": "नौकरी खोजने वाला लॉगिन",
     "continueWithEmail": "ईमेल से जारी रखें",
     "passwordLabel": "पासवर्ड",
-    "passwordPlaceholder": "कम से कम 8 अक्षर",
+    "passwordPlaceholder": "8+ अक्षर, एक अंक और एक चिह्न सहित",
     "createEmployerAccount": "खाता बनाएं",
     "signInButton": "साइन इन",
     "forgotPassword": "पासवर्ड भूल गए?",
     "resetEmailSent": "रीसेट लिंक भेज दिया गया। अपना इनबॉक्स देखें।",
     "switchToSignIn": "पहले से खाता है? साइन इन करें",
     "switchToSignUp": "नए हैं? खाता बनाएं",
-    "passwordTooShort": "पासवर्ड कम से कम 8 अक्षर का होना चाहिए"
+    "passwordTooShort": "पासवर्ड कम से कम 8 अक्षर का हो और उसमें एक बड़ा अक्षर, एक छोटा अक्षर, एक अंक और एक चिह्न होना चाहिए।"
   },
   "jobs": {
     "searchResults": "{count} jobs mile",
