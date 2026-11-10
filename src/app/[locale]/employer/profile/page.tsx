@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import EmployerProfileForm from "@/components/employer/EmployerProfileForm"
+import EmployerSignInMethods from "@/components/employer/EmployerSignInMethods"
 import { ArrowLeft } from "lucide-react"
 
 export default async function EmployerProfilePage() {
@@ -37,6 +38,18 @@ export default async function EmployerProfilePage() {
             description: employer.description,
             logoUrl: employer.logoUrl,
           }} />
+        </div>
+
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 mt-6">
+          <h2 className="text-base font-bold text-gray-900">Sign-in methods</h2>
+          <p className="text-sm text-gray-500 mt-1 mb-5">
+            How you sign in to this account. Adding a password keeps the same account — it does
+            not create a second one.
+          </p>
+          <EmployerSignInMethods
+            currentEmail={dbUser.email}
+            emailVerified={dbUser.emailVerified}
+          />
         </div>
       </div>
     </div>
