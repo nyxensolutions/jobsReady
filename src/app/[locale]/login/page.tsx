@@ -17,6 +17,7 @@ import {
   ConfirmationResult,
 } from "firebase/auth"
 import { auth } from "@/lib/firebase/client"
+import { meetsPasswordPolicy } from "@/lib/passwordPolicy"
 
 type Step = "role" | "phone" | "otp" | "employer" | "employerEmail"
 type Role = "seeker" | "employer"
@@ -187,7 +188,7 @@ function LoginPageContent() {
     setResetSent(false)
     const addr = email.trim().toLowerCase()
     if (!isValidEmail(addr)) { setError("Enter a valid email address"); return }
-    if (password.length < 8) { setError(t("passwordTooShort")); return }
+    if (!meetsPasswordPolicy(password)) { setError(t("passwordTooShort")); return }
     setLoading(true)
     try {
       const cred =
@@ -210,7 +211,10 @@ function LoginPageContent() {
           // collapses a wrong password and an unknown address into one code.
           : code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found"
           ? "Email or password is incorrect."
-          : code === "auth/weak-password"
+          // Firebase raises this when the project's password policy rejects
+          // the value. "Force upgrade on sign-in" means an existing password
+          // that no longer complies lands here too, not only a new one.
+          : code === "auth/weak-password" || code === "auth/password-does-not-meet-requirements"
           ? t("passwordTooShort")
           : code === "auth/too-many-requests"
           ? "Too many attempts. Please wait and try again."

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { EmailAuthProvider, linkWithCredential } from "firebase/auth"
 import { auth } from "@/lib/firebase/client"
+import { meetsPasswordPolicy, PASSWORD_RULE } from "@/lib/passwordPolicy"
 import { Mail, Phone, KeyRound, CheckCircle, AlertCircle, RefreshCw } from "lucide-react"
 
 interface Props {
@@ -51,8 +52,8 @@ export default function EmployerSignInMethods({ currentEmail, emailVerified }: P
       setError("Enter a valid email address")
       return
     }
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters")
+    if (!meetsPasswordPolicy(password)) {
+      setError(PASSWORD_RULE)
       return
     }
 
@@ -102,8 +103,8 @@ export default function EmployerSignInMethods({ currentEmail, emailVerified }: P
               // unattended browser.
               code === "auth/requires-recent-login"
               ? "For your security, please sign out and sign in again, then add your password."
-              : code === "auth/weak-password"
-                ? "Password must be at least 8 characters"
+              : code === "auth/weak-password" || code === "auth/password-does-not-meet-requirements"
+                ? PASSWORD_RULE
                 : "Could not add the password. Please try again."
       )
     } finally {
@@ -241,7 +242,7 @@ export default function EmployerSignInMethods({ currentEmail, emailVerified }: P
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="At least 8 characters"
+              placeholder="8+ characters, with a number and symbol"
               autoComplete="new-password"
               className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#1a3461]"
             />

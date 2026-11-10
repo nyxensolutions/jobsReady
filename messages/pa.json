@@ -166,14 +166,14 @@
     "jobSeekerLogin": "ਨੌਕਰੀ ਭਾਲਕ ਲੌਗਇਨ",
     "continueWithEmail": "ਈਮੇਲ ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
     "passwordLabel": "ਪਾਸਵਰਡ",
-    "passwordPlaceholder": "ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰ",
+    "passwordPlaceholder": "8+ ਅੱਖਰ, ਇੱਕ ਅੰਕ ਅਤੇ ਚਿੰਨ੍ਹ ਸਮੇਤ",
     "createEmployerAccount": "ਖਾਤਾ ਬਣਾਓ",
     "signInButton": "ਸਾਈਨ ਇਨ",
     "forgotPassword": "ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?",
     "resetEmailSent": "ਰੀਸੈਟ ਲਿੰਕ ਭੇਜ ਦਿੱਤਾ ਗਿਆ। ਆਪਣਾ ਇਨਬਾਕਸ ਵੇਖੋ।",
     "switchToSignIn": "ਪਹਿਲਾਂ ਹੀ ਖਾਤਾ ਹੈ? ਸਾਈਨ ਇਨ ਕਰੋ",
     "switchToSignUp": "ਨਵੇਂ ਹੋ? ਖਾਤਾ ਬਣਾਓ",
-    "passwordTooShort": "ਪਾਸਵਰਡ ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
+    "passwordTooShort": "ਪਾਸਵਰਡ ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰਾਂ ਦਾ ਹੋਵੇ ਅਤੇ ਉਸ ਵਿੱਚ ਇੱਕ ਵੱਡਾ ਅੱਖਰ, ਇੱਕ ਛੋਟਾ ਅੱਖਰ, ਇੱਕ ਅੰਕ ਅਤੇ ਇੱਕ ਚਿੰਨ੍ਹ ਹੋਵੇ।"
   },
   "jobs": {
     "searchResults": "{count} ਨੌਕਰੀਆਂ ਮਿਲੀਆਂ",
