@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { getPlanLimits } from "@/lib/subscription"
+import { emailVerificationBlock } from "@/lib/employerAuth"
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -27,6 +28,17 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           code: "VERIFICATION_REQUIRED",
           message: "Your company must be verified before you can unlock candidate contact details.",
         },
+        { status: 403 }
+      )
+    }
+
+    // A password account that never confirmed its address is one password
+    // reset away from belonging to whoever owns that mailbox, so it does not
+    // reach contact details either — even once the company is VERIFIED.
+    const emailError = await emailVerificationBlock(session)
+    if (emailError) {
+      return NextResponse.json(
+        { error: emailError, code: "EMAIL_VERIFICATION_REQUIRED", message: emailError },
         { status: 403 }
       )
     }

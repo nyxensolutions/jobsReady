@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { Prisma } from "@prisma/client"
 import { adminAuth } from "@/lib/firebase/admin"
 import { createSessionCookie, SESSION_COOKIE, SESSION_MAX_AGE_MS } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
@@ -34,6 +35,13 @@ export async function POST(req: NextRequest) {
     // If Firebase confirmed the email (Google sign-in), mark it verified immediately
     const googleVerifiedEmail = decoded.email && decoded.email_verified ? decoded.email : null
 
+    // A password account's address is stored but never trusted: emailVerified
+    // stays false until the OTP in /api/employer/verify-email is confirmed.
+    // Without storing it, the address would exist only inside Firebase and the
+    // verification mail would have nowhere to go.
+    const passwordEmail =
+      decoded.firebase?.sign_in_provider === "password" && decoded.email ? decoded.email : null
+
     ;[dbUser, sessionCookie] = await Promise.all([
       prisma.user.upsert({
         where: { id: decoded.uid },
@@ -47,12 +55,28 @@ export async function POST(req: NextRequest) {
         },
         update: googleVerifiedEmail
           ? { emailVerified: true, email: googleVerifiedEmail }
-          : {},  // phone sign-in: never overwrite anything
+          : passwordEmail
+            ? { email: passwordEmail }
+            : {},  // phone sign-in: never overwrite anything
       }),
       // Create Firebase session cookie — only needs the idToken, not the DB result
       createSessionCookie(idToken),
     ])
-  } catch {
+  } catch (err) {
+    // User.email is unique, so a credential carrying an address another account
+    // already owns lands here. It used to fall into the blanket 500 below, which
+    // told the user nothing and looked identical to a server fault.
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+      return NextResponse.json(
+        {
+          error:
+            "An account already exists with this email address. Sign in the way you did originally, then add a password from your dashboard.",
+          code: "EMAIL_IN_USE",
+        },
+        { status: 409 }
+      )
+    }
+    console.error("[auth/session] session creation failed:", err)
     return NextResponse.json({ error: "Failed to create session" }, { status: 500 })
   }
 
@@ -69,7 +93,15 @@ export async function POST(req: NextRequest) {
     requiresProfile = !employer
   }
 
-  const response = NextResponse.json({ success: true, role: dbUser.role, isAdmin: dbUser.isAdmin, requiresProfile })
+  const response = NextResponse.json({
+    success: true,
+    role: dbUser.role,
+    isAdmin: dbUser.isAdmin,
+    requiresProfile,
+    // The employer UI routes a password account straight to the OTP step when
+    // this is false, rather than letting it reach a dashboard it cannot use.
+    emailVerified: dbUser.emailVerified,
+  })
   response.cookies.set(SESSION_COOKIE, sessionCookie, {
     maxAge: SESSION_MAX_AGE_MS / 1000,
     httpOnly: true,
