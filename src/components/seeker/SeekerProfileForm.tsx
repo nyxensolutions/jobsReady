@@ -2,7 +2,8 @@
 
 import { useState, useRef } from "react"
 import { useRouter } from "@/i18n/navigation"
-import { Loader2, CheckCircle, Plus, X, Camera, FileText, Trash2 } from "lucide-react"
+import SkillAutocomplete from "@/components/seeker/SkillAutocomplete"
+import { Loader2, CheckCircle, Camera, FileText, Trash2 } from "lucide-react"
 import Image from "next/image"
 
 const JOB_TYPES = [
@@ -37,7 +38,6 @@ export default function SeekerProfileForm({
   const [city, setCity] = useState(initial?.city ?? "")
   const [bio, setBio] = useState(initial?.bio ?? "")
   const [skills, setSkills] = useState<string[]>(initial?.skills ?? [])
-  const [skillInput, setSkillInput] = useState("")
   const [preferredJobTypes, setPreferredJobTypes] = useState<string[]>(initial?.preferredJobTypes ?? [])
   const [experienceYears, setExperienceYears] = useState(String(initial?.experienceYears ?? 0))
   const [isOpenToWork, setIsOpenToWork] = useState(initial?.isOpenToWork ?? true)
@@ -110,14 +110,6 @@ export default function SeekerProfileForm({
       setPhotoPreview(initial?.photoUrl ?? null)
     } finally {
       setPhotoUploading(false)
-    }
-  }
-
-  function addSkill() {
-    const v = skillInput.trim()
-    if (v && !skills.includes(v)) {
-      setSkills((s) => [...s, v])
-      setSkillInput("")
     }
   }
 
@@ -242,36 +234,17 @@ export default function SeekerProfileForm({
 
       {/* Skills */}
       <div>
-        <label className={labelCls}>Skills <span className="text-gray-400 text-xs font-normal">(add one at a time)</span></label>
-        {skills.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-2">
-            {skills.map((s) => (
-              <span key={s} className="inline-flex items-center gap-1.5 text-sm bg-blue-50 text-blue-700 border border-blue-100 px-3 py-1 rounded-full">
-                {s}
-                <button type="button" onClick={() => setSkills((p) => p.filter((x) => x !== s))}>
-                  <X size={12} />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={skillInput}
-            onChange={(e) => setSkillInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addSkill() } }}
-            placeholder="e.g. Driving, MS Excel, Hindi"
-            className={inputCls}
-          />
-          <button
-            type="button"
-            onClick={addSkill}
-            className="px-3 py-2.5 border border-gray-300 rounded-xl text-gray-600 hover:bg-gray-50"
-          >
-            <Plus size={16} />
-          </button>
-        </div>
+        <label className={labelCls}>
+          Skills{" "}
+          <span className="text-gray-400 text-xs font-normal">
+            (pick from the list so we can match you to jobs)
+          </span>
+        </label>
+        <SkillAutocomplete
+          value={skills}
+          onChange={setSkills}
+          inputClassName={inputCls}
+        />
       </div>
 
       {/* Preferred job types */}
