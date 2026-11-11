@@ -369,3 +369,31 @@ model Notification {
   @@index([userId, isRead])
   @@map("notifications")
 }
+
+/// Controlled vocabulary for seeker skills.
+///
+/// `SeekerProfile.skills` was free text, so the 12 profiles that had any held
+/// arbitrary strings nothing could match a job against. Recommendations need a
+/// shared vocabulary on both sides, which is what this provides.
+model Skill {
+  id     String  @id @default(uuid())
+  slug   String  @unique
+  nameEn String
+  nameHi String?
+
+  /// Job categories this skill is relevant to, by Category.slug. A skill can
+  /// belong to several — customer handling matters to retail, telecaller and
+  /// hospitality alike — so this is a list rather than a foreign key.
+  categorySlugs String[] @default([])
+
+  /// Spellings and local terms people actually type, matched by search so that
+  /// "bike" finds "Two-Wheeler Riding" and "chef" finds "Cooking".
+  aliases String[] @default([])
+
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("skills")
+}
