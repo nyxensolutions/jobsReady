@@ -415,7 +415,13 @@
       "completenessName": "பெயர்",
       "completenessCity": "நகரம்",
       "completenessSkills": "திறன்கள்",
-      "completenessResume": "ரெஸ்யூமே"
+      "completenessResume": "ரெஸ்யூமே",
+      "gender": "பாலினம்",
+      "genderOptional": "விருப்பத் தேர்வு — பொருத்தமான வேலைகளைப் பரிந்துரைக்க உதவும்",
+      "genderUnset": "சொல்ல விரும்பவில்லை",
+      "genderMale": "ஆண்",
+      "genderFemale": "பெண்",
+      "genderOther": "மற்றவை"
     },
     "apply": {
       "title": "இந்த வேலைக்கு விண்ணப்பிக்கவும்",

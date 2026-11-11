@@ -94,6 +94,7 @@ model SeekerProfile {
   pincode             String?
   stateCode           String?
   experienceYears     Int       @default(0)
+  gender              Gender?
   skills              String[]
   preferredJobTypes   JobType[]
   preferredCategories String[]
@@ -220,6 +221,11 @@ model JobListing {
   shiftType          String? // "Day" | "Night" | "Rotational" | "Flexible"
 
   // ── Call-to-HR: employer can expose their phone for direct candidate calls ──
+  /// null means the role is open to anyone, which is the default and what
+  /// every existing listing carries. Only ever boosts or sinks a job in the
+  /// recommended ordering; the full listing is never filtered by it.
+  genderPreference Gender?
+
   callToHrEnabled Boolean @default(false)
   callToHrPhone   String?
 
@@ -375,6 +381,16 @@ model Notification {
 /// `SeekerProfile.skills` was free text, so the 12 profiles that had any held
 /// arbitrary strings nothing could match a job against. Recommendations need a
 /// shared vocabulary on both sides, which is what this provides.
+/// Optional throughout. A required gender field costs sign-ups, and the value
+/// is used to rank the recommended section only — never to hide a job from the
+/// full listing.
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
 model Skill {
   id     String  @id @default(uuid())
   slug   String  @unique

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import SkillAutocomplete from "@/components/seeker/SkillAutocomplete"
 import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
@@ -16,6 +17,7 @@ type Profile = {
   skills: string[]
   preferredJobTypes: string[]
   experienceYears: number
+  gender: string | null
   isOpenToWork: boolean
   openToRelocate: boolean
   preferredCities: string[]
@@ -83,12 +85,12 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
   const [city, setCity] = useState(initial?.city ?? "")
   const [bio, setBio] = useState(initial?.bio ?? "")
   const [experienceYears, setExperienceYears] = useState(String(initial?.experienceYears ?? 0))
+  const [gender, setGender] = useState<string>(initial?.gender ?? "")
   const [basicLoading, setBasicLoading] = useState(false)
   const [basicSaved, setBasicSaved] = useState(false)
 
   // Skills form
   const [skills, setSkills] = useState<string[]>(initial?.skills ?? [])
-  const [skillInput, setSkillInput] = useState("")
   const [skillsLoading, setSkillsLoading] = useState(false)
 
   // Preferences form
@@ -119,7 +121,7 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: name || displayName,
-        city, bio, skills, preferredJobTypes, experienceYears,
+        city, bio, skills, preferredJobTypes, experienceYears, gender: gender || null,
         isOpenToWork, openToRelocate, preferredCities, preferredCategories, languages,
         ...patch,
       }),
@@ -401,6 +403,23 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
                     <option value="10">{t("expYears", { n: 10 })}+</option>
                   </select>
                 </div>
+
+                {/* Optional throughout, and only ever used to rank the
+                    recommended section — no job is hidden from anyone because
+                    of it. "Prefer not to say" is the default so that leaving
+                    it alone costs the seeker nothing. */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    {t("gender")}{" "}
+                    <span className="text-gray-400 font-normal">{t("genderOptional")}</span>
+                  </label>
+                  <select value={gender} onChange={e => setGender(e.target.value)} className={inputCls}>
+                    <option value="">{t("genderUnset")}</option>
+                    <option value="MALE">{t("genderMale")}</option>
+                    <option value="FEMALE">{t("genderFemale")}</option>
+                    <option value="OTHER">{t("genderOther")}</option>
+                  </select>
+                </div>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">
@@ -422,6 +441,7 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
                   setCity(initial?.city ?? "")
                   setBio(initial?.bio ?? "")
                   setExperienceYears(String(initial?.experienceYears ?? 0))
+                  setGender(initial?.gender ?? "")
                 }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                   {tc("cancel")}
                 </button>
@@ -492,29 +512,16 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
           <div className="p-4">
             {editSkills ? (
               <div className="flex flex-col gap-3">
-                {skills.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5">
-                    {skills.map(s => (
-                      <span key={s} className="inline-flex items-center gap-1 text-sm bg-[#eef2ff] text-[#1a3461] border border-[#1a3461]/20 px-2.5 py-1 rounded-full">
-                        {s}
-                        <button type="button" onClick={() => setSkills(p => p.filter(x => x !== s))}>
-                          <X size={11} />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <div className="flex gap-2">
-                  <input type="text" value={skillInput} onChange={e => setSkillInput(e.target.value)}
-                    onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); const v = skillInput.trim(); if (v && !skills.includes(v)) { setSkills(p => [...p, v]); setSkillInput("") } } }}
-                    placeholder={t("skillsPlaceholder")}
-                    className={inputCls} />
-                  <button type="button"
-                    onClick={() => { const v = skillInput.trim(); if (v && !skills.includes(v)) { setSkills(p => [...p, v]); setSkillInput("") } }}
-                    className="px-3 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">
-                    <Plus size={15} />
-                  </button>
-                </div>
+                {/* Suggestions come from the shared vocabulary, so what is
+                    stored here can be matched against a job's category. The
+                    first preferred category steers the ranking of those
+                    suggestions towards the trade they are actually in. */}
+                <SkillAutocomplete
+                  value={skills}
+                  onChange={setSkills}
+                  category={preferredCategories[0] ?? null}
+                  inputClassName={inputCls}
+                />
                 <div className="flex gap-2">
                   <button onClick={handleSaveSkills} disabled={skillsLoading}
                     className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
@@ -524,7 +531,6 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
                   <button onClick={() => {
                     setEditSkills(false)
                     setSkills(initial?.skills ?? [])
-                    setSkillInput("")
                   }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                     {tc("cancel")}
                   </button>

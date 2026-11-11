@@ -415,7 +415,13 @@
       "completenessName": "নাম",
       "completenessCity": "শহর",
       "completenessSkills": "দক্ষতা",
-      "completenessResume": "রেজুমে"
+      "completenessResume": "রেজুমে",
+      "gender": "লিঙ্গ",
+      "genderOptional": "ঐচ্ছিক — এতে আমরা উপযুক্ত কাজ সুপারিশ করতে পারি",
+      "genderUnset": "বলতে চাই না",
+      "genderMale": "পুরুষ",
+      "genderFemale": "মহিলা",
+      "genderOther": "অন্যান্য"
     },
     "apply": {
       "title": "এই চাকরির জন্য আবেদন",

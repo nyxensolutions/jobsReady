@@ -34,6 +34,7 @@ export default async function SeekerProfilePage({ params }: { params: Promise<{ 
         skills: profile.skills,
         preferredJobTypes: profile.preferredJobTypes,
         experienceYears: profile.experienceYears,
+        gender: profile.gender,
         isOpenToWork: profile.isOpenToWork,
         openToRelocate: profile.openToRelocate,
         preferredCities: profile.preferredCities,
