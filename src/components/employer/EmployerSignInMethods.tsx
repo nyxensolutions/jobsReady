@@ -112,6 +112,28 @@ export default function EmployerSignInMethods({ currentEmail, emailVerified }: P
     }
   }
 
+  /** Mails a code to the address already on the account. */
+  async function sendCode() {
+    setError(null)
+    setBusy(true)
+    try {
+      const res = await fetch("/api/employer/verify-email/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setError(data.error ?? "Could not send the code. Please try again.")
+        return
+      }
+      setEmail(data.email ?? currentEmail ?? "")
+      setStage("otp")
+    } finally {
+      setBusy(false)
+    }
+  }
+
   async function confirmOtp(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -186,9 +208,9 @@ export default function EmployerSignInMethods({ currentEmail, emailVerified }: P
       {stage === "otp" && (
         <form onSubmit={confirmOtp} className="flex flex-col gap-3">
           <p className="text-sm text-gray-600">
-            Your password is set. Enter the 6-digit code we sent to{" "}
-            <span className="font-semibold text-gray-800">{email.trim().toLowerCase()}</span> to
-            finish. Until it is confirmed you cannot post jobs or unlock candidate contacts.
+            Enter the 6-digit code we sent to{" "}
+            <span className="font-semibold text-gray-800">{email.trim().toLowerCase()}</span>.
+            Until this address is confirmed you cannot post jobs or unlock candidate contacts.
           </p>
           <input
             inputMode="numeric"
@@ -208,10 +230,23 @@ export default function EmployerSignInMethods({ currentEmail, emailVerified }: P
       )}
 
       {stage === "list" && hasPassword && !emailVerified && (
-        <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-          Your email address is not confirmed yet. Until it is, this account cannot post jobs or
-          unlock candidate contacts.
-        </p>
+        <div className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+          <p>
+            Your email address is not confirmed yet. Until it is, this account cannot post jobs or
+            unlock candidate contacts.
+          </p>
+          {/* Without this the warning is a dead end: an account can reach this
+              state without a code ever having been sent, and nothing else on
+              the page can send one. */}
+          <button
+            onClick={sendCode}
+            disabled={busy}
+            className="mt-2 inline-flex items-center gap-1.5 font-semibold text-amber-900 underline hover:no-underline disabled:opacity-60"
+          >
+            {busy && <RefreshCw size={13} className="animate-spin" />}
+            Send me a verification code
+          </button>
+        </div>
       )}
 
       {stage === "list" && !hasPassword && (

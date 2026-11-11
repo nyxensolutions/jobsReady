@@ -17,14 +17,28 @@ const INDUSTRIES = [
   "Healthcare", "IT & Technology", "Education", "Other",
 ]
 
-export default function EmployerSetupForm({ cities }: { cities: string[] }) {
+interface Props {
+  cities: string[]
+  /** The address already on the account, if any. */
+  accountEmail: string | null
+  /** True when that address is the sign-in credential (password accounts). */
+  emailIsCredential: boolean
+  alreadyVerified: boolean
+}
+
+export default function EmployerSetupForm({
+  cities,
+  accountEmail,
+  emailIsCredential,
+  alreadyVerified,
+}: Props) {
   const [contactPerson, setContactPerson] = useState("")
   const [hiringFor, setHiringFor]         = useState("")
   const [companyName, setCompanyName]     = useState("")
   const [city, setCity]                   = useState("")
   const [contactPhone, setContactPhone]   = useState("")
   const [industry, setIndustry]           = useState("")
-  const [email, setEmail]                 = useState("")
+  const [email, setEmail]                 = useState(accountEmail ?? "")
   const [loading, setLoading]             = useState(false)
   const [error, setError]                 = useState("")
   const [done, setDone]                   = useState(false)
@@ -32,7 +46,7 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
   // ── Email OTP state ──────────────────────────────────────────────────────
   const [otpSent, setOtpSent]             = useState(false)
   const [otpCode, setOtpCode]             = useState("")
-  const [emailVerified, setEmailVerified] = useState(false)
+  const [emailVerified, setEmailVerified] = useState(alreadyVerified)
   const [otpLoading, setOtpLoading]       = useState(false)
   const [otpError, setOtpError]           = useState("")
   const [countdown, setCountdown]         = useState(0)
@@ -107,6 +121,13 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
     if (!city) { setError("Please select your city."); return }
     if (!contactPhone) { setError("Please enter your contact number."); return }
     if (!/^[6-9]\d{9}$/.test(contactPhone)) { setError("Enter a valid 10-digit mobile number."); return }
+    // Without this, a password employer could finish registration unverified
+    // and then be refused at every action that matters — posting a job or
+    // unlocking a contact — pointed at a code that was never sent.
+    if (emailIsCredential && !emailVerified) {
+      setError("Please confirm your email address below before continuing. Press Verify to receive a 6-digit code.")
+      return
+    }
 
     setLoading(true)
     try {
@@ -262,6 +283,7 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
             <label className="block text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1.5">
               <Mail size={14} />
               Email address
+              {emailIsCredential && <span className="text-red-500">*</span>}
               {emailVerified && (
                 <span className="inline-flex items-center gap-1 text-green-600 font-semibold text-xs ml-1">
                   <ShieldCheck size={13} /> Verified
@@ -269,15 +291,27 @@ export default function EmployerSetupForm({ cities }: { cities: string[] }) {
               )}
             </label>
 
+            {emailIsCredential && !emailVerified && (
+              <p className="text-xs text-gray-500 mb-2">
+                This is the address you sign in with. Confirm it to finish — until you do, this
+                account cannot post jobs or unlock candidate contacts.
+              </p>
+            )}
+
             {/* Email input row */}
             {!emailVerified && (
               <div className="flex gap-2">
+                {/* Read-only for a password account: this address is the
+                    sign-in credential, and editing it here would leave
+                    Firebase and the database pointing at different mailboxes —
+                    password resets going to one, notifications to the other. */}
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); setOtpSent(false); setOtpCode(""); setOtpError("") }}
-                  placeholder="your@email.com (optional)"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1a3461] focus:border-transparent"
+                  readOnly={emailIsCredential}
+                  placeholder={emailIsCredential ? "" : "your@email.com (optional)"}
+                  className={`flex-1 px-4 py-3 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1a3461] focus:border-transparent${emailIsCredential ? " bg-gray-50 text-gray-600 cursor-not-allowed" : ""}`}
                 />
                 {isValidEmail && !otpSent && (
                   <button
