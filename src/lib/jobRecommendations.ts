@@ -1,4 +1,4 @@
-import { Gender, JobType } from "@prisma/client"
+import { JobType } from "@prisma/client"
 import { prisma } from "./db"
 
 /**
@@ -17,7 +17,6 @@ export interface SeekerSignals {
   city: string | null
   preferredCities: string[]
   preferredJobTypes: JobType[]
-  gender: Gender | null
   experienceYears: number
 }
 
@@ -26,7 +25,6 @@ export interface ScorableJob {
   cityName: string | null
   jobType: JobType
   experienceMin: number | null
-  genderPreference: Gender | null
   publishedAt: Date | null
   isFeatured: boolean
 }
@@ -45,14 +43,6 @@ export const WEIGHTS = {
   city: 30,
   preferredCity: 20,
   jobType: 15,
-  /** The role states a gender preference and it is theirs. */
-  genderMatch: 20,
-  /**
-   * Stated and not theirs. Large enough to sink the job below everything
-   * relevant, deliberately short of removing it: the seeker still sees the
-   * whole board, which is both the fairer behaviour and the legal one.
-   */
-  genderMismatch: -120,
   experienceFits: 10,
   featured: 5,
   freshBonus: 8,
@@ -133,14 +123,6 @@ export function scoreJob(
 
   if (s.preferredJobTypes.length > 0 && s.preferredJobTypes.includes(job.jobType)) {
     score += WEIGHTS.jobType
-  }
-
-  // Unstated on either side is neutral, never a penalty — most seekers will
-  // leave this blank and must not be pushed down the list for it.
-  const seekerGender =
-    s.gender && s.gender !== "PREFER_NOT_TO_SAY" ? s.gender : null
-  if (job.genderPreference && seekerGender) {
-    score += job.genderPreference === seekerGender ? WEIGHTS.genderMatch : WEIGHTS.genderMismatch
   }
 
   // A job asking for less experience than they have is a fit; one asking for

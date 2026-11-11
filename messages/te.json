@@ -415,13 +415,7 @@
       "completenessName": "పేరు",
       "completenessCity": "నగరం",
       "completenessSkills": "నైపుణ్యాలు",
-      "completenessResume": "రెజ్యూమే",
-      "gender": "లింగం",
-      "genderOptional": "ఐచ్ఛికం — సరైన ఉద్యోగాలు సూచించడానికి సహాయపడుతుంది",
-      "genderUnset": "చెప్పదలచుకోలేదు",
-      "genderMale": "పురుషుడు",
-      "genderFemale": "స్త్రీ",
-      "genderOther": "ఇతర"
+      "completenessResume": "రెజ్యూమే"
     },
     "apply": {
       "title": "ఈ ఉద్యోగానికి దరఖాస్తు",

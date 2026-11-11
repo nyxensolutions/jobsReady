@@ -415,13 +415,7 @@
       "completenessName": "ਨਾਮ",
       "completenessCity": "ਸ਼ਹਿਰ",
       "completenessSkills": "ਹੁਨਰ",
-      "completenessResume": "ਰਿਜ਼ਿਊਮੇ",
-      "gender": "ਲਿੰਗ",
-      "genderOptional": "ਵਿਕਲਪਿਕ — ਇਸ ਨਾਲ ਅਸੀਂ ਢੁਕਵੀਆਂ ਨੌਕਰੀਆਂ ਸੁਝਾ ਸਕਦੇ ਹਾਂ",
-      "genderUnset": "ਦੱਸਣਾ ਨਹੀਂ ਚਾਹੁੰਦੇ",
-      "genderMale": "ਮਰਦ",
-      "genderFemale": "ਔਰਤ",
-      "genderOther": "ਹੋਰ"
+      "completenessResume": "ਰਿਜ਼ਿਊਮੇ"
     },
     "apply": {
       "title": "ਇਸ ਨੌਕਰੀ ਲਈ ਅਰਜ਼ੀ",

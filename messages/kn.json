@@ -415,13 +415,7 @@
       "completenessName": "ಹೆಸರು",
       "completenessCity": "ನಗರ",
       "completenessSkills": "ಕೌಶಲ್ಯಗಳು",
-      "completenessResume": "ರೆಸ್ಯೂಮೆ",
-      "gender": "ಲಿಂಗ",
-      "genderOptional": "ಐಚ್ಛಿಕ — ಸೂಕ್ತ ಉದ್ಯೋಗಗಳನ್ನು ಸೂಚಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ",
-      "genderUnset": "ಹೇಳಲು ಇಷ್ಟವಿಲ್ಲ",
-      "genderMale": "ಪುರುಷ",
-      "genderFemale": "ಮಹಿಳೆ",
-      "genderOther": "ಇತರೆ"
+      "completenessResume": "ರೆಸ್ಯೂಮೆ"
     },
     "apply": {
       "title": "ಈ ಉದ್ಯೋಗಕ್ಕೆ ಅರ್ಜಿ",
