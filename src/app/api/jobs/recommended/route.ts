@@ -35,7 +35,6 @@ export async function GET(req: NextRequest) {
       city: true,
       preferredCities: true,
       preferredJobTypes: true,
-      gender: true,
       experienceYears: true,
     },
   })
@@ -47,7 +46,6 @@ export async function GET(req: NextRequest) {
     city: profile.city,
     preferredCities: profile.preferredCities,
     preferredJobTypes: profile.preferredJobTypes,
-    gender: profile.gender,
     experienceYears: profile.experienceYears,
   }
 
@@ -71,7 +69,6 @@ export async function GET(req: NextRequest) {
         isHighReach: true,
         source: true,
         publishedAt: true,
-        genderPreference: true,
         employer: { select: { companyName: true, status: true } },
         category: { select: { slug: true, nameEn: true, nameHi: true } },
         city: { select: { name: true, nameHi: true } },

@@ -415,13 +415,7 @@
       "completenessName": "Name",
       "completenessCity": "City",
       "completenessSkills": "Skills",
-      "completenessResume": "Resume",
-      "gender": "Gender",
-      "genderOptional": "optional — helps us suggest roles that fit",
-      "genderUnset": "Prefer not to say",
-      "genderMale": "Male",
-      "genderFemale": "Female",
-      "genderOther": "Other"
+      "completenessResume": "Resume"
     },
     "applied": {
       "sentToHr": "Application sent to HR! 🎉",

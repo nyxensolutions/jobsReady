@@ -415,13 +415,7 @@
       "completenessName": "नाम",
       "completenessCity": "शहर",
       "completenessSkills": "स्किल्स",
-      "completenessResume": "रिज्यूमे",
-      "gender": "लिंग",
-      "genderOptional": "वैकल्पिक — इससे हम आपके लिए सही नौकरियाँ सुझा पाते हैं",
-      "genderUnset": "बताना नहीं चाहते",
-      "genderMale": "पुरुष",
-      "genderFemale": "महिला",
-      "genderOther": "अन्य"
+      "completenessResume": "रिज्यूमे"
     },
     "applied": {
       "sentToHr": "आवेदन HR को भेजा गया! 🎉",

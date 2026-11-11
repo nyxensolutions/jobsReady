@@ -17,7 +17,6 @@ type Profile = {
   skills: string[]
   preferredJobTypes: string[]
   experienceYears: number
-  gender: string | null
   isOpenToWork: boolean
   openToRelocate: boolean
   preferredCities: string[]
@@ -85,7 +84,6 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
   const [city, setCity] = useState(initial?.city ?? "")
   const [bio, setBio] = useState(initial?.bio ?? "")
   const [experienceYears, setExperienceYears] = useState(String(initial?.experienceYears ?? 0))
-  const [gender, setGender] = useState<string>(initial?.gender ?? "")
   const [basicLoading, setBasicLoading] = useState(false)
   const [basicSaved, setBasicSaved] = useState(false)
 
@@ -121,7 +119,7 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: name || displayName,
-        city, bio, skills, preferredJobTypes, experienceYears, gender: gender || null,
+        city, bio, skills, preferredJobTypes, experienceYears,
         isOpenToWork, openToRelocate, preferredCities, preferredCategories, languages,
         ...patch,
       }),
@@ -404,22 +402,6 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
                   </select>
                 </div>
 
-                {/* Optional throughout, and only ever used to rank the
-                    recommended section — no job is hidden from anyone because
-                    of it. "Prefer not to say" is the default so that leaving
-                    it alone costs the seeker nothing. */}
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">
-                    {t("gender")}{" "}
-                    <span className="text-gray-400 font-normal">{t("genderOptional")}</span>
-                  </label>
-                  <select value={gender} onChange={e => setGender(e.target.value)} className={inputCls}>
-                    <option value="">{t("genderUnset")}</option>
-                    <option value="MALE">{t("genderMale")}</option>
-                    <option value="FEMALE">{t("genderFemale")}</option>
-                    <option value="OTHER">{t("genderOther")}</option>
-                  </select>
-                </div>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">
@@ -441,7 +423,6 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
                   setCity(initial?.city ?? "")
                   setBio(initial?.bio ?? "")
                   setExperienceYears(String(initial?.experienceYears ?? 0))
-                  setGender(initial?.gender ?? "")
                 }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                   {tc("cancel")}
                 </button>
