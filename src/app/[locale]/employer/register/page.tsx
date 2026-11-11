@@ -22,5 +22,18 @@ export default async function EmployerRegisterPage() {
     select: { name: true },
   })
 
-  return <EmployerSetupForm cities={cities.map((c) => c.name)} />
+  // A password account signed up with this address, so it is the credential
+  // rather than an optional contact detail: the form pre-fills and locks it,
+  // and will not complete until it has been confirmed. Phone and Google
+  // employers are unaffected and keep the optional field they always had.
+  const emailIsCredential = session.firebase?.sign_in_provider === "password"
+
+  return (
+    <EmployerSetupForm
+      cities={cities.map((c) => c.name)}
+      accountEmail={dbUser.email}
+      emailIsCredential={emailIsCredential}
+      alreadyVerified={dbUser.emailVerified}
+    />
+  )
 }

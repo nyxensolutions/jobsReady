@@ -29,5 +29,8 @@ export async function emailVerificationBlock(session: DecodedIdToken): Promise<s
   })
   if (user?.emailVerified) return null
 
-  return "Please confirm your email address before continuing. We sent a 6-digit code to your inbox."
+  // Deliberately does not claim a code was sent: nothing here sends one, and
+  // an account can reach this state without ever having been mailed. It names
+  // the place that can send one instead.
+  return "Please confirm your email address before continuing. Open your company profile and use Sign-in methods to send yourself a code."
 }
