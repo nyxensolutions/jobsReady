@@ -228,7 +228,9 @@
       "daysPerWeek": "{count} ದಿನ/ವಾರ",
       "translatePage": "ಈ ಪುಟವನ್ನು ಅನುವಾದಿಸಿ",
       "seeAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ →",
-      "applicantsLabel": "ಅರ್ಜಿದಾರರು"
+      "applicantsLabel": "ಅರ್ಜಿದಾರರು",
+      "employerLiveJobs": "{n} ಸಕ್ರಿಯ ಉದ್ಯೋಗಗಳು",
+      "employerMemberSince": "{year} ರಿಂದ Jobs24India ನಲ್ಲಿ"
     },
     "filters": {
       "salary": "ವೇತನ ವ್ಯಾಪ್ತಿ",

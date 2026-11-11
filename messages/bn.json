@@ -228,7 +228,9 @@
       "daysPerWeek": "{count} দিন/সপ্তাহ",
       "translatePage": "এই পাতা অনুবাদ করুন",
       "seeAll": "সব দেখুন →",
-      "applicantsLabel": "আবেদনকারী"
+      "applicantsLabel": "আবেদনকারী",
+      "employerLiveJobs": "{n}টি সক্রিয় চাকরি",
+      "employerMemberSince": "{year} থেকে Jobs24India-তে"
     },
     "filters": {
       "salary": "বেতনের পরিসর",

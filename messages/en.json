@@ -228,7 +228,9 @@
       "shareWhatsapp": "Share on WhatsApp",
       "fresherYrsExp": "{years}+ yrs",
       "seeAll": "See all →",
-      "applicantsLabel": "Applicants"
+      "applicantsLabel": "Applicants",
+      "employerLiveJobs": "{n} live jobs",
+      "employerMemberSince": "On Jobs24India since {year}"
     },
     "filters": {
       "salary": "Salary range",

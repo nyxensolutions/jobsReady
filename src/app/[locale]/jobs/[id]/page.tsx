@@ -134,6 +134,7 @@ export default async function JobDetailPage({ params }: Props) {
           status: true,
           industry: true,
           website: true,
+          createdAt: true,
         },
       },
       category: { select: { slug: true, nameEn: true } },
@@ -147,6 +148,13 @@ export default async function JobDetailPage({ params }: Props) {
 
   const isScraped = job?.source === "SCRAPED"
   const displayCompany = isScraped ? null : job?.employer.companyName
+
+  // Whether an employer hires regularly or posted once is the thing a seeker
+  // most wants to know and had no way to tell.
+  const employerActiveJobs =
+    job && !isScraped
+      ? await prisma.jobListing.count({ where: { employerId: job.employerId, status: "ACTIVE" } })
+      : 0
 
   if (!job || !isJobLive(job)) notFound()
 
@@ -505,6 +513,24 @@ export default async function JobDetailPage({ params }: Props) {
                 {job.employer.industry && (
                   <p className="text-xs text-gray-500 mb-2">{job.employer.industry}</p>
                 )}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-3 text-xs text-gray-500">
+                  {job.employer.city && (
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin size={12} /> {job.employer.city}
+                    </span>
+                  )}
+                  {employerActiveJobs > 0 && (
+                    <span className="inline-flex items-center gap-1">
+                      <Briefcase size={12} /> {t("jobDetail.employerLiveJobs", { n: employerActiveJobs })}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1">
+                    <Clock size={12} />{" "}
+                    {t("jobDetail.employerMemberSince", {
+                      year: job.employer.createdAt.getFullYear(),
+                    })}
+                  </span>
+                </div>
                 {job.employer.description && (
                   <p className="text-sm text-gray-700 leading-relaxed">{job.employer.description}</p>
                 )}
