@@ -397,3 +397,35 @@ model Skill {
 
   @@map("skills")
 }
+
+/// Every outbound message attempt, whatever the channel.
+///
+/// There are 21 email templates and 10 WhatsApp senders, and until this table
+/// existed nothing recorded whether a single one of them arrived. The send
+/// helpers logged failures to the console and returned void, so a broken
+/// channel looked exactly like a quiet one — which is how the notification SMS
+/// path went unnoticed for weeks.
+///
+/// Written at the one chokepoint each channel already funnels through, so
+/// every template is covered without touching any of them.
+model MessageLog {
+  id         String   @id @default(uuid())
+  /// "EMAIL" | "WHATSAPP" | "SMS" | "PUSH"
+  channel    String
+  /// The template or helper that produced it, for grouping by purpose.
+  template   String
+  /// Address or number as actually sent to.
+  recipient  String
+  userId     String?
+  ok         Boolean
+  /// Provider message id when one comes back, for tracing a specific send.
+  providerId String?
+  /// Provider error, truncated. Null when ok.
+  error      String?
+  createdAt  DateTime @default(now())
+
+  @@index([channel, createdAt])
+  @@index([template, createdAt])
+  @@index([userId, createdAt])
+  @@map("message_logs")
+}

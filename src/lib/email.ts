@@ -1,4 +1,5 @@
 import { Resend } from "resend"
+import { logMessage, errorText } from "./messageLog"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -24,16 +25,29 @@ function isDeliverable(to: string | string[]): boolean {
  * future caller. Never throws: email is a side-effect of the request that
  * triggered it, not the point of it.
  */
-async function send(payload: Parameters<typeof resend.emails.send>[0]) {
+async function send(
+  payload: Parameters<typeof resend.emails.send>[0],
+  /** Which template this is, for grouping sends by purpose in message_logs. */
+  template: string
+) {
+  const to = Array.isArray(payload.to) ? payload.to.join(",") : String(payload.to ?? "")
+
   if (!isDeliverable(payload.to as string | string[])) {
     console.warn(`[email] skipped undeliverable recipient: ${JSON.stringify(payload.to)}`)
+    logMessage({ channel: "EMAIL", template, recipient: to, ok: false, error: "undeliverable recipient" })
     return
   }
   try {
-    const { error } = await resend.emails.send(payload)
-    if (error) console.error(`[email] send failed to ${JSON.stringify(payload.to)}: ${error.message ?? error}`)
+    const { data, error } = await resend.emails.send(payload)
+    if (error) {
+      console.error(`[email] send failed to ${JSON.stringify(payload.to)}: ${error.message ?? error}`)
+      logMessage({ channel: "EMAIL", template, recipient: to, ok: false, error: errorText(error) })
+      return
+    }
+    logMessage({ channel: "EMAIL", template, recipient: to, ok: true, providerId: data?.id ?? null })
   } catch (err) {
     console.error("[email] send threw:", err)
+    logMessage({ channel: "EMAIL", template, recipient: to, ok: false, error: errorText(err) })
   }
 }
 
@@ -108,7 +122,7 @@ export async function sendSeekerWelcomeEmail({ email, name }: { email: string; n
     to: email,
     subject: "Welcome to Jobs24India! 🚀",
     html: emailShell(body),
-  })
+  }, "sendSeekerWelcomeEmail")
 }
 
 export async function sendEmployerWelcomeEmail({ email, companyName }: { email: string; companyName: string }) {
@@ -135,7 +149,7 @@ export async function sendEmployerWelcomeEmail({ email, companyName }: { email: 
     to: email,
     subject: "Welcome to Jobs24India! 🚀",
     html: emailShell(body),
-  })
+  }, "sendEmployerWelcomeEmail")
 }
 
 export async function sendAdminCreatedEmployerEmail({ email, companyName, contactPerson }: { email: string; companyName: string; contactPerson?: string | null }) {
@@ -164,7 +178,7 @@ export async function sendAdminCreatedEmployerEmail({ email, companyName, contac
     to: email,
     subject: `Your Jobs24India employer account is ready — ${companyName}`,
     html: emailShell(body),
-  })
+  }, "sendAdminCreatedEmployerEmail")
 }
 
 // ─── Payment receipt ──────────────────────────────────────────────────────────
@@ -200,7 +214,7 @@ export async function sendPaymentReceipt({
     to: toEmail,
     subject: `Payment receipt — ₹${amountRupees.toLocaleString("en-IN")} · ${planName} · Jobs24India`,
     html: emailShell(body),
-  })
+  }, "sendPaymentReceipt")
 }
 
 // ─── Seeker: application submitted ───────────────────────────────────────────
@@ -225,7 +239,7 @@ export async function sendSeekerApplicationConfirmation({
     to: seekerEmail,
     subject: `Application sent to ${companyName} for "${jobTitle}"`,
     html: emailShell(body),
-  })
+  }, "sendSeekerApplicationConfirmation")
 }
 
 // ─── Seeker: application status changed ──────────────────────────────────────
@@ -257,7 +271,7 @@ export async function sendSeekerStatusUpdate({
     to: seekerEmail,
     subject: `${cfg.emoji} ${cfg.headline} — ${jobTitle} at ${companyName}`,
     html: emailShell(body),
-  })
+  }, "sendSeekerStatusUpdate")
 }
 
 // ─── Seeker: daily job digest ─────────────────────────────────────────────────
@@ -291,7 +305,7 @@ export async function sendSeekerJobDigest({
     to: seekerEmail,
     subject: `${jobs.length} new job${jobs.length > 1 ? "s" : ""} match your profile today — Jobs24India`,
     html: emailShell(body),
-  })
+  }, "sendSeekerJobDigest")
 }
 
 // ─── Employer: weekly summary ─────────────────────────────────────────────────
@@ -331,7 +345,7 @@ export async function sendEmployerWeeklySummary({
     to: employerEmail,
     subject: `Weekly hiring summary — ${stats.newApplications} new application${stats.newApplications !== 1 ? "s" : ""} this week`,
     html: emailShell(body),
-  })
+  }, "sendEmployerWeeklySummary")
 }
 
 // ─── Employer: plan expiring soon ─────────────────────────────────────────────
@@ -353,7 +367,7 @@ export async function sendEmployerPlanExpiring({
     to: employerEmail,
     subject: `⚠️ Your ${planName} expires in ${daysLeft} day${daysLeft > 1 ? "s" : ""} — Renew now`,
     html: emailShell(body),
-  })
+  }, "sendEmployerPlanExpiring")
 }
 
 export async function sendEmployerApplicationAlert({
@@ -388,7 +402,7 @@ export async function sendEmployerApplicationAlert({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
-  })
+  }, "sendEmployerApplicationAlert")
 }
 
 export async function sendEmployerVerifiedAlert({
@@ -413,7 +427,7 @@ export async function sendEmployerVerifiedAlert({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
-  })
+  }, "sendEmployerVerifiedAlert")
 }
 
 export async function sendEmployerVerificationRejectedAlert({
@@ -438,7 +452,7 @@ export async function sendEmployerVerificationRejectedAlert({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
-  })
+  }, "sendEmployerVerificationRejectedAlert")
 }
 
 export async function sendEmployerJobApprovedAlert({
@@ -470,7 +484,7 @@ export async function sendEmployerJobApprovedAlert({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
-  })
+  }, "sendEmployerJobApprovedAlert")
 }
 
 export async function sendEmployerJobRejectedAlert({
@@ -503,7 +517,7 @@ export async function sendEmployerJobRejectedAlert({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
-  })
+  }, "sendEmployerJobRejectedAlert")
 }
 
 export async function sendCandidateInviteEmail({
@@ -538,7 +552,7 @@ export async function sendCandidateInviteEmail({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
-  })
+  }, "sendCandidateInviteEmail")
 }
 
 export async function sendEmployerMagicLink({
@@ -577,7 +591,7 @@ export async function sendEmployerMagicLink({
         </div>
       </div>
     `,
-  })
+  }, "sendEmployerMagicLink")
 }
 
 // ─── Employer: email OTP verification ────────────────────────────────────────
@@ -603,7 +617,7 @@ export async function sendEmailOtp({
     to: toEmail,
     subject: `${otp} is your Jobs24India verification code`,
     html: emailShell(body),
-  })
+  }, "sendEmailOtp")
 }
 
 // ─── Employer: email address verification (link-based, legacy) ───────────────
@@ -640,7 +654,7 @@ export async function sendEmployerOnboardingCompleteEmail({
     to: email,
     subject: `🎉 ${companyName} is now verified on Jobs24India!`,
     html: emailShell(body),
-  })
+  }, "sendEmployerOnboardingCompleteEmail")
 }
 
 export async function sendEmailVerification({
@@ -663,7 +677,7 @@ export async function sendEmailVerification({
     to: toEmail,
     subject: "Verify your email address — Jobs24India",
     html: emailShell(body),
-  })
+  }, "sendEmailVerification")
 }
 
 export async function sendSeekerShortlistAlert({
@@ -696,7 +710,7 @@ export async function sendSeekerShortlistAlert({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · India's job portal for frontline workers</p>
       </div>
     `,
-  })
+  }, "sendSeekerShortlistAlert")
 }
 
 // ─── Inbound admin alerts ─────────────────────────────────────────────────────
@@ -776,5 +790,5 @@ export async function sendAdminNewEmployerAlert({
         <p style="color:#9ca3af;font-size:12px;margin-top:32px">Jobs24India · internal notification</p>
       </div>
     `,
-  })
+  }, "sendAdminNewEmployerAlert")
 }
