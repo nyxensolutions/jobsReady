@@ -228,7 +228,9 @@
       "daysPerWeek": "{count} ਦਿਨ/ਹਫ਼ਤਾ",
       "translatePage": "ਇਸ ਪੰਨੇ ਦਾ ਅਨੁਵਾਦ ਕਰੋ",
       "seeAll": "ਸਭ ਦੇਖੋ →",
-      "applicantsLabel": "ਬਿਨੈਕਾਰ"
+      "applicantsLabel": "ਬਿਨੈਕਾਰ",
+      "employerLiveJobs": "{n} ਸਰਗਰਮ ਨੌਕਰੀਆਂ",
+      "employerMemberSince": "{year} ਤੋਂ Jobs24India 'ਤੇ"
     },
     "filters": {
       "salary": "ਤਨਖ਼ਾਹ ਰੇਂਜ",

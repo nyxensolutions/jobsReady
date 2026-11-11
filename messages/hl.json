@@ -228,7 +228,9 @@
       "daysPerWeek": "{count} din/hafta",
       "translatePage": "Is page ko translate karein",
       "seeAll": "Sab dekhein →",
-      "applicantsLabel": "Applicants"
+      "applicantsLabel": "Applicants",
+      "employerLiveJobs": "{n} सक्रिय नौकरियाँ",
+      "employerMemberSince": "{year} से Jobs24India पर"
     },
     "filters": {
       "salary": "Salary range",

@@ -13,7 +13,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     where: { id },
     include: {
       employer: {
-        select: { companyName: true, description: true, contactPhone: true, city: true, logoUrl: true, status: true },
+        select: {
+          id: true,
+          companyName: true,
+          description: true,
+          contactPhone: true,
+          city: true,
+          logoUrl: true,
+          status: true,
+          industry: true,
+          website: true,
+          createdAt: true,
+        },
       },
       category: { select: { slug: true, nameEn: true, nameHi: true, icon: true } },
       city: { select: { name: true, nameHi: true, stateName: true } },
@@ -60,6 +71,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     take: 4,
   })
 
+  const employerActiveJobs = isScraped
+    ? null
+    : await prisma.jobListing.count({
+        where: { employerId: job.employerId, status: "ACTIVE" },
+      })
+
   return NextResponse.json({
     id: job.id,
     title: job.title,
@@ -67,6 +84,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     company: isScraped ? null : job.employer.companyName,
     employerDescription: isScraped ? null : job.employer.description,
     employerLogoUrl: isScraped ? null : job.employer.logoUrl,
+    // The web job page has shown industry, website and a company link for a
+    // while; the API never sent them, so the app could only ever render a name
+    // and a description. These close that gap without a mobile release — the
+    // next build just reads them.
+    employerId: isScraped ? null : job.employer.id,
+    employerIndustry: isScraped ? null : job.employer.industry,
+    employerWebsite: isScraped ? null : job.employer.website,
+    employerCity: isScraped ? null : job.employer.city,
+    employerSince: isScraped ? null : job.employer.createdAt,
+    /** Live roles from this employer, this one included — context for whether
+     *  they hire regularly or posted once. */
+    employerActiveJobs: isScraped ? null : employerActiveJobs,
     city: job.city,
     category: job.category,
     salaryMin: job.salaryMin,

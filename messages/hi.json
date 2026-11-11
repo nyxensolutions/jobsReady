@@ -228,7 +228,9 @@
       "shareWhatsapp": "WhatsApp पर शेयर करें",
       "fresherYrsExp": "{years}+ साल",
       "seeAll": "सभी देखें →",
-      "applicantsLabel": "आवेदक"
+      "applicantsLabel": "आवेदक",
+      "employerLiveJobs": "{n} सक्रिय नौकरियाँ",
+      "employerMemberSince": "{year} से Jobs24India पर"
     },
     "filters": {
       "salary": "वेतन सीमा",
