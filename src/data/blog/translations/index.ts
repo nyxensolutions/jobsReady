@@ -8,6 +8,13 @@ import driverSalary from "./hi/driver-job-salary-in-india"
 import fresherResume from "./hi/resume-for-freshers-without-experience"
 import interviewQuestions from "./hi/common-interview-questions-freshers-answers"
 import dataEntryFromHome from "./hi/data-entry-jobs-from-home-real-pay"
+import deliveryGhaziabad from "./hi/delivery-boy-salary-in-ghaziabad"
+import deliveryNoida from "./hi/delivery-jobs-in-noida-salary-guide"
+import securityGurugram from "./hi/security-guard-salary-in-gurugram"
+import warehouseFaridabad from "./hi/warehouse-jobs-in-faridabad"
+import warehouseGreaterNoida from "./hi/warehouse-jobs-in-greater-noida"
+import pfWithdrawal from "./hi/pf-withdrawal-process-explained"
+import ctcVsInHand from "./hi/ctc-vs-in-hand-salary-explained"
 
 // Hindi translations, keyed by the English post's slug. A post with no entry
 // here simply has no Hindi version: /hi/ falls back to the English text and
@@ -25,4 +32,11 @@ export const HI_TRANSLATIONS: Record<string, PostTranslation> = {
   "resume-for-freshers-without-experience": fresherResume,
   "common-interview-questions-freshers-answers": interviewQuestions,
   "data-entry-jobs-from-home-real-pay": dataEntryFromHome,
+  "delivery-boy-salary-in-ghaziabad": deliveryGhaziabad,
+  "delivery-jobs-in-noida-salary-guide": deliveryNoida,
+  "security-guard-salary-in-gurugram": securityGurugram,
+  "warehouse-jobs-in-faridabad": warehouseFaridabad,
+  "warehouse-jobs-in-greater-noida": warehouseGreaterNoida,
+  "pf-withdrawal-process-explained": pfWithdrawal,
+  "ctc-vs-in-hand-salary-explained": ctcVsInHand,
 }
