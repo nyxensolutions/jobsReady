@@ -20,6 +20,38 @@ export async function POST(req: NextRequest) {
   // Block cross-role sign-in: same phone/Google account cannot be both seeker and employer.
   // Exception: users with isAdmin=true can log in under any role tab without being blocked.
   const existingUser = await prisma.user.findUnique({ where: { id: decoded.uid }, select: { role: true, isAdmin: true } })
+
+  // Google stays enabled in Firebase so the accounts already using it, and the
+  // Google button in the shipped Android build, keep working. What stops here
+  // is the creation of new ones: no row means this uid never completed sign-up,
+  // so there is nothing to preserve.
+  //
+  // Turning the provider off in the Firebase console would instead apply
+  // retroactively — locking out every existing Google account and turning that
+  // Android button into a hard error no release could reach for a month.
+  //
+  // Mobile posts to this same route (jobs24Mobile/app/_layout.tsx), so this one
+  // change covers web and the installed app alike, with no build.
+  if (decoded.firebase?.sign_in_provider === "google.com" && !existingUser) {
+    return NextResponse.json(
+      {
+        // Mobile renders `error` verbatim (apiErrorMessage in
+        // jobs24Mobile/src/lib/api.ts), so the sentence lives there and the
+        // machine-readable string stays in `code`.
+        error: "Google sign-in is no longer available for new accounts. Please continue with your mobile number.",
+        code: "GOOGLE_SIGNUP_CLOSED",
+        message: "Google sign-in is no longer available for new accounts. Please continue with your mobile number.",
+      },
+      // 409 rather than the more obvious 403, because of the installed Android
+      // build: jobs24Mobile/app/_layout.tsx shows the server message and signs
+      // out only on 409, and lets every other status fall through to a silent
+      // setSignedOut(). On 403 a new Google user would be bounced back to the
+      // login screen with nothing said. The app cannot be changed for a month,
+      // so the status is chosen to fit it.
+      { status: 409 }
+    )
+  }
+
   if (existingUser && !existingUser.isAdmin && existingUser.role !== assignedRole) {
     const existingRoleName = existingUser.role === "SEEKER" ? "job seeker" : "employer"
     return NextResponse.json(
