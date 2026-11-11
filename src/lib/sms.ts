@@ -1,3 +1,5 @@
+import { logMessage } from "./messageLog"
+
 /**
  * Notification SMS via 2Factor.in.
  *
@@ -41,10 +43,13 @@ export type SmsResult =
  */
 export async function sendSms(
   phone: string | null | undefined,
-  message: string
+  message: string,
+  /** Template or helper name, for grouping sends by purpose in message_logs. */
+  template = "sms"
 ): Promise<SmsResult> {
   if (!TF_API_KEY) {
     console.warn("[sms] TWOFACTOR_API_KEY not set — skipping SMS")
+    logMessage({ channel: "SMS", template, recipient: phone ?? "", ok: false, error: "NO_API_KEY" })
     return { ok: false, error: "NO_API_KEY" }
   }
   if (!phone) return { ok: false, error: "NO_PHONE" }
@@ -72,17 +77,21 @@ export async function sendSms(
       | null
 
     if (data?.Status === "Success") {
-      return { ok: true, id: String(data.Details ?? "") }
+      const id = String(data.Details ?? "")
+      logMessage({ channel: "SMS", template, recipient: clean, ok: true, providerId: id })
+      return { ok: true, id }
     }
 
     // Details carries the reason, e.g. "Missing templatename value" when DLT
     // rejects a free-text body. Log it — it is the only signal this channel has.
     const error = data?.Details ?? `HTTP ${res.status}`
     console.error(`[sms] 2Factor refused (${clean}): ${error}`)
+    logMessage({ channel: "SMS", template, recipient: clean, ok: false, error })
     return { ok: false, error }
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err)
     console.error(`[sms] send failed (${clean}): ${error}`)
+    logMessage({ channel: "SMS", template, recipient: clean, ok: false, error })
     return { ok: false, error }
   }
 }

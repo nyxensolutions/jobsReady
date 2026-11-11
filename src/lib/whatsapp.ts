@@ -1,3 +1,5 @@
+import { logMessage } from "./messageLog"
+
 /**
  * WhatsApp Business Platform — Meta Cloud API
  * Phone: +91 88009 29721 | WABA ID: 1603050564877428
@@ -59,10 +61,16 @@ function normalizePhone(phone: string): string {
  * credential went unnoticed for weeks precisely because the old version
  * reported nothing.
  */
-async function send(to: string, payload: object): Promise<WhatsAppResult> {
+async function send(
+  to: string,
+  payload: object,
+  /** Template or helper name, for grouping sends by purpose in message_logs. */
+  template = "whatsapp"
+): Promise<WhatsAppResult> {
   if (!TOKEN || !PHONE_NUMBER_ID) {
     const error = "WHATSAPP_TOKEN or WHATSAPP_PHONE_NUMBER_ID not set"
     console.error("[WhatsApp] not configured —", error)
+    logMessage({ channel: "WHATSAPP", template, recipient: to, ok: false, error })
     return { ok: false, error }
   }
 
@@ -90,13 +98,17 @@ async function send(to: string, payload: object): Promise<WhatsAppResult> {
       const err = data?.error
       const error = err ? `${err.code} ${err.message}` : `HTTP ${res.status}`
       console.error(`[WhatsApp] send failed to ${normalizePhone(to)}:`, error)
+      logMessage({ channel: "WHATSAPP", template, recipient: normalizePhone(to), ok: false, error })
       return { ok: false, error }
     }
 
-    return { ok: true, messageId: data?.messages?.[0]?.id ?? "unknown" }
+    const messageId = data?.messages?.[0]?.id ?? "unknown"
+    logMessage({ channel: "WHATSAPP", template, recipient: normalizePhone(to), ok: true, providerId: messageId })
+    return { ok: true, messageId }
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err)
     console.error("[WhatsApp] network error:", error)
+    logMessage({ channel: "WHATSAPP", template, recipient: normalizePhone(to), ok: false, error })
     return { ok: false, error }
   }
 }
@@ -105,7 +117,7 @@ async function send(to: string, payload: object): Promise<WhatsAppResult> {
 
 /** Send a free-form text (only valid within 24h after user messages you) */
 export async function sendWhatsAppText(phone: string, text: string) {
-  return send(phone, { type: "text", text: { body: text } })
+  return send(phone, { type: "text", text: { body: text } }, "whatsapp_text")
 }
 
 /**
@@ -118,7 +130,9 @@ export async function sendWhatsAppTemplate(
   templateId: string,
   params: string[]
 ) {
-  return send(phone, {
+  return send(
+    phone,
+    {
     type: "template",
     template: {
       name: templateId,
@@ -136,7 +150,9 @@ export async function sendWhatsAppTemplate(
           }
         : {}),
     },
-  })
+    },
+    templateId
+  )
 }
 
 // ── Notification helpers ──────────────────────────────────────────────────────
