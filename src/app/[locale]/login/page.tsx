@@ -28,7 +28,14 @@ async function createSession(idToken: string, role: "SEEKER" | "EMPLOYER") {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idToken, role }),
   })
-  if (!res.ok) throw new Error((await res.json()).error ?? "Session error")
+  if (!res.ok) {
+    // The code travels with the error so callers can act on the reason, not
+    // just show the sentence.
+    const data = await res.json().catch(() => ({}))
+    const err = new Error(data.error ?? "Session error") as Error & { apiCode?: string }
+    err.apiCode = data.code
+    throw err
+  }
   return res.json() as Promise<{ role: string; requiresProfile: boolean; emailVerified: boolean }>
 }
 
@@ -256,10 +263,16 @@ function LoginPageContent() {
       window.location.href = getRedirect(data.role, data.requiresProfile)
     } catch (err: any) {
       if (err.code === "auth/popup-closed-by-user") { setLoading(false); return }
+      // The popup creates the Firebase account before our API gets to refuse
+      // it, so a blocked attempt would otherwise leave a credential with no row
+      // behind it — an account that can never sign in anywhere.
+      if (err.apiCode === "GOOGLE_SIGNUP_CLOSED") {
+        await auth.currentUser?.delete().catch(() => {})
+      }
       const msg = err.message ?? ""
       setError(
-        msg.includes("already registered as")
-          ? err.message
+        err.apiCode === "GOOGLE_SIGNUP_CLOSED" || msg.includes("already registered as")
+          ? msg
           : "Google sign-in failed. Try again."
       )
     } finally {
