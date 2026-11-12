@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db"
 import { liveJobWhere } from "@/lib/jobListingQuery"
 import { sendSeekerJobDigest } from "@/lib/email"
 import { notifySeeker, MSG } from "@/lib/sms"
+import { sendSeekerJobMatchesWhatsApp } from "@/lib/whatsapp"
 
 /**
  * Daily digest cron. Called by .github/workflows/cron.yml on "30 2 * * *" —
@@ -106,6 +107,11 @@ export async function GET(req: NextRequest) {
 
       const seekerName = seeker.name ?? "Job Seeker"
 
+      // Email reaches 6 of 47 seekers; 41 are phone-only and no seeker has
+      // both. WhatsApp is the channel that actually arrives — but the digest
+      // is a MARKETING template, so it goes only to those who opted in.
+      const top = jobRows[0]
+
       await Promise.allSettled([
         seeker.user.email
           ? sendSeekerJobDigest({
@@ -113,6 +119,16 @@ export async function GET(req: NextRequest) {
               seekerName,
               jobs: jobRows,
             })
+          : Promise.resolve(),
+        seeker.user.phone && seeker.user.whatsappOptIn
+          ? sendSeekerJobMatchesWhatsApp(
+              seeker.user.phone,
+              seekerName,
+              jobs.length,
+              top.title,
+              top.companyName,
+              top.city
+            )
           : Promise.resolve(),
         notifySeeker(seeker.user.phone, MSG.seeker.newJobs(jobs.length)),
       ])

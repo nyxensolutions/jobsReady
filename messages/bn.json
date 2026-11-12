@@ -417,7 +417,9 @@
       "completenessName": "নাম",
       "completenessCity": "শহর",
       "completenessSkills": "দক্ষতা",
-      "completenessResume": "রেজুমে"
+      "completenessResume": "রেজুমে",
+      "whatsappAlertsToggle": "WhatsApp-এ চাকরির অ্যালার্ট",
+      "whatsappAlertsHint": "আপনার প্রোফাইলের সঙ্গে মেলে এমন নতুন চাকরির খবর Jobs24India আপনাকে WhatsApp-এ পাঠাতে পারে। যে কোনো সময় বন্ধ করতে পারেন।"
     },
     "apply": {
       "title": "এই চাকরির জন্য আবেদন",

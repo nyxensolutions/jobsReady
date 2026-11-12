@@ -71,8 +71,20 @@ model User {
   isActive  Boolean  @default(true)
   isAdmin   Boolean  @default(false) // overlay flag — works alongside SEEKER/EMPLOYER role
   fcmTokens String[] @default([]) // mobile push notification device tokens
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  /// WhatsApp job-alert consent.
+  ///
+  /// Meta classifies a digest of jobs nobody asked for by name as MARKETING,
+  /// and a MARKETING template may only go to a recipient with a recorded
+  /// opt-in. UTILITY templates — application status, job approved, receipts —
+  /// do not depend on this flag and must not be gated on it.
+  ///
+  /// Defaults to false for everyone, existing rows included. Consent cannot be
+  /// backfilled: nobody who signed up before this column existed was asked.
+  whatsappOptIn   Boolean   @default(false)
+  whatsappOptInAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   // Email verification
   emailVerified      Boolean   @default(false)

@@ -417,7 +417,9 @@
       "completenessName": "ಹೆಸರು",
       "completenessCity": "ನಗರ",
       "completenessSkills": "ಕೌಶಲ್ಯಗಳು",
-      "completenessResume": "ರೆಸ್ಯೂಮೆ"
+      "completenessResume": "ರೆಸ್ಯೂಮೆ",
+      "whatsappAlertsToggle": "WhatsApp ನಲ್ಲಿ ಉದ್ಯೋಗ ಎಚ್ಚರಿಕೆಗಳು",
+      "whatsappAlertsHint": "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್‌ಗೆ ಹೊಂದುವ ಹೊಸ ಉದ್ಯೋಗಗಳ ಬಗ್ಗೆ Jobs24India ನಿಮಗೆ WhatsApp ನಲ್ಲಿ ಸಂದೇಶ ಕಳುಹಿಸಬಹುದು. ಯಾವಾಗ ಬೇಕಾದರೂ ನಿಲ್ಲಿಸಬಹುದು."
     },
     "apply": {
       "title": "ಈ ಉದ್ಯೋಗಕ್ಕೆ ಅರ್ಜಿ",

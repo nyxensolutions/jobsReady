@@ -417,7 +417,9 @@
       "completenessName": "Name",
       "completenessCity": "City",
       "completenessSkills": "Skills",
-      "completenessResume": "Resume"
+      "completenessResume": "Resume",
+      "whatsappAlertsToggle": "Job alerts on WhatsApp",
+      "whatsappAlertsHint": "Jobs24India may message you on WhatsApp when new jobs match your profile. You can turn this off at any time."
     },
     "applied": {
       "sentToHr": "Application sent to HR! 🎉",

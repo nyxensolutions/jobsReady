@@ -43,6 +43,9 @@ export default async function SeekerProfilePage({ params }: { params: Promise<{ 
         resumeUrl: profile.resumeUrl ?? null,
       } : null}
       phone={dbUser.phone}
+      // Consent sits on User, not SeekerProfile, so it survives a seeker who
+      // has not created a profile yet — `initial` is null for them.
+      whatsappOptIn={dbUser.whatsappOptIn}
       cities={cities.map(c => c.name)}
       categories={categories.map(c => ({
         slug: c.slug,

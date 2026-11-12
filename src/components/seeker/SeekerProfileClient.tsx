@@ -28,6 +28,7 @@ type Profile = {
 
 type Props = {
   initial: Profile | null
+  whatsappOptIn: boolean
   phone: string | null
   cities: string[]
   categories: { slug: string; name: string }[]
@@ -40,7 +41,7 @@ function maskPhone(phone: string | null) {
   return digits.slice(0, 3) + "*".repeat(4) + digits.slice(-3)
 }
 
-export default function SeekerProfileClient({ initial, phone, cities, categories }: Props) {
+export default function SeekerProfileClient({ initial, whatsappOptIn, phone, cities, categories }: Props) {
   const router = useRouter()
   const t = useTranslations("seeker.profile")
   const tc = useTranslations("common")
@@ -94,6 +95,7 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
   // Preferences form
   const [preferredJobTypes, setPreferredJobTypes] = useState<string[]>(initial?.preferredJobTypes ?? [])
   const [isOpenToWork, setIsOpenToWork] = useState(initial?.isOpenToWork ?? true)
+  const [waOptIn, setWaOptIn] = useState(whatsappOptIn)
   const [prefsLoading, setPrefsLoading] = useState(false)
 
   // Location preference form
@@ -121,6 +123,7 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
         name: name || displayName,
         city, bio, skills, preferredJobTypes, experienceYears,
         isOpenToWork, openToRelocate, preferredCities, preferredCategories, languages,
+        whatsappOptIn: waOptIn,
         ...patch,
       }),
     })
@@ -154,7 +157,7 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
   async function handleSavePrefs() {
     setPrefsLoading(true)
     try {
-      await saveSection({ preferredJobTypes, preferredCategories, isOpenToWork })
+      await saveSection({ preferredJobTypes, preferredCategories, isOpenToWork, whatsappOptIn: waOptIn })
       setEditPrefs(false)
     } finally {
       setPrefsLoading(false)
@@ -591,6 +594,20 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
                     <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${isOpenToWork ? "translate-x-5" : ""}`} />
                   </button>
                 </div>
+                {/* Consent, not a preference. Defaults to off and is never
+                    pre-ticked: a MARKETING template may only go to someone who
+                    actively asked for it. */}
+                <div className={`flex items-center justify-between px-3 py-2.5 rounded-lg border transition-colors ${waOptIn ? "border-green-300 bg-green-50" : "border-gray-200 bg-gray-50"}`}>
+                  <div className="pr-3">
+                    <p className="text-sm font-semibold text-gray-800">{t("whatsappAlertsToggle")}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{t("whatsappAlertsHint")}</p>
+                  </div>
+                  <button type="button" onClick={() => setWaOptIn(v => !v)}
+                    aria-pressed={waOptIn}
+                    className={`relative shrink-0 w-10 h-5 rounded-full transition-colors ${waOptIn ? "bg-green-500" : "bg-gray-300"}`}>
+                    <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${waOptIn ? "translate-x-5" : ""}`} />
+                  </button>
+                </div>
                 <div className="flex gap-2">
                   <button onClick={handleSavePrefs} disabled={prefsLoading}
                     className="flex-1 py-2 rounded-lg bg-[#1a3461] text-white text-sm font-semibold hover:bg-[#142a52] disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5">
@@ -602,6 +619,7 @@ export default function SeekerProfileClient({ initial, phone, cities, categories
                     setPreferredJobTypes(initial?.preferredJobTypes ?? [])
                     setPreferredCategories(initial?.preferredCategories ?? [])
                     setIsOpenToWork(initial?.isOpenToWork ?? true)
+                    setWaOptIn(whatsappOptIn)
                   }} className="px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                     {tc("cancel")}
                   </button>

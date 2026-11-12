@@ -417,7 +417,9 @@
       "completenessName": "பெயர்",
       "completenessCity": "நகரம்",
       "completenessSkills": "திறன்கள்",
-      "completenessResume": "ரெஸ்யூமே"
+      "completenessResume": "ரெஸ்யூமே",
+      "whatsappAlertsToggle": "WhatsApp-இல் வேலை அறிவிப்புகள்",
+      "whatsappAlertsHint": "உங்கள் சுயவிவரத்துடன் பொருந்தும் புதிய வேலைகள் குறித்து Jobs24India உங்களுக்கு WhatsApp-இல் தகவல் அனுப்பலாம். எப்போது வேண்டுமானாலும் நிறுத்தலாம்."
     },
     "apply": {
       "title": "இந்த வேலைக்கு விண்ணப்பிக்கவும்",

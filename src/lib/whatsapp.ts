@@ -221,6 +221,33 @@ export async function sendSeekerRejectedWhatsApp(
 }
 
 
+/**
+ * Seeker: daily digest of new matching jobs.
+ *
+ * MARKETING category, unlike everything else here. Two consequences the
+ * caller must respect and this function cannot enforce on its own:
+ *
+ *  - it may only go to a user with `whatsappOptIn` recorded, and
+ *  - it stays behind WHATSAPP_DIGEST_ENABLED until the template is approved,
+ *    because sending an unapproved name returns 132001 — indistinguishable
+ *    from a wrong locale — once per seeker per day.
+ */
+export async function sendSeekerJobMatchesWhatsApp(
+  phone: string,
+  name: string,
+  jobCount: number,
+  topJobTitle: string,
+  topCompany: string,
+  topCity: string
+) {
+  if (process.env.WHATSAPP_DIGEST_ENABLED !== "true") {
+    return { ok: false as const, error: "digest template not enabled" }
+  }
+  return sendWhatsAppTemplate(phone, "seeker_job_matches_v1", [
+    name, String(jobCount), topJobTitle, topCompany, topCity,
+  ])
+}
+
 /** Employer: new application received */
 export async function sendEmployerApplicationWhatsApp(
   phone: string,

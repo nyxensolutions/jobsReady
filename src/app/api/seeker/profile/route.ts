@@ -19,7 +19,12 @@ export async function GET() {
   const profile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })
   if (!profile) return NextResponse.json({ error: "Profile not found" }, { status: 404 })
 
-  return NextResponse.json({ ...profile, phone: dbUser.phone, email: dbUser.email })
+  return NextResponse.json({
+    ...profile,
+    phone: dbUser.phone,
+    email: dbUser.email,
+    whatsappOptIn: dbUser.whatsappOptIn,
+  })
 }
 
 export async function POST(req: NextRequest) {
@@ -33,7 +38,7 @@ export async function POST(req: NextRequest) {
 
   const {
     name, city, bio, skills, preferredJobTypes, preferredCategories, experienceYears,
-    isOpenToWork, openToRelocate, preferredCities, languages,
+    isOpenToWork, openToRelocate, preferredCities, languages, whatsappOptIn,
   } = await req.json()
 
   if (!name?.trim()) {
@@ -58,6 +63,22 @@ export async function POST(req: NextRequest) {
     // create-user path, so every seeker read as incomplete regardless of what
     // they had filled in. The rule is shared with the backfill.
     isProfileComplete: isSeekerProfileComplete({ name, city, preferredCategories }),
+  }
+
+  // Consent lives on User, not the profile, because it is consent to be
+  // messaged on the phone number — and because employers will need the same
+  // column. Only written when the request actually carries the field, so a
+  // partial save from another section cannot silently revoke it.
+  if (typeof whatsappOptIn === "boolean" && whatsappOptIn !== dbUser.whatsappOptIn) {
+    await prisma.user.update({
+      where: { id: session.uid },
+      data: {
+        whatsappOptIn,
+        // Kept on withdrawal too: when consent was last granted is the thing
+        // worth being able to answer, and clearing it destroys that record.
+        whatsappOptInAt: whatsappOptIn ? new Date() : dbUser.whatsappOptInAt,
+      },
+    })
   }
 
   const existingProfile = await prisma.seekerProfile.findUnique({ where: { userId: session.uid } })

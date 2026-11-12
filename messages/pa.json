@@ -417,7 +417,9 @@
       "completenessName": "ਨਾਮ",
       "completenessCity": "ਸ਼ਹਿਰ",
       "completenessSkills": "ਹੁਨਰ",
-      "completenessResume": "ਰਿਜ਼ਿਊਮੇ"
+      "completenessResume": "ਰਿਜ਼ਿਊਮੇ",
+      "whatsappAlertsToggle": "WhatsApp 'ਤੇ ਨੌਕਰੀ ਅਲਰਟ",
+      "whatsappAlertsHint": "ਤੁਹਾਡੀ ਪ੍ਰੋਫ਼ਾਈਲ ਨਾਲ ਮੇਲ ਖਾਂਦੀਆਂ ਨਵੀਆਂ ਨੌਕਰੀਆਂ ਬਾਰੇ Jobs24India ਤੁਹਾਨੂੰ WhatsApp 'ਤੇ ਸੁਨੇਹਾ ਭੇਜ ਸਕਦਾ ਹੈ। ਤੁਸੀਂ ਕਦੇ ਵੀ ਬੰਦ ਕਰ ਸਕਦੇ ਹੋ।"
     },
     "apply": {
       "title": "ਇਸ ਨੌਕਰੀ ਲਈ ਅਰਜ਼ੀ",
