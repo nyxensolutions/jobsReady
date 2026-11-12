@@ -221,30 +221,131 @@ export async function sendSeekerRejectedWhatsApp(
 }
 
 
+// ── MARKETING templates ───────────────────────────────────────────────────────
+//
+// Meta approved three of these as MARKETING, which means they may only be sent
+// to a recipient with consent recorded in `users.whatsappOptIn`. Two of the
+// three were submitted as Utility and reclassified: the classifier reads a
+// message's purpose, not its wording, and anything whose job is to bring the
+// recipient back to act is Marketing however factually it is phrased.
+//
+// Every one of them takes `optIn` as a required argument rather than reading
+// the database itself. A call site cannot then forget the check — it has to
+// produce the value to call the function at all — and the refusal is logged
+// rather than silent, which is the failure mode this file has a history of.
+
+function consentRefusal(template: string, to: string) {
+  const error = "no WhatsApp marketing consent on record"
+  logMessage({ channel: "WHATSAPP", template, recipient: to, ok: false, error })
+  return { ok: false as const, error }
+}
+
 /**
- * Seeker: daily digest of new matching jobs.
- *
- * MARKETING category, unlike everything else here. Two consequences the
- * caller must respect and this function cannot enforce on its own:
- *
- *  - it may only go to a user with `whatsappOptIn` recorded, and
- *  - it stays behind WHATSAPP_DIGEST_ENABLED until the template is approved,
- *    because sending an unapproved name returns 132001 — indistinguishable
- *    from a wrong locale — once per seeker per day.
+ * Seeker: daily digest of new matching jobs. MARKETING.
  */
 export async function sendSeekerJobMatchesWhatsApp(
   phone: string,
+  optIn: boolean,
   name: string,
   jobCount: number,
   topJobTitle: string,
   topCompany: string,
   topCity: string
 ) {
-  if (process.env.WHATSAPP_DIGEST_ENABLED !== "true") {
-    return { ok: false as const, error: "digest template not enabled" }
-  }
+  if (!optIn) return consentRefusal("seeker_job_matches_v1", phone)
   return sendWhatsAppTemplate(phone, "seeker_job_matches_v1", [
     name, String(jobCount), topJobTitle, topCompany, topCity,
+  ])
+}
+
+/**
+ * Seeker: an employer shortlisted this profile and invited them to apply.
+ * MARKETING — it introduces a relationship that does not exist yet, which is
+ * why dropping the button and the header did not make it Utility.
+ */
+export async function sendSeekerInvitedToApplyWhatsApp(
+  phone: string,
+  optIn: boolean,
+  name: string,
+  jobTitle: string,
+  companyName: string,
+  location: string
+) {
+  if (!optIn) return consentRefusal("seeker_invited_to_apply_v1", phone)
+  return sendWhatsAppTemplate(phone, "seeker_invited_to_apply_v1", [
+    name, jobTitle, companyName, location,
+  ])
+}
+
+/**
+ * Employer: subscription about to lapse. MARKETING.
+ *
+ * `daysLeft` is the whole phrase — "3 days", "1 day" — because a template body
+ * cannot pluralise and {{3}} is substituted verbatim.
+ */
+export async function sendEmployerPlanExpiringWhatsApp(
+  phone: string,
+  optIn: boolean,
+  contactPerson: string,
+  planName: string,
+  daysLeft: string
+) {
+  if (!optIn) return consentRefusal("employer_plan_expiring_v1", phone)
+  return sendWhatsAppTemplate(phone, "employer_plan_expiring_v1", [
+    contactPerson, planName, daysLeft,
+  ])
+}
+
+// ── UTILITY templates ─────────────────────────────────────────────────────────
+//
+// These must never be gated on consent. They report a state change to
+// something the recipient already owns, and withholding one because somebody
+// declined marketing would be withholding information they are owed.
+
+/**
+ * Seeker: an employer released their contact details.
+ *
+ * The one template in this batch that is genuinely urgent for the recipient —
+ * their phone number has just been handed to a company — and the only reason
+ * it is Utility rather than Marketing is that it reports something that
+ * already happened to their own profile.
+ */
+export async function sendSeekerContactUnlockedWhatsApp(
+  phone: string,
+  seekerName: string,
+  companyName: string
+) {
+  return sendWhatsAppTemplate(phone, "seeker_contact_unlocked_v1", [
+    seekerName, companyName,
+  ])
+}
+
+/** Employer: a job posting passed moderation and is live. */
+export async function sendEmployerJobApprovedWhatsApp(
+  phone: string,
+  contactPerson: string,
+  jobTitle: string
+) {
+  return sendWhatsAppTemplate(phone, "employer_job_approved_v1", [
+    contactPerson, jobTitle,
+  ])
+}
+
+/**
+ * Employer: payment received.
+ *
+ * `amount` carries its own currency marker ("Rs 999"); the template does not
+ * add one.
+ */
+export async function sendEmployerPaymentReceiptWhatsApp(
+  phone: string,
+  contactPerson: string,
+  amount: string,
+  planName: string,
+  orderId: string
+) {
+  return sendWhatsAppTemplate(phone, "employer_payment_receipt_v1", [
+    contactPerson, amount, planName, orderId,
   ])
 }
 

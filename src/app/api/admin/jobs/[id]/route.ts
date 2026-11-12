@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { sendEmployerJobApprovedAlert, sendEmployerJobRejectedAlert } from "@/lib/email"
+import { sendEmployerJobApprovedWhatsApp } from "@/lib/whatsapp"
 import { sendPushToUser } from "@/lib/push"
 import { assertAdmin } from "@/lib/admin"
 
@@ -30,7 +31,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     where: { id },
     data,
     include: {
-      employer: { select: { userId: true, companyName: true, contactPerson: true } },
+      employer: { select: { userId: true, companyName: true, contactPerson: true, contactPhone: true } },
     },
   })
 
@@ -65,7 +66,22 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     // Email — fire and forget, use email stored in DB
     ;(async () => {
       try {
-        const empUser = await prisma.user.findUnique({ where: { id: employerUserId }, select: { email: true } })
+        const empUser = await prisma.user.findUnique({
+          where: { id: employerUserId },
+          select: { email: true, phone: true },
+        })
+
+        // Only the approval has an approved template so far;
+        // employer_job_rejected_v1 is still in review with Meta.
+        const empPhone = job.employer.contactPhone ?? empUser?.phone
+        if (action === "approve" && empPhone) {
+          await sendEmployerJobApprovedWhatsApp(
+            empPhone,
+            job.employer.contactPerson ?? job.employer.companyName,
+            job.title
+          )
+        }
+
         if (empUser?.email) {
           if (action === "approve") {
             await sendEmployerJobApprovedAlert({

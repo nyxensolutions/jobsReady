@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { sendCandidateInviteEmail } from "@/lib/email"
+import { sendSeekerInvitedToApplyWhatsApp } from "@/lib/whatsapp"
 import { sendPushToUser } from "@/lib/push"
 
 export async function POST(req: NextRequest) {
@@ -48,10 +49,26 @@ export async function POST(req: NextRequest) {
     data: { jobId: job.id, type: "JOB_INVITE" }
   })
 
-  // Send email invite if seeker has an email address — fire and forget
+  // Email reaches 6 of 47 seekers and WhatsApp reaches 41, so the invite is
+  // worth almost nothing without this. seeker_invited_to_apply_v1 came back
+  // from Meta as MARKETING, so it goes only to seekers who opted in — the
+  // sender takes the flag as an argument so this cannot be forgotten.
   ;(async () => {
     try {
-      const seekerUser = await prisma.user.findUnique({ where: { id: seekerProfile.userId }, select: { email: true } })
+      const seekerUser = await prisma.user.findUnique({
+        where: { id: seekerProfile.userId },
+        select: { email: true, phone: true, whatsappOptIn: true },
+      })
+      if (seekerUser?.phone) {
+        await sendSeekerInvitedToApplyWhatsApp(
+          seekerUser.phone,
+          seekerUser.whatsappOptIn,
+          seekerProfile.name,
+          job.title,
+          employer.companyName,
+          job.city.name
+        )
+      }
       if (seekerUser?.email) {
         await sendCandidateInviteEmail({
           seekerEmail: seekerUser.email,

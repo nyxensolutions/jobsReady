@@ -120,9 +120,10 @@ export async function GET(req: NextRequest) {
               jobs: jobRows,
             })
           : Promise.resolve(),
-        seeker.user.phone && seeker.user.whatsappOptIn
+        seeker.user.phone
           ? sendSeekerJobMatchesWhatsApp(
               seeker.user.phone,
+              seeker.user.whatsappOptIn,
               seekerName,
               jobs.length,
               top.title,

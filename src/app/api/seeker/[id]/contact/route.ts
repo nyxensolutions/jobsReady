@@ -3,6 +3,7 @@ import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import { getPlanLimits } from "@/lib/subscription"
 import { emailVerificationBlock } from "@/lib/employerAuth"
+import { sendSeekerContactUnlockedWhatsApp } from "@/lib/whatsapp"
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -79,6 +80,15 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     })
     if (!seeker) return NextResponse.json({ error: "Seeker not found" }, { status: 404 })
 
+    // Until now a seeker's phone number was handed to a company and the seeker
+    // was told nothing at all. UTILITY, so it is not gated on marketing
+    // consent — withholding "your number was just released" from someone who
+    // declined job alerts would be withholding something they are owed.
+    //
+    // Fired only below, after a new unlock is recorded: the `existing` branch
+    // returns early, so a company re-opening a contact it already paid for
+    // does not re-notify.
+
     if (limits.sub) {
       const subscriptionId = limits.sub.id
       await prisma.$transaction([
@@ -90,6 +100,14 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           data: { candidateUnlocksUsed: { increment: 1 } },
         }),
       ])
+    }
+
+    if (seeker.user.phone) {
+      void sendSeekerContactUnlockedWhatsApp(
+        seeker.user.phone,
+        seeker.name,
+        employer.companyName
+      )
     }
 
     return NextResponse.json({ success: true, contact: seeker.user })

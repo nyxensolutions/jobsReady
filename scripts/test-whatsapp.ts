@@ -29,6 +29,22 @@ const TEMPLATES: Record<string, string[]> = {
   seeker_rejected_v1:            ["Akhil", "Delivery Boy"],
   employer_new_application_v1:   ["ABC Pvt Ltd", "Akhil", "Delivery Boy"],
   employer_onboarding_complete_v1: ["Sachin Verma", "ABC Pvt Ltd"],
+
+  // Batch 2, approved 13 Nov 2026. The three marked MARKETING may only be
+  // sent to a recipient with users.whatsappOptIn recorded — this script
+  // bypasses that check deliberately, because its job is to prove the
+  // template and the credential work, not to exercise the consent rule.
+  employer_payment_receipt_v1:   ["Sachin Verma", "Rs 999", "Growth", "order_R1a2b3c4d5"],
+  employer_job_approved_v1:      ["Sachin Verma", "Delivery Executive"],
+  seeker_contact_unlocked_v1:    ["Akhil", "ABC Pvt Ltd"],
+  employer_plan_expiring_v1:     ["Sachin Verma", "Growth", "3 days"],            // MARKETING
+  seeker_invited_to_apply_v1:    ["Akhil", "Delivery Executive", "ABC Pvt Ltd", "New Delhi"], // MARKETING
+  seeker_job_matches_v1:         ["Akhil", "5", "Delivery Executive", "ABC Pvt Ltd", "New Delhi"], // MARKETING
+
+  // Still in review with Meta at the time of writing; sending either returns
+  // 132001 until they are approved.
+  // employer_job_rejected_v1:           ["Sachin Verma", "Delivery Executive", "Salary range was missing"],
+  // employer_verification_rejected_v1:  ["Sachin Verma", "ABC Pvt Ltd"],
 }
 
 function normalizePhone(phone: string): string {

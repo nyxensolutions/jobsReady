@@ -4,6 +4,7 @@ import { getServerSession } from "@/lib/firebase/session"
 import { prisma } from "@/lib/db"
 import EmployerProfileForm from "@/components/employer/EmployerProfileForm"
 import EmployerSignInMethods from "@/components/employer/EmployerSignInMethods"
+import WhatsAppConsentToggle from "@/components/WhatsAppConsentToggle"
 import { ArrowLeft } from "lucide-react"
 
 export default async function EmployerProfilePage() {
@@ -49,6 +50,23 @@ export default async function EmployerProfilePage() {
           <EmployerSignInMethods
             currentEmail={dbUser.email}
             emailVerified={dbUser.emailVerified}
+          />
+        </div>
+
+        {/* employer_plan_expiring_v1 came back from Meta as MARKETING, not
+            Utility, so the renewal reminder may only be sent to an employer
+            who has opted in. Without this card that template cannot legally
+            fire at all. */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 mt-6">
+          <h2 className="text-base font-bold text-gray-900">Notifications</h2>
+          <p className="text-sm text-gray-500 mt-1 mb-5">
+            Updates about your jobs, applications and payments are always sent. This controls
+            the reminders that are not.
+          </p>
+          <WhatsAppConsentToggle
+            initial={dbUser.whatsappOptIn}
+            label="Reminders on WhatsApp"
+            hint="Jobs24India may message you on WhatsApp before your plan expires and about new features for employers. You can turn this off at any time."
           />
         </div>
       </div>

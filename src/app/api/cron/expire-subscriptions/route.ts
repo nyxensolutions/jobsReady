@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { sendEmployerPlanExpiring } from "@/lib/email"
+import { sendEmployerPlanExpiringWhatsApp } from "@/lib/whatsapp"
 import { notifyEmployer, MSG } from "@/lib/sms"
 import { SITE_URL } from "@/lib/seo"
 
@@ -140,6 +141,18 @@ export async function GET(req: NextRequest) {
               planName: sub.plan.name,
               daysLeft: days,
             })
+          : Promise.resolve(),
+        // MARKETING per Meta, so consent-gated — a renewal prompt is a
+        // prompt to come back and act, whatever the wording. The template
+        // cannot pluralise, so {{3}} carries the whole phrase.
+        phone
+          ? sendEmployerPlanExpiringWhatsApp(
+              phone,
+              employer.user.whatsappOptIn,
+              employer.contactPerson ?? employer.companyName,
+              sub.plan.name,
+              `${days} ${days === 1 ? "day" : "days"}`
+            )
           : Promise.resolve(),
         notifyEmployer(phone, MSG.employer.planExpiringSoon(days)),
       ])

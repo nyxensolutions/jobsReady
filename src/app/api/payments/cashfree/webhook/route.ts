@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createHmac } from "crypto"
 import { prisma } from "@/lib/db"
 import { sendPaymentReceipt } from "@/lib/email"
+import { sendEmployerPaymentReceiptWhatsApp } from "@/lib/whatsapp"
 import { notifyEmployer, MSG } from "@/lib/sms"
 import { sendPushToUser } from "@/lib/push"
 
@@ -124,6 +125,17 @@ export async function POST(req: NextRequest) {
     void Promise.allSettled([
       employer.user.email
         ? sendPaymentReceipt({ toEmail: employer.user.email, ...receiptData })
+        : Promise.resolve(),
+      // UTILITY: a receipt reports a payment that already happened, so it is
+      // never gated on marketing consent.
+      phone
+        ? sendEmployerPaymentReceiptWhatsApp(
+            phone,
+            receiptData.toName,
+            `Rs ${plan.priceRupees}`,
+            plan.name,
+            cfOrderId
+          )
         : Promise.resolve(),
       notifyEmployer(phone, MSG.employer.planActivated(plan.name, plan.durationDays)),
       prisma.notification.create({
