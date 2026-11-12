@@ -1,4 +1,53 @@
-# WhatsApp templates — batch 2 (corrected)
+# WhatsApp templates — batch 2
+
+## Outcome, 13 Nov 2026 — submitted, and what Meta decided
+
+All eight went in. Six are Active, two still in review. **Meta's categories
+are below; the predictions further down this document were wrong twice and
+are kept only to show what the classifier actually does.**
+
+| Template | Submitted as | Approved as | Needs opt-in |
+|---|---|---|---|
+| `employer_payment_receipt_v1` | Utility | Utility | no |
+| `employer_job_approved_v1` | Utility | Utility | no |
+| `seeker_contact_unlocked_v1` | Utility | Utility | no |
+| `employer_job_rejected_v1` | Utility | *in review* | no |
+| `employer_verification_rejected_v1` | Utility | *in review* | no |
+| `seeker_invited_to_apply_v1` | Utility | **Marketing** | **yes** |
+| `employer_plan_expiring_v1` | Utility | **Marketing** | **yes** |
+| `seeker_job_matches_v1` | Marketing | Marketing | yes |
+
+### What the classifier actually enforces
+
+Two Utility predictions in this document were refused, and the pattern is
+consistent once you stop arguing with it:
+
+- **A message is Utility only when it reports a state change to a thing the
+  recipient already owns.** A posting that went live, a payment that landed, a
+  profile whose contact details were released. The event has already happened
+  and the recipient is the owner of the thing it happened to.
+- **Anything whose purpose is to get the recipient to come back and act is
+  Marketing**, however factual the wording. "Your plan expires in 3 days …
+  renew to keep them running" is a renewal prompt. "An employer shortlisted
+  you" introduces a relationship that does not exist yet. Dropping the button
+  and the header did not change either verdict — because the *purpose* is what
+  is being read, not the furniture.
+
+The note below claiming renewal notices are "expressly allowed as Utility" was
+wrong and `employer_plan_expiring_v1` is the proof.
+
+### The consequence that needs code
+
+`employer_plan_expiring_v1` is the renewal nudge and it is now consent-gated.
+`users.whatsappOptIn` covers employers — the column is on User, not
+SeekerProfile, for exactly this reason — but **the toggle only exists on the
+seeker profile page**, so no employer can consent and the template cannot
+legitimately fire at all. An employer-side toggle is a prerequisite, not a
+follow-up.
+
+---
+
+# The submitted templates
 
 WABA `1603050564877428` → WhatsApp Manager → Message templates → Create.
 
@@ -16,6 +65,11 @@ record before anything borderline is attempted.
   All six destinations verified live (HTTP 200) on 13 Nov 2026.
 - A variable resolving to an **empty string is rejected at send time**
   (error 132000), not at approval. Two are flagged below.
+- **Headers are plain text with no variables.** A variable in a header is
+  another rejection surface for very little gain. A Utility header states what
+  happened to something the recipient already has, in the past tense where it
+  can — "Payment received", "Your job posting is live". Anything that reads as
+  an announcement of something new pulls the template toward Marketing.
 - Language `en`. Decline any offer to also create `en_US` — the code looks up
   one locale per template and a second causes 132001.
 
@@ -46,6 +100,7 @@ Order ID: {{4}}
 Your plan is active and your job postings are live.
 ```
 
+**Header** (text): `Payment received`
 **Footer:** `Jobs24India` · **Button:** none
 **Samples:** `Sachin Verma` · `Rs 999` · `Growth` · `order_R1a2b3c4d5`
 
@@ -63,6 +118,7 @@ Job: {{2}}
 Candidates can start applying right away.
 ```
 
+**Header** (text): `Your job posting is live`
 **Footer:** `Jobs24India`
 **Button:** Visit website → Static → `https://www.jobs24india.com/employer/dashboard`
 **Samples:** `Sachin Verma` · `Delivery Executive`
@@ -80,6 +136,7 @@ Reason: {{3}}
 Please edit the posting and submit it again.
 ```
 
+**Header** (text): `Your job posting needs changes`
 **Footer:** `Jobs24India`
 **Button:** Visit website → Static → `https://www.jobs24india.com/employer/dashboard`
 **Samples:** `Sachin Verma` · `Delivery Executive` · `Salary range was missing`
@@ -98,6 +155,7 @@ Hi {{1}}, we were not able to verify the company profile for {{2}} on Jobs24Indi
 Please check that your business details and documents are correct, then submit them again from your profile page.
 ```
 
+**Header** (text): `Company verification unsuccessful`
 **Footer:** `Jobs24India`
 **Button:** Visit website → Static → `https://www.jobs24india.com/employer/profile`
 **Samples:** `Sachin Verma` · `Ramala Collections`
@@ -114,6 +172,7 @@ When it expires your active job postings are paused and candidate contact detail
 Renew from your account to keep them running.
 ```
 
+**Header** (text): `Your plan is expiring`
 **Footer:** `Jobs24India`
 **Button:** Visit website → Static → `https://www.jobs24india.com/employer/plans`
 **Samples:** `Sachin Verma` · `Growth` · `3 days`
@@ -123,7 +182,7 @@ Renew from your account to keep them running.
 
 Renewal notices are expressly allowed as Utility, but the renew-flavoured CTA
 is the first thing here that might draw the category warning. If it does, drop
-the button rather than changing the category — a plan expiry genuinely is an
+the header first and then the button, rather than changing the category — a plan expiry genuinely is an
 account message.
 
 ---
@@ -138,6 +197,7 @@ Company: {{2}}
 They may call or message you on this number. If you did not expect this, you can hide your profile from your account settings.
 ```
 
+**Header** (text): `Your contact details were shared`
 **Footer:** `Jobs24India` · **Button:** none
 **Samples:** `Akhil` · `Ramala Collections`
 
@@ -159,6 +219,9 @@ Location: {{4}}
 The invitation has been saved to your Jobs24India account.
 ```
 
+**Header:** none — deliberate. "You have a job invitation" is announcement
+framing, and it pulls this template further toward the Marketing reading that
+already got it refused once.
 **Footer:** `Jobs24India` · **Button:** none
 **Samples:** `Akhil` · `Delivery Executive` · `Ramala Collections` · `New Delhi`
 
@@ -182,6 +245,7 @@ Top match: {{3}} at {{4}} in {{5}}
 Tap below to see all of them.
 ```
 
+**Header** (text): `New jobs for you`
 **Footer:** `Jobs24India`
 **Button:** Visit website → Static → `https://www.jobs24india.com/jobs`
 **Samples:** `Akhil` · `5` · `Delivery Executive` · `Ramala Collections` · `New Delhi`
