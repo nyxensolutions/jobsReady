@@ -680,6 +680,44 @@ export async function sendEmailVerification({
   }, "sendEmailVerification")
 }
 
+/**
+ * Seeker: an employer released their contact details.
+ *
+ * The email twin of seeker_contact_unlocked_v1. Added because wiring only the
+ * WhatsApp side left a seeker who has an email but no phone with no notice at
+ * all — and this is the message where silence is worst, since it reports that
+ * their number has already been handed to a company.
+ *
+ * Deliberately not a "good news" email: it states what happened and how to
+ * stop it, because the recipient did not choose this and may not want it.
+ */
+export async function sendSeekerContactUnlockedEmail({
+  seekerEmail,
+  seekerName,
+  companyName,
+}: {
+  seekerEmail: string
+  seekerName: string
+  companyName: string
+}) {
+  if (!seekerEmail) return
+  const body = `
+    <h2 style="margin:0 0 4px;color:#1a3461;font-size:20px">An employer has your contact details</h2>
+    <p style="margin:0 0 20px;color:#6b7280;font-size:14px">Hi ${seekerName}, <strong>${companyName}</strong> has unlocked your contact details on Jobs24India to reach you about a job.</p>
+    <div style="background:#eef2ff;border:1px solid #dde5ff;border-radius:12px;padding:16px;margin-bottom:24px;font-size:13px;color:#374151">
+      They may call or message you on the number on your profile. This usually means they are interested in your application or profile.
+    </div>
+    <p style="margin:0 0 24px;color:#6b7280;font-size:13px">If you did not expect this, you can hide your profile from employers at any time by turning off "Open to work" in your profile.</p>
+    ${btn(`${APP_URL}/seeker/profile`, "Open My Profile")}
+  `
+  await send({
+    from: `Jobs24India <${FROM}>`,
+    to: seekerEmail,
+    subject: `${companyName} has your contact details — Jobs24India`,
+    html: emailShell(body),
+  }, "sendSeekerContactUnlockedEmail")
+}
+
 export async function sendSeekerShortlistAlert({
   seekerEmail,
   seekerName,

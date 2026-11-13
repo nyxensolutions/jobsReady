@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db"
 import { getPlanLimits } from "@/lib/subscription"
 import { emailVerificationBlock } from "@/lib/employerAuth"
 import { sendSeekerContactUnlockedWhatsApp } from "@/lib/whatsapp"
+import { sendSeekerContactUnlockedEmail } from "@/lib/email"
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -102,12 +103,22 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       ])
     }
 
+    // Both channels, because no seeker has both a phone and an email — 41 of
+    // 47 are phone-only and 6 are email-only, so sending one would reach a
+    // disjoint set and silently miss the rest.
     if (seeker.user.phone) {
       void sendSeekerContactUnlockedWhatsApp(
         seeker.user.phone,
         seeker.name,
         employer.companyName
       )
+    }
+    if (seeker.user.email) {
+      void sendSeekerContactUnlockedEmail({
+        seekerEmail: seeker.user.email,
+        seekerName: seeker.name,
+        companyName: employer.companyName,
+      })
     }
 
     return NextResponse.json({ success: true, contact: seeker.user })
