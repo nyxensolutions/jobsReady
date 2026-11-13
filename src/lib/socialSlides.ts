@@ -33,10 +33,30 @@ export type Slide = {
 
 export type Format = "carousel" | "onepager"
 
+/**
+ * The language a card is written in.
+ *
+ * Hindi is the default because seeker content is Hindi-only: the audience is
+ * Hindi-first and a Hindi card linking to an English article is the exclusion
+ * this product exists to close. English is for the minority of posts whose
+ * readers genuinely work in English — see ENGLISH_ELIGIBLE in the route — and
+ * is never a mirror of the whole catalogue, which would halve the relevance of
+ * the feed and double the posting rate for no extra reach.
+ */
+export type Lang = "hi" | "en"
+
+/** Closing slide, per language. Instagram does not linkify a URL on an image. */
+const CTA_TEXT: Record<Lang, string> = {
+  hi: "पूरी जानकारी — लिंक बायो में",
+  en: "Full guide — link in bio",
+}
+
 export type Carousel = {
   slug: string
   /** Which shape was built. The bot renders one PNG per slide either way. */
   format: Format
+  /** Which language the slides are written in. */
+  lang: Lang
   /** Blog category label, shown as the eyebrow on every slide. */
   tag: string
   /** Hindi post title — the caption's first line, not rendered on a card. */
@@ -77,9 +97,12 @@ function concreteness(text: string): number {
   let score = 0
   if (/₹/.test(text)) score += 3
   if (/\d/.test(text)) score += 2
+  // Units of time and proportion, in both languages a card can be written in.
   if (/(घंटे|दिन|महीने|तारीख|साल|%)/.test(text)) score += 1
+  if (/\b(hours?|days?|months?|years?|shifts?)\b/i.test(text)) score += 1
   // Hedging language is the opposite of a fact worth a slide.
   if (/(हो सकता|शायद|आमतौर पर|लगभग)/.test(text)) score -= 1
+  if (/\b(may|might|usually|typically|roughly|around|about)\b/i.test(text)) score -= 1
   return score
 }
 
@@ -263,16 +286,16 @@ function dedupe(items: Candidate[]): Candidate[] {
  * together and nothing else. That is also why it takes `facts[0]` rather than a
  * rotating pick — the best fact is the only one that earns the card.
  */
-export function buildOnePager(post: BlogPost, hi: PostTranslation): Carousel {
+export function buildOnePager(post: BlogPost, source: PostTranslation, lang: Lang = "hi"): Carousel {
   const tag = BLOG_CATEGORIES.find(c => c.slug === post.category)?.label ?? "Jobs24India"
-  const base = { slug: post.slug, format: "onepager" as const, tag, title: hi.title }
+  const base = { slug: post.slug, format: "onepager" as const, lang, tag, title: source.title }
 
-  const headline = fit(hi.excerpt, HOOK_MAX_CHARS) ?? fit(hi.description, HOOK_MAX_CHARS)
+  const headline = fit(source.excerpt, HOOK_MAX_CHARS) ?? fit(source.description, HOOK_MAX_CHARS)
   if (!headline) {
     return { ...base, slides: [], skipReason: "No excerpt or description short enough to headline a one-pager." }
   }
 
-  const best = dedupe(candidates(hi.blocks)).sort((a, b) => b.score - a.score)[0]
+  const best = dedupe(candidates(source.blocks)).sort((a, b) => b.score - a.score)[0]
   if (!best) {
     return { ...base, slides: [], skipReason: "No table, callout or list short enough to fit a card." }
   }
@@ -319,7 +342,7 @@ function limitPairs(text: string, max = ONEPAGER_MAX_PAIRS): string {
   return text.slice(0, at) + sep + values.slice(0, max).join(" · ")
 }
 
-export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
+export function buildCarousel(post: BlogPost, source: PostTranslation, lang: Lang = "hi"): Carousel {
   const tag = BLOG_CATEGORIES.find(c => c.slug === post.category)?.label ?? "Jobs24India"
 
   /**
@@ -328,19 +351,20 @@ export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
    * Without the extra room the Ghaziabad post was dropped entirely for an
    * excerpt two characters over the fact cap.
    */
-  const hook = fit(hi.excerpt, HOOK_MAX_CHARS) ?? fit(hi.description, HOOK_MAX_CHARS)
+  const hook = fit(source.excerpt, HOOK_MAX_CHARS) ?? fit(source.description, HOOK_MAX_CHARS)
   if (!hook) {
     return {
       slug: post.slug,
       format: "carousel",
+      lang,
       tag,
-      title: hi.title,
+      title: source.title,
       slides: [],
       skipReason: "No excerpt or description short enough to use as a hook.",
     }
   }
 
-  const facts = dedupe(candidates(hi.blocks))
+  const facts = dedupe(candidates(source.blocks))
     .sort((a, b) => b.score - a.score)
     .slice(0, FACT_SLIDES)
 
@@ -348,8 +372,9 @@ export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
     return {
       slug: post.slug,
       format: "carousel",
+      lang,
       tag,
-      title: hi.title,
+      title: source.title,
       slides: [],
       skipReason:
         `Only ${facts.length} usable fact slide(s); ${FACT_SLIDES} needed. ` +
@@ -360,8 +385,9 @@ export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
   return {
     slug: post.slug,
     format: "carousel",
+    lang,
     tag,
-    title: hi.title,
+    title: source.title,
     skipReason: null,
     slides: [
       { icon: "👇", text: hook, kind: "hook" },
@@ -370,7 +396,7 @@ export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
         icon: "🔎",
         // No URL on the card: Instagram does not linkify it and a seeker cannot
         // type it from a reel. The caption and the bio carry the link.
-        text: "पूरी जानकारी — लिंक बायो में",
+        text: CTA_TEXT[lang],
         kind: "cta",
       },
     ],

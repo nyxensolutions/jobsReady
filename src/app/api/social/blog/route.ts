@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ALL_POSTS } from "@/data/blog"
 import { HI_TRANSLATIONS } from "@/data/blog/translations"
-import { buildCarousel, buildOnePager, type Format } from "@/lib/socialSlides"
+import { buildCarousel, buildOnePager, type Format, type Lang } from "@/lib/socialSlides"
 import { SITE_URL } from "@/lib/seo"
 
 /**
@@ -19,6 +19,31 @@ import { SITE_URL } from "@/lib/seo"
  */
 
 export const dynamic = "force-dynamic"
+
+/**
+ * The posts that may be published in English.
+ *
+ * Deliberately a short allowlist and not "all of them". Seeker content is
+ * Hindi-only by design: the audience is Hindi-first, and mirroring the whole
+ * catalogue into English would halve the relevance of the feed and double the
+ * posting rate without reaching anyone new.
+ *
+ * These eight are the exceptions — office and back-office roles whose readers
+ * generally do work in English, and the money and paperwork explainers whose
+ * terms (CTC, PF, ESI, salary slip) are read in English even by people who
+ * speak Hindi all day. A delivery or security guard post is not on this list
+ * and should not be added to it.
+ */
+const ENGLISH_ELIGIBLE = new Set([
+  "bpo-telecaller-jobs-in-bangalore",
+  "data-entry-jobs-from-home-real-pay",
+  "ctc-vs-in-hand-salary-explained",
+  "how-to-read-your-salary-slip",
+  "pf-withdrawal-process-explained",
+  "resume-for-freshers-without-experience",
+  "common-interview-questions-freshers-answers",
+  "phone-interview-tips-for-jobs",
+])
 
 export async function GET(req: NextRequest) {
   const secret =
@@ -44,7 +69,26 @@ export async function GET(req: NextRequest) {
     )
   }
   const format: Format = formatParam
-  const build = format === "onepager" ? buildOnePager : buildCarousel
+  const builder = format === "onepager" ? buildOnePager : buildCarousel
+
+  const langParam = params.get("lang") ?? "hi"
+  if (langParam !== "hi" && langParam !== "en") {
+    return NextResponse.json(
+      { error: `Unknown lang "${langParam}". Expected "hi" or "en".` },
+      { status: 400 },
+    )
+  }
+  const lang: Lang = langParam
+
+  /**
+   * Hindi reads from the translation; English reads from the post itself,
+   * which already carries the same fields the builders need. So English needs
+   * no new content written — only the decision about which posts qualify.
+   */
+  const build = (post: (typeof ALL_POSTS)[number]) =>
+    lang === "en"
+      ? builder(post, post, "en")
+      : builder(post, HI_TRANSLATIONS[post.slug], "hi")
 
   /** Slugs the caller has posted recently, so a rotation does not repeat. */
   const exclude = new Set(
@@ -53,20 +97,29 @@ export async function GET(req: NextRequest) {
 
   const requested = params.get("slug")?.trim()
 
-  const eligible = ALL_POSTS.filter(p => HI_TRANSLATIONS[p.slug])
+  // Hindi needs a translation to exist; English needs the post to be on the
+  // allowlist above. Both are "is there anything to build from".
+  const eligible = ALL_POSTS.filter(p =>
+    lang === "en" ? ENGLISH_ELIGIBLE.has(p.slug) : Boolean(HI_TRANSLATIONS[p.slug]),
+  )
 
   if (requested) {
     const post = eligible.find(p => p.slug === requested)
     if (!post) {
       return NextResponse.json(
         {
-          error: `No Hindi translation for "${requested}".`,
+          // Say which rule rejected it. The two languages exclude posts for
+          // entirely different reasons, and "no Hindi translation" on an
+          // English request sends whoever reads it looking in the wrong place.
+          error: lang === "en"
+            ? `"${requested}" is not on the English allowlist.`
+            : `No Hindi translation for "${requested}".`,
           available: eligible.map(p => p.slug),
         },
         { status: 404 },
       )
     }
-    return NextResponse.json(decorate(post.slug, build(post, HI_TRANSLATIONS[post.slug])))
+    return NextResponse.json(decorate(post.slug, build(post)))
   }
 
   /**
@@ -97,7 +150,7 @@ export async function GET(req: NextRequest) {
   // content should cost a skipped slot, not a broken post.
   const skipped: { slug: string; reason: string }[] = []
   for (const post of queue) {
-    const built = build(post, HI_TRANSLATIONS[post.slug])
+    const built = build(post)
     if (!built.skipReason) return NextResponse.json(decorate(post.slug, built))
     skipped.push({ slug: post.slug, reason: built.skipReason })
   }
