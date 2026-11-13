@@ -22,11 +22,21 @@ export type Slide = {
   /** One emoji, chosen from the block's own shape — never from its meaning. */
   icon: string
   text: string
-  kind: "hook" | "fact" | "cta"
+  kind: "hook" | "fact" | "cta" | "onepager"
+  /**
+   * `onepager` only: the line above the fact. A one-pager has to carry the
+   * whole argument on one card, so it needs both the claim and the number;
+   * every other kind says one thing and relies on the slides around it.
+   */
+  headline?: string
 }
+
+export type Format = "carousel" | "onepager"
 
 export type Carousel = {
   slug: string
+  /** Which shape was built. The bot renders one PNG per slide either way. */
+  format: Format
   /** Blog category label, shown as the eyebrow on every slide. */
   tag: string
   /** Hindi post title — the caption's first line, not rendered on a card. */
@@ -239,6 +249,76 @@ function dedupe(items: Candidate[]): Candidate[] {
   return out
 }
 
+/**
+ * One article, one card.
+ *
+ * This exists because the constraint on the account is supply, not code: 15
+ * translated posts yield 14 carousels, which is about five weeks at three a
+ * week. Taking a second, different cut of the same article roughly doubles that
+ * without anyone writing a word.
+ *
+ * It is not a carousel with four slides deleted. A carousel can open with a
+ * hook and pay it off three slides later; a one-pager is seen once, in a grid,
+ * usually without a tap, so it carries the claim and the single hardest number
+ * together and nothing else. That is also why it takes `facts[0]` rather than a
+ * rotating pick — the best fact is the only one that earns the card.
+ */
+export function buildOnePager(post: BlogPost, hi: PostTranslation): Carousel {
+  const tag = BLOG_CATEGORIES.find(c => c.slug === post.category)?.label ?? "Jobs24India"
+  const base = { slug: post.slug, format: "onepager" as const, tag, title: hi.title }
+
+  const headline = fit(hi.excerpt, HOOK_MAX_CHARS) ?? fit(hi.description, HOOK_MAX_CHARS)
+  if (!headline) {
+    return { ...base, slides: [], skipReason: "No excerpt or description short enough to headline a one-pager." }
+  }
+
+  const best = dedupe(candidates(hi.blocks)).sort((a, b) => b.score - a.score)[0]
+  if (!best) {
+    return { ...base, slides: [], skipReason: "No table, callout or list short enough to fit a card." }
+  }
+
+  /**
+   * A one-pager with no number on it is a quote card, and a quote card from a
+   * salary guide is the kind of post that teaches people to scroll past us.
+   * Carousels are more forgiving because the other slides carry the weight.
+   */
+  if (!/\d/.test(best.text)) {
+    return {
+      ...base,
+      slides: [],
+      skipReason: "The strongest fact in this article carries no figure; a one-pager needs one.",
+    }
+  }
+
+  return {
+    ...base,
+    skipReason: null,
+    slides: [{ kind: "onepager", icon: best.icon, headline, text: limitPairs(best.text) }],
+  }
+}
+
+/** Values a one-pager shows. See `limitPairs`. */
+const ONEPAGER_MAX_PAIRS = 2
+
+/**
+ * Trims a fact to its leading values.
+ *
+ * A table row can carry four columns, which a carousel fact slide renders
+ * comfortably because it has the whole card. A one-pager sets the same values
+ * much larger, under a headline, so three of them overflow the frame — and the
+ * third value is never the reason anyone stopped scrolling anyway. Two is kept
+ * rather than one so a comparison still works: the real salary beside the
+ * figure a scam promises is the strongest card this produces.
+ */
+function limitPairs(text: string, max = ONEPAGER_MAX_PAIRS): string {
+  const sep = " — "
+  const at = text.indexOf(sep)
+  if (at === -1) return text
+  const values = text.slice(at + sep.length).split(" · ")
+  if (values.length <= max) return text
+  return text.slice(0, at) + sep + values.slice(0, max).join(" · ")
+}
+
 export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
   const tag = BLOG_CATEGORIES.find(c => c.slug === post.category)?.label ?? "Jobs24India"
 
@@ -252,6 +332,7 @@ export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
   if (!hook) {
     return {
       slug: post.slug,
+      format: "carousel",
       tag,
       title: hi.title,
       slides: [],
@@ -266,6 +347,7 @@ export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
   if (facts.length < FACT_SLIDES) {
     return {
       slug: post.slug,
+      format: "carousel",
       tag,
       title: hi.title,
       slides: [],
@@ -277,6 +359,7 @@ export function buildCarousel(post: BlogPost, hi: PostTranslation): Carousel {
 
   return {
     slug: post.slug,
+    format: "carousel",
     tag,
     title: hi.title,
     skipReason: null,
