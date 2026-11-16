@@ -1,6 +1,8 @@
 ﻿import type { Metadata } from "next"
 import { Geist } from "next/font/google"
 import Script from "next/script"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { SITE_URL, SITE_NAME, absoluteUrl } from "@/lib/seo"
 
@@ -112,6 +114,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }} />
         {children}
+        <Analytics />
+        <SpeedInsights />
         <Script
           defer
           src="https://cloud.umami.is/script.js"
