@@ -115,11 +115,12 @@ export async function POST(req: NextRequest) {
   // Profile checks — seeker stub creation and employer requiresProfile are independent
   let requiresProfile = false
   if (dbUser.role === "SEEKER") {
-    const exists = await prisma.seekerProfile.findUnique({ where: { userId: dbUser.id } })
-    if (!exists) {
-      const name = decoded.name ?? decoded.phone_number ?? "New User"
-      await prisma.seekerProfile.create({ data: { userId: dbUser.id, name } })
-    }
+    const name = decoded.name ?? decoded.phone_number ?? "New User"
+    await prisma.seekerProfile.upsert({
+      where: { userId: dbUser.id },
+      create: { userId: dbUser.id, name },
+      update: {},
+    })
   } else if (dbUser.role === "EMPLOYER") {
     const employer = await prisma.employerProfile.findUnique({ where: { userId: dbUser.id } })
     requiresProfile = !employer
@@ -142,6 +143,12 @@ export async function POST(req: NextRequest) {
     path: "/",
   })
   return response
+}
+
+// Lightweight endpoint used by the login page to pre-warm this serverless
+// function so it's already running by the time the user submits their OTP.
+export async function HEAD() {
+  return new Response(null, { status: 200 })
 }
 
 export async function DELETE() {

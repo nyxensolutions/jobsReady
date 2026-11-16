@@ -63,6 +63,12 @@ function LoginPageContent() {
   const confirmRef = useRef<ConfirmationResult | null>(null)
   const recaptchaRef = useRef<RecaptchaVerifier | null>(null)
 
+  // Pre-warm the session API endpoint on page load so the serverless function
+  // is already running by the time the user submits their OTP.
+  useEffect(() => {
+    fetch("/api/auth/session", { method: "HEAD" }).catch(() => {})
+  }, [])
+
   // Pre-warm reCAPTCHA as soon as the phone step is visible so it's ready
   // by the time the user taps "Send OTP" — avoids cold-start delay on that tap.
   useEffect(() => {
