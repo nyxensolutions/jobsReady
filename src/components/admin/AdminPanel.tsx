@@ -5,11 +5,13 @@ import {
   CheckCircle, XCircle, Star, StarOff, ExternalLink, Phone,
   Building2, MapPin, Tag, Users, ChevronDown, ChevronUp,
   FileText, Globe, Loader2, AlertTriangle, LogOut, Eye, PlusCircle, Bell, Briefcase,
+  Pencil, PhoneOff,
 } from "lucide-react"
 import AddEmployerForm from "./AddEmployerForm"
 import AddSeekerForm from "./AddSeekerForm"
 import PushBroadcastForm from "./PushBroadcastForm"
 import PostJobForm from "./PostJobForm"
+import AdminJobEditModal from "./AdminJobEditModal"
 
 type Job = {
   id: string
@@ -27,12 +29,19 @@ type Job = {
   qualificationRequired: string | null
   experienceMin: number
   vacancies: number
+  pincode: string | null
+  area: string | null
+  incentives: string | null
+  workingDaysPerWeek: number | null
+  shiftType: string | null
+  callToHrEnabled: boolean
+  callToHrPhone: string | null
   employer: {
     companyName: string; contactPerson: string; contactPhone: string
     status: string; website: string | null; description: string | null; docUrls: string[]
   }
-  category: { nameEn: string }
-  city: { name: string }
+  category: { nameEn: string; slug: string }
+  city: { name: string; slug: string }
   _count: { applications: number }
 }
 
@@ -113,6 +122,9 @@ export default function AdminPanel() {
   const [employers, setEmployers] = useState<Employer[]>([])
   const [empTab, setEmpTab] = useState("PENDING")
   const [empLoading, setEmpLoading] = useState(false)
+
+  // Edit modal state
+  const [editingJob, setEditingJob] = useState<Job | null>(null)
 
   // Confirm dialog state
   const [confirm, setConfirm] = useState<{ message: string; onConfirm: () => void } | null>(null)
@@ -216,6 +228,14 @@ export default function AdminPanel() {
           message={confirm.message}
           onConfirm={confirm.onConfirm}
           onCancel={() => setConfirm(null)}
+        />
+      )}
+
+      {editingJob && (
+        <AdminJobEditModal
+          job={editingJob}
+          onClose={() => setEditingJob(null)}
+          onSaved={() => { setEditingJob(null); fetchJobs(jobTab) }}
         />
       )}
 
@@ -390,6 +410,13 @@ export default function AdminPanel() {
                             <ExternalLink size={16} />
                           </a>
                           <button
+                            onClick={() => setEditingJob(job)}
+                            className="p-2 text-gray-400 hover:text-[#1a3461] rounded-lg hover:bg-[#1a3461]/10 transition-colors"
+                            title="Edit job"
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
                             onClick={() => jobAction(job.id, "feature")}
                             disabled={actioning === job.id + "feature"}
                             className={`p-2 rounded-lg hover:bg-amber-50 transition-colors ${job.isFeatured ? "text-amber-500" : "text-gray-400 hover:text-amber-500"}`}
@@ -460,6 +487,24 @@ export default function AdminPanel() {
                         <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
                           {job.qualificationRequired && <span><span className="font-semibold">Qualification:</span> {job.qualificationRequired}</span>}
                           <span><span className="font-semibold">Experience:</span> {job.experienceMin === 0 ? "Freshers OK" : `${job.experienceMin}+ yrs`}</span>
+                        </div>
+                        {/* Call HR status */}
+                        <div className="flex items-center gap-3">
+                          {job.callToHrEnabled ? (
+                            <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg">
+                              <Phone size={13} /> Call HR enabled · {job.callToHrPhone ?? "No phone set"}
+                            </span>
+                          ) : (
+                            <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
+                              <PhoneOff size={13} /> Call HR disabled
+                            </span>
+                          )}
+                          <button
+                            onClick={() => setEditingJob(job)}
+                            className="text-xs font-semibold text-[#1a3461] hover:underline flex items-center gap-1"
+                          >
+                            <Pencil size={11} /> Edit to change
+                          </button>
                         </div>
                         {job.employer.docUrls.length > 0 && (
                           <div>

@@ -4,12 +4,16 @@ import { sendEmployerJobApprovedAlert, sendEmployerJobRejectedAlert } from "@/li
 import { sendEmployerJobApprovedWhatsApp } from "@/lib/whatsapp"
 import { sendPushToUser } from "@/lib/push"
 import { assertAdmin } from "@/lib/admin"
+import { isAreaInCity } from "@/lib/areas"
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   if (!await assertAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
-  const { action, reason } = await req.json() // "approve" | "reject" | "feature"
+  const body = await req.json()
+  const { action, reason, enabled, phone } = body as {
+    action: string; reason?: string; enabled?: boolean; phone?: string
+  }
   let data: any = {}
 
   if (action === "approve") {
@@ -23,6 +27,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   } else if (action === "feature") {
     const job = await prisma.jobListing.findUnique({ where: { id } })
     data = { isFeatured: !job?.isFeatured }
+  } else if (action === "set-call-hr") {
+    const existing = await prisma.jobListing.findUnique({ where: { id }, select: { callToHrEnabled: true, callToHrPhone: true } })
+    data = {
+      callToHrEnabled: enabled ?? !existing?.callToHrEnabled,
+      callToHrPhone: phone !== undefined ? (phone || null) : existing?.callToHrPhone,
+    }
   } else {
     return NextResponse.json({ error: "Invalid action" }, { status: 400 })
   }
@@ -106,4 +116,69 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   }
 
   return NextResponse.json(job)
+}
+
+// Full admin edit — does NOT reset status to PENDING_REVIEW
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  if (!await assertAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+
+  const body = await req.json()
+  const {
+    title, categorySlug, citySlug, jobType, area,
+    salaryMin, salaryMax, salaryUnit,
+    vacancies, experienceMin, qualificationRequired,
+    description, requirements, perks, pincode,
+    incentives, workingDaysPerWeek, shiftType,
+    callToHrEnabled, callToHrPhone,
+    status,
+  } = body
+
+  if (!title || !categorySlug || !citySlug || !jobType || !description) {
+    return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+  }
+
+  const [category, city] = await Promise.all([
+    prisma.category.findUnique({ where: { slug: categorySlug } }),
+    prisma.city.findUnique({ where: { slug: citySlug } }),
+  ])
+  if (!category) return NextResponse.json({ error: "Invalid category" }, { status: 400 })
+  if (!city) return NextResponse.json({ error: "Invalid city" }, { status: 400 })
+
+  let areaSlug: string | null = null
+  if (typeof area === "string" && area.trim()) {
+    areaSlug = area.trim()
+    if (!isAreaInCity(areaSlug, city.slug)) {
+      return NextResponse.json({ error: `"${areaSlug}" is not a valid area in ${city.name}.` }, { status: 400 })
+    }
+  }
+
+  const updated = await prisma.jobListing.update({
+    where: { id },
+    data: {
+      title: title.trim(),
+      categoryId: category.id,
+      cityId: city.id,
+      jobType,
+      salaryMin: salaryMin ? parseInt(salaryMin) : null,
+      salaryMax: salaryMax ? parseInt(salaryMax) : null,
+      salaryUnit: salaryUnit ?? "monthly",
+      vacancies: parseInt(vacancies) || 1,
+      experienceMin: parseInt(experienceMin) || 0,
+      qualificationRequired: qualificationRequired || null,
+      description: description.trim(),
+      requirements: Array.isArray(requirements) ? requirements.filter(Boolean) : [],
+      perks: Array.isArray(perks) ? perks.filter(Boolean) : [],
+      pincode: pincode?.trim() || null,
+      area: areaSlug,
+      incentives: incentives?.trim() || null,
+      workingDaysPerWeek: workingDaysPerWeek ? parseInt(workingDaysPerWeek) : null,
+      shiftType: shiftType || null,
+      callToHrEnabled: !!callToHrEnabled,
+      callToHrPhone: callToHrPhone?.trim() || null,
+      ...(status && { status }),
+    },
+  })
+
+  return NextResponse.json({ success: true, job: updated })
 }
