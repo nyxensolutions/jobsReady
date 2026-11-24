@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db"
 import EmployerProfileForm from "@/components/employer/EmployerProfileForm"
 import EmployerSignInMethods from "@/components/employer/EmployerSignInMethods"
 import WhatsAppConsentToggle from "@/components/WhatsAppConsentToggle"
+import LinkPhoneCard from "@/components/LinkPhoneCard"
 import { ArrowLeft } from "lucide-react"
 
 export default async function EmployerProfilePage() {
@@ -47,6 +48,14 @@ export default async function EmployerProfilePage() {
             How you sign in to this account. Adding a password keeps the same account — it does
             not create a second one.
           </p>
+          {/* An employer who signed up with Google has no phone on file at
+              all, which makes Google their only credential. Offered above the
+              provider list because it is the gap that matters, not a detail. */}
+          {!dbUser.phone && (
+            <div className="mb-5">
+              <LinkPhoneCard />
+            </div>
+          )}
           <EmployerSignInMethods
             currentEmail={dbUser.email}
             emailVerified={dbUser.emailVerified}

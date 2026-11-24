@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react"
 import SkillAutocomplete from "@/components/seeker/SkillAutocomplete"
+import LinkPhoneCard from "@/components/LinkPhoneCard"
 import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
@@ -334,6 +335,13 @@ export default function SeekerProfileClient({ initial, whatsappOptIn, phone, cit
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-4 flex flex-col gap-3">
+
+        {/* A seeker with no phone signed up with Google, so Google is their
+            only way in. Signing in by phone would mint a different uid and
+            hand them an empty account, so the number has to be attached to
+            this one. Placed first because it is account recovery, not a
+            profile field. */}
+        {!phone && <LinkPhoneCard />}
 
         {/* Profile completeness */}
         {score < 4 && (
