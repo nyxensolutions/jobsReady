@@ -28,7 +28,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     title, categorySlug, citySlug, jobType,
     salaryMin, salaryMax, salaryUnit, vacancies,
     experienceMin, qualificationRequired, description, requirements, perks, pincode,
-    area,
+    area, callToHrEnabled, callToHrPhone,
   } = body
 
   if (!title || !categorySlug || !citySlug || !jobType || !description) {
@@ -77,6 +77,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       perks: Array.isArray(perks) ? perks.filter(Boolean) : [],
       pincode: pincode?.trim() || null,
       area: areaSlug,
+      callToHrEnabled: callToHrEnabled === true,
+      callToHrPhone: callToHrEnabled === true ? (callToHrPhone?.trim() || null) : null,
       status: "PENDING_REVIEW",
       publishedAt: null,
     },

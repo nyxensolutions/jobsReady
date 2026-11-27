@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "@/i18n/navigation"
-import { Plus, X, Loader2, CheckCircle } from "lucide-react"
+import { Plus, X, Loader2, CheckCircle, Phone, PhoneOff } from "lucide-react"
 import { areasForCity } from "@/lib/areas"
 
 type Category = { id: string; slug: string; nameEn: string }
@@ -24,6 +24,8 @@ export type JobFormData = {
   requirements: string[]
   perks: string[]
   pincode: string
+  callToHrEnabled?: boolean
+  callToHrPhone?: string
 }
 
 const JOB_TYPES = [
@@ -133,6 +135,8 @@ export default function PostJobForm({
   const [requirements, setRequirements] = useState<string[]>(initialData?.requirements ?? [])
   const [perks, setPerks] = useState<string[]>(initialData?.perks ?? [])
   const [pincode, setPincode] = useState(initialData?.pincode ?? "")
+  const [callToHrEnabled, setCallToHrEnabled] = useState(initialData?.callToHrEnabled ?? false)
+  const [callToHrPhone, setCallToHrPhone] = useState(initialData?.callToHrPhone ?? "")
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -158,6 +162,8 @@ export default function PostJobForm({
           qualificationRequired: qualificationRequired || null,
           description, requirements, perks, pincode,
           area: area || null,
+          callToHrEnabled,
+          callToHrPhone: callToHrEnabled ? callToHrPhone : null,
         }),
       })
       const data = await res.json()
@@ -361,6 +367,49 @@ export default function PostJobForm({
           onRemove={(i) => setPerks((p) => p.filter((_, idx) => idx !== i))}
           placeholder="e.g. Weekly salary payout"
         />
+      </div>
+
+      {/* Call HR */}
+      <div className="border border-gray-200 rounded-xl p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-gray-700">Call HR Button</p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Show a "Call HR" button on your listing so candidates can call directly.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setCallToHrEnabled(v => !v)}
+            className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors ${
+              callToHrEnabled
+                ? "bg-green-100 text-green-700 hover:bg-green-200"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+            }`}
+          >
+            {callToHrEnabled ? <Phone size={14} /> : <PhoneOff size={14} />}
+            {callToHrEnabled ? "On" : "Off"}
+          </button>
+        </div>
+        {callToHrEnabled && (
+          <div className="mt-3">
+            <label className={labelCls}>HR Phone Number <span className="text-red-500">*</span></label>
+            <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+              <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm border-r border-gray-200">+91</span>
+              <input
+                type="tel"
+                inputMode="numeric"
+                maxLength={10}
+                value={callToHrPhone}
+                onChange={(e) => setCallToHrPhone(e.target.value.replace(/\D/g, ""))}
+                placeholder="10-digit mobile number"
+                className="flex-1 px-4 py-3 text-sm outline-none bg-transparent"
+                required={callToHrEnabled}
+              />
+            </div>
+            <p className="text-xs text-gray-400 mt-1">This number will be visible to job seekers on your listing.</p>
+          </div>
+        )}
       </div>
 
       {error && <p className="text-red-600 text-sm bg-red-50 rounded-xl px-4 py-3">{error}</p>}
