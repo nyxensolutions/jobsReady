@@ -25,6 +25,8 @@ export async function POST(req: NextRequest) {
     perks,
     area,
     status = "ACTIVE",
+    callToHrEnabled,
+    callToHrPhone,
   } = body
 
   if (!employerUserId || !title?.trim() || !categorySlug || !citySlug || !jobType || !description?.trim()) {
@@ -82,6 +84,8 @@ export async function POST(req: NextRequest) {
       area: areaSlug,
       status: finalStatus,
       isHighReach: false,
+      callToHrEnabled: callToHrEnabled === true,
+      callToHrPhone: callToHrEnabled === true ? (callToHrPhone?.trim() || null) : null,
     },
   })
 

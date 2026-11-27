@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
-import { Briefcase, Loader2, CheckCircle } from "lucide-react"
+import { Briefcase, Loader2, CheckCircle, Phone, PhoneOff } from "lucide-react"
 import { areasForCity } from "@/lib/areas"
 
 type EmployerProfile = {
@@ -32,6 +32,8 @@ const EMPTY_FORM = {
   requirements: "",
   perks: "",
   status: "ACTIVE",
+  callToHrEnabled: false,
+  callToHrPhone: "",
 }
 
 export default function PostJobForm() {
@@ -57,9 +59,8 @@ export default function PostJobForm() {
     })
   }, [])
 
-  function set(field: string, value: string) {
-    // Changing city invalidates the area, which belongs to exactly one city.
-    setForm(f => (field === "citySlug" ? { ...f, citySlug: value, area: "" } : { ...f, [field]: value }))
+  function set(field: string, value: string | boolean) {
+    setForm(f => (field === "citySlug" ? { ...f, citySlug: value as string, area: "" } : { ...f, [field]: value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -74,7 +75,13 @@ export default function PostJobForm() {
     const res = await fetch("/api/admin/post-job", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, requirements, perks }),
+      body: JSON.stringify({
+        ...form,
+        requirements,
+        perks,
+        callToHrEnabled: form.callToHrEnabled,
+        callToHrPhone: form.callToHrEnabled ? form.callToHrPhone : null,
+      }),
     })
     const data = await res.json()
     setSubmitting(false)
@@ -330,6 +337,46 @@ export default function PostJobForm() {
             placeholder={"PF + ESIC\nWeekly off\nIncentives on target"}
             className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a3461]/30 resize-none"
           />
+        </div>
+
+        {/* Call HR */}
+        <div className="border border-gray-200 rounded-xl p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-gray-700">Call HR Button</p>
+              <p className="text-xs text-gray-400 mt-0.5">Show a "Call HR" button on this listing</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => set("callToHrEnabled", !form.callToHrEnabled)}
+              className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors ${
+                form.callToHrEnabled
+                  ? "bg-green-100 text-green-700 hover:bg-green-200"
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+              }`}
+            >
+              {form.callToHrEnabled ? <Phone size={14} /> : <PhoneOff size={14} />}
+              {form.callToHrEnabled ? "On" : "Off"}
+            </button>
+          </div>
+          {form.callToHrEnabled && (
+            <div className="mt-3">
+              <label className="block text-xs font-semibold text-gray-600 mb-1">HR Phone Number *</label>
+              <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:border-[#1a3461] focus-within:ring-1 focus-within:ring-[#1a3461]/20">
+                <span className="px-3 py-2 bg-gray-50 text-gray-500 text-sm border-r border-gray-200">+91</span>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  value={form.callToHrPhone}
+                  onChange={e => set("callToHrPhone", e.target.value.replace(/\D/g, ""))}
+                  placeholder="10-digit mobile number"
+                  className="flex-1 px-3 py-2 text-sm outline-none bg-transparent"
+                  required={form.callToHrEnabled}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Post as */}
